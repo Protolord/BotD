@@ -1,0 +1,10 @@
+//! import "../heroes/ancient_evils/arachnid.j"
+//! import "../heroes/ancient_evils/cave_troll.j"
+//! import "../heroes/ancient_evils/demon.j"
+//! import "../heroes/ancient_evils/gargoyle.j"
+//! import "../heroes/ancient_evils/skeleton_king.j"
+//! import "../heroes/ancient_evils/vampire_lord.j"
+//! import "../heroes/ancient_evils/werewolf.j"
+//! import "../heroes/ancient_evils/wraith.j"
+
+//! import "../heroes/living_force/storm_shaman.j"

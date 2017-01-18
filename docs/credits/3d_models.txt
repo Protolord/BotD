@@ -1,0 +1,62 @@
+-------------------------
+		Models
+-------------------------
+          
+	HEROES:
+		Vampire Lord                by -Grendel
+		Werewolf                    by WhiteDeath
+		Wraith                      by donut3.5
+		Arachnid                    by Tarrasque
+		Demon                       by Werewulf
+		Gargoyle                    by Sellenisko
+		Skeleton King               by -Grendel
+		Cave Troll                  by Sellenisko
+            
+		Storm Shaman                by Pins
+        
+	ABILITIES:
+		Corrupting Stomp Effect     by JetFangInferno
+		Soul Corruption Effect      by Glen Elendra
+		Shadows Of Corruption       by The_Swamp_Warrior
+		Vicious Explorers Effect    by JetFangInferno
+		Eye of Darkness Effect      by kellym0
+		Spectral Track Effect       by Sandro
+		Veins of Blood Effect       by Kino
+		Bloodlines Effect           by WILL THE ALMIGHTY
+            
+		ShapeShift Blast Effects    by WILL THE ALMIGHTY
+		ShapeShifting Effect        by Hermit
+		Force of the Lycan Buff     by PeeKay
+		Flesh Hunger Effects        by cotd333
+		Lycanthrope Effect          by JetFangInferno
+		Fetch Buff                  by CeDiL
+		Fury of the Lycan Buff      by Power
+		Revitalize Effect           by DarkEvil
+            
+		Death and Decay Effect      by dhguardianes
+		Mist of Darkness Effect     by Vortigon
+		Brain Sap Effects           by nGy
+		Horror Effect               by JetFangInferno
+		InnerDive Effect            by Razer!X
+		Spiritual Tunnel Effect     by Azsure, familla
+		Ghostly Beam Light          by JesusHipster
+		Repression Scout            by -Grendel
+		Avante Effect               by JesusHipster
+		Ancestral Rift Effect       by Kino
+		Inception Heal Effect       by Thrikodius
+		
+		Dash Effect                 by Razer!X
+		Sticky Shell Slow           by icewolf055
+		SevereWound Heal            by icewolf055
+		Poison Blast                by icewolf055
+		
+		Vigilant and Virtuous       by ChaoticHunter
+		Taunt                       by Infrisios
+		Hellish Cloud Buff          by JetFangInferno
+		Hellish Cloud Effect        by WILL THE ALMIGHTY
+		Engulfed Fires Buff         by sPy
+	
+	OTHERS:
+		Generic CastBar             by HappyTauren
+		Dummy Model                 by Vexorian
+		Silence SFX                 by icewolf055

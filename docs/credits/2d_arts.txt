@@ -1,0 +1,90 @@
+-------------------------
+		  Icons
+-------------------------
+	Heroes: 
+		BTN_Werewolf                by CRAZYRUSSIAN
+		BTN_Wraith                  by Yak
+		BTN_Arachnid                by -Grendel
+		BTN_Demon                   by Werewulf
+		BTN_Gargoyle                by PeeKay
+		BTN_SkeletonKing            by -Grendel
+		BTN_CaveTroll               by Marshmallo
+		
+		
+	Vampire Lord Abilities:
+		BTN_ImmortalForce           by 4eNNightmare
+		BTN_CorruptingStomp         by Valve Corporation
+		BTN_SoulCorruption          by Hellx-Magnus
+		BTN_DeathCoil               by Mr.Goblin
+		BTN_Shadowrun               by Anarchon
+		BTN_SpiritualWalk           by Palaslayer
+		BTN_ShadowsOfCorruption     by OgeRfaCes
+		BTN_UnrestrainedDistress	by Darkfang
+		BTN_EyeOfDarkness           by Dalharukn
+		BTN_ViciousExplorers        by Stanakin
+		BTN_Spectral Track          by Hellx-Magnus
+		BTN_VeinsOfBlood            by CRAZYRUSSIAN
+		BTN_Bloodlines              by CRAZYRUSSIAN
+		BTN_BloodExtremity          by CRAZYRUSSIAN
+		BTN_UnstoppableHunger       by PeeKay
+		
+	Werewolf Abilities
+		BTN_Revitalize              by BlazeKraze
+		BTN_Lycanthrope             by SkriK
+		BTN_EnvenomedFangs          by Darkfang
+		BTN_EnragedKiller           by Kimbo 
+		BTN_FuryOfTheLycan          by Golden-Drake
+		BTN_Revitalize              by PeeKay
+		
+	Wraith Abilities:
+		BTN_ChillingTouch           by The Panda
+		BTN_DeathAndDecay           by NFWar
+		BTN_BrainSap                by BLazeKraze
+		BTN_EssenceOfEvil           by morbent
+		BTN_CursedRift              by CRAZYRUSSIAN
+		BTN_InnerDive               by CRAZYRUSSIAN
+		BTN_Horror                  by kola
+		BTN_SpiritualTunnel         by CRAZYRUSSIAN
+		BTN_GhostlyBeam             by Palaslayer
+		BTN_SoulDance               by ~Nightmare
+		BTN_SoulRelease             by ~Nightmare
+		BTN_Avante                  by JollyD
+		BTN_Inception               by San
+
+	Arachnid Abilities:
+		BTN_PoisonSpit              by Valve Corporation
+		BTN_Hatch                   by Valve Corporation
+		BTN_Spiders                 by Valve Corporation
+		BTN_WebSpin                 by Valve Corporation
+		BTN_Tunnel                  by CRAZYRUSSIAN
+		BTN_Sacrifice               by CRAZYRUSSIAN
+		BTN_PoisonBlast             by Lelling
+		BTN_SevereWound             by Tails96
+
+	Demon Abilities:
+		BTN_Taunt                   by PeeKay
+		BTN_HellishCloud            by 4eNNightmare
+		BTN_RainOfFire              by Mr.Goblin
+
+	Gargoyle Abilities:
+		BTN_StonyPath               by Praytic
+		BTN_RockToss                by -Berz-
+		BTN_Crack                   by Valve Corporation
+		BTN_Fissure                 by Valve Corporation
+		BTN_PowderisingStrength     by CRAZYRUSSIAN
+		BTN_Rebuild                 by Nudl9
+		BTN_UpliftPurpose           by inhuman89
+		BTN_StoneGaze               by Big Dub
+		
+		
+	Others:
+		BTN_Check                   by Lockheart 
+		BTN_Phased                  by Riley
+		BTN_Silence                 by Valve Corporation
+		
+		
+		
+-------------------------
+		  Skins
+-------------------------
+		Blue Laser Lightning        by Erkki2

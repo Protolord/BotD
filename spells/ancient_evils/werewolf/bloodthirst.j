@@ -1,0 +1,107 @@
+scope Bloodthirst
+    
+    globals
+        private constant integer SPELL_ID = 'A242'
+        private constant string LIGHTNING = "HWPB"
+        private constant real LINK_LIFE = 0.75
+    endglobals
+    
+    private function HealFixed takes integer level returns real
+        if level == 11 then
+            return 2000.0
+        endif
+        return 250.0*level
+    endfunction
+    
+    private function HealPerUnit takes integer level returns real
+        if level == 11 then
+            return 1000.0
+        endif
+        return 50.0*level
+    endfunction
+    
+    private function Radius takes integer level returns real
+        return 800.0 + 0.0*level
+    endfunction
+    
+    private function TargetFilter takes unit u, player p returns boolean
+        return UnitAlive(u) and not IsUnitType(u, UNIT_TYPE_UNDEAD) and not IsUnitType(u, UNIT_TYPE_STRUCTURE) and IsUnitEnemy(u, p) 
+    endfunction
+    
+    private struct Wave extends array
+    
+        private lightning link
+        private real duration
+        
+        implement CTLExpire
+            set this.duration = this.duration - CTL_TIMEOUT
+            if this.duration > 0 then
+                call SetLightningColor(this.link, 1.0, 0.0, 0.0, this.duration/LINK_LIFE)
+            else
+                call DestroyLightning(this.link)
+                set this.link = null
+                call this.destroy()
+            endif
+        implement CTLEnd
+        
+        static method add takes real x, real y, real z, unit u returns thistype
+            local thistype this = thistype.create()
+            set this.duration = LINK_LIFE
+            set this.link = AddLightningEx(LIGHTNING, true, GetUnitX(u), GetUnitY(u), GetUnitZ(u) + 50, x, y, z + 50)
+            call SetLightningColor(this.link, 1.0, 0.0, 0.0, 1.0)
+            return this
+        endmethod
+        
+    endstruct
+    
+    struct Bloodthirst extends array
+        implement Alloc
+        
+        private unit u
+        
+        private static method debuff takes nothing returns nothing
+            local thistype this = ReleaseTimer(GetExpiredTimer())
+            call UnitRemoveAbility(this.u, 'Bbsk')
+            set this.u = null
+        endmethod
+        
+        private static method onCast takes nothing returns nothing
+            local thistype this = thistype.allocate()
+            local unit caster = GetTriggerUnit()
+            local integer level = GetUnitAbilityLevel(caster, SPELL_ID)
+            local real amount = HealFixed(level)
+            local real inc = HealPerUnit(level)
+            local group g = NewGroup()
+            local real x = GetUnitX(caster)
+            local real y = GetUnitY(caster)
+            local real z = GetUnitZ(caster)
+            local player p = GetTriggerPlayer()
+            local unit u
+            call GroupUnitsInArea(g, x, y, Radius(level))
+            loop
+                set u = FirstOfGroup(g)
+                exitwhen u == null
+                call GroupRemoveUnit(g, u)
+                if TargetFilter(u, p) then
+                    call Wave.add(x, y, z, u)
+                    set amount = amount + inc
+                endif
+            endloop
+            call Heal.unit(caster, amount, 4)
+            set this.u = caster
+            call TimerStart(NewTimerEx(this), 0.00, false, function thistype.debuff)
+            call ReleaseGroup(g)
+            set g = null
+            set caster = null
+            call SystemMsg.create(GetUnitName(GetTriggerUnit()) + " cast thistype")
+        endmethod
+        
+        static method init takes nothing returns nothing
+            call SystemTest.start("Initializing thistype: ")
+            call RegisterSpellEffectEvent(SPELL_ID, function thistype.onCast)
+            call SystemTest.end()
+        endmethod
+        
+    endstruct
+    
+endscope

@@ -1,0 +1,174 @@
+-----------------------------------------------------------------------------------------------------------------------------------
+Vigilant and the Virtuous
+|cfff4a460Target|r: |cff3399ffPassive, Enemy|n|r|cfff4a460Range|r: |cff3399ffMelee|r|n|cfff4a460Damage per second|r: |cff3399ff(3 x Hero Level)|r|n|cfff4a460Duration|r: |cff3399ff30 seconds|r|n|nEach attack will leave a mark of the Demon on it's living target dealing non lethal damage per second meaning targets will be left with at least 1 HP.
+Target: Passive, Enemy
+Range: Melee
+Damage per second: (3 x Hero Level)
+Duration: 30 seconds
+
+Each attack will leave a mark of the Demon on it's living target dealing non lethal damage per second meaning targets will be left with at least 1 HP.
+-----------------------------------------------------------------------------------------------------------------------------------
+Doom
+|cfff4a460Target|r: |cff3399ffEnemy Unit|n|r|cfff4a460Range|r: |cff3399ff600|n|r|cfff4a460Damage per second|r: |cff3399ff50|n|r|cfff4a460Duration|r: |cff3399ff(1 second x ability level)|n|r|cfff4a460Cooldown|r: |cff3399ff30 seconds|r|n|nMarks a target unit for the manifestation of a Demon. The afflicted unit cannot cast spells and takes magical damage over time.
+Target: Enemy Unit
+Range: 600
+Damage per second: 50
+Duration: (1 second x ability level)
+Cooldown: 30 seconds
+
+Marks a target unit for the manifestation of a Demon. The afflicted unit cannot cast spells and takes magical damage over time.
+-----------------------------------------------------------------------------------------------------------------------------------
+Pitfall
+|cfff4a460Target|r: |cff3399ffSelf (300)|n|r|cfff4a460Damage per second|r: |cff3399ff(30 x ability level)|n|r|cfff4a460Duration|r: |cff3399ff10 seconds|n|r|cfff4a460Cooldown|r: |cff3399ff20 seconds|r|n|nDemon creates a volcanic pit which deals damage and slows units in the pit.
+Target: Self (300)
+Damage per second: (30 x ability level)
+Duration: 10 seconds
+Cooldown: 20 seconds
+
+Demon creates a volcanic pit which deals damage and slows units in the pit.
+-----------------------------------------------------------------------------------------------------------------------------------
+Charge
+|cfff4a460Target|r: |cff3399ffEnemy Unit|n|r|cfff4a460Range|r: |cff3399ff800|n|r|cfff4a460Duration|r: |cff3399ff(0.3 seconds x ability level)|n|r|cfff4a460Damage|r: |cff3399ff(50 x ability level)|n|r|cfff4a460Cooldown|r: |cff3399ff30 seconds|r|n|nCharges the target unit to deal massive damage and temporarily stun the target. Cannot pass through cliffs and obstacles.
+Target: Enemy Unit
+Range: 800
+Stun duration: (0.3 x ability level) seconds 
+Damage: (50 x ability level)
+Cooldown: 30 seconds
+
+Charges the target unit to deal massive damage and temporarily stun the target. Cannot pass through cliffs and obstacles.
+-----------------------------------------------------------------------------------------------------------------------------------
+Taunt
+|cfff4a460Target|r: |cff3399ffSelf|n|r|cfff4a460Radius|r: |cff3399ff(100 x ability level)|n|r|cfff4a460Damage|r: |cff3399ff(35 x ability level)|n|r|cfff4a460Cooldown|r: |cff3399ff30 seconds|r|n|nDemon howls a scream making at most 20 nearby enemies to attack him. Also deals magical damage in area around him.
+Target: Self
+Radius: (100 x ability level)
+Damage: (35 x ability level)
+Cooldown: 30 seconds
+
+Demon howls a scream making at most 20 nearby enemies to attack him. Also deals magical damage in area around him.
+-----------------------------------------------------------------------------------------------------------------------------------
+Rain of Fire
+|cfff4a460Target|r: |cff3399ffAoe(300)|n|r|cfff4a460Range|r: |cff3399ff600|n|r|cfff4a460Damage/wave|r: |cff3399ff20 x ability level|r|n|nDemon summons a Rain of Fire with a maximum of 5 waves at a rate of 1 wave/second. Does not damage buildings and damages allies.
+
+Target: AoE(300)
+Range: 600
+Damage/wave: 20 x ability level
+
+Demon summons a Rain of Fire with a maximum of 5 waves at a rate of 1 wave/second. Does not damage buildings and damages allies.
+-----------------------------------------------------------------------------------------------------------------------------------
+Hellish Clouds
+|cfff4a460Target|r: |cff3399ffSelf|n|r|cfff4a460Damage|r: |cff3399ff(50 x ability level)|n|r|cfff4a460Duration|r: |cff3399ff(5 + (1 x ability level)) seconds|n|r|cfff4a460Cooldown|r: |cff3399ff(10 + (1 x ability level)) seconds|r|n|nDemon becomes temporarily invisible and deals extra area (400) damage on impact.
+Target: Self
+Damage: (50 x ability level)
+Duration: (5 + (1 x ability level)) seconds
+Cooldown: (10 + (1 x ability level)) seconds
+
+Demon becomes temporarily invisible and deals extra area damage (400) on impact.
+-----------------------------------------------------------------------------------------------------------------------------------
+Infernal Chains
+<?>
+-----------------------------------------------------------------------------------------------------------------------------------
+Underworld Fires
+|cfff4a460Target|r: |cff3399ffSelf (160)|n|r|cfff4a460Damage|r: |cff3399ff(30 x ability level)|n|r|cfff4a460Mana cost|r: |cff3399ff20 + (4 x ability level)|r|n|nDemon engulfs with Underworld Fires to deal damage to nearby enemies. Also damages structures.
+Target: Self (160)
+Damage: (30 x ability level)
+Mana cost: 20 + (4 x ability level)
+
+Demon engulfs with Underworld Fires to deal damage to nearby enemies. Also damages structures.
+-----------------------------------------------------------------------------------------------------------------------------------
+Diabolic Senses
+|cfff4a460Target|r: |cff3399ffSelf|n|r|cfff4a460Number of senses|r: |cff3399ff1 x ability level|n|r|cfff4a460Cooldown|r: |cff3399ff30 seconds|r|n|nDemon releases his Diabolic Senses which are aiming any living unit nearby dealing 50 damage. Also provide 1000 exploration range and reveal invisible units. Lasts 15 seconds.
+Target: Self
+Number of senses: 1 x ability level
+Cooldown: 30 seconds
+
+Demon releases his Diabolic Senses which are aiming any living unit nearby dealing 50 damage. Also provide 1000 exploration range and reveal invisible units. Lasts 15 seconds.
+-----------------------------------------------------------------------------------------------------------------------------------
+Dark Lord Vision
+|cfff4a460Target|r: |cff3399ffSelf|n|r|cfff4a460Reveal threshold|r: |cff3399ff50% + (5% x ability level)|n|r|cfff4a460Duration|r: |cff3399ff30 seconds|r|n|cfff4a460Cooldown|r: |cff3399ff30 seconds|r|n|nDemon gains a vision of any units that are not healthy. Lasts 30 seconds.
+Target: Self
+Reveal threshold: 25% + (5% x ability level)
+Duration: 30 seconds
+Cooldown: 30 seconds
+
+Demon gains a vision of any units that are not healthy
+
+Notes:
+-Lv11 tooltip:
+ |cfff4a460Target|r: |cff3399ffSelf|n|r|cfff4a460Duration|r: |cff3399ff15 seconds|r|n|cfff4a460Cooldown|r: |cff3399ff30 seconds|r|n|nDemon gains a vision of the entire map. Also reveals invisible units.
+ 
+Implement in a way like what I did in my TrueSight system.
+-----------------------------------------------------------------------------------------------------------------------------------
+Shattered Earth
+|cfff4a460Target|r: |cff3399ffSelf|n|r|cfff4a460Explosions|r: |cff3399ff1 x ability level|n|r|cfff4a460Sight|r: |cff3399ff1500 x ability level|n|r|cfff4a460Duration|r: |cff3399ff30 seconds|n|r|cfff4a460Cooldown|r: |cff3399ff30 seconds|r|n|nDemon slams the ground and makes the earth to split open and create random explosions around the map. Each explosion provide vision and reveals invisible units.
+
+Target: Self
+Explosions: 1 x ability level
+Sight: 1500
+Duration: 30 seconds
+Cooldown: 30 seconds
+
+Demon slams the ground and makes the earth to split open and create random explosions around the map. Each explosion provide vision and reveals invisible units.
+Notes:
+- Lv11 tooltip
+  |cfff4a460Target|r: |cff3399ffSelf|n|r|cfff4a460Duration|r: |cff3399ff15 seconds|n|r|cfff4a460Cooldown|r: |cff3399ff30 seconds|r|n|nDemon slams the ground and makes the earth to split open and reveal an entire map for 15 seconds.
+ 
+Fogmodifiers would be the way to go.
+-----------------------------------------------------------------------------------------------------------------------------------
+Dark Lord Powers
+|cfff4a460Target|r: |cff3399ffSelf (500)|n|r|cfff4a460Healing|r: |cff3399ff450 x ability level|n|r|cfff4a460Cooldown|r: |cff3399ff30 seconds|r|n|nDemon creates a Fire Nova which heals any nearby allies in a range of 500. Heals 4x more hitpoints on ethereal units.
+
+Target: Self (500)
+Healing: 450 x ability level
+Cooldown: 30 seconds
+
+Demon creates a Fire Nova which heals any nearby allies in a range of 500. Heals 4x more hitpoints on ethereal units.
+
+Note:
+- Lv11 Heal: 9000
+-----------------------------------------------------------------------------------------------------------------------------------
+Hellfire Blasts
+|cfff4a460Target|r: |cff3399ffSelf (300)|n|r|cfff4a460Heal/explosion|r: |cff3399ff40 x ability level|n|r|cfff4a460Cooldown|r: |cff3399ff30 seconds|r|n|nDemon uses his demonic powers to create a Hellfire Blast each second. Each of them heals Demon and his nearby allies and damage enemies for the same amount. Lasts 10 seconds. Ethereal units are damaged or healed 4x stronger.
+
+Target: Self (300)
+Heal/explosion: 40 x ability level
+Cooldown: 30 seconds
+
+Demon uses his demonic powers to create a Hellfire Blast each second. Each of them heals Demon and his nearby allies and damage enemies for the same amount. Lasts 10 seconds. Ethereal units are damaged or healed 4x stronger.
+
+Note:
+- Lv11 Heal/explosion: 800
+-----------------------------------------------------------------------------------------------------------------------------------
+Hellguard
+|cfff4a460Target|r: |cff3399ffSelf (100)|n|r|cfff4a460Heal per second|r: |cff3399ff(100 x ability level)|n|r|cfff4a460Stacking Bonus Heal|r: |cff3399ff10%|n|r|cfff4a460Duration|r: |cff3399ff10 seconds|n|r|cfff4a460Cooldown|r: |cff3399ff30 seconds|r|n|nDemon summons imps which heal a small area around caster. Will grant stacking bonus healing the longer Demon or his ally stay in the area. Heals 4x more hitpoints on ethereal units.
+Target: Self (100)
+Heal per second: (100 x ability level)
+Stacking Bonus Heal: 10%
+Duration: 10 seconds
+Cooldown: 30 seconds
+
+Demon summons imps which heal a small area around caster. Will grant stacking bonus healing the longer Demon or his ally stay in the area. Heals 4x more hitpoints on ethereal units.
+-----------------------------------------------------------------------------------------------------------------------------------
+Engulfed Fires
+|cfff4a460Target|r: |cff3399ffSelf|n|r|cfff4a460Duration|r: |cff3399ff5 + (0.5 x ability level) seconds|n|r|cfff4a460Cooldown|r: |cff3399ff30 seconds|r|n|nDemon engulfs in magical flames which are making him completely immune to any loses or gains of life. Also blocks arenas damage.
+Target: Self
+Duration: 5 + (0.5 x ability level) second
+Cooldown: 30 seconds
+
+Demon engulfs in magical flames which are making him completely immune to any loses or gains of life. Also blocks arenas damage.
+-----------------------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------------------------
+
+
+
