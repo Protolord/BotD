@@ -5,6 +5,7 @@ scope Doom
         private constant integer BUFF_ID = 'a511'
         private constant attacktype ATTACK_TYPE = ATTACK_TYPE_NORMAL
         private constant damagetype DAMAGE_TYPE = DAMAGE_TYPE_MAGIC
+        private constant string SFX = "Models\\Effects\\Doom.mdx"
         private constant real TIMEOUT = 1.0
     endglobals
     
@@ -17,7 +18,7 @@ scope Doom
     endfunction
     
     private function TargetFilter takes unit u, player p returns boolean
-        return UnitAlive(u) and IsUnitEnemy(u, p) and not IsUnitType(u, UNIT_TYPE_STRUCTURE) and not IsUnitType(u, UNIT_TYPE_MAGIC_IMMUNE)
+        return UnitAlive(u) and IsUnitEnemy(u, p) and not IsUnitType(u, UNIT_TYPE_STRUCTURE) and GetUnitAbilityLevel(u, BUFF_ID) > 0
     endfunction
     
     struct Doom extends array
@@ -25,6 +26,7 @@ scope Doom
         
         private unit caster
         private unit target
+        private effect sfx
         private real dmg
         private real time
         private real duration
@@ -33,7 +35,9 @@ scope Doom
         private method destroy takes nothing returns nothing
             call UnitRemoveAbility(this.target, BUFF_ID)
             call ReleaseTimer(this.t)
+            call DestroyEffect(this.sfx)
             set this.t = null
+            set this.sfx = null
             set this.caster = null
             set this.target = null
             call this.deallocate()
@@ -61,6 +65,7 @@ scope Doom
             set this.time = Duration(lvl)
             set this.duration = this.time
             set this.t = NewTimerEx(this)
+            set this.sfx = AddSpecialEffectTarget(SFX, this.target, "origin")
             call TimerStart(this.t, TIMEOUT, true, function thistype.onPeriod)
             call SystemMsg.create(GetUnitName(GetTriggerUnit()) + " cast thistype")
         endmethod

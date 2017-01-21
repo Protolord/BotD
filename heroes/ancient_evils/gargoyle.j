@@ -80,7 +80,6 @@ module GargoyleConfig
     set gargoyle.attribute = "19 +3.0    7 +4.3   12 +1.5"
     set gargoyle.primary = STR
     
-    
     //Configure Spells
     set gargoyle.innateSpell = deadlyRepulse
     set gargoyle.spell11 = crack
@@ -94,7 +93,6 @@ module GargoyleConfig
     set gargoyle.spell31 = stoneVision
     set gargoyle.spell32 = rockToss
     set gargoyle.spell33 = stonyPath
-    set gargoyle.spell34 = Spell.BLANK
     set gargoyle.spell41 = powderisingStrength
     set gargoyle.spell42 = stoneForm
     set gargoyle.spell43 = evilAlteration

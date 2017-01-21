@@ -1,12 +1,12 @@
 -----------------------------------------------------------------------------------------------------------------------------------
 Vigilant and the Virtuous
-|cfff4a460Target|r: |cff3399ffPassive, Enemy|n|r|cfff4a460Range|r: |cff3399ffMelee|r|n|cfff4a460Damage per second|r: |cff3399ff(3 x Hero Level)|r|n|cfff4a460Duration|r: |cff3399ff30 seconds|r|n|nEach attack will leave a mark of the Demon on it's living target dealing non lethal damage per second meaning targets will be left with at least 1 HP.
+|cfff4a460Target|r: |cff3399ffPassive, Enemy|n|r|cfff4a460Range|r: |cff3399ffMelee|r|n|cfff4a460Damage per second|r: |cff3399ff(3 x Hero Level)|r|n|cfff4a460Duration|r: |cff3399ff30 seconds|r|n|nEach attack will leave a mark of the Demon on it's living target dealing non lethal damage per second such that targets will be left with at least 1 HP.
 Target: Passive, Enemy
 Range: Melee
 Damage per second: (3 x Hero Level)
 Duration: 30 seconds
 
-Each attack will leave a mark of the Demon on it's living target dealing non lethal damage per second meaning targets will be left with at least 1 HP.
+Each attack will leave a mark of the Demon on it's living target dealing non lethal damage per second such that targets will be left with at least 1 HP.
 -----------------------------------------------------------------------------------------------------------------------------------
 Doom
 |cfff4a460Target|r: |cff3399ffEnemy Unit|n|r|cfff4a460Range|r: |cff3399ff600|n|r|cfff4a460Damage per second|r: |cff3399ff50|n|r|cfff4a460Duration|r: |cff3399ff(1 second x ability level)|n|r|cfff4a460Cooldown|r: |cff3399ff30 seconds|r|n|nMarks a target unit for the manifestation of a Demon. The afflicted unit cannot cast spells and takes magical damage over time.
@@ -65,7 +65,12 @@ Cooldown: (10 + (1 x ability level)) seconds
 Demon becomes temporarily invisible and deals extra area damage (400) on impact.
 -----------------------------------------------------------------------------------------------------------------------------------
 Infernal Chains
-<?>
+|cfff4a460Target|r: |cff3399ffPassive, Structure|n|r|cfff4a460Chain Length|r:|cff3399ff (1 x ability level)|n|r|cfff4a460Chance to proc|r:|cff3399ff 1%|n|n|rProvides Demon with a chance to devastate enemy structures dealing 10% of target's Max HP as damage. Further successful procs on the same target deals additional 10% damage up to 100%.
+Target: Passive, Structure
+Chain length: (1 x ability level)
+Chance to proc: 1%
+
+Provides Demon with a chance to devastate enemy structures dealing 10% damage. Further successful procs on the same target deals addition 10% damage up to 100%. 
 -----------------------------------------------------------------------------------------------------------------------------------
 Underworld Fires
 |cfff4a460Target|r: |cff3399ffSelf (160)|n|r|cfff4a460Damage|r: |cff3399ff(30 x ability level)|n|r|cfff4a460Mana cost|r: |cff3399ff20 + (4 x ability level)|r|n|nDemon engulfs with Underworld Fires to deal damage to nearby enemies. Also damages structures.
@@ -84,13 +89,13 @@ Cooldown: 30 seconds
 Demon releases his Diabolic Senses which are aiming any living unit nearby dealing 50 damage. Also provide 1000 exploration range and reveal invisible units. Lasts 15 seconds.
 -----------------------------------------------------------------------------------------------------------------------------------
 Dark Lord Vision
-|cfff4a460Target|r: |cff3399ffSelf|n|r|cfff4a460Reveal threshold|r: |cff3399ff50% + (5% x ability level)|n|r|cfff4a460Duration|r: |cff3399ff30 seconds|r|n|cfff4a460Cooldown|r: |cff3399ff30 seconds|r|n|nDemon gains a vision of any units that are not healthy. Lasts 30 seconds.
+|cfff4a460Target|r: |cff3399ffSelf|n|r|cfff4a460Reveal threshold|r: |cff3399ff50% + (5% x ability level)|n|r|cfff4a460Duration|r: |cff3399ff30 seconds|r|n|cfff4a460Cooldown|r: |cff3399ff30 seconds|r|n|nDemon gains a vision of any units that are not healthy.
 Target: Self
 Reveal threshold: 25% + (5% x ability level)
 Duration: 30 seconds
 Cooldown: 30 seconds
 
-Demon gains a vision of any units that are not healthy
+Demon gains a vision of any units that are not healthy.
 
 Notes:
 -Lv11 tooltip:

@@ -77,7 +77,7 @@ module ArachnidConfig
     set arachnid.faction = ANCIENT_EVILS
     set arachnid.name = "Arachnid"
     set arachnid.iconPath = "ReplaceableTextures\\CommandButtons\\BTN_Arachnid.blp"
-    set arachnid.scaleAdd = 0.1
+    set arachnid.scaleAdd = -0.15
     set arachnid.modelPath = "Models\\Units\\Arachnid.mdl"
     set arachnid.info = "ARACHNIDS MASTERED THEIR SUMMON, STICKY WEB AND ACID ABILITIES. WHEN COMBINED IT TURNS ARACHNID INTO DEADLY WEAPON IN THE |nHANDS OF THE SCOURGE. AS A PART OF THE SPIDER KINGDOM THEY EXCEL AT HUNTING DOWN ANYTHING THAT MOVES AND PROVIDING |nUNSTOPPABLE SUPPORT TO ALLIES."
     set arachnid.attribute = "19 +3.0    7 +4.3   12 +1.5"
@@ -96,7 +96,6 @@ module ArachnidConfig
     set arachnid.spell31 = spiders
     set arachnid.spell32 = webSpin
     set arachnid.spell33 = tunnel
-    set arachnid.spell34 = Spell.BLANK
     set arachnid.spell41 = spray
     set arachnid.spell42 = feed
     set arachnid.spell43 = poisonBlast

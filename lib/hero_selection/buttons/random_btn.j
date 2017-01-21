@@ -34,6 +34,7 @@ library RandomButton/*
                 set i = i - 1
             endloop
             call HeroDisplay.change(Track.tracker, hn.hero)
+            call SpellDisplay.reset(Track.tracker, hn.hero)
         endmethod
         
         private static method createTrack takes nothing returns nothing

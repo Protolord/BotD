@@ -2,7 +2,8 @@ scope Spray
  
     globals
         private constant integer SPELL_ID = 'A441'
-        private constant string SFX = "Models\\Effects\\SevereWound.mdx"
+        private constant string SFX = "Models\\Effects\\Spray.mdx"
+        private constant string HEALED_SFX = "Abilities\\Spells\\NightElf\\ManaBurn\\ManaBurnTarget.mdl"
         private constant real TIMEOUT = 1.0
     endglobals
     
@@ -55,6 +56,7 @@ scope Spray
                 call GroupRemoveUnit(thistype.g, u)
                 if TargetFilter(u, owner) then
                     call Heal.unit(u, this.hps, 4.0)
+                    call DestroyEffect(AddSpecialEffectTarget(HEALED_SFX, u, "origin"))
                 endif
             endloop
             call DestroyEffect(AddSpecialEffectTarget(SFX, this.dummy, "origin"))

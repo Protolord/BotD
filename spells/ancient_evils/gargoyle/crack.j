@@ -1,28 +1,19 @@
-scope CorruptingStomp
+scope Crack
 
     globals
-        private constant integer SPELL_ID = 'A112'
+        private constant integer SPELL_ID = 'A611'
         private constant string SFX = "Models\\Effects\\CorruptingStomp.mdx"
-        private constant attacktype ATTACK_TYPE = ATTACK_TYPE_NORMAL
-        private constant damagetype DAMAGE_TYPE = DAMAGE_TYPE_MAGIC
     endglobals
     
     private function Duration takes integer level returns real
         if level == 11 then
-            return 7.0
+            return 4.0
         endif
-        return 0.35*level
+        return 0.2*level
     endfunction
     
     private function Radius takes integer level returns real
-        return 250.0 + 0.0*level
-    endfunction
-    
-    private function DamageDealt takes integer level returns real
-        if level == 11 then
-            return 400.0
-        endif
-        return 20.0*level
+        return 300.0 + 0.0*level
     endfunction
     
     private function TargetFilter takes unit u, player p returns boolean
@@ -30,16 +21,15 @@ scope CorruptingStomp
     endfunction
     
     
-    struct CorruptingStomp extends array
+    struct Crack extends array
         
         private static method onCast takes nothing returns nothing
             local unit caster = GetTriggerUnit()
             local player owner = GetTriggerPlayer()
             local integer lvl = GetUnitAbilityLevel(caster, SPELL_ID)
             local real duration = Duration(lvl)
-            local real damage = DamageDealt(lvl)
-            local real x = GetUnitX(caster)
-            local real y = GetUnitY(caster)
+            local real x = GetSpellTargetX()
+            local real y = GetSpellTargetY()
             local group g = NewGroup()
             local unit dummy = GetRecycledDummyAnyAngle(x, y, 50)
             local unit u
@@ -52,7 +42,6 @@ scope CorruptingStomp
                 exitwhen u == null
                 call GroupRemoveUnit(g, u)
                 if TargetFilter(u, owner) then
-                    call Damage.element.apply(caster, u, damage, ATTACK_TYPE, DAMAGE_TYPE, DAMAGE_ELEMENT_DARK)
                     call Stun.create(u, duration, false)
                 endif
             endloop

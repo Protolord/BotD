@@ -4,7 +4,7 @@ scope SevereWound
         private constant integer SPELL_ID = 'A444'
         private constant integer UNIT_ID = 'uSeW'
         private constant real TIMEOUT = 1.0
-        private constant string HEALER_SFX = "Models\\Effects\\SevereWound.mdx"
+        private constant string HEALER_SFX = "Models\\Effects\\Spray.mdx"
         private constant string HEALED_SFX = "Abilities\\Spells\\NightElf\\ManaBurn\\ManaBurnTarget.mdl"
     endglobals
     

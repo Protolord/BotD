@@ -9,25 +9,31 @@ library HeroDisplay/*
     */ TextSplat2 /*
 
 */
+    globals
+        private constant real TIMEOUT = 0.0625
+    endglobals
 
     struct HeroDisplay extends array
         //Instance is per player
         
-        public textsplat name
-        public textsplat info
-        public textsplat attribute
-        public texttag innateSpellText
-        public fogmodifier fog
-        public fogmodifier heroVision
-        public Border primary
+        private textsplat name
+        private textsplat info
+        private textsplat attribute
+        private texttag innateSpellText
+        private fogmodifier fog
+        private fogmodifier heroVision
+        private Border primary
+        private Border selected
         
-        public thistype next
-        public thistype prev
+        private static timer t = CreateTimer()
+        private static rect r
+        private static rect modelRect
         
-        public static timer t = CreateTimer()
-        public static rect r
-        public static rect modelRect
-        public static constant integer LIST_HEAD = 100
+        //How many active HeroDisplays
+        private static integer count = 0
+
+        //local data for camerafield
+        private static boolean has = false
         
         method destroy takes nothing returns nothing
             local Hero h = PlayerStat(this).hero
@@ -36,6 +42,7 @@ library HeroDisplay/*
                 call ShowDummy(h.unitModel, false)
                 call SetImageRenderAlways(h.icon, false)
                 call SetImageRenderAlways(h.spellIcon, false)
+                set thistype.has = false
             endif
             call DestroyFogModifier(this.fog)
             call DestroyFogModifier(this.heroVision)
@@ -45,11 +52,11 @@ library HeroDisplay/*
             call this.info.destroy()
             call this.attribute.destroy()
             call this.primary.destroy()
+            call this.selected.destroy()
             call SystemTest.end()
-            set this.prev.next = .next
-            set this.next.prev = .prev
+            set thistype.count = thistype.count - 1
             //If this is the last HeroDisplay
-            if thistype(LIST_HEAD).next == LIST_HEAD then
+            if thistype.count == 0 then
                 call PauseTimer(thistype.t)
                 call SystemTest.start("Destroying the StaticDisplay: ")
                 call StaticDisplay.remove()
@@ -63,20 +70,15 @@ library HeroDisplay/*
             endif
         endmethod
 
-        public static method pickAll takes nothing returns nothing
-            local thistype this = thistype(LIST_HEAD).next
-            loop
-                exitwhen this == LIST_HEAD
-                if GetLocalPlayer() == Player(this) then
-                    call SetCameraField(CAMERA_FIELD_ANGLE_OF_ATTACK, -90, 0)
-                    call SetCameraField(CAMERA_FIELD_ROTATION, 90, 0)
-                    call SetCameraField(CAMERA_FIELD_TARGET_DISTANCE, 1700, 0)
-                endif
-                set this = this.next
-            endloop
+        private static method pickAll takes nothing returns nothing
+            if thistype.has then
+                call SetCameraField(CAMERA_FIELD_ANGLE_OF_ATTACK, -90, 0)
+                call SetCameraField(CAMERA_FIELD_ROTATION, 90, 0)
+                call SetCameraField(CAMERA_FIELD_TARGET_DISTANCE, 1700, 0)
+            endif
         endmethod
         
-        public static method endAll takes nothing returns nothing
+        private static method endAll takes nothing returns nothing
             call thistype(GetPlayerId(GetEnumPlayer())).destroy()
         endmethod
         
@@ -89,6 +91,7 @@ library HeroDisplay/*
             local thistype this = GetPlayerId(p)
             local boolean b = GetLocalPlayer() == p
             local Hero prevHero = PlayerStat(this).hero
+            local HeroButton hb = HeroButton.get(h)
             //Show Hero Model
             if b then
                 if prevHero != 0 then
@@ -98,7 +101,9 @@ library HeroDisplay/*
                 endif
                 call ShowDummy(h.unitModel, true)
                 call SetImageRenderAlways(h.icon, true)
-                call SetImageRenderAlways(h.spellIcon, true)
+                if h.innateSpell > 0 then
+                    call SetImageRenderAlways(h.spellIcon, true)
+                endif
             endif
             call SetTextTagText(this.innateSpellText, h.innateSpell.info1, 0.02)
             call SetTextTagPos(this.innateSpellText, ICON_X - 20, ATTR_Y - 130 - h.innateSpell.yOffset1, 0)
@@ -106,6 +111,7 @@ library HeroDisplay/*
             call this.attribute.setText(h.attribute, 6.1, TEXTSPLAT_TEXT_ALIGN_LEFT)
             call this.name.setText(h.name, 10, TEXTSPLAT_TEXT_ALIGN_LEFT)
             call this.primary.move(ATTR_UI_X + 100*(h.primary - 1) - 2.5, ATTR_UI_Y - 1)
+            call this.selected.move(hb.x, hb.y)
             set PlayerStat(this).hero = h
             call ConfirmButton.show(p, false)
         endmethod
@@ -116,6 +122,7 @@ library HeroDisplay/*
             set this.info = textsplat.create(TREBUCHET_MS)
             set this.attribute = textsplat.create(TREBUCHET_MS)
             set this.primary = Border.create(0, 61, 0, 61)
+            set this.selected = Border.create(0, 70, 0, 70)
             set this.name = textsplat.create(TREBUCHET_MS)
             set this.innateSpellText = CreateTextTag()
             call this.info.setPosition(INFO_X, INFO_Y, 1)
@@ -124,19 +131,20 @@ library HeroDisplay/*
             call this.info.setVisible(b)
             call this.attribute.setVisible(b)
             call this.primary.show(b)
+            call this.selected.show(b)
             call this.name.setVisible(b)
             call SetTextTagVisibility(this.innateSpellText, b)
-            set this.next = LIST_HEAD
-            set this.prev = thistype(LIST_HEAD).prev
-            set this.next.prev = this
-            set this.prev.next = this
-            if this.prev == LIST_HEAD then
+            set thistype.count = thistype.count + 1
+            if thistype.count == 1 then
                 call TimerStart(thistype.t, TIMEOUT, true, function thistype.pickAll)
+            endif
+            if b then
+                set thistype.has = true
             endif
             return this
         endmethod
         
-        public static method perPlayer takes nothing returns nothing
+        private static method perPlayer takes nothing returns nothing
             local player p = GetEnumPlayer()
             local thistype this = thistype.create(p)
             set this.heroVision = CreateFogModifierRect(p, FOG_OF_WAR_VISIBLE, thistype.modelRect, true, false)
@@ -157,12 +165,7 @@ library HeroDisplay/*
             call SystemTest.end()
             return false
         endmethod
-        
-        public static method onInit takes nothing returns nothing
-            set thistype(LIST_HEAD).next = LIST_HEAD
-            set thistype(LIST_HEAD).prev = LIST_HEAD
-        endmethod
-        
+
     endstruct
 
 endlibrary

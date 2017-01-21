@@ -8,9 +8,10 @@ scope ClawPierce
         private constant string SFX = "Abilities\\Spells\\Other\\Stampede\\StampedeMissileDeath.mdl"//"Models\\Effects\\ClawPierce.mdx"
     endglobals
     
+    //In percent
     private function Chance takes integer level returns real
         if level == 11 then
-            return 100.0//75.0
+            return 75.0
         endif
         return 5.0*level
     endfunction

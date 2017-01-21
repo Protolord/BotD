@@ -1,5 +1,5 @@
 library Buff /*
-                        Buff System v1.11
+                           Buff v1.20
                             by Flux
                
             Handles all interactions of self-defined buffs.
@@ -9,8 +9,9 @@ library Buff /*
                 - Supports 3 types of buff stacking.
                 - Buffs with duration.
                 - Pick all Buffs of a unit easily.
+               
            
-        */ requires Ascii/*
+        */ requires /*
            (nothing)
        
         */ optional TimerUtils /*  
@@ -53,7 +54,7 @@ library Buff /*
         //but will generate a lot of scripts in the process
         private constant boolean PRELOAD_BUFFS = false
     endglobals
-   
+
     struct Buff
        
         readonly boolean exist
@@ -69,12 +70,11 @@ library Buff /*
         private integer buffId
         private integer stackId
         private integer dispelId
-       
+        //For duration
         private timer t
        
-       
-        private static hashtable hash = InitHashtable()
-       
+        readonly static hashtable priv_hash = InitHashtable()
+
         stub method rawcode takes nothing returns integer
             return 0
         endmethod
@@ -97,6 +97,9 @@ library Buff /*
             return GetObjectName(this.rawcode())
         endmethod
        
+        //===============================================================
+        //======================== BUFF CORE ============================
+        //===============================================================        
         method remove takes nothing returns nothing
             local boolean remove = false
             local integer ids
@@ -107,7 +110,7 @@ library Buff /*
             if this.exist then
                 set ids = GetHandleId(this.source)
                 set idt = GetHandleId(this.target)
-                set head = LoadInteger(thistype.hash, idt, 0)
+                set head = LoadInteger(thistype.priv_hash, idt, 0)
                
                 call this.onRemove()
                
@@ -115,7 +118,7 @@ library Buff /*
                     static if LIBRARY_TimerUtils then
                         call ReleaseTimer(this.t)
                     else
-                        call RemoveSavedInteger(thistype.hash, GetHandleId(this.t), 0)
+                        call RemoveSavedInteger(thistype.priv_hash, GetHandleId(this.t), 0)
                         call DestroyTimer(this.t)
                     endif
                     set this.t = null
@@ -123,26 +126,26 @@ library Buff /*
                
                 if this.stackId == BUFF_STACK_FULL then
                     //Update Buff count
-                    set count = LoadInteger(thistype.hash, this.getType(), idt) - 1
-                    call SaveInteger(thistype.hash, this.getType(), idt, count)
+                    set count = LoadInteger(thistype.priv_hash, this.getType(), idt) - 1
+                    call SaveInteger(thistype.priv_hash, this.getType(), idt, count)
                     if count == 0 then
                         set remove = true
                     endif
                    
                 elseif this.stackId == BUFF_STACK_PARTIAL then
                     //Update Buff count
-                    set count = LoadInteger(thistype.hash, this.getType(), idt) - 1
-                    call SaveInteger(thistype.hash, this.getType(), idt, count)
+                    set count = LoadInteger(thistype.priv_hash, this.getType(), idt) - 1
+                    call SaveInteger(thistype.priv_hash, this.getType(), idt, count)
                     if count == 0 then
                         set remove = true
                     endif
                     //Remove saved Buff instance bound to [source id][target id][this.getType()]
-                    call RemoveSavedInteger(thistype.hash, ids, idt*this.getType())
+                    call RemoveSavedInteger(thistype.priv_hash, ids, idt*this.getType())
                    
                 elseif this.stackId == BUFF_STACK_NONE then
                     set remove = true
                     //Remove saved Buff instance bound to [target id][this.getType()]
-                    call RemoveSavedInteger(thistype.hash, idt, this.getType())
+                    call RemoveSavedInteger(thistype.priv_hash, idt, this.getType())
                    
                 endif
                
@@ -154,12 +157,12 @@ library Buff /*
                 //Remove from the BuffList
                 //If this is the only Buff of the unit
                 if this == head and this.bnext == head then
-                    call RemoveSavedInteger(thistype.hash, idt, 0)
+                    call RemoveSavedInteger(thistype.priv_hash, idt, 0)
                 else
                     //If this is the head of the BuffList
                     if this == head then
                         //Change this unit's BuffList head
-                        call SaveInteger(thistype.hash, idt, 0, this.bnext)
+                        call SaveInteger(thistype.priv_hash, idt, 0, this.bnext)
                     endif
                     set this.bnext.bprev = this.bprev
                     set this.bprev.bnext = this.bnext
@@ -169,6 +172,8 @@ library Buff /*
                 set this.target = null
                 set this.source = null
                 call this.destroy()
+            debug else
+                debug call DisplayTextToPlayer(GetLocalPlayer(), 0, 0, "[BuffEvent]: Attempted to remove non-existing Buff instance.")
             endif
         endmethod
        
@@ -178,8 +183,8 @@ library Buff /*
                 call ReleaseTimer(GetExpiredTimer())
             else
                 local integer id = GetHandleId(GetExpiredTimer())
-                local thistype this = LoadInteger(thistype.hash, id, 0)
-                call RemoveSavedInteger(thistype.hash, id, 0)
+                local thistype this = LoadInteger(thistype.priv_hash, id, 0)
+                call RemoveSavedInteger(thistype.priv_hash, id, 0)
                 call DestroyTimer(GetExpiredTimer())
             endif
             if this.t != null then
@@ -188,24 +193,161 @@ library Buff /*
             endif
         endmethod
        
+        method operator duration takes nothing returns real
+            if this.t != null then
+                return TimerGetRemaining(this.t)
+            endif
+            return 0.0
+        endmethod
+       
         method operator duration= takes real time returns nothing
             if this.t == null then
                 static if LIBRARY_TimerUtils then
                     set this.t = NewTimerEx(this)
                 else
                     set this.t = CreateTimer()
-                    call SaveInteger(thistype.hash, GetHandleId(this.t), 0, this)
+                    call SaveInteger(thistype.priv_hash, GetHandleId(this.t), 0, this)
                 endif
             endif
             call TimerStart(this.t, time, false, function thistype.expires)
         endmethod
        
+        method check takes unit source, unit target returns thistype
+            local boolean apply = false
+            local integer prevSpellId = 0
+            local integer idt = GetHandleId(target)
+            local integer ids
+            local thistype head
+            static if not LIBRARY_TimerUtils then
+                local timer t
+            endif
+           
+            set this.stackId = this.stackType()
+            set this.dispelId = this.dispelType()
+           
+            if this.stackId == BUFF_STACK_FULL then
+                //Count how many buffs are stored in a certain unit
+                call SaveInteger(thistype.priv_hash, this.getType(), idt, LoadInteger(thistype.priv_hash, this.getType(), idt) + 1)                
+                set apply = true
+               
+            elseif this.stackId == BUFF_STACK_PARTIAL then
+                set ids = GetHandleId(source)
+                //Check if a similar buff with the same source and target exist
+                //Uses dimensions [source id][target id][buff type]
+                if HaveSavedInteger(thistype.priv_hash, ids, idt*this.getType()) then
+                    call this.destroy()
+                    set this = LoadInteger(thistype.priv_hash, ids, idt*this.getType())
+                    set prevSpellId = this.spellId
+                else
+                    //Store the Buff instance to hashtable [source id][target id][buff type]
+                    call SaveInteger(thistype.priv_hash, ids, idt*this.getType(), this)
+                    set apply = true
+                   
+                    //Count how many buffs of this type are stored in this certain unit
+                    call SaveInteger(thistype.priv_hash, this.getType(), idt, LoadInteger(thistype.priv_hash, this.getType(), idt) + 1)
+                endif
+               
+            elseif this.stackId == BUFF_STACK_NONE then
+                //Check if a similar buff with the same target exist
+                //Uses dimensions [target id][buff type]
+                if HaveSavedInteger(thistype.priv_hash, idt, this.getType()) then
+                    call this.destroy()
+                    set this = LoadInteger(thistype.priv_hash, idt, this.getType())
+                    set prevSpellId = this.spellId
+                else
+                    //Store the Buff instance to hashtable [target id][buff type]
+                    call SaveInteger(thistype.priv_hash, idt, this.getType(), this)
+                    set apply = true
+                endif
+            endif
+           
+            set this.source = source
+            set this.target = target
+            set this.exist = true
+            set this.spellId = this.rawcode()
+            set this.buffId = this.spellId + 0x01000000
+           
+            //If SpellBuff is different, remove the previous SpellBuff
+            if prevSpellId != 0 and prevSpellId != this.spellId then
+                call UnitRemoveAbility(target, prevSpellId)
+                call UnitRemoveAbility(target, prevSpellId + 0x01000000)
+                call UnitAddAbility(target, this.spellId)
+                call UnitMakeAbilityPermanent(target, true, this.spellId)
+            endif
+           
+            if apply then
+               
+                if GetUnitAbilityLevel(target, this.spellId) == 0 then
+                    call UnitAddAbility(target, this.spellId)
+                    call UnitMakeAbilityPermanent(target, true, this.spellId)
+                endif
+               
+                //Add the Buff to a BuffList of this unit
+                    //If BuffList already exist
+                if HaveSavedInteger(thistype.priv_hash, idt, 0) then
+                    set head = LoadInteger(thistype.priv_hash, idt, 0)
+                    set this.bnext = head
+                    set this.bprev = head.bprev
+                    set this.bnext.bprev = this
+                    set this.bprev.bnext = this
+                else
+                    //Set this as the unit's BuffList head
+                    call SaveInteger(thistype.priv_hash, idt, 0, this)
+                    set this.bnext = this
+                    set this.bprev = this
+                endif
+               
+                call this.onApply()
+            endif
+           
+            static if LIBRARY_BuffEvent then
+                static if LIBRARY_TimerUtils then
+                    call TimerStart(NewTimerEx(this), 0.0, false, function BuffEvent.pickAll)
+                else
+                    set t = CreateTimer()
+                    call SaveInteger(thistype.priv_hash, GetHandleId(t), 0, this)
+                    call TimerStart(t, 0.0, false, function BuffEvent.pickAll)
+                endif
+            endif
+            return this
+        endmethod
+       
+        //===============================================================
+        //======================== BUFF ENUM ============================
+        //===============================================================
+        readonly static thistype buffHead
+        readonly static thistype picked
+       
+        //Will get inlined anyway
+        //The idea is to prevent users from overwriting Buff.picked
+        static method priv_nextBuff takes nothing returns nothing
+            set thistype.picked = thistype.picked.bnext
+        endmethod
+       
+        //
+        static method priv_headBuff takes nothing returns nothing
+            set thistype.picked = thistype.buffHead
+        endmethod
+       
+        static method pickBuffs takes unit u returns nothing
+            local integer id = GetHandleId(u)
+            if HaveSavedInteger(thistype.priv_hash, id, 0) then
+                set thistype.buffHead = LoadInteger(thistype.priv_hash, id, 0)
+            else
+                set thistype.buffHead = 0
+            endif
+        endmethod
+       
+       
+        //===============================================================
+        //======================= BUFF DISPEL ===========================
+        //===============================================================
         static method dispel takes unit u, integer dispelType returns nothing
             local integer id = GetHandleId(u)
             local thistype head
             local thistype this
-            if HaveSavedInteger(thistype.hash, id, 0) then
-                set head = LoadInteger(thistype.hash, id, 0)
+            if HaveSavedInteger(thistype.priv_hash, id, 0) then
+                set head = LoadInteger(thistype.priv_hash, id, 0)
                 set this = head.bnext
                 loop
                     if this.dispelId == dispelType then
@@ -216,26 +358,14 @@ library Buff /*
                 endloop
             endif
         endmethod
-       
-        readonly static thistype buffHead
-        public static thistype picked
-       
-        static method pickBuffs takes unit u returns nothing
-            local integer id = GetHandleId(u)
-            if HaveSavedInteger(thistype.hash, id, 0) then
-                set thistype.buffHead = LoadInteger(thistype.hash, id, 0)
-            else
-                set thistype.buffHead = 0
-            endif
-        endmethod
 
        
         static method dispelBoth takes unit u returns nothing
             local integer id = GetHandleId(u)
             local thistype head
             local thistype this
-            if HaveSavedInteger(thistype.hash, id, 0) then
-                set head = LoadInteger(thistype.hash, id, 0)
+            if HaveSavedInteger(thistype.priv_hash, id, 0) then
+                set head = LoadInteger(thistype.priv_hash, id, 0)
                 set this = head.bnext
                 loop
                     if this.dispelId == BUFF_POSITIVE or this.dispelId == BUFF_NEGATIVE then
@@ -251,8 +381,8 @@ library Buff /*
             local integer id = GetHandleId(u)
             local thistype head
             local thistype this
-            if HaveSavedInteger(thistype.hash, id, 0) then
-                set head = LoadInteger(thistype.hash, id, 0)
+            if HaveSavedInteger(thistype.priv_hash, id, 0) then
+                set head = LoadInteger(thistype.priv_hash, id, 0)
                 set this = head.bnext
                 loop
                     call this.remove()
@@ -264,95 +394,6 @@ library Buff /*
        
         private static method onDeath takes nothing returns nothing
             call thistype.dispelAll(GetTriggerUnit())
-        endmethod
-       
-        method check takes unit source, unit target returns thistype
-            local boolean apply = false
-            local integer bprevSpellId = 0
-            local integer idt = GetHandleId(target)
-            local integer ids
-            local thistype head
-           
-           
-            set this.stackId = this.stackType()
-            set this.dispelId = this.dispelType()
-           
-            if this.stackId == BUFF_STACK_FULL then
-                //Count how many buffs are stored in a certain unit
-                call SaveInteger(thistype.hash, this.getType(), idt, LoadInteger(thistype.hash, this.getType(), idt) + 1)                
-                set apply = true
-               
-            elseif this.stackId == BUFF_STACK_PARTIAL then
-                set ids = GetHandleId(source)
-                //Check if a similar buff with the same source and target exist
-                //Uses dimensions [source id][target id][buff type]
-                if HaveSavedInteger(thistype.hash, ids, idt*this.getType()) then
-                    call this.destroy()
-                    set this = LoadInteger(thistype.hash, ids, idt*this.getType())
-                    set bprevSpellId = this.spellId
-                else
-                    //Store the Buff instance to hashtable [source id][target id][buff type]
-                    call SaveInteger(thistype.hash, ids, idt*this.getType(), this)
-                    set apply = true
-                   
-                    //Count how many buffs of this type are stored in this certain unit
-                    call SaveInteger(thistype.hash, this.getType(), idt, LoadInteger(thistype.hash, this.getType(), idt) + 1)
-                endif
-               
-            elseif this.stackId == BUFF_STACK_NONE then
-                //Check if a similar buff with the same target exist
-                //Uses dimensions [target id][buff type]
-                if HaveSavedInteger(thistype.hash, idt, this.getType()) then
-                    call this.destroy()
-                    set this = LoadInteger(thistype.hash, idt, this.getType())
-                    set bprevSpellId = this.spellId
-                else
-                    //Store the Buff instance to hashtable [target id][buff type]
-                    call SaveInteger(thistype.hash, idt, this.getType(), this)
-                    set apply = true
-                endif
-            endif
-           
-            set this.source = source
-            set this.target = target
-            set this.exist = true
-            set this.spellId = this.rawcode()
-            set this.buffId = this.spellId + 0x20000000
-           
-            //If SpellBuff is different, remove the previous SpellBuff
-            if bprevSpellId != 0 and bprevSpellId != this.spellId then
-                call UnitRemoveAbility(target, bprevSpellId)
-                call UnitRemoveAbility(target, bprevSpellId + 0x20000000)
-                call UnitAddAbility(target, this.spellId)
-                call UnitMakeAbilityPermanent(target, true, this.spellId)
-            endif
-           
-            if apply then
-                
-                if GetUnitAbilityLevel(target, this.spellId) == 0 then
-                    call UnitAddAbility(target, this.spellId)
-                    call UnitMakeAbilityPermanent(target, true, this.spellId)
-                endif
-               
-                //Add the Buff to a BuffList of this unit
-                    //If BuffList already exist
-                if HaveSavedInteger(thistype.hash, idt, 0) then
-                    set head = LoadInteger(thistype.hash, idt, 0)
-                    set this.bnext = head
-                    set this.bprev = head.bprev
-                    set this.bnext.bprev = this
-                    set this.bprev.bnext = this
-                else
-                    //Set this as the unit's BuffList head
-                    call SaveInteger(thistype.hash, idt, 0, this)
-                    set this.bnext = this
-                    set this.bprev = this
-                endif
-               
-                call this.onApply()
-            endif
-           
-            return this
         endmethod
        
         implement optional BuffInit
@@ -407,13 +448,13 @@ library Buff /*
    
     module BuffListStart
         if Buff.buffHead > 0 then
-            set Buff.picked = Buff.buffHead
+            call Buff.priv_headBuff()
             loop
     endmodule
    
     module BuffListEnd
                 exitwhen Buff.picked == Buff.buffHead.bprev
-                set Buff.picked = Buff.picked.bnext
+                call Buff.priv_nextBuff()
             endloop
         endif
     endmodule

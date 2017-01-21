@@ -94,7 +94,6 @@ module VampireLordConfig
     set vampireLord.spell31 = eyeOfDarkness
     set vampireLord.spell32 = viciousExplorers
     set vampireLord.spell33 = spectralTrack
-    set vampireLord.spell34 = Spell.BLANK
     set vampireLord.spell41 = veinsOfBlood
     set vampireLord.spell42 = bloodlines
     set vampireLord.spell43 = bloodExtremity

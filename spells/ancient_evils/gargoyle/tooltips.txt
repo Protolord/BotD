@@ -1,0 +1,87 @@
+Crack
+|cfff4a460Target|r: |cff3399ffArea of Effect (300)|n|r|cfff4a460Range|r: |cff3399ff800|n|r|cfff4a460Duration|r: |cff3399ff(0.2 second x ability level)|n|r|cfff4a460Cooldown|r: |cff3399ff20 seconds|r|n|nGargoyle cracks the ground and temporarily stuns all nearby opponents.
+Target: Area of Effect (300)
+Range: 800
+Duration: (0.2 second x ability level)
+Cooldown: 20 seconds
+
+Gargoyle cracks the ground and temporarily stuns all nearby opponents.
+-----------------------------------------------------------------------------------------------------------------------------------
+Stone Gaze
+|cfff4a460Target|r: |cff3399ffEnemy Unit|n|r|cfff4a460Range|r: |cff3399ff600|n|r|cfff4a460Damage|r: |cff3399ff(40 x ability level)|n|r|cfff4a460Duration|r: |cff3399ff(0.4 second x ability level)|n|r|cfff4a460Cooldown|r:|cff3399ff 15 seconds|r|n|nSends a wave of unknown energy to deal magic damage and temporarily turn a living unit into a stone.
+Target: Enemy Unit
+Range: 600
+Damage: (40 x ability level)
+Duration: (0.4 second x ability level)
+Cooldown: 15 seconds
+
+Sends a wave of unknown energy to deal magic damage and temporarily turn a living unit into a stone.
+-----------------------------------------------------------------------------------------------------------------------------------
+Terror
+|cfff4a460Target|r: |cff3399ffSelf (400)|n|r|cfff4a460Damage|r: |cff3399ff(35 x ability level)|n|r|cfff4a460Cooldown|r: |cff3399ff15 seconds|r|n|nGargoyle creates a horrifying scream which damages nearby enemy units and makes them to run away 250 range away.
+Target: Self (400)
+Damage: (35 x ability level)
+Cooldown: 15 seconds
+
+Gargoyle creates a horrifying scream which damages nearby enemy units and makes them to run away 250 range away.
+
+-----------------------------------------------------------------------------------------------------------------------------------
+
+
+Uplift Purpose
+|cfff4a460Target|r: |cff3399ffSelf|n|r|cfff4a460Hitpoints Sacrificed|r: |cff3399ff(1% x ability level)|n|r|cfff4a460Duration|r: |cff3399ff10 seconds|n|r|cfff4a460Cooldown|r: |cff3399ff30 seconds|r|n|nGargoyle sacrifices some amount of his maximum life as a damage for his next attack. This ability can kill Gargoyle if used unwise.
+Target: Self
+Hitpoints Sacrificed: (1% x ability level)
+Duration: 10 seconds
+Cooldown: 30 seconds
+
+Gargoyle sacrifices some amount of his maximum life as a damage for his next attack. This ability can kill Gargoyle if used unwise.
+-----------------------------------------------------------------------------------------------------------------------------------
+Rock Hard
+|cfff4a460Target|r: |cff3399ffPassive|n|r|cfff4a460Reduction|r: |cff3399ff(1 damage + (0.5 x ability level))|r|n|nGargoyle rock hard skin can reduce damage from incoming ranged attacks.
+Target: Passive
+Reduction: (1 damage + (0.5 x ability level))
+
+Gargoyle rock hard skin can reduce damage from incoming ranged attacks.
+-----------------------------------------------------------------------------------------------------------------------------------
+Camouflage
+|cfff4a460Target|r: |cff3399ffSelf|n|r|cfff4a460Stun Duration|r: |cff3399ff(0.3 second x ability level)|n|r|cfff4a460Duration|r: |cff3399ff10 seconds|n|r|cfff4a460Cooldown|r: |cff3399ff20 seconds|r|n|nGargoyle becomes temporarily invisible, moves 10% slower and will temporarily stun it's first target.
+Target: Self
+Stun Duration: (0.3 second x ability level)
+Duration: 10 seconds
+Cooldown: 20 seconds
+
+Gargoyle becomes temporarily invisible, moves 10% slower and will temporarily stun it's first target.
+-----------------------------------------------------------------------------------------------------------------------------------
+Rock Toss
+|cfff4a460Target|r: |cff3399ffPoint|n|r|cfff4a460Exploration|r: |cff3399ff(500 x level of ability)|n|r|cfff4a460Cooldown|r: |cff3399ff30 seconds|r|n|nGargoyle tosses a massive burning rock which on impact with the ground will temporarily stun opponents in a range of 500 for 1 second. Exploration lasts 15 seconds, also reveals invisible units.
+Target: Point
+Exploration: (500 x level of ability)
+Cooldown: 30 seconds
+
+Gargoyle tosses a massive burning rock which on impact with the ground will temporarily stun opponents in a range of 500 for 1 second. Exploration lasts 15 seconds, also reveals invisible units.
+-----------------------------------------------------------------------------------------------------------------------------------
+Stony Path
+-----------------------------------------------------------------------------------------------------------------------------------
+Powderising Strength
+|cfff4a460Target|r: |cff3399ffPassive|n|r|cfff4a460Life restored|r: |cff3399ff(15% + (4% x ability level))|r|n|nGargoyle is able to regain his life from attacking structures.
+Target: Passive
+Life restored: (15% + (4% x ability level))
+
+Gargoyle is able to regain his life from attacking structures.
+-----------------------------------------------------------------------------------------------------------------------------------
+Stone Form
+|cfff4a460Target|r: |cff3399ffSelf|n|r|cfff4a460Healing|r: |cff3399ff(100 per second x ability level)|n|r|cfff4a460Cooldown|r: |cff3399ff60 seconds|r|n|nGargoyle turns into his stone form and gaining a massive regeneration. It takes 3 seconds to turn into stone form. Gargoyle is immobile and loses his ability to attack during stone form. Stone Form is interruptible. Heals 4x more hitpoints on ethereal Gargoyle.
+Target: Self
+Healing: (100 per second x ability level)
+Cooldown: 60 seconds
+
+Gargoyle turns into his stone form and gaining a massive regeneration. It takes 3 seconds to turn into stone form. Gargoyle is immobile and loses his ability to attack during stone form. Stone Form is interruptible. Heals 4x more hitpoints on ethereal Gargoyle.
+-----------------------------------------------------------------------------------------------------------------------------------
+Evil Alternation
+|cfff4a460Target|r: |cff3399ffSelf|n|r|cfff4a460Damage healed|r: |cff3399ff(75% of damage taken + (5% x ability level))|r|n|nGargoyle activates spiritual shield which gains damage Gargoyle is taking and upon deactivation restores some of it's power to heal Gargoyle. Drains 25 mana per second.
+Target: Self
+Damage healed: (75% of damage taken + (5% x ability level))
+
+Gargoyle activates spiritual shield which gains damage Gargoyle is taking and upon deactivation restores some of it's power to heal Gargoyle. Drains 25 mana per second.
+-----------------------------------------------------------------------------------------------------------------------------------

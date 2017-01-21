@@ -63,8 +63,7 @@ scope Hatch
                 call UnitSetBonus(u, BONUS_ATK_SPEED, R2I(100*AttackSpeedBonus(lvl)))
                 call IssuePointOrderById(u, ORDER_attack, x + GetRandomReal(-PERIMETER, PERIMETER), y + GetRandomReal(-PERIMETER, PERIMETER))
                 if lvl == 11 then
-                    call Invisible.create(u, duration)
-                    call SetUnitScale(u, 1.25, 0, 0)
+                    call SetUnitVertexColor(u, 255, 20, 20, 255)
                 endif
                 set i = i - 1
             endloop

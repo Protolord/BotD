@@ -85,6 +85,7 @@ scope ViciousExplorers
                     call SetUnitVertexColor(this.bat.u, 200, 30, 30, 255)
                 endif
                 call SetUnitScale(this.bat.u, 0.30 + 0.02*level, 0, 0)
+                //ViciousExplorers cannot die aside from expiration.
                 call TrueSight.createEx(this.bat.u, radius, duration)
                 call FlySight.createEx(this.bat.u, radius, duration)
                 call TimerStart(NewTimerEx(this), duration, false, function thistype.expires)

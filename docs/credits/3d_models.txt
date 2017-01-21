@@ -6,7 +6,7 @@
 		Vampire Lord                by -Grendel
 		Werewolf                    by WhiteDeath
 		Wraith                      by donut3.5
-		Arachnid                    by Tarrasque
+		Arachnid                    by A.R.
 		Demon                       by Werewulf
 		Gargoyle                    by Sellenisko
 		Skeleton King               by -Grendel
@@ -51,9 +51,13 @@
 		Poison Blast                by icewolf055
 		
 		Vigilant and Virtuous       by ChaoticHunter
-		Taunt                       by Infrisios
+		Doom						by xyzier_24
+		Taunt                       by JetFangInferno
 		Hellish Cloud Buff          by JetFangInferno
-		Hellish Cloud Effect        by WILL THE ALMIGHTY
+		Hellish Cloud Effect        by Vortigon
+		Dark Lord Vision			by Shyster
+		Infernal Chains Buff		by Power
+		Shattered Earth Ash Effect  by PeeKay
 		Engulfed Fires Buff         by sPy
 	
 	OTHERS:

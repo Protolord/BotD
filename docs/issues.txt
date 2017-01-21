@@ -5,10 +5,15 @@ To do list:
 SHORT TERM:        
 	
 	- Improve test map, put some trees, units, etc.
-	
-	- Spray should have some kind of projectile and heals upon landing instead of being instant
-	
-	- Trigger doom Effect to show damage element.
+
+	- Dark Lord Powers SFX
+	- Hellfire Blast SFX
+	- Rain of Fire script
+	- Hellguard script
+	- Avante heal complete no SFX
+	- Repression summon no SFX
+	- Severe Wounds summon no SFX
+	- Severe Wounds change Heal SFX
 	
 	VISUALS:
 		- Change Horror SFX
@@ -19,8 +24,6 @@ SHORT TERM:
 	- Test if Inception takes the correct damage taken factor
 	
 	- Periodic Damage from Buff should not get removed upon false TargetFilter.
-	
-	- Fetch and Dark Lord Vision should have a Buff
 	
 	- Allow units with Rabies exceed 522 ms.
 	

@@ -29,7 +29,8 @@
 //! import "../lib/public/argb.j"
 //! import "../lib/public/ascii.j"
 //! import "../lib/public/bonus_mod.j"
-//! import "../lib/public/buff_system.j"
+//! import "../lib/public/buff.j"
+//! import "../lib/public/buff_event.j"
 //! import "../lib/public/ctl.j"
 //! import "../lib/public/damage_event.j"
 //! import "../lib/public/damage_modify.j"
@@ -72,6 +73,7 @@
 //! import "../lib/sys/forced_order.j"
 
 //Unit Status
+//! import "../lib/unit_status/armor.j"
 //! import "../lib/unit_status/attackspeed.j"
 //! import "../lib/unit_status/fly_sight.j"
 //! import "../lib/unit_status/heal.j"
@@ -81,6 +83,7 @@
 //! import "../lib/unit_status/root.j"
 //! import "../lib/unit_status/silence.j"
 //! import "../lib/unit_status/spell_block.j"
+//! import "../lib/unit_status/spell_immune.j"
 //! import "../lib/unit_status/stun.j"
 
 //Utility functions

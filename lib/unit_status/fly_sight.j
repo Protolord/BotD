@@ -69,13 +69,13 @@ library FlySight uses TimerUtilsEx
                         endif
                         set this.x = GetUnitX(this.u)
                         set this.y = GetUnitY(this.u)
-                        call DestroyFogModifier(this.fm)
-                        if this.priv_radius == GLOBAL_SIGHT then
-                            set this.fm = CreateFogModifierRect(this.owner, FOG_OF_WAR_VISIBLE, WorldBounds.world, true, false)
-                        else
+                        //Only recreate if it is a new owner or it is not global sight
+                        //Global sights does not need to be re-created because they provide the same vision.
+                        if this.priv_radius < GLOBAL_SIGHT or not b then
+                            call DestroyFogModifier(this.fm)
                             set this.fm = CreateFogModifierRadius(this.owner, FOG_OF_WAR_VISIBLE, this.x, this.y, this.priv_radius, true, false)
+                            call FogModifierStart(this.fm)
                         endif
-                        call FogModifierStart(this.fm)
                     endif
                 else
                     call this.destroy()

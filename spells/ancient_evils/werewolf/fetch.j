@@ -2,6 +2,7 @@ scope Fetch
 
     globals
         private constant integer SPELL_ID = 'A233'
+        private constant integer BUFF_ID = 'B233'
         private constant string SFX = "Models\\Effects\\FetchBuff.mdx"
         private constant real NODE_RADIUS = 250
         private constant real TIMEOUT = 0.05
@@ -67,127 +68,127 @@ scope Fetch
         
     endstruct
     
-    struct Fetch extends array
-        implement Alloc
+    private struct SpellBuff extends Buff
         implement List
-        
-        private SightSource source
-        private real radius
-        private real duration
-        private unit u
+
+        public SightSource ss
+        public FlySight fs
+        public real radius
         private player owner
         private group visible
-        private fogmodifier fm
         private effect sfx
-        
-        private static group g
-        private static timer t
-        
-        private method destroy takes nothing returns nothing
-            local SightSource sight = this.source.next
-            call this.pop()
-            //Destroy all SightSource
-            loop
-                exitwhen sight == this.source
-                call sight.destroy()
-                set sight = sight.next
-            endloop
-            call this.source.destroy()
-            call DestroyGroup(this.visible)
-            call DestroyEffect(this.sfx)
-            set this.u = null
-            set this.sfx = null
-            set this.visible = null
-            call this.deallocate()
+
+        public static group g
+
+        method rawcode takes nothing returns integer
+            return BUFF_ID
         endmethod
         
-        private method update takes nothing returns nothing
+        method dispelType takes nothing returns integer
+            return BUFF_POSITIVE
+        endmethod
+        
+        method stackType takes nothing returns integer
+            return BUFF_STACK_NONE
+        endmethod
+        
+        method onRemove takes nothing returns nothing
+            local SightSource sight = this.ss.next
+            call this.pop()
+            if this.ss > 0 then
+                //Destroy all SightSource
+                loop
+                    exitwhen sight == this.ss
+                    call sight.destroy()
+                    set sight = sight.next
+                endloop
+            endif
+            if this.fs > 0 then
+                call this.fs.destroy()
+            endif
+            call ReleaseGroup(this.visible)
+            call DestroyEffect(this.sfx)
+            set this.sfx = null
+            set this.visible = null
+            set this.owner = null
+        endmethod
+
+        private static method onPeriod takes nothing returns nothing
+            local thistype this = thistype(0).next
             local unit u
             local SightSource ss
             local boolean b
-            set this.duration = this.duration - TIMEOUT
-            if this.duration > 0 then
-                call GroupUnitsInArea(thistype.g, GetUnitX(this.u), GetUnitY(this.u), this.radius)
-                set b = this.owner != GetOwningPlayer(this.u)
-                if b then
-                    set this.owner = GetOwningPlayer(this.u)
-                endif
-                loop
-                    set u = FirstOfGroup(thistype.g)
-                    exitwhen u == null
-                    call GroupRemoveUnit(thistype.g, u)
-                    if not IsUnitInGroup(u, this.visible) and TargetFilter(u, this.owner) then
-                        call GroupAddUnit(this.visible, u)
-                        call SightSource.create(this.source, u, this.owner)
-                    endif
-                endloop
-                //Update SightSources
-                set ss = this.source.next
-                loop
-                    exitwhen ss == this.source
-                    if IsUnitInRange(this.u, ss.target, this.radius) and TargetFilter(ss.target, this.owner) then
-                        call SetUnitX(ss.u, GetUnitX(ss.target))
-                        call SetUnitY(ss.u, GetUnitY(ss.target))
-                        if b then
-                            call SetUnitOwner(ss.u, this.owner, false)
-                        endif
-                    else
-                        call GroupRemoveUnit(this.visible, ss.target)
-                        call ss.destroy()
-                    endif
-                    set ss = ss.next
-                endloop
-            else
-                call this.destroy()
-            endif
-            set u = null
-        endmethod
-        
-        private static method onPeriod takes nothing returns nothing
-            local thistype this = thistype(0).next
             loop
                 exitwhen this == 0
-                call this.update()
+                if this.ss > 0 then
+                    call GroupUnitsInArea(thistype.g, GetUnitX(this.target), GetUnitY(this.target), this.radius)
+                    set b = this.owner != GetOwningPlayer(this.target)
+                    if b then
+                        set this.owner = GetOwningPlayer(this.target)
+                    endif
+                    loop
+                        set u = FirstOfGroup(thistype.g)
+                        exitwhen u == null
+                        call GroupRemoveUnit(thistype.g, u)
+                        if not IsUnitInGroup(u, this.visible) and TargetFilter(u, this.owner) then
+                            call GroupAddUnit(this.visible, u)
+                            call SightSource.create(this.ss, u, this.owner)
+                        endif
+                    endloop
+                    //Update SightSources
+                    set ss = this.ss.next
+                    loop
+                        exitwhen ss == this.ss
+                        if IsUnitInRange(this.target, ss.target, this.radius) and TargetFilter(ss.target, this.owner) then
+                            call SetUnitX(ss.u, GetUnitX(ss.target))
+                            call SetUnitY(ss.u, GetUnitY(ss.target))
+                            if b then
+                                call SetUnitOwner(ss.u, this.owner, false)
+                            endif
+                        else
+                            call GroupRemoveUnit(this.visible, ss.target)
+                            call ss.destroy()
+                        endif
+                        set ss = ss.next
+                    endloop
+                endif
                 set this = this.next
             endloop
         endmethod
         
-        private static method expires takes nothing returns nothing
-            local thistype this = ReleaseTimer(GetExpiredTimer())
-            call DestroyFogModifier(this.fm)
-            call DestroyEffect(this.sfx)
-            set this.fm = null
-            set this.sfx = null
-            set this.u = null
-            call this.deallocate()
+        method onApply takes nothing returns nothing
+            set this.sfx = AddSpecialEffectTarget(SFX, this.target, "overhead")
+            set this.owner = GetOwningPlayer(this.target)
+            set this.visible = NewGroup()
+            call this.push(TIMEOUT)
         endmethod
         
+        implement BuffApply
+    endstruct
+
+    struct Fetch extends array
+        
         private static method onCast takes nothing returns nothing
-            local thistype this = thistype.allocate()
-            local integer lvl
-            set this.u = GetTriggerUnit()
-            set this.owner = GetTriggerPlayer()
-            set lvl = GetUnitAbilityLevel(u, SPELL_ID)
+            local unit u = GetTriggerUnit()
+            local integer lvl = GetUnitAbilityLevel(u, SPELL_ID)
+            local SpellBuff b = SpellBuff.add(u, u)
+            set b.duration = Duration(lvl)
+            set b.radius = Radius(lvl)
             if lvl < 11 then
-                set this.radius = Radius(lvl)
-                set this.duration = Duration(lvl)
-                set this.visible = CreateGroup()
-                set this.source = SightSource.head()
-                call this.push(TIMEOUT)
+                set b.ss = SightSource.head()
+                set b.fs = 0
             else
-                set this.fm = CreateFogModifierRect(this.owner, FOG_OF_WAR_VISIBLE, WorldBounds.world, true, false)
-                call FogModifierStart(this.fm)
-                call TimerStart(NewTimerEx(this), Duration(lvl), false, function thistype.expires)
-                set this.owner = null
+                set b.ss = 0
+                set b.fs = FlySight.create(u, GLOBAL_SIGHT)
             endif
-            set this.sfx = AddSpecialEffectTarget(SFX, this.u, "overhead")
+            set u = null
             call SystemMsg.create(GetUnitName(GetTriggerUnit()) + " cast thistype")
         endmethod
         
-        
         static method init takes nothing returns nothing
             call SystemTest.start("Initializing thistype: ")
-            set thistype.g = CreateGroup()
+            set SpellBuff.g = CreateGroup()
+            call PreloadSpell(BUFF_ID)
             call RegisterSpellEffectEvent(SPELL_ID, function thistype.onCast)
             call SystemTest.end()
         endmethod

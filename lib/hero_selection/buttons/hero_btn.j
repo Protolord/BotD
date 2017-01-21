@@ -137,6 +137,8 @@ library HeroButton/*
             set thistype.global = this
             call ForForce(Players.users, function thistype.createTrack)
             //Create the Icon Image
+            set this.x = thistype.buttonX
+            set this.y = thistype.buttonY
             set this.icon = NewImage(h.iconPath, 64, 64, thistype.buttonX, thistype.buttonY, 1, 1)
             call SetImageRenderAlways(this.icon, true)
             //Change the button position for the next instance to be created

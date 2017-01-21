@@ -96,7 +96,6 @@ module WraithConfig
     set wraith.spell31 = ghostlyBeam
     set wraith.spell32 = repression
     set wraith.spell33 = soulDance
-    set wraith.spell34 = Spell.BLANK
     set wraith.spell41 = avante
     set wraith.spell42 = spiritualLights
     set wraith.spell43 = ancestralRift

@@ -1,14 +1,14 @@
-library Atkspeed uses Table, BonusMod, TimerUtilsEx
+library Armor uses Table, BonusMod, TimerUtilsEx
 
 /*
-    Atkspeed.create(unit, bonus)
-        - Add Atkspeed instance to a unit.
+    Armor.create(unit, bonus)
+        - Add Armor instance to a unit.
             
     this.change(newBonus)
-         - Change the atk speed modification of a certain instance.
+         - Change the armor modification of a certain instance.
         
     this.destroy()
-         - Destroy the Atkspeed instance.
+         - Destroy the Armor instance.
 
 */    
 
@@ -25,7 +25,7 @@ library Atkspeed uses Table, BonusMod, TimerUtilsEx
         return R2I(r)
     endfunction
 
-    struct Atkspeed extends array
+    struct Armor extends array
         implement Alloc
         
         readonly real b
@@ -44,7 +44,7 @@ library Atkspeed uses Table, BonusMod, TimerUtilsEx
                 call thistype.tb.remove(GetHandleId(this.u))
                 call head.deallocate()
             endif
-            call UnitSetBonus(u, BONUS_ATK_SPEED, Range(head.b*100))
+            call UnitSetBonus(u, BONUS_ARMOR, Range(head.b*100))
             call this.deallocate()
         endmethod
         
@@ -52,7 +52,7 @@ library Atkspeed uses Table, BonusMod, TimerUtilsEx
             local thistype head = this.head
             set head.b = head.b + newBonus - this.b
             set this.b = newBonus
-            call UnitSetBonus(u, BONUS_ATK_SPEED, Range(head.b*100))
+            call UnitSetBonus(u, BONUS_ARMOR, Range(head.b*100))
         endmethod
         
         static method create takes unit u, real bonus returns thistype
@@ -72,7 +72,7 @@ library Atkspeed uses Table, BonusMod, TimerUtilsEx
             set this.b = bonus
             set this.head = head
             set head.b = head.b + this.b
-            call UnitSetBonus(u, BONUS_ATK_SPEED, Range(head.b*100))
+            call UnitSetBonus(u, BONUS_ARMOR, Range(head.b*100))
             return this
         endmethod
         

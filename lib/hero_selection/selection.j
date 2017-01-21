@@ -54,9 +54,8 @@ library SelectionMain /*
         constant real RANDOM_BTN_Y = CENTER_Y - 250
         constant real ATTR_UI_X = ATTR_X + 40
         constant real ATTR_UI_Y = ATTR_Y + 75
-    constant string TRACK_PATH_SMALL = "Doodads\\Terrain\\InvisiblePlatformSmall\\InvisiblePlatformSmall.mdl"
+        constant string TRACK_PATH_SMALL = "Doodads\\Terrain\\InvisiblePlatformSmall\\InvisiblePlatformSmall.mdl"
         constant string LINE = "LASR"
-        constant real TIMEOUT = 0.05
         constant string BLACK_IMAGE = "UI\\BlackImage.blp"
         constant integer BLACK_ALPHA = 210
     //---------------------------------------------------------
@@ -68,8 +67,8 @@ library SelectionMain /*
 
         private static method onInit takes nothing returns nothing
             local trigger t = CreateTrigger()
-            call Spell.initialize.evaluate()
-            call Hero.initialize.evaluate()
+            call ExecuteFunc(Spell.initialize.name)
+            call ExecuteFunc(Hero.initialize.name)
             call TriggerRegisterTimerEvent(t, 0.01, false)
             call TriggerAddCondition(t, function ConfirmButton.init)
             call TriggerAddCondition(t, function RandomButton.init)
@@ -79,7 +78,6 @@ library SelectionMain /*
             call TriggerAddCondition(t, function HeroDisplay.init)
             call TriggerAddCondition(t, function StaticDisplay.init)
             call SetCameraPosition(CENTER_X, CENTER_Y)
-            set t = null
         endmethod
 
     endstruct

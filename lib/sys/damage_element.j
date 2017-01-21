@@ -33,9 +33,8 @@ library DamageElement uses DamageEvent, FloatingText
         endmethod
             
         private static method onDamage takes nothing returns boolean
-            //local textsplat t
             if Damage.source == thistype.source then
-                call FloatingTextSplat(thistype.path[thistype.element] + I2S(R2I(Damage.amount)) + "|r", Damage.target, 1.0).setVisible(GetLocalPlayer() == GetOwningPlayer(Damage.source) and IsUnitVisible(Damage.target, GetLocalPlayer()))
+                call FloatingTextSplat(thistype.path[thistype.element] + I2S(R2I(Damage.amount + 0.5)) + "|r", Damage.target, 1.0).setVisible(GetLocalPlayer() == GetOwningPlayer(Damage.source) and IsUnitVisible(Damage.target, GetLocalPlayer()))
             endif
             return false
         endmethod
@@ -76,8 +75,16 @@ library DamageElement uses DamageEvent, FloatingText
         static Element element
         
         static method apply takes unit source, unit target, real amount, attacktype at, damagetype dt returns nothing
-            call UnitDamageTarget(source, target, amount, false, false, at, dt, null)
+            call UnitDamageTarget(source, target, amount, true, false, at, dt, null)
         endmethod
+
+        static method kill takes unit source, unit target returns nothing
+            set Damage.enabled = false
+            call SetWidgetLife(target, 0.406)
+            call UnitDamageTarget(source, target, 0x0000FFFF, true, false, ATTACK_TYPE_CHAOS, DAMAGE_TYPE_UNIVERSAL, null)
+            set Damage.enabled = true
+        endmethod
+
     endmodule
     
 endlibrary

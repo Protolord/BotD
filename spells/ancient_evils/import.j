@@ -116,6 +116,10 @@
 //==============================================================================
 //                              Gargoyle
 //==============================================================================
+//! import "../spells/ancient_evils/gargoyle/crack.j"
+//! import "../spells/ancient_evils/gargoyle/powderising_strength.j"
+//! import "../spells/ancient_evils/gargoyle/stone_gaze.j"
+//! import "../spells/ancient_evils/gargoyle/uplift_purpose.j"
 //==============================================================================
 //                             Skeleton King
 //==============================================================================

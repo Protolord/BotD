@@ -61,7 +61,6 @@ scope EnragedKiller
             local integer level = GetUnitAbilityLevel(Damage.source, SPELL_ID)
             local SpellBuff b
             local textsplat t
-            local real dmg
             if Damage.type == DAMAGE_TYPE_PHYSICAL and not Damage.element.coded and level > 0 and TargetFilter(Damage.target, GetOwningPlayer(Damage.source)) then
                 set b = SpellBuff.add(Damage.source, Damage.target)
                 set b.duration = Duration(level)
@@ -70,10 +69,8 @@ scope EnragedKiller
                     call DisableTrigger(thistype.trg)
                     call Damage.apply(Damage.source, Damage.target, b.dmg, ATTACK_TYPE, DAMAGE_TYPE)
                     call EnableTrigger(thistype.trg)
-                    set t = FloatingTextSplat(Element.string(DAMAGE_ELEMENT_NORMAL) + "+" + I2S(R2I(b.dmg)) + "|r", Damage.target, 1.0)
-                    static if not DEBUG_MODE then
-                        call t.setVisible(GetLocalPlayer() == GetOwningPlayer(Damage.source) and IsUnitVisible(Damage.source, GetLocalPlayer()))
-                    endif
+                    set t = FloatingTextSplat(Element.string(DAMAGE_ELEMENT_NORMAL) + "+" + I2S(R2I(b.dmg + 0.5)) + "|r", Damage.target, 1.0)
+                    call t.setVisible(GetLocalPlayer() == GetOwningPlayer(Damage.source) and IsUnitVisible(Damage.source, GetLocalPlayer()))
                 endif
                 set b.dmg = b.dmg + DamageGrowth(level)
             endif

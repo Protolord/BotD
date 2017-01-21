@@ -11,14 +11,14 @@ library SpellDisplay/*
         //Instance is per player
 
         //! textmacro SELECTION_SYSTEM_SPELL_DISPLAYS takes NUM
-            public image spell$NUM$
-            public image spell$NUM$1
-            public image spell$NUM$2
-            public image spell$NUM$3
-            public image spell$NUM$4
-            public texttag text1$NUM$
-            public texttag text2$NUM$
-            public Border selected$NUM$
+            private image spell$NUM$
+            private image spell$NUM$1
+            private image spell$NUM$2
+            private image spell$NUM$3
+            private image spell$NUM$4
+            private texttag text1$NUM$
+            private texttag text2$NUM$
+            private Border selected$NUM$
         //! endtextmacro
         
         //! runtextmacro SELECTION_SYSTEM_SPELL_DISPLAYS("1")
@@ -29,16 +29,16 @@ library SpellDisplay/*
         //! textmacro SELECTION_SYSTEM_CHANGE_SELECTABLE_SPELLS takes NUM
             call ReleaseImage(this.spell$NUM$1)
             set this.spell$NUM$1 = NewImage(h.spell$NUM$1.iconPath, 64, 64, spellBtnX[$NUM$*4 + 1], spellBtnY[$NUM$*4 + 1], 1, 1)
-            call SetImageRenderAlways(this.spell$NUM$1, h.spell$NUM$1 != Spell.BLANK and b)
+            call SetImageRenderAlways(this.spell$NUM$1, h.spell$NUM$1 != 0 and b)
             call ReleaseImage(this.spell$NUM$2)
             set this.spell$NUM$2 = NewImage(h.spell$NUM$2.iconPath, 64, 64, spellBtnX[$NUM$*4 + 2], spellBtnY[$NUM$*4 + 2], 1, 1)
-            call SetImageRenderAlways(this.spell$NUM$2, h.spell$NUM$2 != Spell.BLANK and b)
+            call SetImageRenderAlways(this.spell$NUM$2, h.spell$NUM$2 != 0 and b)
             call ReleaseImage(this.spell$NUM$3)
             set this.spell$NUM$3 = NewImage(h.spell$NUM$3.iconPath, 64, 64, spellBtnX[$NUM$*4 + 3], spellBtnY[$NUM$*4 + 3], 1, 1)
-            call SetImageRenderAlways(this.spell$NUM$3, h.spell$NUM$3 != Spell.BLANK and b)
+            call SetImageRenderAlways(this.spell$NUM$3, h.spell$NUM$3 != 0 and b)
             call ReleaseImage(this.spell$NUM$4)
             set this.spell$NUM$4 = NewImage(h.spell$NUM$4.iconPath, 64, 64, spellBtnX[$NUM$*4 + 4], spellBtnY[$NUM$*4 + 4], 1, 1)
-            call SetImageRenderAlways(this.spell$NUM$4, h.spell$NUM$4 != Spell.BLANK and b)
+            call SetImageRenderAlways(this.spell$NUM$4, h.spell$NUM$4 != 0 and b)
             call this.selected$NUM$.show(false)
         //! endtextmacro
         
@@ -86,27 +86,12 @@ library SpellDisplay/*
             call SystemTest.end()
         endmethod
         
-        //Used when a new hero is selected
-        static method reset takes player p, Hero h returns nothing
-            local thistype this = GetPlayerId(p)
-            local boolean b = p == GetLocalPlayer()
-            //Change the selectable spells
-            //! runtextmacro SELECTION_SYSTEM_CHANGE_SELECTABLE_SPELLS("1")
-            //! runtextmacro SELECTION_SYSTEM_CHANGE_SELECTABLE_SPELLS("2")
-            //! runtextmacro SELECTION_SYSTEM_CHANGE_SELECTABLE_SPELLS("3")
-            //! runtextmacro SELECTION_SYSTEM_CHANGE_SELECTABLE_SPELLS("4")
-            //! runtextmacro SELECTION_SYSTEM_CHANGE_SPELL("Spell.BLANK", "1")
-            //! runtextmacro SELECTION_SYSTEM_CHANGE_SPELL("Spell.BLANK", "2")
-            //! runtextmacro SELECTION_SYSTEM_CHANGE_SPELL("Spell.BLANK", "3")
-            //! runtextmacro SELECTION_SYSTEM_CHANGE_SPELL("Spell.BLANK", "4")
-        endmethod
-        
         //Changes the description and displayed selected spell
         static method change takes player p, integer spellNum, integer order returns nothing
             local thistype this = GetPlayerId(p)
             local boolean b = p == GetLocalPlayer()
             local Spell s = PlayerStat(this).hero.getSpell(spellNum, order)
-            if s != Spell.BLANK then
+            if s != 0 then
                 if spellNum == 1 then
                     //! runtextmacro SELECTION_SYSTEM_CHANGE_SPELL("s", "1")
                     call this.selected1.show(b)
@@ -126,6 +111,33 @@ library SpellDisplay/*
                 endif
             endif
         endmethod
+
+        //Used when a new hero is selected
+        static method reset takes player p, Hero h returns nothing
+            local thistype this = GetPlayerId(p)
+            local boolean b = p == GetLocalPlayer()
+            //Change the selectable spells
+            //! runtextmacro SELECTION_SYSTEM_CHANGE_SELECTABLE_SPELLS("1")
+            //! runtextmacro SELECTION_SYSTEM_CHANGE_SELECTABLE_SPELLS("2")
+            //! runtextmacro SELECTION_SYSTEM_CHANGE_SELECTABLE_SPELLS("3")
+            //! runtextmacro SELECTION_SYSTEM_CHANGE_SELECTABLE_SPELLS("4")
+            if h.faction == LIVING_FORCE then
+                //! runtextmacro SELECTION_SYSTEM_CHANGE_SPELL("h.spell11", "1")
+                //! runtextmacro SELECTION_SYSTEM_CHANGE_SPELL("h.spell21", "2")
+                //! runtextmacro SELECTION_SYSTEM_CHANGE_SPELL("h.spell31", "3")
+                //! runtextmacro SELECTION_SYSTEM_CHANGE_SPELL("h.spell41", "4")
+                call thistype.change(p, 1, 1)
+                call thistype.change(p, 2, 1)
+                call thistype.change(p, 3, 1)
+                call thistype.change(p, 4, 1)
+                call ConfirmButton.show(Track.tracker, true)
+            elseif h.faction == ANCIENT_EVILS then
+                //! runtextmacro SELECTION_SYSTEM_CHANGE_SPELL("Spell.BLANK", "1")
+                //! runtextmacro SELECTION_SYSTEM_CHANGE_SPELL("Spell.BLANK", "2")
+                //! runtextmacro SELECTION_SYSTEM_CHANGE_SPELL("Spell.BLANK", "3")
+                //! runtextmacro SELECTION_SYSTEM_CHANGE_SPELL("Spell.BLANK", "4")
+            endif
+        endmethod
         
         //! textmacro SELECTION_SYSTEM_SPELL_INIT takes NUM
             set this.spell$NUM$ = NewImage(BLACK_IMAGE, 0, 0, 0, 0, 0, 1)
@@ -137,11 +149,11 @@ library SpellDisplay/*
             call SetTextTagVisibility(this.text1$NUM$, b)
             set this.text2$NUM$ = CreateTextTag()
             call SetTextTagVisibility(this.text2$NUM$, b)
-            set this.selected$NUM$ = Border.create(35, -35, 35, -35)
+            set this.selected$NUM$ = Border.create(0, 70, 0, 70)
             call this.selected$NUM$.show(false)
         //! endtextmacro
         
-        public static method create takes player p returns thistype
+        private static method create takes player p returns thistype
             local thistype this = GetPlayerId(p)
             local boolean b = p == GetLocalPlayer()
             //! runtextmacro SELECTION_SYSTEM_SPELL_INIT("1")
@@ -151,7 +163,7 @@ library SpellDisplay/*
             return this
         endmethod
         
-        public static method perPlayer takes nothing returns nothing
+        private static method perPlayer takes nothing returns nothing
             call thistype.create(GetEnumPlayer())
         endmethod
         

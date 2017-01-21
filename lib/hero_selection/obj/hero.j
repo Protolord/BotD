@@ -20,10 +20,10 @@ library Hero requires DummyRecycler, Table
         readonly string attribute    //The attributes displayed
         readonly integer primary
         readonly string info
-        private string pModelPath
-        private Spell pInnateSpell
-        private string pIconPath
-        private thistype pFaction
+        private string priv_modelPath
+        private Spell priv_innateSpell
+        private string priv_iconPath
+        private thistype priv_faction
         
         readonly image icon
         readonly image spellIcon
@@ -98,11 +98,11 @@ library Hero requires DummyRecycler, Table
         endmethod
         
         method operator modelPath takes nothing returns string
-            return this.pModelPath
+            return this.priv_modelPath
         endmethod
         
         method operator modelPath= takes string s returns nothing
-            set this.pModelPath = s
+            set this.priv_modelPath = s
             set this.unitModel = GetRecycledDummy(MODEL_X, MODEL_Y, 100, 270)
             set this.model = AddSpecialEffectTarget(s, this.unitModel, "origin")
             call SetUnitScale(this.unitModel, this.scaleAdd + 1.5, 0, 0)
@@ -111,20 +111,20 @@ library Hero requires DummyRecycler, Table
         endmethod
         
         method operator innateSpell takes nothing returns Spell
-            return this.pInnateSpell
+            return this.priv_innateSpell
         endmethod
         
         method operator innateSpell= takes Spell s returns nothing
             set this.spellIcon = NewImage(s.iconPath, 60, 60, INNATE_SPELL_X, INNATE_SPELL_Y, 0, 1)
-            set this.pInnateSpell = s
+            set this.priv_innateSpell = s
         endmethod
         
         method operator iconPath takes nothing returns string
-            return this.pIconPath
+            return this.priv_iconPath
         endmethod
         
         method operator faction= takes thistype f returns nothing
-            set this.pFaction = f
+            set this.priv_faction = f
             set this.next = f
             set this.prev = f.prev
             set this.next.prev = this
@@ -132,11 +132,11 @@ library Hero requires DummyRecycler, Table
         endmethod
         
         method operator faction takes nothing returns thistype
-            return this.pFaction
+            return this.priv_faction
         endmethod
         
         method operator iconPath= takes string s returns nothing
-            set this.pIconPath = s
+            set this.priv_iconPath = s
             set this.icon = NewImage(s, 70, 70, ICON_X, ICON_Y, 1, 1)
         endmethod
         
@@ -161,12 +161,9 @@ library Hero requires DummyRecycler, Table
             set ANCIENT_EVILS = thistype.factionHead()
             //! runtextmacro SELECTION_SYSTEM_HERO_IMPLEMENTATION()
             set defaultHero = vampireLord
-            /*
             if IsPlayerInForce(GetLocalPlayer(), Players.ancientEvils) then
-                set defaultHero = vampireLord
-            elseif IsPlayerInForce(GetLocalPlayer(), Players.livingForce) then
                 set defaultHero = stormShaman
-            endif*/
+            endif
             call SystemTest.end()
         endmethod
         

@@ -68,7 +68,7 @@ scope EnvenomedFangs
             local integer level = GetUnitAbilityLevel(Damage.source, SPELL_ID)
             local SpellBuff b
             
-            if Damage.type == DAMAGE_TYPE_PHYSICAL and not Damage.element.coded and level > 0 and TargetFilter(Damage.target, GetOwningPlayer(Damage.source))  then
+            if level > 0 and Damage.type == DAMAGE_TYPE_PHYSICAL and not Damage.element.coded and TargetFilter(Damage.target, GetOwningPlayer(Damage.source))  then
                 set b = SpellBuff.add(Damage.source, Damage.target)
                 set b.dmg = DamagePerSecond(level)
                 set b.duration = Duration(level)

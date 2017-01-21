@@ -77,8 +77,7 @@ scope UnrestrainedDistress
                     if hp > 0.406 then
                         call SetWidgetLife(this.target, hp)
                     else
-                        call SetWidgetLife(this.target, 0.406)
-                        call UnitDamageTarget(this.caster, this.target, 99999, false, false, ATTACK_TYPE_NORMAL, DAMAGE_TYPE_UNIVERSAL, WEAPON_TYPE_WHOKNOWS)
+                        call Damage.kill(this.caster, this.target)
                     endif
                 endif
             else

@@ -163,11 +163,12 @@ library Spell requires StringSize
         static method initialize takes nothing returns nothing
             call SystemTest.start("Initializing thistype" + "s:")
             //! runtextmacro SELECTION_SYSTEM_SPELL_IMPLEMENTATION()
+            call DestroyTrigger(thistype.trg)
             call SystemTest.end()
         endmethod
         
         private static method onInit takes nothing returns nothing
-            set thistype.BLANK = thistype.allocate()
+            set thistype.BLANK = 0
             set thistype.BLANK.id = 0
             set thistype.BLANK.addId = 0
             set thistype.BLANK.info = ""

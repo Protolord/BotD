@@ -99,7 +99,6 @@ module WerewolfConfig
     set werewolf.spell31 = wolfSpirit
     set werewolf.spell32 = childOfTheNight
     set werewolf.spell33 = fetch
-    set werewolf.spell34 = Spell.BLANK
     set werewolf.spell41 = rabid
     set werewolf.spell42 = bloodthirst
     set werewolf.spell43 = furyOfTheLycan

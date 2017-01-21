@@ -81,7 +81,7 @@ scope HellfireBlast
                 set u = FirstOfGroup(thistype.g)
                 exitwhen u == null
                 if TargetFilter(u, owner) then
-                    call Damage.element.apply(this.target, u, this.dmg, ATTACK_TYPE, DAMAGE_TYPE, DAMAGE_ELEMENT_FIRE)                 
+                    call Damage.element.apply(this.target, u, this.dmg, ATTACK_TYPE, DAMAGE_TYPE, DAMAGE_ELEMENT_FIRE)  
                 endif
                 if HealFilter(u, owner) then
                     call Heal.unit(u, this.heal, 4.0)                  

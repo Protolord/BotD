@@ -71,6 +71,7 @@ scope WolfSpirit
             call SetUnitVertexColor(this.wolf, 255, 255, 255, 150)
             call DestroyEffect(AddSpecialEffect(SUMMON_SFX, x, y))
             call UnitApplyTimedLife(this.wolf, 'BTLF', Duration(level))
+            call UnitAddAbility(this.wolf, 'Atwa')
             
             if level < 11 then
                 call GroupEnumUnitsInRect(g, bj_mapInitialPlayableArea, null)
