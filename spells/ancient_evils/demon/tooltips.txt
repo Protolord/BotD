@@ -89,13 +89,13 @@ Cooldown: 30 seconds
 Demon releases his Diabolic Senses which are aiming any living unit nearby dealing 50 damage. Also provide 1000 exploration range and reveal invisible units. Lasts 15 seconds.
 -----------------------------------------------------------------------------------------------------------------------------------
 Dark Lord Vision
-|cfff4a460Target|r: |cff3399ffSelf|n|r|cfff4a460Reveal threshold|r: |cff3399ff50% + (5% x ability level)|n|r|cfff4a460Duration|r: |cff3399ff30 seconds|r|n|cfff4a460Cooldown|r: |cff3399ff30 seconds|r|n|nDemon gains a vision of any units that are not healthy.
+|cfff4a460Target|r: |cff3399ffSelf|n|r|cfff4a460Reveal threshold|r: |cff3399ff25% + (5% x ability level)|n|r|cfff4a460Duration|r: |cff3399ff30 seconds|r|n|cfff4a460Cooldown|r: |cff3399ff30 seconds|r|n|nDemon gains a vision of any units whose hit points percentage falls below a certain threshold.
 Target: Self
 Reveal threshold: 25% + (5% x ability level)
 Duration: 30 seconds
 Cooldown: 30 seconds
 
-Demon gains a vision of any units that are not healthy.
+Demon gains a vision of any units whose hit points percentage falls below a certain threshold.
 
 Notes:
 -Lv11 tooltip:
@@ -104,7 +104,7 @@ Notes:
 Implement in a way like what I did in my TrueSight system.
 -----------------------------------------------------------------------------------------------------------------------------------
 Shattered Earth
-|cfff4a460Target|r: |cff3399ffSelf|n|r|cfff4a460Explosions|r: |cff3399ff1 x ability level|n|r|cfff4a460Sight|r: |cff3399ff1500 x ability level|n|r|cfff4a460Duration|r: |cff3399ff30 seconds|n|r|cfff4a460Cooldown|r: |cff3399ff30 seconds|r|n|nDemon slams the ground and makes the earth to split open and create random explosions around the map. Each explosion provide vision and reveals invisible units.
+|cfff4a460Target|r: |cff3399ffSelf|n|r|cfff4a460Explosions|r: |cff3399ff1 x ability level|n|r|cfff4a460Sight|r: |cff3399ff1500|n|r|cfff4a460Duration|r: |cff3399ff30 seconds|n|r|cfff4a460Cooldown|r: |cff3399ff30 seconds|r|n|nDemon slams the ground and makes the earth to split open and create random explosions around the map. Each explosion provide vision and reveals invisible units.
 
 Target: Self
 Explosions: 1 x ability level
@@ -116,8 +116,6 @@ Demon slams the ground and makes the earth to split open and create random explo
 Notes:
 - Lv11 tooltip
   |cfff4a460Target|r: |cff3399ffSelf|n|r|cfff4a460Duration|r: |cff3399ff15 seconds|n|r|cfff4a460Cooldown|r: |cff3399ff30 seconds|r|n|nDemon slams the ground and makes the earth to split open and reveal an entire map for 15 seconds.
- 
-Fogmodifiers would be the way to go.
 -----------------------------------------------------------------------------------------------------------------------------------
 Dark Lord Powers
 |cfff4a460Target|r: |cff3399ffSelf (500)|n|r|cfff4a460Healing|r: |cff3399ff450 x ability level|n|r|cfff4a460Cooldown|r: |cff3399ff30 seconds|r|n|nDemon creates a Fire Nova which heals any nearby allies in a range of 500. Heals 4x more hitpoints on ethereal units.

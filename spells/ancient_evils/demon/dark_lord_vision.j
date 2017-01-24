@@ -3,7 +3,8 @@ scope DarkLordVision
     globals
         private constant integer SPELL_ID = 'A532'
         private constant integer BUFF_ID = 'B532'
-        private constant string SFX = "Models\\Effects\\DarkLordVision.mdx"
+        private constant string SFX = "Models\\Effects\\DarkLordVisionBuff.mdx"
+        private constant string SFX_TARGET = "Models\\Effects\\DarkLordVisionTarget.mdx"
         private constant real NODE_RADIUS = 200
         private constant real TIMEOUT = 0.05
     endglobals
@@ -26,6 +27,7 @@ scope DarkLordVision
     private struct SightSource
         
         private FlySight fs
+        private effect sfx
         readonly unit u
         readonly unit target
         
@@ -36,11 +38,13 @@ scope DarkLordVision
             set this.prev.next = this.next
             set this.next.prev = this.prev
             if this.u != null then
-                //call UnitClearBonus(this.u, BONUS_SIGHT_RANGE)
                 call this.fs.destroy()
                 call UnitRemoveAbility(this.u, 'ATSS')
                 call RecycleDummy(this.u)
                 set this.u = null
+            endif
+            if this.sfx != null then
+                call DestroyEffect(this.sfx)
             endif
             set this.target = null
             call this.deallocate()
@@ -48,13 +52,17 @@ scope DarkLordVision
         
         static method create takes thistype head, unit target, player owner returns thistype
             local thistype this = thistype.allocate()
+            local string s = SFX_TARGET
             set this.target = target
             set this.u = GetRecycledDummyAnyAngle(GetUnitX(target), GetUnitY(target), 0)
             call PauseUnit(this.u, false)
             call SetUnitOwner(this.u, owner, false)
-            //call UnitSetBonus(this.u, BONUS_SIGHT_RANGE, R2I(NODE_RADIUS))
             set this.fs = FlySight.create(this.u, NODE_RADIUS)
             call UnitAddAbility(this.u, 'ATSS')
+            if IsPlayerEnemy(owner, GetLocalPlayer()) then
+                set s = ""
+            endif
+            set this.sfx = AddSpecialEffectTarget(s, target, "origin")
             set this.next = head.next
             set this.prev = head
             set this.next.prev = this

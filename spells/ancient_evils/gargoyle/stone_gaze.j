@@ -3,8 +3,8 @@ scope StoneGaze
     globals
         private constant integer SPELL_ID = 'A613'
         private constant integer BUFF_ID = 'D613'
-        private constant string MODEL = "Abilities\\Spells\\Undead\\DeathCoil\\DeathCoilMissile.mdl"
-        private constant string SFX = ""
+        private constant string MODEL = "Models\\Effects\\StoneGazeMissile.mdx"
+        private constant string SFX = "Models\\Effects\\StoneGazeEffect.mdx"
         private constant attacktype ATTACK_TYPE = ATTACK_TYPE_NORMAL
         private constant damagetype DAMAGE_TYPE = DAMAGE_TYPE_MAGIC
     endglobals
@@ -21,7 +21,7 @@ scope StoneGaze
     endfunction
     
     private function Speed takes integer level returns real
-        return 1500.0 + 0.0*level
+        return 1000.0 + 0.0*level
     endfunction
 
     private function Duration takes integer level returns real
@@ -41,7 +41,7 @@ scope StoneGaze
         private SpellImmune si
         private Stun s
         private effect sfx
-        
+        private VertexColor color 
         
         method rawcode takes nothing returns integer
             return BUFF_ID
@@ -60,7 +60,9 @@ scope StoneGaze
             call this.si.destroy()
             call this.s.destroy()
             call DestroyEffect(this.sfx)
-            call SetUnitVertexColor(this.target, 255, 255, 255, 255)
+            set this.color.speed = 500
+            call this.color.destroy()
+            call SetUnitTimeScale(this.target, 1.0)
             set this.sfx = null
         endmethod
         
@@ -69,7 +71,9 @@ scope StoneGaze
             set this.si = SpellImmune.create(this.target)
             set this.s = Stun.create(this.target, 0, false)
             set this.sfx = AddSpecialEffectTarget(SFX, this.target, "origin")
-            call SetUnitVertexColor(this.target, 50, 50, 50, 255)
+            set this.color = VertexColor.create(this.target, -215, -215, -215, 0)
+            set this.color.speed = 255
+            call SetUnitTimeScale(this.target, 0)
         endmethod
         
         implement BuffApply
@@ -96,6 +100,7 @@ scope StoneGaze
             if not SpellBlock.has(this.target) and TargetFilter(this.target, this.owner) then
                 set b = SpellBuff.add(this.caster, this.target)
                 call b.a.change(BonusArmor(this.lvl))
+                set b.duration = Duration(this.lvl)
                 call Damage.element.apply(this.caster, this.target, DamageDealt(this.lvl), ATTACK_TYPE, DAMAGE_TYPE, DAMAGE_ELEMENT_EARTH)
             endif
             call this.destroy()

@@ -41,9 +41,9 @@ scope Bloodlines
             local real x = GetUnitX(caster)
             local real y = GetUnitY(caster)
             local group g = NewGroup()
-            local unit u = GetRecycledDummyAnyAngle(x, y, 100)
+            local unit u = GetRecycledDummyAnyAngle(x, y, 50)
             set this.u = caster
-            call SetUnitScale(u, Radius(level)/800, 0, 0)
+            call SetUnitScale(u, Radius(level)/700, 0, 0)
             call DestroyEffect(AddSpecialEffectTarget(HEAL_AREA, u, "origin"))
             call DummyAddRecycleTimer(u, 5.0)
             call GroupUnitsInArea(g, x, y, Radius(level))

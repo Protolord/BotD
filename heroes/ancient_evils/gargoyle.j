@@ -24,19 +24,19 @@ module GargoyleSpells
     set deadlyRepulse.info = "Deadly Repulse"
     
     set crack = Spell.create('A611')
-    set crack.info = "Crack"
+    set crack.info = "Crack|n|cfff4a460Target|r: |cff3399ffArea of Effect (300)|n|r|cfff4a460Range|r: |cff3399ff800|n|r|cfff4a460Duration|r: |cff3399ff(0.2 second x ability level)|n|r|cfff4a460Cooldown|r: |cff3399ff20 seconds|r|n|nGargoyle cracks the ground and temporarily stuns all nearby opponents."
     
     set earthShatter = Spell.create('A612')
     set earthShatter.info = "Earth Shatter"
     
     set stoneGaze = Spell.create('A613')
-    set stoneGaze.info = "Stone Gaze"
+    set stoneGaze.info = "Stone Gaze|n|cfff4a460Target|r: |cff3399ffEnemy Unit|n|r|cfff4a460Range|r: |cff3399ff600|n|r|cfff4a460Damage|r: |cff3399ff(40 x ability level)|n|r|cfff4a460Duration|r: |cff3399ff(0.4 second x ability level)|n|r|cfff4a460Cooldown|r:|cff3399ff 15 seconds|r|n|nSends a wave of unknown energy to deal magic damage and temporarily turn a living unit into a stone disabling movement but increasing it's armor and rendering it immune to magic."
     
     set terror = Spell.create('A614')
     set terror.info = "Terror"
     
     set upliftPurpose = Spell.create('A621')
-    set upliftPurpose.info = "Uplift Purpose"
+    set upliftPurpose.info = "Uplift Purpose|n|cfff4a460Target|r: |cff3399ffSelf|n|r|cfff4a460Hitpoints Sacrificed|r: |cff3399ff(1% x ability level)|n|r|cfff4a460Duration|r: |cff3399ff10 seconds|n|r|cfff4a460Cooldown|r: |cff3399ff30 seconds|r|n|nGargoyle sacrifices some amount of his maximum life as a damage for his next attack. This ability can kill Gargoyle if used unwise."
     
     set fissure = Spell.create('A622')
     set fissure.info = "Fissure"
@@ -57,7 +57,8 @@ module GargoyleSpells
     set stonyPath.info = "Stony Path"
     
     set powderisingStrength = Spell.create('A641')
-    set powderisingStrength.info = "Powderising Strength"
+    set powderisingStrength.passive = true
+    set powderisingStrength.info = "Powderising Strength|n|cfff4a460Target|r: |cff3399ffPassive|n|r|cfff4a460Life restored|r: |cff3399ff(15% + (4% x ability level))|r|n|nGargoyle is able to regain his life from attacking structures."
     
     set stoneForm = Spell.create('A642')
     set stoneForm.info = "Stone Form"

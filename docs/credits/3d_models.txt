@@ -47,18 +47,29 @@
 		
 		Dash Effect                 by Razer!X
 		Sticky Shell Slow           by icewolf055
-		SevereWound Heal            by icewolf055
+		Spray Heal           		by icewolf055
 		Poison Blast                by icewolf055
+		Severe Wound Heal			by WILL THE ALMIGHTY
 		
 		Vigilant and Virtuous       by ChaoticHunter
 		Doom						by xyzier_24
 		Taunt                       by JetFangInferno
 		Hellish Cloud Buff          by JetFangInferno
 		Hellish Cloud Effect        by Vortigon
-		Dark Lord Vision			by Shyster
+		Diabolic Senses				by D4RK_G4ND4LF
+		Dark Lord Vision Buff		by Shyster
+		Dark Lord Vision Target  	by Shyster
 		Infernal Chains Buff		by Power
 		Shattered Earth Ash Effect  by PeeKay
+		Dark Lord Powers			by DCrimson
+		Hellfire Blast				by WILL THE ALMIGHTY
+		Hellguard					by Kuhneghetz
+		Hellguard Pentagram			by Skizzik
 		Engulfed Fires Buff         by sPy
+
+		Stone Gaze Effect 			by Ergius
+		Ston Gaze Missile			by 00110000
+		Uplift Purpose Buff			by ChaoticHunter
 	
 	OTHERS:
 		Generic CastBar             by HappyTauren

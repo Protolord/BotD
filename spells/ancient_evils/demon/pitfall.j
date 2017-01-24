@@ -3,6 +3,7 @@ scope Pitfall
     globals
         private constant integer SPELL_ID = 'A512'
         private constant integer SPELL_BUFF = 'D512'
+        private constant integer PITFALL_ID = 0 //None as of now
         private constant attacktype ATTACK_TYPE = ATTACK_TYPE_NORMAL
         private constant damagetype DAMAGE_TYPE = DAMAGE_TYPE_MAGIC
         private constant string SFX_FIRE = "Abilities\\Spells\\Human\\FlameStrike\\FlameStrikeEmbers.mdl"
@@ -221,7 +222,7 @@ scope Pitfall
             set this.moveSlow = -MoveSlow(lvl)
             set this.dmg = DamagePerSecond(lvl)*TIMEOUT
             set this.tb = Table.create()
-            set this.volc = CreateDestructable('B512', this.x, this.y, GetRandomReal(0, 360), this.radius/260, 0)
+            set this.volc = CreateDestructable(PITFALL_ID, this.x, this.y, GetRandomReal(0, 360), this.radius/260, 0)
             call SetDestructableAnimation(this.volc, "birth")
             //Create SFX
             set this.sfxHead = Fire.head()

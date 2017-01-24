@@ -84,7 +84,7 @@ library StaticDisplay/*
             set thistype.spell4 = Border.create(spellTop, spellBot, xLimit, spellX + 1080)
             set thistype.extraInfo = Border.create(spellBot - 10, CENTER_Y - 150, xLimit, spellX)
             set thistype.heroSelection = Border.create(CENTER_Y - 160, CENTER_Y - 435, CENTER_X + 790, spellX)
-            set thistype.background = CreateImage("UI\\HeroSelection\\background.tga", 1900, 975, 0, CENTER_X - 960, CENTER_Y - 455, 1, 0, 0, 0, 2)
+            set thistype.background = CreateImage("UI\\HeroSelection\\Background.tga", 1900, 975, 0, CENTER_X - 960, CENTER_Y - 455, 1, 0, 0, 0, 2)
             call SetImageRenderAlways(thistype.background, true)
             //Display STR, AGI and INT Icon
             set thistype.str = NewImage("UI\\HeroSelection\\Strength.blp", 64, 64, ATTR_UI_X, ATTR_UI_Y, 1, 1)

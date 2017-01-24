@@ -67,15 +67,18 @@
 		BTN_RainOfFire              by Mr.Goblin
 
 	Gargoyle Abilities:
+		BTN_Camouflage				by PeeKay
 		BTN_StonyPath               by Praytic
 		BTN_RockToss                by -Berz-
 		BTN_Crack                   by Valve Corporation
 		BTN_Fissure                 by Valve Corporation
+		BTN_RockHard				by Kimbo
 		BTN_PowderisingStrength     by CRAZYRUSSIAN
 		BTN_Rebuild                 by Nudl9
 		BTN_UpliftPurpose           by inhuman89
 		BTN_StoneGaze               by Big Dub
 		
+		BTN_GhostForm				by DarkFang
 		
 	Others:
 		BTN_Check                   by Lockheart 

@@ -38,7 +38,8 @@ module DemonSpells
     set taunt.info = "Taunt|n|cfff4a460Target|r: |cff3399ffSelf|n|r|cfff4a460Radius|r: |cff3399ff(100 x level)|n|r|cfff4a460Damage|r: |cff3399ff(35 x level)|n|r|cfff4a460Cooldown|r: |cff3399ff30 seconds|r|n|nDemon howls a scream making at most 20 nearby enemies to attack him. Also deals magical damage in area around him."
     
     set rainOfFire = Spell.create('A521')
-    set rainOfFire.info = "Rain Of Fire|n|cfff4a460Target|r: |cff3399ffAoe(300)|n|r|cfff4a460Range|r: |cff3399ff600|n|r|cfff4a460Damage/wave|r: |cff3399ff20 x level|r|n|nDemon summons a Rain of Fire with a maximum of 5 waves at a rate of 1 wave/second. Does not damage buildings and damages allies."
+    set rainOfFire.info = "Rain Of Fire|n<Not yet coded>"
+    //set rainOfFire.info = "Rain Of Fire|n|cfff4a460Target|r: |cff3399ffAoe(300)|n|r|cfff4a460Range|r: |cff3399ff600|n|r|cfff4a460Damage/wave|r: |cff3399ff20 x level|r|n|nDemon summons a Rain of Fire with a maximum of 5 waves at a rate of 1 wave/second. Does not damage buildings and damages allies."
     
     set hellishCloud = Spell.create('A522')
     set hellishCloud.info = "Hellish Cloud|n|cfff4a460Target|r: |cff3399ffSelf|n|r|cfff4a460Damage|r: |cff3399ff(50 x level)|n|r|cfff4a460Duration|r: |cff3399ff(5 + (1 x level)) seconds|n|r|cfff4a460Cooldown|r: |cff3399ff(10 + (1 x level)) seconds|r|n|nDemon becomes temporarily invisible and deals extra area (400) damage on impact."

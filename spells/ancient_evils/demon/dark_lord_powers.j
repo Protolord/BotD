@@ -2,8 +2,8 @@ scope DarkLordPowers
  
     globals
         private constant integer SPELL_ID = 'A541'
-        private constant string HEAL_AREA = "Models\\Effects\\Bloodlines.mdl"
-        private constant string HEAL_ATTACHED = "Abilities\\Spells\\Undead\\DeathCoil\\DeathCoilSpecialArt.mdl"
+        private constant string HEAL_AREA = "Models\\Effects\\DarkLordPowers.mdx"
+        private constant string HEAL_ATTACHED = "Abilities\\Spells\\Items\\AIam\\AIamTarget.mdl"
     endglobals
     
     private function Radius takes integer level returns real
@@ -41,9 +41,9 @@ scope DarkLordPowers
             local real x = GetUnitX(caster)
             local real y = GetUnitY(caster)
             local group g = NewGroup()
-            local unit u = GetRecycledDummyAnyAngle(x, y, 100)
+            local unit u = GetRecycledDummyAnyAngle(x, y, 20)
             set this.u = caster
-            call SetUnitScale(u, Radius(level)/800, 0, 0)
+            call SetUnitScale(u, Radius(level)/300, 0, 0)
             call DestroyEffect(AddSpecialEffectTarget(HEAL_AREA, u, "origin"))
             call DummyAddRecycleTimer(u, 5.0)
             call GroupUnitsInArea(g, x, y, Radius(level))

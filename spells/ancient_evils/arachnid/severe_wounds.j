@@ -4,8 +4,9 @@ scope SevereWound
         private constant integer SPELL_ID = 'A444'
         private constant integer UNIT_ID = 'uSeW'
         private constant real TIMEOUT = 1.0
-        private constant string HEALER_SFX = "Models\\Effects\\Spray.mdx"
+        private constant string HEALER_SFX = "Models\\Effects\\SevereWounds.mdx"
         private constant string HEALED_SFX = "Abilities\\Spells\\NightElf\\ManaBurn\\ManaBurnTarget.mdl"
+        private constant string SFX_SUMMON = "Abilities\\Spells\\Undead\\RaiseSkeletonWarrior\\RaiseSkeleton.mdl"
     endglobals
     
     private function HealPerSecond takes integer level returns real
@@ -56,7 +57,7 @@ scope SevereWound
             if UnitAlive(this.u) then
                 call GroupUnitsInArea(thistype.g, GetUnitX(this.u), GetUnitY(this.u), this.radius)
                 set dummy = GetRecycledDummyAnyAngle(GetUnitX(this.u), GetUnitY(this.u), 10)
-                call SetUnitScale(dummy, this.radius/100, 0, 0)
+                call SetUnitScale(dummy, this.radius/700, 0, 0)
                 call DestroyEffect(AddSpecialEffectTarget(HEALER_SFX, dummy, "origin"))
                 loop
                     set u = FirstOfGroup(thistype.g)
@@ -84,6 +85,7 @@ scope SevereWound
             set this.u = CreateUnit(owner, UNIT_ID, x, y, facing)
             call UnitApplyTimedLife(this.u, 'BTLF', Duration(lvl))
             call SetUnitMaxState(u, UNIT_STATE_MAX_LIFE, UnitHP(lvl))
+            call DestroyEffect(AddSpecialEffectTarget(SFX_SUMMON, this.u, "origin"))
             set this.t = NewTimerEx(this)
             set this.hps = HealPerSecond(lvl)*TIMEOUT
             set this.radius = Radius(lvl)

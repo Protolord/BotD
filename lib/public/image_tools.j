@@ -129,7 +129,7 @@ library ImageTools /*v2.0
             debug else
                 debug call DebugMsg("function NewImage: Can't find string path in data: " + file) 
             debug endif
-            return null
+            return CreateImage("UI\\BlackImage.blp", sizeX, sizeY, 0, posX - 0.5*sizeX, posY - 0.5*sizeY, posZ, 0, 0, 0, imageType)
         else
             set table.boolean[GetHandleId(i)] = true
             return i

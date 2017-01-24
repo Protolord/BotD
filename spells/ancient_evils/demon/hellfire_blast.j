@@ -3,7 +3,9 @@ scope HellfireBlast
     globals
         private constant integer SPELL_ID = 'A542'
         private constant integer BUFF_ID = 'B542'
-        private constant string SFX = ""
+        private constant string SFX = "Models\\Effects\\HellfireBlast.mdx"
+        private constant string SFX_BUFF = "Abilities\\Spells\\Other\\Incinerate\\IncinerateBuff.mdl"
+        private constant string SFX_TARGET = "Abilities\\Spells\\Items\\AIfb\\AIfbSpecialArt.mdl"
         private constant attacktype ATTACK_TYPE = ATTACK_TYPE_NORMAL
         private constant damagetype DAMAGE_TYPE = DAMAGE_TYPE_MAGIC
         private constant real TIMEOUT = 1.0
@@ -80,23 +82,25 @@ scope HellfireBlast
             loop
                 set u = FirstOfGroup(thistype.g)
                 exitwhen u == null
+                call GroupRemoveUnit(thistype.g, u)
                 if TargetFilter(u, owner) then
                     call Damage.element.apply(this.target, u, this.dmg, ATTACK_TYPE, DAMAGE_TYPE, DAMAGE_ELEMENT_FIRE)  
+                    call DestroyEffect(AddSpecialEffectTarget(SFX_TARGET, u, "overhead"))
                 endif
                 if HealFilter(u, owner) then
-                    call Heal.unit(u, this.heal, 4.0)                  
+                    call Heal.unit(u, this.heal, 4.0)
+                    call DestroyEffect(AddSpecialEffectTarget(SFX_TARGET, u, "overhead"))                  
                 endif
-                call GroupRemoveUnit(thistype.g, u)
             endloop
             set dummy = GetRecycledDummyAnyAngle(x, y, 50)
             call DummyAddRecycleTimer(dummy, 2.5)
-            call SetUnitScale(dummy, this.radius/500, 0, 0)
+            call SetUnitScale(dummy, this.radius/700, 0, 0)
             call DestroyEffect(AddSpecialEffectTarget(SFX, dummy, "origin"))
         endmethod
         
         method onApply takes nothing returns nothing
             set this.t = NewTimerEx(this)
-            set this.sfx = AddSpecialEffectTarget(SFX, this.target, "overhead")
+            set this.sfx = AddSpecialEffectTarget(SFX_BUFF, this.target, "chest")
             call TimerStart(this.t, TIMEOUT, true, function thistype.onPeriod)
         endmethod
         

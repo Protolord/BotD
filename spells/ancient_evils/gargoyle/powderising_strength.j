@@ -2,6 +2,7 @@ scope PowderisingStrength
 
     globals
         private constant integer SPELL_ID = 'A641'
+        private constant string SFX_TARGET = ""
     endglobals
 
     private function LifeSteal takes integer level returns real
@@ -21,6 +22,7 @@ scope PowderisingStrength
             local integer level = GetUnitAbilityLevel(Damage.source, SPELL_ID)
             if level > 0 and Damage.type == DAMAGE_TYPE_PHYSICAL and not Damage.element.coded and TargetFilter(Damage.target, GetOwningPlayer(Damage.source))  then
                 call Heal.unit(Damage.source, LifeSteal(level)*Damage.amount, 1.0)
+                call DestroyEffect(AddSpecialEffectTarget(SFX_TARGET, Damage.source, "origin"))
             endif
         endmethod
         

@@ -3,7 +3,7 @@ scope ShatteredEarth
     globals
         private constant integer SPELL_ID = 'A533'
         private constant string SFX1 = "Models\\Effects\\ShatteredEarthAsh.mdx"
-        private constant string SFX2 = "Abilities\\Spells\\Orc\\EarthQuake\\EarthQuakeTarget.mdl"
+        private constant string SFX2 = ""//"Abilities\\Spells\\Orc\\EarthQuake\\EarthQuakeTarget.mdl"
     endglobals
     
     private function Sight takes integer level returns real

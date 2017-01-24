@@ -4,6 +4,7 @@ scope Repression
         private constant integer SPELL_ID = 'A332'
         private constant integer UNIT_ID = 'uSco'
         private constant real OFFSET = 100.0
+        private constant string SFX_SUMMON = "Abilities\\Spells\\Orc\\FeralSpirit\\feralspiritdone.mdl"
     endglobals
     
     private function Duration takes integer level returns real
@@ -45,7 +46,8 @@ scope Repression
             call FlySight.create(scout, radius)
             call SetUnitMaxState(scout, UNIT_STATE_MAX_LIFE, ScoutHealth(lvl))
             call UnitApplyTimedLife(scout, 'BTLF', Duration(lvl))
-            call SetUnitAnimation(scout, "birth")
+            call SetUnitFlyHeight(scout, 200, 100)
+            call DestroyEffect(AddSpecialEffectTarget(SFX_SUMMON, scout, "origin"))
             call SystemMsg.create(GetUnitName(GetTriggerUnit()) + " cast thistype")
         endmethod
         

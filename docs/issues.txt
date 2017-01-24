@@ -4,28 +4,20 @@ To do list:
 
 SHORT TERM:        
 	
-	- Improve test map, put some trees, units, etc.
+	- Create Rain of Fire Spell
+	- Wind walk based abilities onDamage doesn't properly retrieve level at cast
+	- StoneGaze added armor not correct.
 
-	- Dark Lord Powers SFX
-	- Hellfire Blast SFX
-	- Rain of Fire script
-	- Hellguard script
-	- Avante heal complete no SFX
-	- Repression summon no SFX
-	- Severe Wounds summon no SFX
-	- Severe Wounds change Heal SFX
-	
 	VISUALS:
-		- Change Horror SFX
-		- Hellish Cloud Impact Visuals not scalable.
-		- Burrow Animation and SFX
-		- BTN_BurrowOff and BTN_UnderworldFiresOff not matching.
+		- Burrow Animation and SFX (requested to a modeler)
+		- Change Crack SFX
+		- Add Pitfall SFX (requested to a modeler)
+		- BTN_BurrowOff and BTN_UnderworldFiresOff not matching
 	
 	- Test if Inception takes the correct damage taken factor
 	
-	- Periodic Damage from Buff should not get removed upon false TargetFilter.
-	
-	- Allow units with Rabies exceed 522 ms.
+	- Allow units with Rabies exceed 522 movespeed.
+	- Damage Event doesn't properly classify unit's with magic attack as magic damage.
 	
 LONG TERM:
 	
@@ -37,12 +29,3 @@ LONG TERM:
 
 	- Test in Multiplayer
 	
-
-LESS PRIORITIES
-	
-	- Alter illusion system to use DummyRecycler
-	
-	- Blood Extremity recolor heal effect to RED
-	
-	- 
-

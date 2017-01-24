@@ -4,6 +4,7 @@ scope Fetch
         private constant integer SPELL_ID = 'A233'
         private constant integer BUFF_ID = 'B233'
         private constant string SFX = "Models\\Effects\\FetchBuff.mdx"
+        private constant string SFX_TARGET = "Models\\Effects\\FetchTarget.mdx"
         private constant real NODE_RADIUS = 250
         private constant real TIMEOUT = 0.05
     endglobals
@@ -27,6 +28,7 @@ scope Fetch
         
         readonly unit u
         readonly unit target
+        private effect sfx
         
         readonly thistype next
         readonly thistype prev
@@ -40,18 +42,26 @@ scope Fetch
                 call RecycleDummy(this.u)
                 set this.u = null
             endif
+            if this.sfx != null then
+                call DestroyEffect(this.sfx)
+            endif
             set this.target = null
             call this.deallocate()
         endmethod
         
         static method create takes thistype head, unit target, player owner returns thistype
             local thistype this = thistype.allocate()
+            local string s = SFX_TARGET
             set this.target = target
             set this.u = GetRecycledDummyAnyAngle(GetUnitX(target), GetUnitY(target), 0)
             call PauseUnit(this.u, false)
             call SetUnitOwner(this.u, owner, false)
             call UnitSetBonus(this.u, BONUS_SIGHT_RANGE, R2I(NODE_RADIUS))
             call UnitAddAbility(this.u, 'ATSS')
+            if IsPlayerEnemy(owner, GetLocalPlayer()) then
+                set s = ""
+            endif
+            set this.sfx = AddSpecialEffectTarget(s, target, "origin")
             set this.next = head.next
             set this.prev = head
             set this.next.prev = this

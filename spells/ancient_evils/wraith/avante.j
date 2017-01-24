@@ -3,7 +3,7 @@ scope Avante
     globals
         private constant integer SPELL_ID = 'A341'
         private constant string SFX = "Models\\Effects\\Avante.mdx"
-        private constant string HEAL_SFX = "Abilities\\Spells\\Undead\\DeathCoil\\DeathCoilMissile.mdl"
+        private constant string HEAL_SFX = "Abilities\\Spells\\Undead\\AnimateDead\\AnimateDeadTarget.mdl" 
     endglobals
     
     private function ChannelTime takes integer level returns real

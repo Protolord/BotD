@@ -8,6 +8,7 @@ scope EngulfedFires
     
     private function Duration takes integer level returns real
         if level == 11 then
+            return 20.0
         endif
         return 0.5*level + 5.0
     endfunction
