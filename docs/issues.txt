@@ -4,14 +4,14 @@ To do list:
 
 SHORT TERM:        
 	
-	- Create Rain of Fire Spell
 	- Wind walk based abilities onDamage doesn't properly retrieve level at cast
 	- StoneGaze added armor not correct.
+	- Edit StoneVision icon to look more gray-ish
+	- Edit Terror icon to use Dota 2 Savage Roar icon, make it more orange-ish
+	- SystemMsg create admin parameter
 
 	VISUALS:
 		- Burrow Animation and SFX (requested to a modeler)
-		- Change Crack SFX
-		- Add Pitfall SFX (requested to a modeler)
 		- BTN_BurrowOff and BTN_UnderworldFiresOff not matching
 	
 	- Test if Inception takes the correct damage taken factor

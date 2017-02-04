@@ -93,7 +93,7 @@
 //==============================================================================
 //                               Demon
 //==============================================================================
-//! import "../spells/ancient_evils/demon/vigilant_and_virtuous.j"
+//! import "../spells/ancient_evils/demon/vigilant_and_the_virtuous.j"
 //------------------------------------------------------------------------------
 //! import "../spells/ancient_evils/demon/doom.j"
 //! import "../spells/ancient_evils/demon/pitfall.j"
@@ -105,6 +105,7 @@
 //! import "../spells/ancient_evils/demon/infernal_chains.j"
 //! import "../spells/ancient_evils/demon/underworld_fires.j"
 //------------------------------------------------------------------------------
+//! import "../spells/ancient_evils/demon/rain_of_fire.j"
 //! import "../spells/ancient_evils/demon/diabolic_senses.j"
 //! import "../spells/ancient_evils/demon/dark_lord_vision.j"
 //! import "../spells/ancient_evils/demon/shattered_earth.j"
@@ -116,10 +117,21 @@
 //==============================================================================
 //                              Gargoyle
 //==============================================================================
+//! import "../spells/ancient_evils/gargoyle/deadly_repulse.j"
+//------------------------------------------------------------------------------
 //! import "../spells/ancient_evils/gargoyle/crack.j"
-//! import "../spells/ancient_evils/gargoyle/powderising_strength.j"
+//! import "../spells/ancient_evils/gargoyle/earth_shatter.j"
 //! import "../spells/ancient_evils/gargoyle/stone_gaze.j"
+//! import "../spells/ancient_evils/gargoyle/terror.j"
+//------------------------------------------------------------------------------
 //! import "../spells/ancient_evils/gargoyle/uplift_purpose.j"
+//! import "../spells/ancient_evils/gargoyle/fissure.j"
+//! import "../spells/ancient_evils/gargoyle/camouflage.j"
+//------------------------------------------------------------------------------
+//! import "../spells/ancient_evils/gargoyle/stone_vision.j"
+//! import "../spells/ancient_evils/gargoyle/rock_toss.j"
+//------------------------------------------------------------------------------
+//! import "../spells/ancient_evils/gargoyle/powderising_strength.j"
 //==============================================================================
 //                             Skeleton King
 //==============================================================================

@@ -11,6 +11,9 @@ scope HellishCloud
     endglobals
     
     private function DamageDealt takes integer level returns real
+        if level == 11 then
+            return 1000.0
+        endif
         return 50.0*level
     endfunction
     
@@ -19,7 +22,7 @@ scope HellishCloud
     endfunction
     
     private function TargetFilter takes unit u, player p returns boolean
-        return UnitAlive(u) and IsUnitEnemy(u, p) and not IsUnitType(u, UNIT_TYPE_STRUCTURE)
+        return UnitAlive(u) and IsUnitEnemy(u, p) and not IsUnitType(u, UNIT_TYPE_STRUCTURE) and not IsUnitType(u, UNIT_TYPE_MAGIC_IMMUNE)
     endfunction
 
     struct HellishCloud extends array

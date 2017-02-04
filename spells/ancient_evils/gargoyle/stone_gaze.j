@@ -57,8 +57,8 @@ scope StoneGaze
         
         method onRemove takes nothing returns nothing
             call this.a.destroy()
-            call this.si.destroy()
             call this.s.destroy()
+            call this.si.destroy()
             call DestroyEffect(this.sfx)
             set this.color.speed = 500
             call this.color.destroy()
@@ -68,11 +68,11 @@ scope StoneGaze
         
         method onApply takes nothing returns nothing
             set this.a = Armor.create(this.target, 0)
-            set this.si = SpellImmune.create(this.target)
             set this.s = Stun.create(this.target, 0, false)
             set this.sfx = AddSpecialEffectTarget(SFX, this.target, "origin")
             set this.color = VertexColor.create(this.target, -215, -215, -215, 0)
             set this.color.speed = 255
+            set this.si = SpellImmune.create(this.target)
             call SetUnitTimeScale(this.target, 0)
         endmethod
         
@@ -98,10 +98,12 @@ scope StoneGaze
             local thistype this = Missile.getHit()
             local SpellBuff b
             if not SpellBlock.has(this.target) and TargetFilter(this.target, this.owner) then
-                set b = SpellBuff.add(this.caster, this.target)
-                call b.a.change(BonusArmor(this.lvl))
-                set b.duration = Duration(this.lvl)
                 call Damage.element.apply(this.caster, this.target, DamageDealt(this.lvl), ATTACK_TYPE, DAMAGE_TYPE, DAMAGE_ELEMENT_EARTH)
+                if UnitAlive(this.target) then
+                    set b = SpellBuff.add(this.caster, this.target)
+                    call b.a.change(BonusArmor(this.lvl))
+                    set b.duration = Duration(this.lvl)
+                endif
             endif
             call this.destroy()
         endmethod

@@ -17,7 +17,7 @@ scope DarkLordVision
         if level == 11 then
             return 15.0
         endif
-        return 5.00
+        return 30.00
     endfunction
     
     private function TargetFilter takes unit u, player owner returns boolean
@@ -114,12 +114,16 @@ scope DarkLordVision
                     call sight.destroy()
                     set sight = sight.next
                 endloop
+                call this.ss.destroy()
+                set this.ss = 0
             endif
             if this.fs > 0 then
                 call this.fs.destroy()
+                set this.fs = 0
             endif
             if this.ts > 0 then
                 call this.ts.destroy()
+                set this.ts = 0
             endif
             call ReleaseGroup(this.visible)
             call DestroyEffect(this.sfx)
@@ -175,6 +179,9 @@ scope DarkLordVision
             set this.sfx = AddSpecialEffectTarget(SFX, this.target, "overhead")
             set this.owner = GetOwningPlayer(this.target)
             set this.visible = NewGroup()
+            if GetUnitAbilityLevel(this.source, SPELL_ID) < 11 then
+                set this.ss = SightSource.head()
+            endif
             call this.push(TIMEOUT)
         endmethod
         
@@ -187,14 +194,21 @@ scope DarkLordVision
             local unit u = GetTriggerUnit()
             local integer lvl = GetUnitAbilityLevel(u, SPELL_ID)
             local SpellBuff b = SpellBuff.add(u, u)
+            local SightSource sight
             set b.duration = Duration(lvl)
             set b.threshold = RevealThreshold(lvl)
-            if lvl < 11 then
-                set b.ss = SightSource.head()
-                set b.fs = 0
-                set b.ts = 0
-            else
-                set b.ss = 0
+            if lvl == 11 then
+                if b.ss > 0 then
+                    set sight = b.ss.next
+                    //Destroy all SightSource
+                    loop
+                        exitwhen sight == b.ss
+                        call sight.destroy()
+                        set sight = sight.next
+                    endloop
+                    call b.ss.destroy()
+                    set b.ss = 0
+                endif
                 set b.fs = FlySight.create(u, GLOBAL_SIGHT)
                 set b.ts = TrueSight.create(u, GLOBAL_SIGHT)
             endif

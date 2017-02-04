@@ -2,7 +2,7 @@ scope Crack
 
     globals
         private constant integer SPELL_ID = 'A611'
-        private constant string SFX = "Models\\Effects\\CorruptingStomp.mdx"
+        private constant string SFX = "Abilities\\Spells\\Orc\\EarthQuake\\EarthquakeTarget.mdl"
     endglobals
     
     private function Duration takes integer level returns real
@@ -30,12 +30,17 @@ scope Crack
             local real duration = Duration(lvl)
             local real x = GetSpellTargetX()
             local real y = GetSpellTargetY()
+            local real sfxDur = RMaxBJ(duration, 1.0)
             local group g = NewGroup()
-            local unit dummy = GetRecycledDummyAnyAngle(x, y, 50)
+            local unit dummy = GetRecycledDummyAnyAngle(x, y, 5)
             local unit u
-            call DummyAddRecycleTimer(dummy, 2.5)
+            call DummyAddRecycleTimer(dummy, sfxDur + 2.5)
             call SetUnitScale(dummy, Radius(lvl)/250.0, 0, 0)
-            call DestroyEffect(AddSpecialEffectTarget(SFX, dummy, "origin"))
+            call AddSpecialEffectTimer(AddSpecialEffectTarget(SFX, dummy, "origin"), sfxDur)
+            set dummy = GetRecycledDummyAnyAngle(x, y, 5)
+            call DummyAddRecycleTimer(dummy, sfxDur + 2.5)
+            call SetUnitScale(dummy, Radius(lvl)/250.0, 0, 0)
+            call AddSpecialEffectTimer(AddSpecialEffectTarget(SFX, dummy, "origin"), sfxDur)
             call GroupUnitsInArea(g, x, y, Radius(lvl))
             loop
                 set u = FirstOfGroup(g)

@@ -3,12 +3,10 @@ scope Pitfall
     globals
         private constant integer SPELL_ID = 'A512'
         private constant integer SPELL_BUFF = 'D512'
-        private constant integer PITFALL_ID = 0 //None as of now
+        private constant integer PITFALL_ID = 'B512'
         private constant attacktype ATTACK_TYPE = ATTACK_TYPE_NORMAL
         private constant damagetype DAMAGE_TYPE = DAMAGE_TYPE_MAGIC
-        private constant string SFX_FIRE = "Abilities\\Spells\\Human\\FlameStrike\\FlameStrikeEmbers.mdl"
         private constant string SFX_BUFF = "Abilities\\Spells\\Human\\FlameStrike\\FlameStrikeDamageTarget.mdl"
-        private constant real FIRE_SPACING = 60
         private constant real TIMEOUT = 1.0
     endglobals
     
@@ -84,46 +82,11 @@ scope Pitfall
         
         implement BuffApply
     endstruct
-    
-    private struct Fire extends array
-        implement Alloc
-        
-        private effect sfx
-        
-        readonly thistype next
-        readonly thistype prev
-        
-        method destroy takes nothing returns nothing
-            set this.prev.next = this.next
-            set this.next.prev = this.prev
-            if this.sfx != null then
-                call DestroyEffect(this.sfx)
-                set this.sfx = null
-            endif
-            call this.deallocate()
-        endmethod
-        
-        static method add takes thistype head, real x, real y returns nothing
-            local thistype this = thistype.allocate()
-            set this.sfx = AddSpecialEffect(SFX_FIRE, x, y)
-            set this.next = head
-            set this.prev = head.prev
-            set this.prev.next = this
-            set this.next.prev = this
-        endmethod
-        
-        static method head takes nothing returns thistype
-            local thistype this = thistype.allocate()
-            set this.next = this
-            set this.prev = this
-            return this
-        endmethod
-    endstruct
-    
+
     struct Pitfall extends array
         
         private unit caster
-        private destructable volc
+        private destructable pit
         private real x
         private real y
         private real dmg
@@ -133,12 +96,10 @@ scope Pitfall
         private real moveSlow
         private real atkSlow
         private Table tb
-        private Fire sfxHead
         
         private static group enumG
         
         private method remove takes nothing returns nothing
-            local Fire f = this.sfxHead.next
             local unit u
             loop
                 set u = FirstOfGroup(this.g)
@@ -146,16 +107,10 @@ scope Pitfall
                 call GroupRemoveUnit(this.g, u)
                 call Buff(this.tb[GetHandleId(u)]).remove()
             endloop
-            loop
-                exitwhen f == this.sfxHead
-                call f.destroy()
-                set f = f.next
-            endloop
-            call this.sfxHead.destroy()
-            call KillDestructable(this.volc)
+            call KillDestructable(this.pit)
             call this.tb.destroy()
             call ReleaseGroup(this.g)
-            set this.volc = null
+            set this.pit = null
             set this.g = null
             set this.caster = null
             call this.destroy()
@@ -164,9 +119,13 @@ scope Pitfall
         private static method picked takes nothing returns nothing
             local unit u = GetEnumUnit()
             local SpellBuff b
+            local integer id
             if not TargetFilter(u, GetOwningPlayer(global.caster)) or not IsUnitInRangeXY(u, global.x, global.y, global.radius) then
                 call GroupRemoveUnit(global.g, u)
-                call Buff(global.tb[GetHandleId(u)]).remove()
+                set id = GetHandleId(u)
+                if Buff.has(global.caster, u, SpellBuff.typeid) then
+                    call Buff(global.tb[id]).remove()
+                endif
             endif
             set u = null
         endmethod
@@ -208,9 +167,6 @@ scope Pitfall
         private static method onCast takes nothing returns nothing
             local thistype this = thistype.create()
             local integer lvl
-            local real angle
-            local real endAngle
-            local real da
             set this.caster = GetTriggerUnit()
             set this.g = NewGroup()
             set lvl = GetUnitAbilityLevel(this.caster, SPELL_ID)
@@ -222,21 +178,8 @@ scope Pitfall
             set this.moveSlow = -MoveSlow(lvl)
             set this.dmg = DamagePerSecond(lvl)*TIMEOUT
             set this.tb = Table.create()
-            set this.volc = CreateDestructable(PITFALL_ID, this.x, this.y, GetRandomReal(0, 360), this.radius/260, 0)
-            call SetDestructableAnimation(this.volc, "birth")
-            //Create SFX
-            set this.sfxHead = Fire.head()
-            set da = 2*bj_PI/R2I(2*bj_PI*this.radius/FIRE_SPACING)
-            if da > bj_PI/3 then
-                set da = bj_PI/3
-            endif
-            set angle = da
-            set endAngle = da + 2*bj_PI - 0.0001
-            loop
-                exitwhen angle >= endAngle
-                call Fire.add(this.sfxHead, this.x + this.radius*Cos(angle), this.y + this.radius*Sin(angle))
-                set angle = angle + da
-            endloop
+            set this.pit = CreateDestructable(PITFALL_ID, this.x, this.y, GetRandomReal(0, 360), this.radius/110, 0)
+            call SetDestructableAnimation(this.pit, "birth")
             call SystemMsg.create(GetUnitName(GetTriggerUnit()) + " cast thistype")
         endmethod
         

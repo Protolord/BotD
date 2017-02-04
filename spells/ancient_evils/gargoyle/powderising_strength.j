@@ -2,7 +2,7 @@ scope PowderisingStrength
 
     globals
         private constant integer SPELL_ID = 'A641'
-        private constant string SFX_TARGET = ""
+        private constant string SFX_TARGET = "Models\\Effects\\PowderisingStrength.mdx"
     endglobals
 
     private function LifeSteal takes integer level returns real

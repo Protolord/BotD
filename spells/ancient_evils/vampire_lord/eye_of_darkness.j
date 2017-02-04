@@ -41,7 +41,7 @@ scope EyeOfDarkness
         endmethod
 
         static method create takes thistype head, real x, real y, real angle, real scale returns thistype
-            local thistype this = thistype.allocate()
+            local thistype this
 
             if x < WorldBounds.maxX and x > WorldBounds.minX and y < WorldBounds.maxY and y > WorldBounds.minY then
                 set this = thistype.allocate()

@@ -15,6 +15,7 @@
 		Storm Shaman                by Pins
         
 	ABILITIES:
+		Immortal Force Effect		by nGy
 		Corrupting Stomp Effect     by JetFangInferno
 		Soul Corruption Effect      by Glen Elendra
 		Shadows Of Corruption       by The_Swamp_Warrior
@@ -29,7 +30,6 @@
 		Force of the Lycan Buff     by PeeKay
 		Flesh Hunger Effects        by cotd333
 		Lycanthrope Effect          by JetFangInferno
-		Fetch Buff                  by CeDiL
 		Fury of the Lycan Buff      by Power
 		Revitalize Effect           by DarkEvil
             
@@ -67,9 +67,14 @@
 		Hellguard Pentagram			by Skizzik
 		Engulfed Fires Buff         by sPy
 
+		Earth Shattered				by JetFangInferno
 		Stone Gaze Effect 			by Ergius
 		Ston Gaze Missile			by 00110000
+		Fissure Missile				by nGy
 		Uplift Purpose Buff			by ChaoticHunter
+		Powderising Strength        by JesusHipster
+		Rock Toss Effect			by WILL THE ALMIGHTY
+		Stone Vision Target         by CeDiL
 	
 	OTHERS:
 		Generic CastBar             by HappyTauren

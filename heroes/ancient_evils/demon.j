@@ -1,7 +1,7 @@
 globals
     Hero demon
     //Demon Spells
-    Spell vigilantAndVirtuous
+    Spell vigilantAndTheVirtuous
     Spell doom
     Spell pitfall
     Spell charge
@@ -21,9 +21,9 @@ endglobals
 
 module DemonSpells
     
-    set vigilantAndVirtuous = Spell.create('A5XX')
-    set vigilantAndVirtuous.passive = true
-    set vigilantAndVirtuous.info = "Vigilant And Virtuous|n|cfff4a460Target|r: |cff3399ffPassive, Enemy|n|r|cfff4a460Range|r: |cff3399ffMelee|r|n|cfff4a460Damage per second|r: |cff3399ff(3 x Hero Level)|r|n|cfff4a460Duration|r: |cff3399ff30 seconds|r|n|nEach attack will leave a mark on it's living target dealing non-lethal damage per second; targets will be left with at least 1 HP."
+    set vigilantAndTheVirtuous = Spell.create('A5XX')
+    set vigilantAndTheVirtuous.passive = true
+    set vigilantAndTheVirtuous.info = "Vigilant And The Virtuous|n|cfff4a460Target|r: |cff3399ffPassive, Enemy|n|r|cfff4a460Range|r: |cff3399ffMelee|r|n|cfff4a460Damage per second|r: |cff3399ff(3 x Hero Level)|r|n|cfff4a460Duration|r: |cff3399ff30 seconds|r|n|nEach attack will leave a mark on it's living target dealing non-lethal damage per second; targets will be left with at least 1 HP."
     
     set doom = Spell.create('A511')
     set doom.info = "Doom|n|cfff4a460Target|r: |cff3399ffEnemy Unit|n|r|cfff4a460Range|r: |cff3399ff600|n|r|cfff4a460Damage per second|r: |cff3399ff50|n|r|cfff4a460Duration|r: |cff3399ff(1 second x level)|n|r|cfff4a460Cooldown|r: |cff3399ff30 seconds|r|n|nMarks a target unit for the manifestation of a Demon. The afflicted unit cannot cast spells and takes magical damage over time."
@@ -38,8 +38,7 @@ module DemonSpells
     set taunt.info = "Taunt|n|cfff4a460Target|r: |cff3399ffSelf|n|r|cfff4a460Radius|r: |cff3399ff(100 x level)|n|r|cfff4a460Damage|r: |cff3399ff(35 x level)|n|r|cfff4a460Cooldown|r: |cff3399ff30 seconds|r|n|nDemon howls a scream making at most 20 nearby enemies to attack him. Also deals magical damage in area around him."
     
     set rainOfFire = Spell.create('A521')
-    set rainOfFire.info = "Rain Of Fire|n<Not yet coded>"
-    //set rainOfFire.info = "Rain Of Fire|n|cfff4a460Target|r: |cff3399ffAoe(300)|n|r|cfff4a460Range|r: |cff3399ff600|n|r|cfff4a460Damage/wave|r: |cff3399ff20 x level|r|n|nDemon summons a Rain of Fire with a maximum of 5 waves at a rate of 1 wave/second. Does not damage buildings and damages allies."
+    set rainOfFire.info = "Rain Of Fire|n|cfff4a460Target|r: |cff3399ffAoe(300)|n|r|cfff4a460Range|r: |cff3399ff600|n|r|cfff4a460Damage/wave|r: |cff3399ff20 x level|r|n|nDemon summons a Rain of Fire with a maximum of 5 waves at a rate of 1 wave/second. Does not damage buildings and damages allies."
     
     set hellishCloud = Spell.create('A522')
     set hellishCloud.info = "Hellish Cloud|n|cfff4a460Target|r: |cff3399ffSelf|n|r|cfff4a460Damage|r: |cff3399ff(50 x level)|n|r|cfff4a460Duration|r: |cff3399ff(5 + (1 x level)) seconds|n|r|cfff4a460Cooldown|r: |cff3399ff(10 + (1 x level)) seconds|r|n|nDemon becomes temporarily invisible and deals extra area (400) damage on impact."
@@ -82,11 +81,11 @@ module DemonConfig
     set demon.scaleAdd = 0.15
     set demon.modelPath = "Models\\Units\\Demon.mdx"
     set demon.info = "DEMONS COME STRAIGHT FROM THE HELLGATE. THEY ARE DIRECTLY RELATED TO FLAMES AND HELLISH CREATURES WHICH THEY COMMAND |nIN COMBAT. DEMON HIMSELF PROVES TO BE EXCELLENT AT RAZING SOLID DEFENCES AND DEVASTATING CLUSTERS OF ENEMIES. WITH HIS |nSTRENGTH BASE DEMONS ARE CAPABLE OF TAKING MASSIVE AMOUNT OF DAMAGE AND PROTECT WEAKER MEMBERS OF THE TEAM."
-    set demon.attribute = "19 +3.0    7 +4.3   12 +1.5"
+    set demon.attribute = "19 +3.7    7 +2.9   12 +1.0"
     set demon.primary = STR
     
     //Configure Spells
-    set demon.innateSpell = vigilantAndVirtuous
+    set demon.innateSpell = vigilantAndTheVirtuous
     set demon.spell11 = doom
     set demon.spell12 = pitfall
     set demon.spell13 = charge

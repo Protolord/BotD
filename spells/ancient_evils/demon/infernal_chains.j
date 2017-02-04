@@ -12,6 +12,9 @@ scope InfernalChains
 
     //Damage is a percentage of target's max hp
     private function DamageGrowth takes integer level returns real
+        if level == 11 then
+            return 0.20
+        endif
         return 0.10 + 0.0*level
     endfunction
 
@@ -76,17 +79,14 @@ scope InfernalChains
             if Damage.type == DAMAGE_TYPE_PHYSICAL and not Damage.element.coded and level > 0 and GetRandomReal(0, 100) <= Chance(level) and TargetFilter(Damage.target, GetOwningPlayer(Damage.source)) then
                 set b = SpellBuff.add(Damage.source, Damage.target)
                 //Deal extra damage
-                if b.dmg > 0 then
+                if b.dmg <= MaxDamage(level) then
                     set dmg = b.dmg*GetUnitState(Damage.target, UNIT_STATE_MAX_LIFE)
                     call DisableTrigger(thistype.trg)
                     call Damage.apply(Damage.source, Damage.target, dmg, ATTACK_TYPE, DAMAGE_TYPE)
                     call EnableTrigger(thistype.trg)
                     set t = FloatingTextSplatEx(Element.string(DAMAGE_ELEMENT_FIRE) + "+" + I2S(R2I(dmg + 0.5)) + "|r", Damage.target, 1.0, 250.0)
                     call t.setVisible(GetLocalPlayer() == GetOwningPlayer(Damage.source) and IsUnitVisible(Damage.source, GetLocalPlayer()))
-                endif
-                set b.dmg = b.dmg + DamageGrowth(level)
-                if b.dmg > MaxDamage(level) then
-                    set b.dmg = MaxDamage(level)
+                    set b.dmg = b.dmg + DamageGrowth(level)
                 endif
             endif
             return false

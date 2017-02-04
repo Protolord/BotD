@@ -47,13 +47,13 @@ Cooldown: 30 seconds
 Demon howls a scream making at most 20 nearby enemies to attack him. Also deals magical damage in area around him.
 -----------------------------------------------------------------------------------------------------------------------------------
 Rain of Fire
-|cfff4a460Target|r: |cff3399ffAoe(300)|n|r|cfff4a460Range|r: |cff3399ff600|n|r|cfff4a460Damage/wave|r: |cff3399ff20 x ability level|r|n|nDemon summons a Rain of Fire with a maximum of 5 waves at a rate of 1 wave/second. Does not damage buildings and damages allies.
+|cfff4a460Target|r: |cff3399ffAoe(300)|n|r|cfff4a460Range|r: |cff3399ff600|n|r|cfff4a460Damage/wave|r: |cff3399ff20 x ability level|r|n|nDemon summons a Rain of Fire with a maximum of 5 waves at a rate of 1 wave/second.
 
 Target: AoE(300)
 Range: 600
 Damage/wave: 20 x ability level
 
-Demon summons a Rain of Fire with a maximum of 5 waves at a rate of 1 wave/second. Does not damage buildings and damages allies.
+Demon summons a Rain of Fire with a maximum of 5 waves at a rate of 1 wave/second.
 -----------------------------------------------------------------------------------------------------------------------------------
 Hellish Clouds
 |cfff4a460Target|r: |cff3399ffSelf|n|r|cfff4a460Damage|r: |cff3399ff(50 x ability level)|n|r|cfff4a460Duration|r: |cff3399ff(5 + (1 x ability level)) seconds|n|r|cfff4a460Cooldown|r: |cff3399ff(10 + (1 x ability level)) seconds|r|n|nDemon becomes temporarily invisible and deals extra area (400) damage on impact.

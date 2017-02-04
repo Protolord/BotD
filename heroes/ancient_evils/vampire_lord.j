@@ -78,9 +78,9 @@ module VampireLordConfig
     set vampireLord.iconPath = "ReplaceableTextures\\CommandButtons\\BTN_VampireLord.blp"
     set vampireLord.scaleAdd = 0.15
     set vampireLord.modelPath = "Models\\Units\\VampireLord.mdx"
-    set vampireLord.info = "VAMPIRES ARE THE MASTERS OF SHADOWS & DEALING MASSIVE DAMAGE TO ENEMIES DEFENCES WHEN IT IS ABSOLUTELY UNEXPECTED. WHILE |nABLE TO RAPIDLY REGENERATE THEIR LIFEFORCE THEY BECOME ULTIMATE KILLING TOOL IN THE SCOURGE ARMY. CUNNING SLAUGHTER FOR |nLIVING AND FORTIFIED ENEMIES."
+    set vampireLord.info = "VAMPIRES ARE THE MASTERS OF SHADOWS AND DEALING MASSIVE DAMAGE TO ENEMIES DEFENCES WHEN IT IS ABSOLUTELY UNEXPECTED. |nWHILE ABLE TO RAPIDLY REGENERATE THEIR LIFEFORCE THEY BECOME ULTIMATE KILLING TOOL IN THE SCOURGE ARMY. CUNNING SLAUGHTER |nFOR LIVING AND FORTIFIED ENEMIES."
     set vampireLord.attribute = "19 +2.9    7 +4.8   12 +1.6"
-    set vampireLord.primary = STR
+    set vampireLord.primary = AGI
     //Configure Spells
     set vampireLord.innateSpell = reincarnation
     set vampireLord.spell11 = immortalForce

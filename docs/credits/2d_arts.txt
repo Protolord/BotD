@@ -68,6 +68,7 @@
 
 	Gargoyle Abilities:
 		BTN_Camouflage				by PeeKay
+		BTN_Terror					by Valve Corporation
 		BTN_StonyPath               by Praytic
 		BTN_RockToss                by -Berz-
 		BTN_Crack                   by Valve Corporation

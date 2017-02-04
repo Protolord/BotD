@@ -3,7 +3,7 @@ scope Fetch
     globals
         private constant integer SPELL_ID = 'A233'
         private constant integer BUFF_ID = 'B233'
-        private constant string SFX = "Models\\Effects\\FetchBuff.mdx"
+        private constant string SFX = ""
         private constant string SFX_TARGET = "Models\\Effects\\FetchTarget.mdx"
         private constant real NODE_RADIUS = 250
         private constant real TIMEOUT = 0.05
@@ -112,9 +112,12 @@ scope Fetch
                     call sight.destroy()
                     set sight = sight.next
                 endloop
+                call this.ss.destroy()
+                set this.ss = 0
             endif
             if this.fs > 0 then
                 call this.fs.destroy()
+                set this.fs = 0
             endif
             call ReleaseGroup(this.visible)
             call DestroyEffect(this.sfx)
@@ -170,6 +173,9 @@ scope Fetch
             set this.sfx = AddSpecialEffectTarget(SFX, this.target, "overhead")
             set this.owner = GetOwningPlayer(this.target)
             set this.visible = NewGroup()
+            if GetUnitAbilityLevel(this.source, SPELL_ID) < 11 then
+                set this.ss = SightSource.head()
+            endif
             call this.push(TIMEOUT)
         endmethod
         
@@ -182,13 +188,21 @@ scope Fetch
             local unit u = GetTriggerUnit()
             local integer lvl = GetUnitAbilityLevel(u, SPELL_ID)
             local SpellBuff b = SpellBuff.add(u, u)
+            local SightSource sight
             set b.duration = Duration(lvl)
             set b.radius = Radius(lvl)
-            if lvl < 11 then
-                set b.ss = SightSource.head()
-                set b.fs = 0
-            else
-                set b.ss = 0
+            if lvl == 11 then
+                if b.ss > 0 then
+                    set sight = b.ss.next
+                    //Destroy all SightSource
+                    loop
+                        exitwhen sight == b.ss
+                        call sight.destroy()
+                        set sight = sight.next
+                    endloop
+                    call b.ss.destroy()
+                    set b.ss = 0
+                endif
                 set b.fs = FlySight.create(u, GLOBAL_SIGHT)
             endif
             set u = null

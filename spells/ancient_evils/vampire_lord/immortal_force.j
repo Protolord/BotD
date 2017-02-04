@@ -2,7 +2,7 @@ scope ImmortalForce
 
     globals
         private constant integer SPELL_ID = 'A111'
-        private constant string MODEL = "Abilities\\Spells\\Undead\\OrbOfDeath\\AnnihilationMissile.mdl"
+        private constant string MODEL = "Models\\Effects\\ImmortalForce.mdx"
         private constant string SFX_HIT = "Abilities\\Spells\\Undead\\DeathandDecay\\DeathandDecayTarget.mdl"
         private constant attacktype ATTACK_TYPE = ATTACK_TYPE_NORMAL
         private constant damagetype DAMAGE_TYPE = DAMAGE_TYPE_MAGIC

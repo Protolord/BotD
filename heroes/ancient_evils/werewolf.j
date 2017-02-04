@@ -83,9 +83,9 @@ module WerewolfConfig
     set werewolf.name = "Werewolf"
     set werewolf.iconPath = "ReplaceableTextures\\CommandButtons\\BTN_Werewolf.blp"
     set werewolf.modelPath = "Models\\Units\\Werewolf.mdx"
-    set werewolf.info = "WEREWOLVES ARE THE MASTER'S FAVOURITE. ALTHOUGH DEPENDANT ON THE CLOSE DISTANCE COMBAT THEY ARE CAPABLE OF DEALING |nDESTRUCTIVE DAMAGE TO ANYTHING, WHETHER ALIVE OR NOT. WEREWOLVES ARE THE REAL HUNTERS THAT HAVE MASTERED HUNTING |nHUMAN HEROES TO PERFECTION." 
+    set werewolf.info = "WEREWOLVES ARE THE MASTER'S FAVOURITE. ALTHOUGH DEPENDANT ON THE CLOSE DISTANCE COMBAT THEY ARE CAPABLE OF DEALING |nDESTRUCTIVE DAMAGE TO ANYTHING, WHETHER ALIVE OR NOT. WEREWOLVES ARE BORN HUNTERS THAT HAVE MASTERED HUNTING HUMAN |nHEROES TO PERFECTION." 
     set werewolf.attribute = "19 +4.1    7 +3.2   12 +1.2"
-    set werewolf.primary = AGI
+    set werewolf.primary = STR
     //Configure Spells
     set werewolf.innateSpell = shapeshift
     set werewolf.spell11 = envenomedFangs

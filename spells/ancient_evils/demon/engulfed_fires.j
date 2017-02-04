@@ -50,7 +50,7 @@ scope EngulfedFires
         method onApply takes nothing returns nothing
             call Damage.remove(this.target)
             set this.sfx = AddSpecialEffectTarget(SFX, this.target, "origin")
-            set this.hp = I2R(R2I(GetWidgetLife(this.target))) + 0.5
+            set this.hp = RMinBJ(I2R(R2I(GetWidgetLife(this.target))) + 0.5, GetUnitState(this.target, UNIT_STATE_MAX_LIFE))
             set this.trg = CreateTrigger()
             call TriggerRegisterUnitStateEvent(this.trg, this.target, UNIT_STATE_LIFE, LESS_THAN, this.hp - 0.1 )
             call TriggerRegisterUnitStateEvent(this.trg, this.target, UNIT_STATE_LIFE, GREATER_THAN, this.hp + 0.1)

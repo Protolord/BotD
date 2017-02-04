@@ -11,6 +11,9 @@ scope Hatch
     endglobals
     
     private function Speed takes integer level returns real
+        if level == 11 then
+            return 522.0
+        endif
         return 0.0*level + 250
     endfunction
     
@@ -24,6 +27,7 @@ scope Hatch
         endif
         return 0.0
     endfunction
+
     
     private function Duration takes integer level returns real
         return 2.0*level + 10

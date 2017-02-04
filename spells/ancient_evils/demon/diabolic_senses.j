@@ -23,8 +23,7 @@ scope DiabolicSenses
         implement Alloc
         
         private unit caster
-        private integer atk
-        private integer sight
+        private integer lvl
         
         private static group g
         private static Table tb
@@ -41,8 +40,12 @@ scope DiabolicSenses
             if GetUnitTypeId(GetTriggerUnit()) == UNIT_ID then
                 set this = thistype(thistype.tb[GetHandleId(thistype.tb.unit[GetHandleId(GetTriggeringTrigger())])])
                 set u = GetTriggerUnit()
-                call UnitSetBonus(u, BONUS_DAMAGE, this.atk)
-                call UnitSetBonus(u, BONUS_SIGHT_RANGE, this.sight)
+                call UnitSetBonus(u, BONUS_DAMAGE, R2I(AttackDamage(lvl)) - INIT_DAMAGE)
+                if this.lvl == 11 then
+                    call FlySight.create(u, GLOBAL_SIGHT)
+                else
+                    call UnitSetBonus(u, BONUS_SIGHT_RANGE, R2I(SightRadius(lvl)) - INIT_SIGHT)
+                endif
                 set u = null
             endif
             return false
@@ -54,13 +57,10 @@ scope DiabolicSenses
         
         private static method onCast takes nothing returns nothing
             local thistype this = thistype.allocate()
-            local integer lvl
             set this.caster = GetTriggerUnit()
-            set lvl = GetUnitAbilityLevel(this.caster, SPELL_ID)
-            set this.atk = R2I(AttackDamage(lvl)) - INIT_DAMAGE
-            set this.sight = R2I(SightRadius(lvl)) - INIT_SIGHT
+            set this.lvl = GetUnitAbilityLevel(this.caster, SPELL_ID)
             set thistype.tb[GetHandleId(this.caster)] = this
-            call TimerStart(NewTimerEx(this), Duration(lvl), false, function thistype.expires)
+            call TimerStart(NewTimerEx(this), Duration(this.lvl), false, function thistype.expires)
             call SystemMsg.create(GetUnitName(GetTriggerUnit()) + " cast thistype")
         endmethod
         

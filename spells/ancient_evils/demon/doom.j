@@ -13,7 +13,10 @@ scope Doom
         return 0.0*level + 50.0
     endfunction
     
-    private function Duration takes integer level returns real
+    private function Duration takes integer level returns real  
+        if level == 11 then
+            return 20.0
+        endif
         return 1.0*level
     endfunction
     

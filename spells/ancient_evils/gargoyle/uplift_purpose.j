@@ -37,7 +37,7 @@ scope UpliftPurpose
         endmethod
         
         method stackType takes nothing returns integer
-            return BUFF_STACK_PARTIAL
+            return BUFF_STACK_FULL
         endmethod
         
         method onRemove takes nothing returns nothing
