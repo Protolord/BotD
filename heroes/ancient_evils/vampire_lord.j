@@ -68,6 +68,7 @@ module VampireLordSpells
     set bloodExtremity.info = "Blood Extremity|n|cfff4a460Target|r: |cff3399ffFriendly Unit|n|r|cfff4a460Range|r: |cff3399ff2500|n|r|cfff4a460Amount Healed|r: |cff3399ff(700 x level)|n|r|cfff4a460Cooldown|r: |cff3399ff30 seconds|r|n|nCalls a wave of dark energy which heals targeted ally. Heals 4x more hitpoints on ethereal units."
     
     set unstoppableHunger = Spell.create('A144')
+    set unstoppableHunger.passive = true
     set unstoppableHunger.info = "Unstoppable Hunger|n|cfff4a460Target|r: |cff3399ffPassive, Self|n|r|cfff4a460Heal|r: |cff3399ff(2.5 x level) x Dmg taken |r|n|nPassive healing providing Vampire with 3% chance to heal himself any time takes physical damage."
 endmodule
 
@@ -78,8 +79,8 @@ module VampireLordConfig
     set vampireLord.iconPath = "ReplaceableTextures\\CommandButtons\\BTN_VampireLord.blp"
     set vampireLord.scaleAdd = 0.15
     set vampireLord.modelPath = "Models\\Units\\VampireLord.mdx"
-    set vampireLord.info = "VAMPIRES ARE THE MASTERS OF SHADOWS AND DEALING MASSIVE DAMAGE TO ENEMIES DEFENCES WHEN IT IS ABSOLUTELY UNEXPECTED. |nWHILE ABLE TO RAPIDLY REGENERATE THEIR LIFEFORCE THEY BECOME ULTIMATE KILLING TOOL IN THE SCOURGE ARMY. CUNNING SLAUGHTER |nFOR LIVING AND FORTIFIED ENEMIES."
-    set vampireLord.attribute = "19 +2.9    7 +4.8   12 +1.6"
+    set vampireLord.info = "VAMPIRE LORDS ARE THE MASTERS OF SHADOWS AND DEALING MASSIVE DAMAGE TO ENEMIES DEFENCES WHEN IT IS ABSOLUTELY |nUNEXPECTED. WHILE ABLE TO RAPIDLY REGENERATE THEIR LIFEFORCE THEY BECOME ULTIMATE KILLING TOOL IN THE SCOURGE ARMY. CUNNING |nSLAUGHTER FOR LIVING AND FORTIFIED ENEMIES."
+    set vampireLord.attribute = "19 +2.9    7 +4.6   12 +1.6"
     set vampireLord.primary = AGI
     //Configure Spells
     set vampireLord.innateSpell = reincarnation

@@ -42,9 +42,8 @@ scope UnstoppableHunger
         private static method onDamage takes nothing returns nothing
             local integer level = GetUnitAbilityLevel(Damage.target, SPELL_ID)
             local thistype this
-            local real rand
             if level > 0 and Damage.type == DAMAGE_TYPE_PHYSICAL and not Damage.element.coded then
-                if GetRandomReal(0, 100) < Chance(level) then
+                if GetRandomReal(0, 100) <= Chance(level) then
                     set this = thistype.allocate()
                     set this.heal = HealFactor(level)*Damage.amount + HealConstant(level)
                     set this.u = Damage.target

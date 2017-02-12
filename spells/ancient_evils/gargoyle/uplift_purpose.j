@@ -65,8 +65,8 @@ scope UpliftPurpose
                 set b = Buff.get(Damage.source, Damage.source, SpellBuff.typeid)
                 if b > 0 then
                     call DisableTrigger(thistype.trg)
-                    call Damage.apply(Damage.source, Damage.target, SpellBuff(Buff.picked).dmg, ATTACK_TYPE, DAMAGE_TYPE)
-                    call FloatingTextSplat(Element.string(DAMAGE_ELEMENT_EARTH) + "+" + I2S(R2I(SpellBuff(Buff.picked).dmg + 0.5)) + "|r", Damage.target, 1.0).setVisible(GetLocalPlayer() == GetOwningPlayer(Damage.source))
+                    call Damage.apply(Damage.source, Damage.target, b.dmg, ATTACK_TYPE, DAMAGE_TYPE)
+                    call FloatingTextSplat(Element.string(DAMAGE_ELEMENT_EARTH) + "+" + I2S(R2I(b.dmg + 0.5)) + "|r", Damage.target, 1.0).setVisible(GetLocalPlayer() == GetOwningPlayer(Damage.source))
                     call EnableTrigger(thistype.trg)
                     call b.remove()
                 endif

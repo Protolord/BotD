@@ -1,48 +1,48 @@
 library Illusion /*
 
-                         Illusion v1.32
+                         Illusion v1.33
                             by Flux
-           
+          
             Allows easy creation of Illusion with any damage factor.
-   
+  
     */ requires DamageEvent, DamageModify/*
     http://www.hiveworkshop.com/threads/damagepackage.287101/
     Required to manipulate damage given and damage taken by illusions.
-   
-   
+  
+  
     */ optional Table /*
     If not found, the system will create a hashtable. You cannot create more than 256 hashtable
     per map.
 
-   
+  
     ********************************************************************************
     *************************************** API ************************************
     ********************************************************************************
-   
+  
     Illusion.create(player, unitSource, x, y)
-        - Create an Illusion based on <unitSource>, owned by <player>, positioned at (<x>, <y>) 
-       
+        - Create an Illusion based on <unitSource>, owned by <player>, positioned at (<x>, <y>)
+      
     this.duration = <timedLife>
         - Add a timer to an illusion.
         - Cannot be overwritten once set.
-       
+      
     Illusion.get(unit)
         - Return the 'Illusion instance' based on <unit> parameter.
-         
+        
     this.unit
         - Refers to the actual illusion unit
-       
+      
     this.damageGiven
         - Determines damage dealt factor.
-       
+      
     this.damageTaken
-        - Determines damage received factor.  
-   
-   
+        - Determines damage received factor. 
+  
+  
     CREDITS:
         Bribe         - Table
         Flux          - DamageEvent and DamageModify
-       
+      
 */
     //===================================================================
     //========================= CONFIGURATION ===========================
@@ -50,9 +50,9 @@ library Illusion /*
     globals
         //Rawcode of Illusion Ability based on "Item Illusions"
         private constant integer ILLUSION_SPELL = 'AILS'
-       
+      
         private constant integer DUMMY_ID = 'dumi'
-       
+      
         private constant integer REFRESH_COUNT = 30
         //Dummy unit owner
         private constant player DUMMY_OWNER = Player(PLAYER_NEUTRAL_PASSIVE)
@@ -60,28 +60,28 @@ library Illusion /*
     //===================================================================
     //======================= END CONFIGURATION =========================
     //===================================================================
-   
+  
     native UnitAlive takes unit u returns boolean
-   
-    struct Illusion 
-       
+  
+    struct Illusion
+      
         readonly unit unit
         public real damageTaken
         public real damageGiven
-       
+      
         static if LIBRARY_Table then
             private static Table tb
         else
             private static hashtable hash = InitHashtable()
         endif
-       
+      
         private static trigger deathTrg = CreateTrigger()
         private static group g = CreateGroup()
         private static timer t = CreateTimer()
         private static integer count = 0
         private static unit dummy
         private static unit illu
-       
+      
         static method get takes unit u returns thistype
             static if LIBRARY_Table then
                 return thistype.tb[GetHandleId(u)]
@@ -89,11 +89,16 @@ library Illusion /*
                 return LoadInteger(thistype.hash, GetHandleId(u), 0)
             endif
         endmethod
-       
+      
         private static method reAdd takes nothing returns nothing
             call TriggerRegisterUnitEvent(thistype.deathTrg, GetEnumUnit(), EVENT_UNIT_DEATH)
         endmethod
-       
+      
+        private static method onDeath takes nothing returns boolean
+            call thistype(thistype.get(GetTriggerUnit())).destroy()
+            return false
+        endmethod
+      
         method destroy takes nothing returns nothing
             if UnitAlive(this.unit) then
                 call KillUnit(this.unit)
@@ -116,8 +121,8 @@ library Illusion /*
             set this.unit = null
             call this.deallocate()
         endmethod
-       
-       
+      
+      
         private static method onDamage takes nothing returns nothing
             //If source is illusion
             if IsUnitInGroup(Damage.source, thistype.g) then
@@ -128,28 +133,21 @@ library Illusion /*
                 set Damage.amount = Damage.amount*thistype.get(Damage.target).damageTaken
             endif
         endmethod
-       
-        private static method onDeath takes nothing returns boolean
-            call thistype(thistype.get(GetTriggerUnit())).destroy()
-            return false
-        endmethod
-       
+      
         private static method entered takes nothing returns boolean
-            if GetSummoningUnit() == thistype.dummy then
-                set thistype.illu = GetSummonedUnit()
-            endif
+            set thistype.illu = GetSummonedUnit()
             return false
         endmethod
-       
+      
         method operator duration= takes real time returns nothing
             call UnitApplyTimedLife(this.unit, 'BTLF', time)
         endmethod
-       
+      
         static method create takes player owner, unit source, real x, real y returns thistype
             local thistype this
             set thistype.illu = null
             //Create the Illusion Unit
-            if source != null then
+            if source != null and UnitAlive(source) then
                 call SetUnitX(thistype.dummy, GetUnitX(source))
                 call SetUnitY(thistype.dummy, GetUnitY(source))
                 call SetUnitOwner(thistype.dummy, GetOwningPlayer(source), false)
@@ -163,16 +161,18 @@ library Illusion /*
                             call SetUnitY(thistype.illu, y)
                         endif
                     else
-                        debug call DisplayTextToPlayer(GetLocalPlayer(), 0, 0, "[Illusion] No illusion created")
+                        debug call DisplayTimedTextToPlayer(GetLocalPlayer(), 0, 0, 3600, "[Illusion] No illusion created")
+                        call SetUnitOwner(thistype.dummy, DUMMY_OWNER, false)
                         return 0
                     endif
                 else
-                    debug call DisplayTextToPlayer(GetLocalPlayer(), 0, 0, "[Illusion] Issued order failed")
+                    debug call DisplayTimedTextToPlayer(GetLocalPlayer(), 0, 0, 3600, "[Illusion] Issued illusion create order failed")
+                    call SetUnitOwner(thistype.dummy, DUMMY_OWNER, false)
                     return 0
                 endif
                 call SetUnitOwner(thistype.dummy, DUMMY_OWNER, false)
             else
-                debug call DisplayTextToPlayer(GetLocalPlayer(), 0, 0, "[Illusion] Source unit is null")
+                debug call DisplayTimedTextToPlayer(GetLocalPlayer(), 0, 0, 3600, "[Illusion] Source unit dead or non-existing")
                 return 0
             endif
             //Initialize struct
@@ -184,13 +184,14 @@ library Illusion /*
             call GroupAddUnit(thistype.g, this.unit)
             call TriggerRegisterUnitEvent(thistype.deathTrg, this.unit, EVENT_UNIT_DEATH)
             static if LIBRARY_Table then
-                set thistype.tb[GetHandleId(this.unit)] = this  
+                set thistype.tb[GetHandleId(this.unit)] = this 
             else
                 call SaveInteger(thistype.hash, GetHandleId(this.unit), 0, this)
             endif
+            set thistype.illu = null
             return this
         endmethod
-       
+      
         private static method onInit takes nothing returns nothing
             local trigger t = CreateTrigger()
             set thistype.dummy = CreateUnit(DUMMY_OWNER, DUMMY_ID, 0, 0, 0)
@@ -203,7 +204,7 @@ library Illusion /*
             endif
             call Damage.registerModifier(function thistype.onDamage)
         endmethod
-       
+      
     endstruct
-   
+  
 endlibrary

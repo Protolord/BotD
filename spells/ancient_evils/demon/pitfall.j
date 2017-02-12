@@ -47,7 +47,7 @@ scope Pitfall
         endmethod
         
         method dispelType takes nothing returns integer
-            return BUFF_NEGATIVE
+            return BUFF_NONE
         endmethod
         
         method stackType takes nothing returns integer
@@ -178,7 +178,7 @@ scope Pitfall
             set this.moveSlow = -MoveSlow(lvl)
             set this.dmg = DamagePerSecond(lvl)*TIMEOUT
             set this.tb = Table.create()
-            set this.pit = CreateDestructable(PITFALL_ID, this.x, this.y, GetRandomReal(0, 360), this.radius/110, 0)
+            set this.pit = CreateDestructable(PITFALL_ID, this.x, this.y, GetRandomReal(0, 360), this.radius/80, 0)
             call SetDestructableAnimation(this.pit, "birth")
             call SystemMsg.create(GetUnitName(GetTriggerUnit()) + " cast thistype")
         endmethod

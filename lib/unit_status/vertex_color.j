@@ -25,7 +25,8 @@ library VertexColor uses Table
         private constant real TIMEOUT = 0.0625
     endglobals
     
-    struct VertexColor
+    struct VertexColor extends array
+        implement Alloc
         
         //! textmacro VERTEX_COLOR_SYSTEM_ATTRIBUTES takes COLOR
             private integer $COLOR$add

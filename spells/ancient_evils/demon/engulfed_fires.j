@@ -4,6 +4,7 @@ scope EngulfedFires
         private constant integer SPELL_ID = 'A544'
         private constant integer BUFF_ID = 'B544'
         private constant string SFX = "Models\\Effects\\EngulfedFires.mdx"
+        private constant integer SET_MAX_LIFE = 'ASML'
     endglobals
     
     private function Duration takes integer level returns real
@@ -17,7 +18,9 @@ scope EngulfedFires
         
         private effect sfx
         private real hp
+        private boolean added
         private trigger trg
+        private trigger dmgTrg
         
         public static Table tb
         
@@ -35,6 +38,9 @@ scope EngulfedFires
         
         method onRemove takes nothing returns nothing
             call Damage.add(this.target)
+            call thistype.tb.remove(GetHandleId(this.dmgTrg))
+            call thistype.tb.remove(GetHandleId(this.trg))
+            call DestroyTrigger(this.dmgTrg)
             call DestroyTrigger(this.trg)
             call DestroyEffect(this.sfx)
             set this.trg = null
@@ -43,7 +49,24 @@ scope EngulfedFires
         
         private static method onChange takes nothing returns boolean
             local thistype this = thistype.tb[GetHandleId(GetTriggeringTrigger())]
+            if this.added then
+                call UnitRemoveAbility(this.target, SET_MAX_LIFE)
+                set this.added = false
+            endif
             call SetWidgetLife(this.target, this.hp)
+            return false
+        endmethod
+
+        private static method onDamage takes nothing returns boolean
+            local thistype this = thistype.tb[GetHandleId(GetTriggeringTrigger())]
+            local real amount = GetEventDamage()
+            if amount > this.hp then
+                call DisableTrigger(this.trg)
+                call UnitAddAbility(this.target, SET_MAX_LIFE)
+                call SetWidgetLife(this.target, this.hp + amount)
+                call EnableTrigger(this.trg)
+                set this.added = true
+            endif
             return false
         endmethod
         
@@ -51,11 +74,16 @@ scope EngulfedFires
             call Damage.remove(this.target)
             set this.sfx = AddSpecialEffectTarget(SFX, this.target, "origin")
             set this.hp = RMinBJ(I2R(R2I(GetWidgetLife(this.target))) + 0.5, GetUnitState(this.target, UNIT_STATE_MAX_LIFE))
+            set this.added = false
+            set this.dmgTrg = CreateTrigger()
             set this.trg = CreateTrigger()
+            call TriggerRegisterUnitEvent(this.dmgTrg, this.target, EVENT_UNIT_DAMAGED)
+            call TriggerAddCondition(this.dmgTrg, function thistype.onDamage)
             call TriggerRegisterUnitStateEvent(this.trg, this.target, UNIT_STATE_LIFE, LESS_THAN, this.hp - 0.1 )
             call TriggerRegisterUnitStateEvent(this.trg, this.target, UNIT_STATE_LIFE, GREATER_THAN, this.hp + 0.1)
             call TriggerAddCondition(this.trg, function thistype.onChange)
             call SetWidgetLife(this.target, this.hp)
+            set thistype.tb[GetHandleId(this.dmgTrg)] = this
             set thistype.tb[GetHandleId(this.trg)] = this
         endmethod
         

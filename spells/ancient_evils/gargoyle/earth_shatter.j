@@ -90,7 +90,7 @@ scope EarthShatter
             local unit u
             local SpellBuff b
             call DummyAddRecycleTimer(dummy, 2.5)
-            call SetUnitScale(dummy, Radius(lvl)/250.0, 0, 0)
+            call SetUnitScale(dummy, Radius(lvl)/300.0, 0, 0)
             call DestroyEffect(AddSpecialEffectTarget(SFX, dummy, "origin"))
             call GroupUnitsInArea(g, x, y, Radius(lvl))
             loop

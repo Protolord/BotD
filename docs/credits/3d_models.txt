@@ -11,6 +11,7 @@
 		Gargoyle                    by Sellenisko
 		Skeleton King               by -Grendel
 		Cave Troll                  by Sellenisko
+		Cave Troll Club				by Hayate
             
 		Storm Shaman                by Pins
         
@@ -67,14 +68,15 @@
 		Hellguard Pentagram			by Skizzik
 		Engulfed Fires Buff         by sPy
 
-		Earth Shattered				by JetFangInferno
+		Earth Shatter				by JetFangInferno
 		Stone Gaze Effect 			by Ergius
 		Ston Gaze Missile			by 00110000
 		Fissure Missile				by nGy
 		Uplift Purpose Buff			by ChaoticHunter
-		Powderising Strength        by JesusHipster
 		Rock Toss Effect			by WILL THE ALMIGHTY
 		Stone Vision Target         by CeDiL
+		Stony Path					by EdwardSwolenToe
+		Evil Alternation			by JesusHipster
 	
 	OTHERS:
 		Generic CastBar             by HappyTauren

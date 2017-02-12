@@ -78,7 +78,10 @@
 		BTN_Rebuild                 by Nudl9
 		BTN_UpliftPurpose           by inhuman89
 		BTN_StoneGaze               by Big Dub
-		
+	
+	Skeleton King Abilities:
+		BTN_Bones					by Marcos DAB
+		BTN_Reaper					by PeeKay
 		BTN_GhostForm				by DarkFang
 		
 	Others:

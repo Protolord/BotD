@@ -2,8 +2,8 @@ scope ShatteredEarth
  
     globals
         private constant integer SPELL_ID = 'A533'
-        private constant string SFX1 = "Models\\Effects\\ShatteredEarthAsh.mdx"
-        private constant string SFX2 = ""//"Abilities\\Spells\\Orc\\EarthQuake\\EarthQuakeTarget.mdl"
+        private constant string SFX = "Models\\Effects\\ShatteredEarthAsh.mdx"
+        private constant string SFX_CAST = "Abilities\\Spells\\Orc\\WarStomp\\WarStompCaster.mdl"
     endglobals
     
     private function Sight takes integer level returns real
@@ -28,8 +28,7 @@ scope ShatteredEarth
         implement Alloc
 
         private destructable d
-        private effect sfx1
-        private effect sfx2
+        private effect sfx
         private TrueSight ts
         private FlySight fs
 
@@ -37,13 +36,11 @@ scope ShatteredEarth
 
         method destroy takes nothing returns nothing
             call KillDestructable(this.d)
-            call DestroyEffect(this.sfx1)
-            call DestroyEffect(this.sfx2)
+            call DestroyEffect(this.sfx)
             call this.ts.destroy()
             call this.fs.destroy()
+            set this.sfx = null
             set this.d = null
-            set this.sfx1 = null
-            set this.sfx2 = null
         endmethod
 
         static method remove takes unit u returns nothing
@@ -57,8 +54,7 @@ scope ShatteredEarth
         static method add takes unit u, real sight returns nothing
             local thistype this = thistype.allocate()
             set this.d = CreateDestructable('Volc', GetUnitX(u), GetUnitY(u), GetRandomReal(0, 360), 0.3, 0)
-            set this.sfx1 = AddSpecialEffectTarget(SFX1, u, "origin")
-            set this.sfx2 = AddSpecialEffectTarget(SFX2, u, "origin")
+            set this.sfx = AddSpecialEffectTarget(SFX, u, "origin")
             set this.ts = TrueSight.create(u, sight)
             set this.fs = FlySight.create(u, sight)
             call SetDestructableAnimation(this.d, "birth")
@@ -115,6 +111,7 @@ scope ShatteredEarth
                 call SetUnitScale(u, 0.35, 0, 0)
                 set i = i - 1
             endloop
+            call DestroyEffect(AddSpecialEffect(SFX_CAST, GetUnitX(caster), GetUnitY(caster)))
             call TimerStart(NewTimerEx(this), duration, false, function thistype.expires)
             set u = null
             set caster = null
@@ -125,7 +122,7 @@ scope ShatteredEarth
         static method init takes nothing returns nothing
             call SystemTest.start("Initializing thistype: ")
             call Node.init()
-            call RegisterSpellEffectEvent(SPELL_ID, function thistype.onCast)
+            call RegisterSpellFinishEvent(SPELL_ID, function thistype.onCast)
             call SystemTest.end()
         endmethod
         

@@ -73,8 +73,9 @@ library Castbar requires WorldBounds, TimerUtilsEx
         
     endstruct
     
-    struct Castbar
-        
+    struct Castbar extends array
+        implement Alloc
+
         private unit bar
         private real duration
         private real anim

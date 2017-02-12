@@ -6,7 +6,6 @@ scope InfernalChains
         private constant integer BUFF_ID = 'D523'
         private constant attacktype ATTACK_TYPE = ATTACK_TYPE_CHAOS //Changing it may not properly affect buildings
         private constant damagetype DAMAGE_TYPE = DAMAGE_TYPE_UNIVERSAL
-        private constant real STARTING_DAMAGE = 0.10
         private constant string BUFF_SFX = "Models\\Effects\\InfernalChains.mdx"
     endglobals
 
@@ -28,7 +27,7 @@ scope InfernalChains
     //In percent
     private function Chance takes integer level returns real
         if level == 11 then
-            return 20.0
+            return 100.0//1.0
         endif
         return 100.0//1.0
     endfunction
@@ -60,7 +59,7 @@ scope InfernalChains
         endmethod
         
         method onApply takes nothing returns nothing
-            set this.dmg = STARTING_DAMAGE
+            set this.dmg = DamageGrowth(GetUnitAbilityLevel(this.source, SPELL_ID))
             set this.sfx = AddSpecialEffectTarget(BUFF_SFX, this.target, "origin")
         endmethod
         

@@ -5,7 +5,8 @@ scope RockToss
         private constant string MODEL = "Abilities\\Weapons\\AncientProtectorMissile\\AncientProtectorMissile.mdl"
         private constant string SFX_HIT = "Models\\Effects\\RockToss.mdx"
         private constant string SFX_ROCK = "Doodads\\LordaeronSummer\\Rocks\\Lords_Rock\\Lords_Rock9.mdl"
-        private constant real ROCK_SPACING = 300.0
+        private constant real ROCK_SPACING = 200.0
+        private constant player NEUTRAL = Player(14)
     endglobals
     
     private function Duration takes integer level returns real
@@ -49,6 +50,8 @@ scope RockToss
             set this.next.prev = this.prev
             if this.u != null then
                 call DummyAddRecycleTimer(this.u, 5.0)
+                call UnitClearBonus(this.u, BONUS_SIGHT_RANGE)
+                call SetUnitOwner(this.u, NEUTRAL, false)
                 set this.u = null
             endif
             if this.sfx != null then
@@ -58,13 +61,15 @@ scope RockToss
             call this.deallocate()
         endmethod
         
-        static method add takes thistype head, real x, real y returns nothing
+        static method add takes player owner, thistype head, real x, real y returns nothing
             local thistype this
             if x < WorldBounds.maxX and x > WorldBounds.minX and y < WorldBounds.maxY and y > WorldBounds.minY then
                 set this = thistype.allocate()
                 set this.u = GetRecycledDummyAnyAngle(x, y, 0)
                 set this.sfx = AddSpecialEffectTarget(SFX_ROCK, this.u, "origin")
+                call SetUnitOwner(this.u, owner, false)
                 call SetUnitScale(this.u, 0.5, 0, 0)
+                call UnitSetBonus(this.u, BONUS_SIGHT_RANGE, 100)
                 set this.next = head
                 set this.prev = head.prev
                 set this.prev.next = this
@@ -126,8 +131,8 @@ scope RockToss
             local unit u = GetRecycledDummyAnyAngle(this.m.x, this.m.y, 0)
             call SetUnitScale(u, StunRadius(this.lvl)/300, 0, 0)
             call DestroyEffect(AddSpecialEffectTarget(SFX_HIT, u, "origin"))
-            call DummyAddRecycleTimer(u, 3.0)
-            call SetUnitOwner(this.m.u, GetOwningPlayer(this.caster), false)
+            call DummyAddRecycleTimer(u, 5.0)
+            call SetUnitOwner(this.m.u, this.owner, false)
             call ShowDummy(this.m.u, false)
             set this.fs = FlySight.create(this.m.u, radius)
             set this.ts = TrueSight.create(this.m.u, radius)
@@ -144,7 +149,6 @@ scope RockToss
             call ReleaseGroup(g)
             //Create SFX
             if this.lvl < 11 then  
-                set radius = 0.7*radius
                 set this.sfxHead = Rock.head()
                 set da = 2*bj_PI/R2I(2*bj_PI*radius/ROCK_SPACING)
                 if da > bj_PI/3 then
@@ -154,7 +158,7 @@ scope RockToss
                 set endAngle = da + 2*bj_PI - 0.0001
                 loop
                     exitwhen angle >= endAngle
-                    call Rock.add(this.sfxHead, this.m.x + radius*Cos(angle), this.m.y + radius*Sin(angle))
+                    call Rock.add(this.owner, this.sfxHead, this.m.x + radius*Cos(angle), this.m.y + radius*Sin(angle))
                     set angle = angle + da
                 endloop
             endif

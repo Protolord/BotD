@@ -130,8 +130,11 @@
 //------------------------------------------------------------------------------
 //! import "../spells/ancient_evils/gargoyle/stone_vision.j"
 //! import "../spells/ancient_evils/gargoyle/rock_toss.j"
+//! import "../spells/ancient_evils/gargoyle/stony_path.j"
 //------------------------------------------------------------------------------
 //! import "../spells/ancient_evils/gargoyle/powderising_strength.j"
+//! import "../spells/ancient_evils/gargoyle/stone_form.j"
+//! import "../spells/ancient_evils/gargoyle/evil_alternation.j"
 //==============================================================================
 //                             Skeleton King
 //==============================================================================

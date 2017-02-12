@@ -81,7 +81,7 @@ module DemonConfig
     set demon.scaleAdd = 0.15
     set demon.modelPath = "Models\\Units\\Demon.mdx"
     set demon.info = "DEMONS COME STRAIGHT FROM THE HELLGATE. THEY ARE DIRECTLY RELATED TO FLAMES AND HELLISH CREATURES WHICH THEY COMMAND |nIN COMBAT. DEMON HIMSELF PROVES TO BE EXCELLENT AT RAZING SOLID DEFENCES AND DEVASTATING CLUSTERS OF ENEMIES. WITH HIS |nSTRENGTH BASE DEMONS ARE CAPABLE OF TAKING MASSIVE AMOUNT OF DAMAGE AND PROTECT WEAKER MEMBERS OF THE TEAM."
-    set demon.attribute = "19 +3.7    7 +2.9   12 +1.0"
+    set demon.attribute = "19 +3.9    7 +3.1   12 +1.3"
     set demon.primary = STR
     
     //Configure Spells

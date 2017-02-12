@@ -23,7 +23,7 @@ module WerewolfSpells
     //Werewolf
 
     set shapeshift = Spell.create('A2XX')
-    set shapeshift.info = "Shapeshift|n|cfff4a460Target|r: |cff3399ffSelf|r|n|cfff4a460Duration|r: |cff3399ff5 seconds|r|n|nAllows Werewolf to transform into a human making his size lot smaller to enable him to pass through narrow passages. Disables ability to attack."
+    set shapeshift.info = "Shapeshift|n|cfff4a460Target|r: |cff3399ffSelf|r|n|cfff4a460Cooldown|r: |cff3399ff5 seconds|r|n|nAllows Werewolf to transform into a human making his size lot smaller to enable him to pass through narrow passages. Disables ability to attack."
     
     set envenomedFangs = Spell.create('A211')
     set envenomedFangs.passive = true

@@ -72,7 +72,9 @@ scope VigilantAndTheVirtuous
         private static method onPrevent takes nothing returns boolean
             if thistype.dying == Damage.target and Damage.amount > GetWidgetLife(Damage.target) then
                 set Damage.amount = GetWidgetLife(Damage.target) - 0.6
-                call FloatingTextSplat(Element.string(DAMAGE_ELEMENT_FIRE) + I2S(R2I(Damage.amount + 0.5)) + "|r", Damage.target, 1.0).setVisible(GetLocalPlayer() == GetOwningPlayer(Damage.source) and IsUnitVisible(Damage.target, GetLocalPlayer()))
+                if Damage.amount + 0.5 >= 1 then
+                    call FloatingTextSplat(Element.string(DAMAGE_ELEMENT_FIRE) + I2S(R2I(Damage.amount + 0.5)) + "|r", Damage.target, 1.0).setVisible(GetLocalPlayer() == GetOwningPlayer(Damage.source) and IsUnitVisible(Damage.target, GetLocalPlayer()))
+                endif
             endif
             set thistype.dying = null
             return false

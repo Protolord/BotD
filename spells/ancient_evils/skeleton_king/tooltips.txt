@@ -1,0 +1,8 @@
+------------------------------------------------------------------------------------------------------------------------------
+Bones
+Target: Passive, Self
+Max Arrows: 25
+Duration: 5 minutes
+
+Arrow projectiles have 10% chance getting stuck on skeletal body to create temporary spiked carapace. Each arrow gets stuck for 5 minutes and deals 10 damage to melee attackers.
+------------------------------------------------------------------------------------------------------------------------------

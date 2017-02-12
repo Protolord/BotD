@@ -26,7 +26,7 @@
 *           - Groups units while taking into account collision
 *
 ***************************************/
-library GroupTools
+library GroupTools requires WorldBounds, FlySight, TimerUtilsEx
     
     globals
         // The highest collision size you're using in your map.
@@ -97,15 +97,19 @@ library GroupTools
             debug call DisplayTimedTextToPlayer(GetLocalPlayer(),0,0,60,"[GroupUtils]Error: Null group passed to GroupUnitsInArea!")
             debug return
         debug endif
-        call GroupEnumUnitsInRange(ENUM_GROUP,x,y,radius+MAX_COLLISION_SIZE,null)
-        loop
-            set u = FirstOfGroup(ENUM_GROUP)
-            exitwhen null==u
-            if IsUnitInRangeXY(u,x,y,radius) then
-                call GroupAddUnit(whichGroup,u)
-            endif
-            call GroupRemoveUnit(ENUM_GROUP,u)
-        endloop
+        if radius < GLOBAL_SIGHT then
+            call GroupEnumUnitsInRange(ENUM_GROUP,x,y,radius+MAX_COLLISION_SIZE,null)
+            loop
+                set u = FirstOfGroup(ENUM_GROUP)
+                exitwhen null==u
+                if IsUnitInRangeXY(u,x,y,radius) then
+                    call GroupAddUnit(whichGroup,u)
+                endif
+                call GroupRemoveUnit(ENUM_GROUP,u)
+            endloop
+        else
+            call GroupEnumUnitsInRect(ENUM_GROUP, WorldBounds.world, null)
+        endif
     endfunction
     
 endlibrary

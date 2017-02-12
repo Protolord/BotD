@@ -23,7 +23,8 @@ library TimeScale uses Table
         private constant real TIMEOUT = 0.05
     endglobals
     
-    struct TimeScale
+    struct TimeScale extends array
+        implement Alloc
         
         public real speed
         public real duration

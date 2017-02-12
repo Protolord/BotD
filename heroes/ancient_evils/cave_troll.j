@@ -12,10 +12,10 @@ module CaveTrollConfig
     set caveTroll.faction = ANCIENT_EVILS
     set caveTroll.name = "Cave Troll"
     set caveTroll.iconPath = "ReplaceableTextures\\CommandButtons\\BTN_CaveTroll.blp"
-    set caveTroll.scaleAdd = -0.35
+    set caveTroll.scaleAdd = -0.45
     set caveTroll.modelPath = "Models\\Units\\CaveTroll.mdx"
     set caveTroll.info = "<NOTHING YET>"
-    set caveTroll.attribute = "19 +3.0    7 +4.3   12 +1.5"
+    set caveTroll.attribute = "19 +4.5    7 +2.5   12 +1.2"
     set caveTroll.primary = STR
     
     //Configure Spells

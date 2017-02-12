@@ -36,12 +36,15 @@ scope Avante
         
         private static method onStop takes nothing returns nothing
             local integer id = GetHandleId(GetTriggerUnit())
-            local thistype this = thistype.tb[id]
-            call this.bar.destroy()
-            call thistype.tb.remove(id)
-            call DestroyEffect(this.sfx)
-            set this.sfx = null
-            call this.deallocate()
+            local thistype this
+            if thistype.tb.has(id) then
+                set this = thistype.tb[id]
+                call thistype.tb.remove(id)
+                call this.bar.destroy()
+                call DestroyEffect(this.sfx)
+                set this.sfx = null
+                call this.deallocate()
+            endif
         endmethod
         
         private static method onFinish takes nothing returns nothing

@@ -4,6 +4,7 @@ scope Burrow
         private constant integer BURROWED_UNIT_ID = 'UBAr'
         private constant real DAMAGE = 9999999.9
         private constant real RADIUS = 150.0
+        private constant string SFX = "Objects\\Spawnmodels\\Undead\\ImpaleTargetDust\\ImpaleTargetDust.mdl"
         private constant attacktype ATTACK_TYPE = ATTACK_TYPE_CHAOS
         private constant damagetype DAMAGE_TYPE = DAMAGE_TYPE_NORMAL
     endglobals
@@ -16,13 +17,15 @@ scope Burrow
         
         private static method onCast takes nothing returns nothing
             local unit caster = GetTriggerUnit()
+            local real x = GetUnitX(caster)
+            local real y = GetUnitY(caster)
             local player owner
             local group g
             local unit u
             if GetUnitTypeId(caster) == BURROWED_UNIT_ID then
                 set g = NewGroup()
                 set owner = GetTriggerPlayer()
-                call GroupUnitsInArea(g, GetUnitX(caster), GetUnitY(caster), RADIUS)
+                call GroupUnitsInArea(g, x, y, RADIUS)
                 loop
                     set u = FirstOfGroup(g)
                     exitwhen u == null
@@ -35,6 +38,7 @@ scope Burrow
                 set g = null
                 set owner = null
             endif
+            call DestroyEffect(AddSpecialEffect(SFX, x, y))
             set caster = null
             call SystemMsg.create(GetUnitName(GetTriggerUnit()) + " cast thistype")
         endmethod

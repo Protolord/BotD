@@ -55,17 +55,17 @@ module GargoyleSpells
     set rockToss.info = "Rock Toss|n|cfff4a460Target|r: |cff3399ffPoint|n|r|cfff4a460Sight Radius|r: |cff3399ff(500 x ability level)|n|r|cfff4a460Sight Duration|r: |cff3399ff15 seconds|n|r|cfff4a460Cooldown|r: |cff3399ff30 seconds|r|n|nGargoyle tosses a massive rock which on impact with the ground will temporarily stun opponents in a range of 500 for 1 second. Also reveals invisible units."
     
     set stonyPath = Spell.create('A633')
-    set stonyPath.info = "Stony Path"
+    set stonyPath.info = "Stony Path|n|cfff4a460Target|r: |cff3399ffSelf|n|r|cfff4a460Line of sight|r: |cff3399ff(100 x ability level)|n|r|cfff4a460Cooldown|r: |cff3399ff60 seconds|r|n|nGargoyle marks his current location with a stones making this place permanently explored. Also reveals invisible units."
     
     set powderisingStrength = Spell.create('A641')
     set powderisingStrength.passive = true
     set powderisingStrength.info = "Powderising Strength|n|cfff4a460Target|r: |cff3399ffPassive|n|r|cfff4a460Life restored|r: |cff3399ff(15% + (4% x level))|r|n|nGargoyle is able to regain his life from attacking structures."
     
     set stoneForm = Spell.create('A642')
-    set stoneForm.info = "Stone Form"
+    set stoneForm.info = "Stone Form|n|cfff4a460Target|r: |cff3399ffSelf|n|r|cfff4a460Healing|r: |cff3399ff(100 per second x ability level)|n|r|cfff4a460Cooldown|r: |cff3399ff60 seconds|r|n|nGargoyle turns into his stone form and gaining a massive regeneration. It takes 3 seconds to turn into stone form. Gargoyle is immobile and loses his ability to attack during stone form. Stone Form is interruptible. Heals 4x more hitpoints on ethereal Gargoyle."
     
     set evilAlternation = Spell.create('A643')
-    set evilAlternation.info = "Evil Alternation"
+    set evilAlternation.info = "Evil Alternation|n|cfff4a460Target|r: |cff3399ffSelf|n|r|cfff4a460Damage healed|r: |cff3399ff(75% of damage taken + (5% x ability level))|r|n|nGargoyle activates spiritual shield which gains damage Gargoyle is taking and upon deactivation restores some of it's power to heal Gargoyle. Drains 25 mana per second."
     
     set rebuild = Spell.create('A644')
     set rebuild.info = "Rebuild"
@@ -79,7 +79,7 @@ module GargoyleConfig
     set gargoyle.scaleAdd = -0.15
     set gargoyle.modelPath = "Models\\Units\\Gargoyle.mdx"
     set gargoyle.info = "GARGOYLES ARE DIRECTLY RELATED TO STONE. THIS GIVES THEM OPPORTUNITY TO MINIMIZE DAMAGE AND TURN EVEN STRONGEST DEFENCES |nINTO ASHES. GARGOYLE MAINLY EXCELS AT DESTROYING ENEMIES FORTIFICATIONS AND HARASSING ENEMIES FROM DISTANCE WHILE ALLIES |nARE FOCUSING ON LIVING PREY."
-    set gargoyle.attribute = "19 +3.0    7 +4.8   12 +1.0"
+    set gargoyle.attribute = "19 +3.0    7 +4.5   12 +1.4"
     set gargoyle.primary = STR
     
     //Configure Spells

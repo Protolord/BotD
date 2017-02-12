@@ -116,6 +116,12 @@ Cooldown: 30 seconds
 Gargoyle tosses a massive rock which on impact with the ground will temporarily stun opponents in a range of 500 for 1 second. Also reveals invisible units.
 -----------------------------------------------------------------------------------------------------------------------------------
 Stony Path
+|cfff4a460Target|r: |cff3399ffSelf|n|r|cfff4a460Line of sight|r: |cff3399ff(100 x ability level)|n|r|cfff4a460Cooldown|r: |cff3399ff60 seconds|r|n|nGargoyle marks his current location with a stones making this place permanently explored. Also reveals invisible units.
+Target: Self
+Line of sight: (100 x ability level)
+Cooldown: 60 seconds
+
+Gargoyle marks his current location with a stones making this place permanently explored. Also reveals invisible units.
 -----------------------------------------------------------------------------------------------------------------------------------
 Powderising Strength
 |cfff4a460Target|r: |cff3399ffPassive|n|r|cfff4a460Life restored|r: |cff3399ff(15% + (4% x ability level))|r|n|nGargoyle is able to regain his life from attacking structures.
@@ -131,11 +137,11 @@ Healing: (100 per second x ability level)
 Cooldown: 60 seconds
 
 Gargoyle turns into his stone form and gaining a massive regeneration. It takes 3 seconds to turn into stone form. Gargoyle is immobile and loses his ability to attack during stone form. Stone Form is interruptible. Heals 4x more hitpoints on ethereal Gargoyle.
------------------------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------------
 Evil Alternation
 |cfff4a460Target|r: |cff3399ffSelf|n|r|cfff4a460Damage healed|r: |cff3399ff(75% of damage taken + (5% x ability level))|r|n|nGargoyle activates spiritual shield which gains damage Gargoyle is taking and upon deactivation restores some of it's power to heal Gargoyle. Drains 25 mana per second.
 Target: Self
 Damage healed: (75% of damage taken + (5% x ability level))
 
 Gargoyle activates spiritual shield which gains damage Gargoyle is taking and upon deactivation restores some of it's power to heal Gargoyle. Drains 25 mana per second.
------------------------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------------

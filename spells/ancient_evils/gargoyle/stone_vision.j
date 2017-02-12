@@ -3,13 +3,16 @@ scope StoneVision
     globals
         private constant integer SPELL_ID = 'A631'
         private constant integer BUFF_ID = 'B631'
-        private constant string SFX = ""
+        private constant string SFX = "Models\\Effects\\StoneVisionTarget.mdx"
         private constant string SFX_TARGET = "Models\\Effects\\StoneVisionTarget.mdx"
-        private constant real NODE_RADIUS = 250
+        private constant real NODE_RADIUS = 200
         private constant real TIMEOUT = 0.05
     endglobals
 
     private function Radius takes integer level returns real
+        if level == 11 then
+            return GLOBAL_SIGHT
+        endif
         return 1500.0*level
     endfunction
     
@@ -33,13 +36,13 @@ scope StoneVision
         method destroy takes nothing returns nothing
             set this.prev.next = this.next
             set this.next.prev = this.prev
+            if this.sfx != null then
+                call DestroyEffect(this.sfx)
+            endif
             if this.u != null then
                 call UnitClearBonus(this.u, BONUS_SIGHT_RANGE)
                 call RecycleDummy(this.u)
                 set this.u = null
-            endif
-            if this.sfx != null then
-                call DestroyEffect(this.sfx)
             endif
             set this.target = null
             call this.deallocate()

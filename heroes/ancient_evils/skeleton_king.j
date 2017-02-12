@@ -14,7 +14,7 @@ module SkeletonKingConfig
     set skeletonKing.iconPath = "ReplaceableTextures\\CommandButtons\\BTN_SkeletonKing.blp"
     set skeletonKing.modelPath = "Models\\Units\\SkeletonKing.mdx"
     set skeletonKing.info = "<NOTHING YET>"
-    set skeletonKing.attribute = "19 +3.0    7 +4.3   12 +1.5"
+    set skeletonKing.attribute = "19 +3.6    7 +3.2   12 +1.4"
     set skeletonKing.primary = STR
     
     //Configure Spells

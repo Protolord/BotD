@@ -85,6 +85,7 @@
 //! import "../lib/unit_status/spell_block.j"
 //! import "../lib/unit_status/spell_immune.j"
 //! import "../lib/unit_status/stun.j"
+//! import "../lib/unit_status/time_scale.j"
 //! import "../lib/unit_status/vertex_color.j"
 
 //Utility functions
