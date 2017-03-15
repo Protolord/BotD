@@ -42,7 +42,6 @@ scope SpiritualLights
     
     struct SpiritualLights extends array
         implement Alloc
-        implement List
         
         private unit caster
         private group lights
@@ -125,6 +124,8 @@ scope SpiritualLights
                 set this = this.next
             endloop
         endmethod
+
+        implement List
         
         private static method onSummon takes nothing returns boolean
             if GetUnitTypeId(GetTriggerUnit()) == UNIT_ID then

@@ -79,10 +79,13 @@ library DamageElement uses DamageEvent, FloatingText
         endmethod
 
         static method kill takes unit source, unit target returns nothing
-            set Damage.enabled = false
-            call SetWidgetLife(target, 0.406)
-            call UnitDamageTarget(source, target, 0x0000FFFF, true, false, ATTACK_TYPE_CHAOS, DAMAGE_TYPE_UNIVERSAL, null)
-            set Damage.enabled = true
+            if source != null and target != null then
+                set Damage.enabled = false
+                call SetWidgetLife(target, 0.406)
+                call UnitDamageTarget(source, target, 0x0000FFFF, true, false, ATTACK_TYPE_CHAOS, DAMAGE_TYPE_UNIVERSAL, null)
+                call UnitDamageTarget(source, target, 0x0000FFFF, true, false, ATTACK_TYPE_NORMAL, DAMAGE_TYPE_MAGIC, null)
+                set Damage.enabled = true
+            endif
         endmethod
 
     endmodule

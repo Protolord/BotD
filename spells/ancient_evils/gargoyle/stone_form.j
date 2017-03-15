@@ -2,7 +2,6 @@ scope StoneForm
  
     globals
         private constant integer SPELL_ID = 'A642'
-        private constant integer BUFF_ID = 'B642'
         private constant real TIMEOUT = 1.0
         private constant string SFX = "Models\\Effects\\StoneForm.mdx"
     endglobals
@@ -23,17 +22,9 @@ scope StoneForm
         private real hps
         private timer t
 
-        method rawcode takes nothing returns integer
-            return BUFF_ID
-        endmethod
-        
-        method dispelType takes nothing returns integer
-            return BUFF_NONE
-        endmethod
-        
-        method stackType takes nothing returns integer
-            return BUFF_STACK_NONE
-        endmethod
+        private static constant integer RAWCODE = 'D642'
+        private static constant integer DISPEL_TYPE = BUFF_NONE
+        private static constant integer STACK_TYPE = BUFF_STACK_NONE
         
         method onRemove takes nothing returns nothing
             call ReleaseTimer(this.t)
@@ -49,6 +40,10 @@ scope StoneForm
             set this.t = NewTimerEx(this)
             set this.hps = HealPerSecond(GetUnitAbilityLevel(this.target, SPELL_ID))*TIMEOUT
             call TimerStart(this.t, TIMEOUT, true, function thistype.onPeriod)
+        endmethod
+
+        private static method init takes nothing returns nothing
+            call PreloadSpell(thistype.RAWCODE)
         endmethod
         
         implement BuffApply
@@ -118,6 +113,7 @@ scope StoneForm
             set thistype.tb = Table.create()
             call RegisterSpellEffectEvent(SPELL_ID, function thistype.onCast)
             call RegisterSpellEndcastEvent(SPELL_ID, function thistype.onStop)
+            call SpellBuff.initialize()
             call SystemTest.end()
         endmethod
         

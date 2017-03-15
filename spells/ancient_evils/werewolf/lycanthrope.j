@@ -2,7 +2,6 @@ scope Lycanthrope
     
     globals
         private constant integer SPELL_ID = 'A224'
-        private constant integer SPELL_BUFF = 'B224'
         private constant string BUFF_SFX = "Abilities\\Spells\\NightElf\\BattleRoar\\RoarTarget.mdl"
         private constant string CAST_SFX = "Models\\Effects\\LycanthropeEffect.mdx"
         private constant string BUFF_SFX2 = "Abilities\\Spells\\Orc\\Bloodlust\\BloodLustSpecial.mdl"
@@ -21,18 +20,10 @@ scope Lycanthrope
         private effect handLeft
         private effect handRight
         
-        method rawcode takes nothing returns integer
-            return SPELL_BUFF
-        endmethod
-        
-        method dispelType takes nothing returns integer
-            return BUFF_POSITIVE
-        endmethod
-        
-        method stackType takes nothing returns integer
-            return BUFF_STACK_NONE
-        endmethod
-        
+        private static constant integer RAWCODE = 'B224'
+        private static constant integer DISPEL_TYPE = BUFF_POSITIVE
+        private static constant integer STACK_TYPE = BUFF_STACK_NONE
+
         method onRemove takes nothing returns nothing
             call UnitRemoveAbility(this.target, 'a224')
             //call UnitAddAbility(this.target, SHAPESHIFT_ID)
@@ -49,6 +40,10 @@ scope Lycanthrope
             set this.handLeft = AddSpecialEffectTarget(BUFF_SFX2, this.target, "hand left")
             set this.handRight = AddSpecialEffectTarget(BUFF_SFX2, this.target, "hand right")
             //call UnitRemoveAbility(this.target, SHAPESHIFT_ID)
+        endmethod
+
+        private static method init takes nothing returns nothing
+            call PreloadSpell(thistype.RAWCODE)
         endmethod
         
         implement BuffApply
@@ -72,7 +67,7 @@ scope Lycanthrope
         static method init takes nothing returns nothing
             call SystemTest.start("Initializing thistype: ")
             call RegisterSpellEffectEvent(SPELL_ID, function thistype.onCast)
-            call PreloadSpell(SPELL_BUFF)
+            call SpellBuff.initialize()
             call SystemTest.end()
         endmethod
         

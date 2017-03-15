@@ -33,7 +33,6 @@ scope RainOfFire
     private keyword Wave
 
     private struct Fire extends array
-        implement List
 
         private Wave w
         private Missile m
@@ -88,6 +87,8 @@ scope RainOfFire
                 set this = this.next
             endloop
         endmethod
+
+        implement List
 
         static method add takes Wave w, real x, real y, integer part returns nothing
             local thistype this = thistype(Missile.create())

@@ -2,10 +2,9 @@ scope UpliftPurpose
 
     globals
         private constant integer SPELL_ID = 'A621'
-        private constant integer BUFF_ID = 'B621'
         private constant string SFX = "Models\\Effects\\UpliftPurpose.mdx"
-        private constant attacktype ATTACK_TYPE = ATTACK_TYPE_NORMAL
-        private constant damagetype DAMAGE_TYPE = DAMAGE_TYPE_MAGIC
+        private constant attacktype ATTACK_TYPE = ATTACK_TYPE_SIEGE
+        private constant damagetype DAMAGE_TYPE = DAMAGE_TYPE_NORMAL
     endglobals
     
     private function HPSacrifice takes integer level returns real
@@ -27,18 +26,10 @@ scope UpliftPurpose
      
         private effect sfx
         public real dmg
-        
-        method rawcode takes nothing returns integer
-            return BUFF_ID
-        endmethod
-        
-        method dispelType takes nothing returns integer
-            return BUFF_NEGATIVE
-        endmethod
-        
-        method stackType takes nothing returns integer
-            return BUFF_STACK_FULL
-        endmethod
+
+        private static constant integer RAWCODE = 'B621'
+        private static constant integer DISPEL_TYPE = BUFF_NEGATIVE
+        private static constant integer STACK_TYPE = BUFF_STACK_FULL
         
         method onRemove takes nothing returns nothing
             call DestroyEffect(this.sfx)
@@ -47,6 +38,10 @@ scope UpliftPurpose
         
         method onApply takes nothing returns nothing
             set this.sfx = AddSpecialEffectTarget(SFX, this.target, "overhead")
+        endmethod
+
+        private static method init takes nothing returns nothing
+            call PreloadSpell(thistype.RAWCODE)
         endmethod
         
         implement BuffApply
@@ -61,11 +56,11 @@ scope UpliftPurpose
 
         private static method onDamage takes nothing returns boolean
             local SpellBuff b
-            if Damage.type == DAMAGE_TYPE_PHYSICAL and not Damage.element.coded and GetUnitAbilityLevel(Damage.source, BUFF_ID) > 0 and TargetFilter(Damage.target, GetOwningPlayer(Damage.source)) then
+            if Damage.type == DAMAGE_TYPE_PHYSICAL and not Damage.element.coded and Buff.has(Damage.source, Damage.source, SpellBuff.typeid) and TargetFilter(Damage.target, GetOwningPlayer(Damage.source)) then
                 set b = Buff.get(Damage.source, Damage.source, SpellBuff.typeid)
                 if b > 0 then
                     call DisableTrigger(thistype.trg)
-                    call Damage.apply(Damage.source, Damage.target, b.dmg, ATTACK_TYPE, DAMAGE_TYPE)
+                    call UnitDamageTarget(Damage.source, Damage.target, b.dmg, true, false, ATTACK_TYPE, DAMAGE_TYPE, null)
                     call FloatingTextSplat(Element.string(DAMAGE_ELEMENT_EARTH) + "+" + I2S(R2I(b.dmg + 0.5)) + "|r", Damage.target, 1.0).setVisible(GetLocalPlayer() == GetOwningPlayer(Damage.source))
                     call EnableTrigger(thistype.trg)
                     call b.remove()
@@ -107,7 +102,7 @@ scope UpliftPurpose
             call Damage.registerTrigger(thistype.trg)
             call TriggerAddCondition(thistype.trg, function thistype.onDamage)
             call RegisterSpellEffectEvent(SPELL_ID, function thistype.onCast)
-            call PreloadSpell(BUFF_ID)
+            call SpellBuff.initialize()
             call SystemTest.end()
         endmethod
         

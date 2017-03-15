@@ -2,10 +2,8 @@ scope Reaper
     
     globals
         private constant integer SPELL_ID = 'A712'
-        private constant integer SPELL_BUFF = 'D712'
-        private constant attacktype ATTACK_TYPE = ATTACK_TYPE_NORMAL
-        private constant damagetype DAMAGE_TYPE = DAMAGE_TYPE_UNIVERSAL
-        private constant string BUFF_SFX = "Models\\Effects\\EnragedKiller.mdx"
+        private constant string BUFF_SFX = "Models\\Effects\\Reaper.mdx"
+        private constant real LIMIT = 500.0
     endglobals
 
     private function Duration takes integer level returns real
@@ -23,34 +21,33 @@ scope Reaper
     endfunction
     
     private function TargetFilter takes unit u, player p returns boolean
-        return UnitAlive(u)
+        return UnitAlive(u) and IsUnitEnemy(u, p) and not IsUnitType(u, UNIT_TYPE_STRUCTURE)
     endfunction
     
     private struct SpellBuff extends Buff
         
         private effect sfx
-        public real dmg
-        
-        method rawcode takes nothing returns integer
-            return SPELL_BUFF
-        endmethod
-        
-        method dispelType takes nothing returns integer
-            return BUFF_NEGATIVE
-        endmethod
-        
-        method stackType takes nothing returns integer
-            return BUFF_STACK_PARTIAL
-        endmethod
+        public real bonus
+        readonly AtkDamage ad
+
+        private static constant integer RAWCODE = 'B712'
+        private static constant integer DISPEL_TYPE = BUFF_POSITIVE
+        private static constant integer STACK_TYPE = BUFF_STACK_NONE
         
         method onRemove takes nothing returns nothing
             call DestroyEffect(this.sfx)
+            call this.ad.destroy()
             set this.sfx = null
         endmethod
         
         method onApply takes nothing returns nothing
-            set this.dmg = 0
-            set this.sfx = AddSpecialEffectTarget(BUFF_SFX, this.target, "overhead")
+            set this.bonus = 0
+            set this.ad = AtkDamage.create(this.target, 0)
+            set this.sfx = AddSpecialEffectTarget(BUFF_SFX, this.target, "weapon right")
+        endmethod
+
+        private static method init takes nothing returns nothing
+            call PreloadSpell(thistype.RAWCODE)
         endmethod
         
         implement BuffApply
@@ -63,19 +60,14 @@ scope Reaper
         private static method onDamage takes nothing returns boolean
             local integer level = GetUnitAbilityLevel(Damage.source, SPELL_ID)
             local SpellBuff b
-            local textsplat t
             if Damage.type == DAMAGE_TYPE_PHYSICAL and not Damage.element.coded and level > 0 and TargetFilter(Damage.target, GetOwningPlayer(Damage.source)) then
-                set b = SpellBuff.add(Damage.source, Damage.target)
+                set b = SpellBuff.add(Damage.source, Damage.source)
                 set b.duration = Duration(level)
-                //Deal extra damage
-                if b.dmg > 0 then
-                    call DisableTrigger(thistype.trg)
-                    call Damage.apply(Damage.source, Damage.target, b.dmg, ATTACK_TYPE, DAMAGE_TYPE)
-                    call EnableTrigger(thistype.trg)
-                    set t = FloatingTextSplat(Element.string(DAMAGE_ELEMENT_NORMAL) + "+" + I2S(R2I(b.dmg + 0.5)) + "|r", Damage.target, 1.0)
-                    call t.setVisible(GetLocalPlayer() == GetOwningPlayer(Damage.source) and IsUnitVisible(Damage.source, GetLocalPlayer()))
+                set b.bonus = b.bonus + DamageGrowth(level)
+                if b.bonus > LIMIT then
+                    set b.bonus = LIMIT
                 endif
-                set b.dmg = b.dmg + DamageGrowth(level)
+                call b.ad.change(b.bonus)
             endif
             return false
         endmethod
@@ -85,7 +77,7 @@ scope Reaper
             set thistype.trg = CreateTrigger()
             call Damage.registerTrigger(thistype.trg)
             call TriggerAddCondition(thistype.trg, function thistype.onDamage)
-            call PreloadSpell(SPELL_BUFF)
+            call SpellBuff.initialize()
             call SystemTest.end()
         endmethod
         

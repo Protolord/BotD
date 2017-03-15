@@ -17,9 +17,20 @@ scope EvilAlternation
         private unit caster
         private real absorbed
         private integer lvl
+        private trigger manaTrg
 
         private static trigger trg
         private static Table tb
+
+        private method destroy takes nothing returns nothing
+            call DestroyTrigger(this.manaTrg)
+            call Heal.unit(this.caster, this.absorbed, 1.0)
+            call thistype.tb.remove(GetHandleId(this.caster))
+            call thistype.tb.remove(GetHandleId(this.manaTrg))
+            set this.caster = null
+            set this.manaTrg = null
+            call this.deallocate()
+        endmethod
 
         private static method onDamage takes nothing returns nothing
             local integer lvl = GetUnitAbilityLevel(Damage.target, SPELL_ID)
@@ -31,24 +42,33 @@ scope EvilAlternation
             endif
         endmethod
 
+        private static method onManaDeplete takes nothing returns boolean
+            local integer id = GetHandleId(GetTriggeringTrigger())
+            if thistype.tb.has(id) then
+                call thistype(thistype.tb[id]).destroy()
+                call SetUnitState(GetTriggerUnit(), UNIT_STATE_MANA, 0.0)
+                call SystemMsg.create(GetUnitName(GetTriggerUnit()) + " deactivates thistype")
+            endif
+            return false
+        endmethod
+
         private static method onCast takes nothing returns nothing
             local thistype this = thistype.allocate()
             set this.caster = GetTriggerUnit()
             set this.absorbed = 0
             set this.lvl = GetUnitAbilityLevel(this.caster, SPELL_ID)
+            set this.manaTrg = CreateTrigger()
+            call TriggerAddCondition(this.manaTrg, function thistype.onManaDeplete)
+            call TriggerRegisterUnitStateEvent(this.manaTrg, this.caster, UNIT_STATE_MANA, LESS_THAN, 1.0)
             set thistype.tb[GetHandleId(this.caster)] = this
+            set thistype.tb[GetHandleId(this.manaTrg)] = this
             call SystemMsg.create(GetUnitName(GetTriggerUnit()) + " activates thistype")
         endmethod
 
         private static method unCast takes nothing returns boolean
             local integer id = GetHandleId(GetTriggerUnit())
-            local thistype this
             if GetIssuedOrderId() == ORDER_unimmolation and thistype.tb.has(id) then
-                set this = thistype.tb[id]
-                call Heal.unit(this.caster, this.absorbed, 1.0)
-                call thistype.tb.remove(id)
-                set this.caster = null
-                call this.deallocate()
+                call thistype(thistype.tb[id]).destroy()
                 call SystemMsg.create(GetUnitName(GetTriggerUnit()) + " deactivates thistype")
             endif
             return false

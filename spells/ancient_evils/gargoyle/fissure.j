@@ -32,7 +32,6 @@ scope Fissure
     endfunction
     
     struct Fissure extends array
-        implement List
 
         private unit caster
         private player owner
@@ -73,6 +72,8 @@ scope Fissure
                 set this = this.next
             endloop
         endmethod
+
+        implement List
 
         private static method onCast takes nothing returns nothing
             local thistype this = thistype(Missile.create())

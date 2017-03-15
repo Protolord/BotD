@@ -33,10 +33,12 @@ scope CursedRift
         private Invisible inv
         private Movespeed ms
         
-        private static group g
+        private static Table tb
+		private static group g
         
         private method remove takes nothing returns nothing
             call DestroyGroup(this.affected)
+			call thistype.tb.remove(GetHandleId(this.caster))
             call this.inv.destroy()
             call this.ms.destroy()
             call DestroyEffect(this.sfx)
@@ -71,21 +73,30 @@ scope CursedRift
         implement CTLEnd
         
         private static method onCast takes nothing returns nothing
-            local thistype this = thistype.create()
-            local integer lvl
-            set this.caster = GetTriggerUnit()
-            set lvl = GetUnitAbilityLevel(this.caster, SPELL_ID)
-            set this.affected = CreateGroup()
-            set this.inv = Invisible.create(this.caster, 0)
-            set this.ms = Movespeed.create(this.caster, BonusSpeed(lvl), 0)
+			local integer id = GetHandleId(GetTriggerUnit())
+            local thistype this
+			local integer lvl
+            if thistype.tb.has(id) then
+				set this = thistype.tb[id]
+				call DestroyGroup(this.affected)
+			else
+                set this = thistype.create()
+                set this.caster = GetTriggerUnit()
+                set this.inv = Invisible.create(this.caster, 0)
+				set this.sfx = AddSpecialEffectTarget(SFX, this.caster, "chest")
+                set thistype.tb[id] = this
+            endif
+			set this.affected = CreateGroup()
+			set lvl = GetUnitAbilityLevel(this.caster, SPELL_ID)
+			set this.ms = Movespeed.create(this.caster, BonusSpeed(lvl), 0)
             set this.dmg = DamageAmount(lvl)
-            set this.sfx = AddSpecialEffectTarget(SFX, this.caster, "chest")
             call SystemMsg.create(GetUnitName(GetTriggerUnit()) + " cast thistype")
         endmethod
         
         static method init takes nothing returns nothing
             call SystemTest.start("Initializing thistype: ")
-            set thistype.g = CreateGroup()
+            set thistype.tb = Table.create()
+			set thistype.g = CreateGroup()
             call RegisterSpellEffectEvent(SPELL_ID, function thistype.onCast)
             call SystemTest.end()
         endmethod

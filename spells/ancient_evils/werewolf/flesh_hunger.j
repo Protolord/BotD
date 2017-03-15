@@ -2,7 +2,6 @@ scope FleshHunger
     
     globals
         private constant integer SPELL_ID = 'A214'
-        private constant integer SPELL_BUFF = 'D214'
         private constant string SFX = "Models\\Effects\\FleshHunger.mdx"
     endglobals
     
@@ -22,17 +21,9 @@ scope FleshHunger
         public Movespeed ms
         private effect sfx
         
-        method rawcode takes nothing returns integer
-            return SPELL_BUFF
-        endmethod
-        
-        method dispelType takes nothing returns integer
-            return BUFF_NEGATIVE
-        endmethod
-        
-        method stackType takes nothing returns integer
-            return BUFF_STACK_PARTIAL
-        endmethod
+        private static constant integer RAWCODE = 'D214'
+        private static constant integer DISPEL_TYPE = BUFF_NEGATIVE
+        private static constant integer STACK_TYPE = BUFF_STACK_PARTIAL
         
         method onRemove takes nothing returns nothing
             call this.ms.destroy()
@@ -43,6 +34,10 @@ scope FleshHunger
         method onApply takes nothing returns nothing
             set this.ms = Movespeed.create(this.target, 0, 0)
             set this.sfx = AddSpecialEffectTarget(SFX, this.target, "chest")
+        endmethod
+
+        private static method init takes nothing returns nothing
+            call PreloadSpell(thistype.RAWCODE)
         endmethod
         
         implement BuffApply
@@ -63,7 +58,7 @@ scope FleshHunger
         static method init takes nothing returns nothing
             call SystemTest.start("Initializing thistype: ")
             call RegisterSpellEffectEvent(SPELL_ID, function thistype.onCast)
-            call PreloadSpell(SPELL_BUFF)
+            call SpellBuff.initialize()
             call SystemTest.end()
         endmethod
         

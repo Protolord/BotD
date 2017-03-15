@@ -2,11 +2,12 @@ scope SoulRip
     
     globals
         private constant integer SPELL_ID = 'A713'
-        private constant string MODEL = "Models\\Effects\\ImmortalForce.mdx"
+        private constant string MODEL = "Models\\Effects\\SoulRipMissile.mdx"
         private constant string SFX_HIT = "Abilities\\Spells\\Undead\\DeathCoil\\DeathCoilSpecialArt.mdl"
-        private constant string HEAL_AREA = "Abilities\\Spells\\Undead\\DeathCoil\\DeathCoilSpecialArt.mdl"
+        private constant string AREA_NODE = "Objects\\Spawnmodels\\Undead\\UndeadDissipate\\UndeadDissipate.mdl"
         private constant attacktype ATTACK_TYPE = ATTACK_TYPE_NORMAL
         private constant damagetype DAMAGE_TYPE = DAMAGE_TYPE_MAGIC
+		private constant real SPACING = 200.0
     endglobals
     
     private function HealPerUnit takes integer level returns real
@@ -28,31 +29,33 @@ scope SoulRip
     endfunction
     
     private function TargetFilter takes unit u, player p returns boolean
-        return UnitAlive(u) and IsUnitAlly(u, p) and not IsUnitType(u, UNIT_TYPE_STRUCTURE)
+        return UnitAlive(u) and IsUnitEnemy(u, p) and not IsUnitType(u, UNIT_TYPE_STRUCTURE)
     endfunction
     
     private struct Soul extends array
         
         private Missile m
-        private unit target
+        private unit caster
         private real heal
         
         private method destroy takes nothing returns nothing
             call this.m.destroy()
-            set this.target = null
+            set this.caster = null
         endmethod
         
         private static method onHit takes nothing returns nothing
             local thistype this = Missile.getHit()
-            call DestroyEffect(AddSpecialEffectTarget(SFX_HIT, this.target, "origin"))
-            call Heal.unit(this.target, this.heal, 1.0)
+            if UnitAlive(this.caster) then
+                call DestroyEffect(AddSpecialEffectTarget(SFX_HIT, this.caster, "origin"))
+                call Heal.unit(this.caster, this.heal, 1.0)
+            endif
             call this.destroy()
         endmethod
         
         static method add takes unit source, unit target returns nothing
             local thistype this = thistype(Missile.create())
-            local integer lvl = GetUnitAbilityLevel(target, SPELL_ID)
-            set this.target = source
+            local integer lvl = GetUnitAbilityLevel(source, SPELL_ID)
+            set this.caster = source
             set this.heal = HealPerUnit(lvl)
             set this.m = Missile(this)
             set this.m.sourceUnit = target
@@ -61,7 +64,7 @@ scope SoulRip
             set this.m.model = MODEL
             call this.m.registerOnHit(function thistype.onHit)
             call this.m.launch()
-            call Damage.element.apply(target, source, this.heal, ATTACK_TYPE, DAMAGE_TYPE, DAMAGE_ELEMENT_SPIRIT)
+            call Damage.element.apply(source, target, this.heal, ATTACK_TYPE, DAMAGE_TYPE, DAMAGE_ELEMENT_SPIRIT)
         endmethod
         
     endstruct
@@ -75,19 +78,31 @@ scope SoulRip
             local real x = GetUnitX(caster)
             local real y = GetUnitY(caster)
             local group g = NewGroup()
-            local unit u = GetRecycledDummyAnyAngle(x, y, 50)
-            call SetUnitScale(u, Radius(level)/700, 0, 0)
-            call DestroyEffect(AddSpecialEffectTarget(HEAL_AREA, u, "origin"))
-            call DummyAddRecycleTimer(u, 5.0)
+			local real radius = Radius(level)
+			local real da
+            local real angle
+            local real endAngle
+            local unit u
             call GroupUnitsInArea(g, x, y, Radius(level))
             loop
                 set u = FirstOfGroup(g)
                 exitwhen u == null
                 call GroupRemoveUnit(g, u)
                 if TargetFilter(u, p) then
-                    call Soul.add(u, caster)
+                    call Soul.add(caster, u)
                 endif
             endloop
+			set da = 2*bj_PI/R2I(2*bj_PI*radius/SPACING)
+			if da > bj_PI/3 then
+				set da = bj_PI/3
+			endif
+			set angle = da
+			set endAngle = da + 2*bj_PI - 0.0001
+			loop
+				exitwhen angle >= endAngle
+				call DestroyEffect(AddSpecialEffect(AREA_NODE, x + radius*Cos(angle), y + radius*Sin(angle)))
+				set angle = angle + da
+			endloop
             call ReleaseGroup(g)
             set g = null
             set caster = null

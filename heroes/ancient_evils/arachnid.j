@@ -75,7 +75,7 @@ endmodule
 module ArachnidConfig
     set arachnid = Hero.create('UAra')
     set arachnid.faction = ANCIENT_EVILS
-    set arachnid.name = "Arachnid"
+    set arachnid.name = "Ancient Arachnid"
     set arachnid.iconPath = "ReplaceableTextures\\CommandButtons\\BTN_Arachnid.blp"
     set arachnid.scaleAdd = -0.15
     set arachnid.modelPath = "Models\\Units\\Arachnid.mdl"

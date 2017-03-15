@@ -114,6 +114,7 @@ library TrebuchetMS uses Font
             call TREBUCHET_MS.addImage("ELEMENT_POISON", 32, "Fonts\\Elements\\Poison.blp")
             call TREBUCHET_MS.addImage("ELEMENT_SPIRIT", 32, "Fonts\\Elements\\Spirit.blp")
             call TREBUCHET_MS.addImage("ELEMENT_WATER", 32, "Fonts\\Elements\\Water.blp")
+            call TREBUCHET_MS.addImage("REGENCY", 32, "ReplaceableTextures\\CommandButtons\\BTN_Regency.blp")
         endmethod
         
     endstruct

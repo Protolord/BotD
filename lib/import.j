@@ -75,6 +75,9 @@
 //Unit Status
 //! import "../lib/unit_status/armor.j"
 //! import "../lib/unit_status/attackspeed.j"
+//! import "../lib/unit_status/atk_damage.j"
+//! import "../lib/unit_status/damage_stat.j"
+//! import "../lib/unit_status/damage_stat_register.j"
 //! import "../lib/unit_status/fly_sight.j"
 //! import "../lib/unit_status/heal.j"
 //! import "../lib/unit_status/invisible.j"
@@ -94,4 +97,5 @@
 //! import "../lib/utils/list.j"
 //! import "../lib/utils/preload.j"
 //! import "../lib/utils/set_unit_z.j"
+//! import "../lib/utils/stack.j"
 //! import "../lib/utils/unselectable.j"

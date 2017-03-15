@@ -28,6 +28,8 @@ scope EyeOfDarkness
         readonly thistype prev
         
         method destroy takes nothing returns nothing
+			set this.prev.next = this.next
+            set this.next.prev = this.prev
             if this.unit != null then
                 call DummyAddRecycleTimer(this.unit, 1.0)
                 call UnitClearBonus(this.unit, BONUS_SIGHT_RANGE)
@@ -38,21 +40,18 @@ scope EyeOfDarkness
                 call DestroyEffect(this.sfx)
                 set this.sfx = null
             endif
-            set this.prev.next = this.next
-            set this.next.prev = this.prev
             call this.deallocate()
         endmethod
 
         static method create takes player owner, thistype head, real x, real y, real angle, real scale returns thistype
             local thistype this
-
             if x < WorldBounds.maxX and x > WorldBounds.minX and y < WorldBounds.maxY and y > WorldBounds.minY then
                 set this = thistype.allocate()
                 set this.unit = GetRecycledDummy(x, y, 0, angle*bj_RADTODEG)
+                call UnitSetBonus(this.unit, BONUS_SIGHT_RANGE, 150)
                 call SetUnitScale(this.unit, scale, 0, 0)
                 set this.sfx = AddSpecialEffectTarget(MODEL, this.unit, "origin")
                 call SetUnitOwner(this.unit, owner, false)
-                call UnitSetBonus(this.unit, BONUS_SIGHT_RANGE, 100)
                 set this.next = head
                 set this.prev = head.prev
                 set this.next.prev = this

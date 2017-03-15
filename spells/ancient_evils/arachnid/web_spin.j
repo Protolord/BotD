@@ -39,18 +39,10 @@ scope WebSpin
         
         private effect sfx
         readonly Movespeed ms
-            
-        method rawcode takes nothing returns integer
-            return SPELL_BUFF
-        endmethod
-        
-        method dispelType takes nothing returns integer
-            return BUFF_POSITIVE
-        endmethod
-        
-        method stackType takes nothing returns integer
-            return BUFF_STACK_FULL //Do not change
-        endmethod
+
+        private static constant integer RAWCODE = 'B432'
+        private static constant integer DISPEL_TYPE = BUFF_POSITIVE
+        private static constant integer STACK_TYPE = BUFF_STACK_FULL //do not change
         
         method onRemove takes nothing returns nothing
             call this.ms.destroy()
@@ -62,6 +54,10 @@ scope WebSpin
             set this.ms = Movespeed.create(this.target, 999.9, 999)
             set this.sfx = AddSpecialEffectTarget(BONUS_SFX, this.target, "chest")
         endmethod
+
+        private static method init takes nothing returns nothing
+            call PreloadSpell(thistype.RAWCODE)
+        endmethod
         
         implement BuffApply
     endstruct
@@ -70,18 +66,10 @@ scope WebSpin
     
         private effect sfx
         readonly Movespeed ms
-            
-        method rawcode takes nothing returns integer
-            return SPELL_DEBUFF
-        endmethod
-        
-        method dispelType takes nothing returns integer
-            return BUFF_NONE
-        endmethod
-        
-        method stackType takes nothing returns integer
-            return BUFF_STACK_FULL  //Do not change
-        endmethod
+
+        private static constant integer RAWCODE = 'D432'
+        private static constant integer DISPEL_TYPE = BUFF_NONE
+        private static constant integer STACK_TYPE = BUFF_STACK_FULL
         
         method onRemove takes nothing returns nothing
             call DestroyEffect(this.sfx)
@@ -92,6 +80,10 @@ scope WebSpin
         method onApply takes nothing returns nothing
             set this.sfx = AddSpecialEffectTarget(BUFF_SFX, this.target, "chest")
             set this.ms = Movespeed.create(this.target, 0, 0)
+        endmethod
+
+        private static method init takes nothing returns nothing
+            call PreloadSpell(thistype.RAWCODE)
         endmethod
         
         implement BuffApply
@@ -220,8 +212,8 @@ scope WebSpin
             call SystemTest.start("Initializing thistype: ")
             call RegisterSpellEffectEvent(SPELL_ID, function thistype.onCast)
             set thistype.enumG = CreateGroup()
-            call PreloadSpell(SPELL_BUFF)
-            call PreloadSpell(SPELL_DEBUFF)
+            call SpellBuff.initialize()
+            call Bonus.initialize()
             call SystemTest.end()
         endmethod
         

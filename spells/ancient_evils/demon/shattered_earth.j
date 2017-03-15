@@ -21,7 +21,7 @@ scope ShatteredEarth
     endfunction
     
     private function Duration takes integer level returns real
-        return 15.0 + 0.0*level
+        return 30 + 0.0*level
     endfunction
 
     private struct Node extends array

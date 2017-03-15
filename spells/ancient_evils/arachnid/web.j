@@ -2,7 +2,6 @@ scope Web
  
     globals
         private constant integer SPELL_ID = 'A424'
-        private constant integer SPELL_BUFF = 'D424'
         private constant string MISSILE_MODEL = "Models\\Effects\\WebMissile.mdx"
         private constant string SFX = "Models\\Effects\\Web.mdx"
     endglobals
@@ -26,18 +25,10 @@ scope Web
         
         private effect sfx
         private Root r
-        
-        method rawcode takes nothing returns integer
-            return SPELL_BUFF
-        endmethod
-        
-        method dispelType takes nothing returns integer
-            return BUFF_NEGATIVE
-        endmethod
-        
-        method stackType takes nothing returns integer
-            return BUFF_STACK_FULL
-        endmethod
+
+        private static constant integer RAWCODE = 'D424'
+        private static constant integer DISPEL_TYPE = BUFF_NEGATIVE
+        private static constant integer STACK_TYPE = BUFF_STACK_FULL
         
         method onRemove takes nothing returns nothing
             call DestroyEffect(this.sfx)
@@ -48,6 +39,10 @@ scope Web
         method onApply takes nothing returns nothing
             set this.sfx = AddSpecialEffectTarget(SFX, this.target, "chest")
             set this.r = Root.create(this.target)
+        endmethod
+
+        private static method init takes nothing returns nothing
+            call PreloadSpell(thistype.RAWCODE)
         endmethod
         
         implement BuffApply
@@ -98,7 +93,7 @@ scope Web
         static method init takes nothing returns nothing
             call SystemTest.start("Initializing thistype: ")
             call RegisterSpellEffectEvent(SPELL_ID, function thistype.onCast)
-            call PreloadSpell(SPELL_BUFF)
+            call SpellBuff.initialize()
             call SystemTest.end()
         endmethod
         

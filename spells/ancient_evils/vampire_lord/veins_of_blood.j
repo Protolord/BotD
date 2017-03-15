@@ -2,7 +2,6 @@ scope VeinsOfBlood
     
     globals
         private constant integer SPELL_ID = 'A141'
-        private constant integer SPELL_BUFF = 'B141'
         private constant string BUFF_SFX = "Models\\Effects\\VeinsOfBlood.mdx"
         private constant real TIMEOUT = 1.0
     endglobals
@@ -26,18 +25,10 @@ scope VeinsOfBlood
         private timer t
         private effect sfx
         public real heal
-        
-        method raw takes nothing returns integer
-            return SPELL_BUFF
-        endmethod
-        
-        method dispelType takes nothing returns integer
-            return BUFF_POSITIVE
-        endmethod
-        
-        method stackType takes nothing returns integer
-            return BUFF_STACK_FULL
-        endmethod
+
+        private static constant integer RAWCODE = 'B141'
+        private static constant integer DISPEL_TYPE = BUFF_POSITIVE
+        private static constant integer STACK_TYPE = BUFF_STACK_FULL
         
         method onRemove takes nothing returns nothing
             call ReleaseTimer(this.t)
@@ -55,6 +46,10 @@ scope VeinsOfBlood
             set this.t = NewTimerEx(this)
             set this.sfx = AddSpecialEffectTarget(BUFF_SFX, this.target, "origin")
             call TimerStart(this.t, TIMEOUT, true, function thistype.onPeriod)
+        endmethod
+
+        private static method init takes nothing returns nothing
+            call PreloadSpell(thistype.RAWCODE)
         endmethod
         
         implement BuffApply
@@ -88,7 +83,7 @@ scope VeinsOfBlood
         static method init takes nothing returns nothing
             call SystemTest.start("Initializing thistype: ")
             call RegisterSpellEffectEvent(SPELL_ID, function thistype.onCast)
-            call PreloadSpell(SPELL_BUFF)
+            call SpellBuff.initialize()
             call SystemTest.end()
         endmethod
         

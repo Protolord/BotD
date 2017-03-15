@@ -2,7 +2,6 @@ scope Pitfall
  
     globals
         private constant integer SPELL_ID = 'A512'
-        private constant integer SPELL_BUFF = 'D512'
         private constant integer PITFALL_ID = 'B512'
         private constant attacktype ATTACK_TYPE = ATTACK_TYPE_NORMAL
         private constant damagetype DAMAGE_TYPE = DAMAGE_TYPE_MAGIC
@@ -41,18 +40,10 @@ scope Pitfall
         private effect sfx
         private timer t
         public real dmg
-        
-        method rawcode takes nothing returns integer
-            return SPELL_BUFF
-        endmethod
-        
-        method dispelType takes nothing returns integer
-            return BUFF_NONE
-        endmethod
-        
-        method stackType takes nothing returns integer
-            return BUFF_STACK_FULL
-        endmethod
+
+        private static constant integer RAWCODE = 'D512'
+        private static constant integer DISPEL_TYPE = BUFF_NONE
+        private static constant integer STACK_TYPE = BUFF_STACK_FULL
         
         method onRemove takes nothing returns nothing
             call this.ms.destroy()
@@ -80,6 +71,9 @@ scope Pitfall
             call TimerStart(this.t, TIMEOUT, true, function thistype.onPeriod)
         endmethod
         
+        private static method init takes nothing returns nothing
+            call PreloadSpell(thistype.RAWCODE)
+        endmethod
         implement BuffApply
     endstruct
 
@@ -186,6 +180,7 @@ scope Pitfall
         static method init takes nothing returns nothing
             call SystemTest.start("Initializing thistype: ")
             set thistype.enumG = CreateGroup()
+            call SpellBuff.initialize()
             call RegisterSpellEffectEvent(SPELL_ID, function thistype.onCast)
             call SystemTest.end()
         endmethod

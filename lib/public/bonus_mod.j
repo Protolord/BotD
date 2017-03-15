@@ -146,7 +146,7 @@ globals
 //========================================================================================
 
     // The number of abilitys used per bonus type:
-    private constant integer ABILITY_COUNT = 10
+    private constant integer ABILITY_COUNT = 12
     
     // Note: Setting the following to false will decrease loading time, but will cause a
     // small ammount of lag when a bonus is first applied. (Especially a negative bonus)
@@ -186,7 +186,9 @@ private function InitializeAbilitys takes nothing returns nothing
     set BonusAbilitys[i + 6]  = 'ZxA6' // +64
     set BonusAbilitys[i + 7]  = 'ZxA7' // +128
     set BonusAbilitys[i + 8]  = 'ZxA8' // +256
-    set BonusAbilitys[i + 9]  = 'ZxA9' // -512
+    set BonusAbilitys[i + 9]  = 'ZxA9' // +512
+    set BonusAbilitys[i + 10]  = 'ZxAA' // +1024
+    set BonusAbilitys[i + 11]  = 'ZxAB' // -2048
     
     // Bonus Mod - Damage abilitys
     set i = BONUS_DAMAGE * ABILITY_COUNT
@@ -199,7 +201,9 @@ private function InitializeAbilitys takes nothing returns nothing
     set BonusAbilitys[i + 6]  = 'ZxB6' // +64
     set BonusAbilitys[i + 7]  = 'ZxB7' // +128
     set BonusAbilitys[i + 8]  = 'ZxB8' // +256
-    set BonusAbilitys[i + 9]  = 'ZxB9' // -512
+    set BonusAbilitys[i + 9]  = 'ZxB9' // +512
+    set BonusAbilitys[i + 10]  = 'ZxBA' // +1024
+    set BonusAbilitys[i + 11]  = 'ZxBB' // -2048
     
     // Bonus Mod - Sight Range abilitys
     set i = BONUS_SIGHT_RANGE * ABILITY_COUNT
@@ -212,10 +216,12 @@ private function InitializeAbilitys takes nothing returns nothing
     set BonusAbilitys[i + 6]  = 'ZxC6' // +64
     set BonusAbilitys[i + 7]  = 'ZxC7' // +128
     set BonusAbilitys[i + 8]  = 'ZxC8' // +256
-    set BonusAbilitys[i + 9]  = 'ZxC9' // -512
+    set BonusAbilitys[i + 9]  = 'ZxC9' // +512
+    set BonusAbilitys[i + 10]  = 'ZxCA' // +1024
+    set BonusAbilitys[i + 11]  = 'ZxCB' // -2048
     
     
-    // Bonus Mod - Mana Regen abilitys
+    // Bonus Mod - Attack Speed abilitys
     set i = BONUS_ATK_SPEED * ABILITY_COUNT
     set BonusAbilitys[i + 0]  = 'ZxD0' // +1
     set BonusAbilitys[i + 1]  = 'ZxD1' // +2
@@ -226,7 +232,9 @@ private function InitializeAbilitys takes nothing returns nothing
     set BonusAbilitys[i + 6]  = 'ZxD6' // +64
     set BonusAbilitys[i + 7]  = 'ZxD7' // +128
     set BonusAbilitys[i + 8]  = 'ZxD8' // +256
-    set BonusAbilitys[i + 9]  = 'ZxD9' // -512
+    set BonusAbilitys[i + 9]  = 'ZxD9' // +512
+    set BonusAbilitys[i + 10]  = 'ZxDA' // +1024
+    set BonusAbilitys[i + 11]  = 'ZxDB' // -2048
  
 endfunction
 
@@ -292,38 +300,10 @@ function UnitSetBonus takes unit u, integer bonusType, integer ammount returns b
         set i = i - 1
         exitwhen i < 0
     endloop
-    //call SaveInteger(hash, GetHandleId(u), bonusType, ammount)
     
     return true
 endfunction
-/*
-function UnitGetBonus takes unit u, integer bonusType returns integer
-    local integer i = 0
-    local integer ammount = 0
-    
-    if HaveSavedInteger(hash, GetHandleId(u), bonusType) then
-        return LoadInteger(hash, GetHandleId(u), bonusType)
-    endif
-    
-    if GetUnitAbilityLevel(u, BonusAbilitys[bonusType * ABILITY_COUNT + ABILITY_COUNT - 1]) > 0 then
-        set ammount = MinBonus
-    endif
-    
-    loop
-        if GetUnitAbilityLevel(u, BonusAbilitys[bonusType * ABILITY_COUNT + i]) > 0 then
-            set ammount = ammount + PowersOf2[i]
-        endif
-        
-        set i = i + 1
-        exitwhen i == ABILITY_COUNT - 2
-    endloop
-    
-    return ammount
-endfunction
 
-function UnitAddBonus takes unit u, integer bonusType, integer ammount returns boolean
-    return UnitSetBonus(u, bonusType, UnitGetBonus(u, bonusType) + ammount)
-endfunction*/
 
 private function Initialize takes nothing returns nothing
     local integer i = 1

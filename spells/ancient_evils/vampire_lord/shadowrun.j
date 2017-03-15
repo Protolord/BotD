@@ -18,8 +18,11 @@ scope Shadowrun
         private unit caster
         private Movespeed ms
         private Invisible inv
+		
+		private static Table tb
         
         private method remove takes nothing returns nothing
+			call thistype.tb.remove(GetHandleId(this.caster))
             call this.inv.destroy()
             call this.ms.destroy()
             set this.caster = null
@@ -34,16 +37,24 @@ scope Shadowrun
     
         
         private static method onCast takes nothing returns nothing
-            local thistype this = thistype.create()
-            set this.caster = GetTriggerUnit()
-            set this.ms = Movespeed.create(this.caster, BonusSpeed(GetUnitAbilityLevel(this.caster, SPELL_ID)), 0)
-            set this.inv = Invisible.create(this.caster, 0)
+			local integer id = GetHandleId(GetTriggerUnit())
+            local thistype this
+            if thistype.tb.has(id) then
+				set this = thistype.tb[id]
+			else
+                set this = thistype.create()
+                set this.caster = GetTriggerUnit()
+                set this.inv = Invisible.create(this.caster, 0)
+                set thistype.tb[id] = this
+            endif
+			set this.ms = Movespeed.create(this.caster, BonusSpeed(GetUnitAbilityLevel(this.caster, SPELL_ID)), 0)
             call SystemMsg.create(GetUnitName(GetTriggerUnit()) + " cast thistype")
         endmethod
         
         
         static method init takes nothing returns nothing
             call SystemTest.start("Initializing thistype: ")
+			set thistype.tb = Table.create()
             call RegisterSpellEffectEvent(SPELL_ID, function thistype.onCast)
             call SystemTest.end()
         endmethod

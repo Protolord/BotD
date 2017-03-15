@@ -12,7 +12,7 @@
 		
 		
 	Vampire Lord Abilities:
-		BTN_ImmortalForce           by 4eNNightmare
+		BTN_ImmortalForce           by PeeKay
 		BTN_CorruptingStomp         by Valve Corporation
 		BTN_SoulCorruption          by Hellx-Magnus
 		BTN_DeathCoil               by Mr.Goblin
@@ -81,8 +81,17 @@
 	
 	Skeleton King Abilities:
 		BTN_Bones					by Marcos DAB
+		BTN_SoulBreak	            by 4eNNightmare
 		BTN_Reaper					by PeeKay
+		BTN_SoulRip					by -Berz-
 		BTN_GhostForm				by DarkFang
+		BTN_DeathPact				by PeeKay
+		BTN_Regency					by NFWar
+		BTN_OtherSide				by 4eNNightmare
+		BTN_SoulFeast				by San
+		BTN_GrimDeal				by -Berz-
+		BTN_SoulMark				by CRAZYRUSSIAN
+		BTN_LoneSoul				by Paladon
 		
 	Others:
 		BTN_Check                   by Lockheart 

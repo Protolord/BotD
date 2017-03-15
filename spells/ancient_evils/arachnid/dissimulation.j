@@ -17,25 +17,33 @@ scope Dissimulation
         endif
         return 1.0*level
     endfunction
+
+    private function TargetFilter takes unit u, player p returns boolean
+        return UnitAlive(u) and IsUnitEnemy(u, p) and not IsUnitType(u, UNIT_TYPE_STRUCTURE) and not IsUnitType(u, UNIT_TYPE_MAGIC_IMMUNE)
+    endfunction
     //End configuration
     
     struct Dissimulation extends array
         
         private unit caster
+        private integer lvl
         private Movespeed ms
         private Invisible inv
         
-        private static group g
+        private static Table tb
         
         private static method onDamage takes nothing returns nothing
-            if Damage.type == DAMAGE_TYPE_PHYSICAL and IsUnitInGroup(Damage.source, thistype.g) then
-                call Silence.create(Damage.target, SilenceDuration(GetUnitAbilityLevel(Damage.source, SPELL_ID)), SILENCE_STACK)
+            local integer id = GetHandleId(Damage.source)
+            if Damage.type == DAMAGE_TYPE_PHYSICAL and not Damage.element.coded and thistype.tb.has(id) then
+                if TargetFilter(Damage.target, GetOwningPlayer(Damage.source)) then
+                    call Silence.create(Damage.target, SilenceDuration(thistype(thistype.tb[id]).lvl), SILENCE_STACK)
+                endif
                 call UnitRemoveAbility(Damage.source, SPELL_BUFF)
             endif
         endmethod
         
         private method remove takes nothing returns nothing
-            call GroupRemoveUnit(thistype.g, this.caster)
+            call thistype.tb.remove(GetHandleId(this.caster))
             call this.inv.destroy()
             call this.ms.destroy()
             set this.caster = null
@@ -49,18 +57,25 @@ scope Dissimulation
         implement CTLEnd
         
         private static method onCast takes nothing returns nothing
-            local thistype this = thistype.create()
-            set this.caster = GetTriggerUnit()
-            set this.inv = Invisible.create(this.caster, 0)
-            set this.ms = Movespeed.create(this.caster, BonusSpeed(GetUnitAbilityLevel(this.caster, SPELL_ID)), 0)
-            call GroupAddUnit(thistype.g, this.caster)
+            local integer id = GetHandleId(GetTriggerUnit())
+            local thistype this
+            if thistype.tb.has(id) then
+				set this = thistype.tb[id]
+			else
+                set this = thistype.create()
+                set this.caster = GetTriggerUnit()
+                set this.inv = Invisible.create(this.caster, 0)
+                set thistype.tb[id] = this
+            endif
+			set this.lvl = GetUnitAbilityLevel(this.caster, SPELL_ID)
+			set this.ms = Movespeed.create(this.caster, BonusSpeed(this.lvl), 0)
             call SystemMsg.create(GetUnitName(GetTriggerUnit()) + " cast thistype")
         endmethod
 
         static method init takes nothing returns nothing
             call SystemTest.start("Initializing thistype: ")
             call Damage.register(function thistype.onDamage)
-            set thistype.g = CreateGroup()
+            set thistype.tb = Table.create()
             call RegisterSpellEffectEvent(SPELL_ID, function thistype.onCast)
             call SystemTest.end()
         endmethod

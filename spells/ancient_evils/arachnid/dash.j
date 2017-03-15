@@ -35,18 +35,10 @@ scope Dash
     
         private effect sfx
         private Movespeed ms
-        
-        method rawcode takes nothing returns integer
-            return 'ADSB'
-        endmethod
-        
-        method dispelType takes nothing returns integer
-            return BUFF_NEGATIVE
-        endmethod
-        
-        method stackType takes nothing returns integer
-            return BUFF_STACK_PARTIAL
-        endmethod
+
+        private static constant integer RAWCODE = 'D411'
+        private static constant integer DISPEL_TYPE = BUFF_NEGATIVE
+        private static constant integer STACK_TYPE = BUFF_STACK_PARTIAL
         
         method onRemove takes nothing returns nothing
             call DestroyEffect(this.sfx)
@@ -58,6 +50,10 @@ scope Dash
         method onApply takes nothing returns nothing
             set this.sfx = AddSpecialEffectTarget(SFX, this.target, "overhead")
             set this.ms = Movespeed.create(this.target, -Slow(GetUnitAbilityLevel(this.source, SPELL_ID)), 0)
+        endmethod
+
+        private static method init takes nothing returns nothing
+            call PreloadSpell(thistype.RAWCODE)
         endmethod
         
         implement BuffApply

@@ -13,19 +13,11 @@ scope FuryOfTheLycan
     private struct SpellBuff extends Buff
         private effect sfx
         
-        static group g
+        readonly static group g
         
-        method rawcode takes nothing returns integer
-            return SPELL_BUFF
-        endmethod
-        
-        method dispelType takes nothing returns integer
-            return BUFF_NONE
-        endmethod
-        
-        method stackType takes nothing returns integer
-            return BUFF_STACK_NONE
-        endmethod
+        private static constant integer RAWCODE = 'B243'
+        private static constant integer DISPEL_TYPE = BUFF_POSITIVE
+        private static constant integer STACK_TYPE = BUFF_STACK_NONE
         
         method onRemove takes nothing returns nothing
             call GroupRemoveUnit(thistype.g, this.target)
@@ -36,6 +28,11 @@ scope FuryOfTheLycan
         method onApply takes nothing returns nothing
             set this.sfx = AddSpecialEffectTarget(BUFF_SFX, this.target, "origin")
             call GroupAddUnit(thistype.g, this.target)
+        endmethod
+
+        private static method init takes nothing returns nothing
+            call PreloadSpell(thistype.RAWCODE)
+            set thistype.g = CreateGroup()
         endmethod
         
         implement BuffApply
@@ -75,8 +72,7 @@ scope FuryOfTheLycan
             call SystemTest.start("Initializing thistype: ")
             call Damage.registerModifier(function thistype.onDamage)
             call RegisterSpellEffectEvent(SPELL_ID, function thistype.onCast)
-            set SpellBuff.g = CreateGroup()
-            call PreloadSpell(SPELL_BUFF)
+            call SpellBuff.initialize()
             call SystemTest.end()
         endmethod
         

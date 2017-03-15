@@ -2,7 +2,6 @@ scope StoneVision
  
     globals
         private constant integer SPELL_ID = 'A631'
-        private constant integer BUFF_ID = 'B631'
         private constant string SFX = "Models\\Effects\\StoneVisionTarget.mdx"
         private constant string SFX_TARGET = "Models\\Effects\\StoneVisionTarget.mdx"
         private constant real NODE_RADIUS = 200
@@ -77,7 +76,6 @@ scope StoneVision
     endstruct
 
     private struct SpellBuff extends Buff
-        implement List
 
         public SightSource ss
         public real radius
@@ -87,17 +85,9 @@ scope StoneVision
 
         private static group g
 
-        method rawcode takes nothing returns integer
-            return BUFF_ID
-        endmethod
-        
-        method dispelType takes nothing returns integer
-            return BUFF_POSITIVE
-        endmethod
-        
-        method stackType takes nothing returns integer
-            return BUFF_STACK_NONE
-        endmethod
+        private static constant integer RAWCODE = 'D631'
+        private static constant integer DISPEL_TYPE = BUFF_POSITIVE
+        private static constant integer STACK_TYPE = BUFF_STACK_NONE
         
         method onRemove takes nothing returns nothing
             local SightSource sight = this.ss.next
@@ -161,6 +151,8 @@ scope StoneVision
                 set this = this.next
             endloop
         endmethod
+
+        implement List
         
         method onApply takes nothing returns nothing
             set this.sfx = AddSpecialEffectTarget(SFX, this.target, "overhead")
@@ -169,7 +161,8 @@ scope StoneVision
             call this.push(TIMEOUT)
         endmethod
 
-        static method init takes nothing returns nothing
+        private static method init takes nothing returns nothing
+            call PreloadSpell(thistype.RAWCODE)
             set thistype.g = CreateGroup()
         endmethod
         
@@ -192,8 +185,7 @@ scope StoneVision
         static method init takes nothing returns nothing
             call SystemTest.start("Initializing thistype: ")
             call RegisterSpellEffectEvent(SPELL_ID, function thistype.onCast)
-            call PreloadSpell(BUFF_ID)
-            call SpellBuff.init()
+            call SpellBuff.initialize()
             call SystemTest.end()
         endmethod
         

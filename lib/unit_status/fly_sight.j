@@ -29,8 +29,7 @@ library FlySight uses TimerUtilsEx
         private real y
         private player owner
         private fogmodifier fm
-        
-        implement List
+    
         
         method destroy takes nothing returns nothing
             call DestroyFogModifier(this.fm)
@@ -83,6 +82,8 @@ library FlySight uses TimerUtilsEx
                 set this = this.next
             endloop
         endmethod
+
+        implement List
         
         static method create takes unit u, real radius returns thistype
             local thistype this = thistype.allocate()

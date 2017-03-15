@@ -13,7 +13,7 @@ library Armor uses Table, BonusMod, TimerUtilsEx
 */    
 
     globals
-        private constant integer LIMIT = 511
+        private constant integer LIMIT = 2000
     endglobals
 
     private function Range takes real r returns integer

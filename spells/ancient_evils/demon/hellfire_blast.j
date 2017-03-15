@@ -2,7 +2,6 @@ scope HellfireBlast
  
     globals
         private constant integer SPELL_ID = 'A542'
-        private constant integer BUFF_ID = 'B542'
         private constant string SFX = "Models\\Effects\\HellfireBlast.mdx"
         private constant string SFX_BUFF = "Abilities\\Spells\\Other\\Incinerate\\IncinerateBuff.mdl"
         private constant string SFX_TARGET = "Abilities\\Spells\\Items\\AIfb\\AIfbSpecialArt.mdl"
@@ -50,19 +49,11 @@ scope HellfireBlast
         private timer t
         private effect sfx
         
-        public static group g
-        
-        method rawcode takes nothing returns integer
-            return BUFF_ID
-        endmethod
-        
-        method dispelType takes nothing returns integer
-            return BUFF_POSITIVE
-        endmethod
-        
-        method stackType takes nothing returns integer
-            return BUFF_STACK_NONE
-        endmethod
+        private static group g
+
+        private static constant integer RAWCODE = 'B542'
+        private static constant integer DISPEL_TYPE = BUFF_POSITIVE
+        private static constant integer STACK_TYPE = BUFF_STACK_NONE
         
         method onRemove takes nothing returns nothing
             call ReleaseTimer(this.t)
@@ -103,6 +94,11 @@ scope HellfireBlast
             set this.sfx = AddSpecialEffectTarget(SFX_BUFF, this.target, "chest")
             call TimerStart(this.t, TIMEOUT, true, function thistype.onPeriod)
         endmethod
+
+        private static method init takes nothing returns nothing
+            call PreloadSpell(thistype.RAWCODE)
+            set thistype.g = CreateGroup()
+        endmethod
         
         implement BuffApply 
     endstruct
@@ -136,7 +132,6 @@ scope HellfireBlast
         
         static method init takes nothing returns nothing
             call SystemTest.start("Initializing thistype: ")
-            set SpellBuff.g = CreateGroup()
             call RegisterSpellEffectEvent(SPELL_ID, function thistype.onCast)
             call SystemTest.end()
         endmethod

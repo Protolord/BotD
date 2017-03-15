@@ -2,7 +2,6 @@ scope ChillingTouch
     
     globals
         private constant integer SPELL_ID = 'A3XX'
-        private constant integer SPELL_BUFF = 'D3XX'
         private constant string SFX = "Abilities\\Spells\\Other\\FrostDamage\\FrostDamage.mdl"
     endglobals
     
@@ -20,18 +19,10 @@ scope ChillingTouch
         readonly Movespeed ms
         readonly Atkspeed as
         private effect sfx
-        
-        method rawcode takes nothing returns integer
-            return SPELL_BUFF
-        endmethod
-        
-        method dispelType takes nothing returns integer
-            return BUFF_NEGATIVE
-        endmethod
-        
-        method stackType takes nothing returns integer
-            return BUFF_STACK_PARTIAL
-        endmethod
+
+        private static constant integer RAWCODE = 'D3XX'
+        private static constant integer DISPEL_TYPE = BUFF_NEGATIVE
+        private static constant integer STACK_TYPE = BUFF_STACK_PARTIAL
         
         method onRemove takes nothing returns nothing
             call this.ms.destroy()
@@ -46,6 +37,10 @@ scope ChillingTouch
             set this.sfx = AddSpecialEffectTarget(SFX, this.target, "chest")
         endmethod
         
+        private static method init takes nothing returns nothing
+            call PreloadSpell(thistype.RAWCODE)
+        endmethod
+
         implement BuffApply
     endstruct
     
@@ -68,7 +63,7 @@ scope ChillingTouch
         static method init takes nothing returns nothing
             call SystemTest.start("Initializing thistype: ")
             call Damage.register(function thistype.onDamage)
-            call PreloadSpell(SPELL_BUFF)
+            call SpellBuff.initialize()
             call SystemTest.end()
         endmethod
         

@@ -3,7 +3,6 @@ scope InfernalChains
     
     globals
         private constant integer SPELL_ID = 'A523'
-        private constant integer BUFF_ID = 'D523'
         private constant attacktype ATTACK_TYPE = ATTACK_TYPE_CHAOS //Changing it may not properly affect buildings
         private constant damagetype DAMAGE_TYPE = DAMAGE_TYPE_UNIVERSAL
         private constant string BUFF_SFX = "Models\\Effects\\InfernalChains.mdx"
@@ -40,18 +39,10 @@ scope InfernalChains
         
         private effect sfx
         public real dmg
-        
-        method rawcode takes nothing returns integer
-            return BUFF_ID
-        endmethod
-        
-        method dispelType takes nothing returns integer
-            return BUFF_NONE
-        endmethod
-        
-        method stackType takes nothing returns integer
-            return BUFF_STACK_PARTIAL
-        endmethod
+
+        private static constant integer RAWCODE = 'D523'
+        private static constant integer DISPEL_TYPE = BUFF_NONE
+        private static constant integer STACK_TYPE = BUFF_STACK_PARTIAL
         
         method onRemove takes nothing returns nothing
             call DestroyEffect(this.sfx)
@@ -61,6 +52,10 @@ scope InfernalChains
         method onApply takes nothing returns nothing
             set this.dmg = DamageGrowth(GetUnitAbilityLevel(this.source, SPELL_ID))
             set this.sfx = AddSpecialEffectTarget(BUFF_SFX, this.target, "origin")
+        endmethod
+
+        private static method init takes nothing returns nothing
+            call PreloadSpell(thistype.RAWCODE)
         endmethod
         
         implement BuffApply
@@ -96,7 +91,7 @@ scope InfernalChains
             set thistype.trg = CreateTrigger()
             call Damage.registerTrigger(thistype.trg)
             call TriggerAddCondition(thistype.trg, function thistype.onDamage)
-            call PreloadSpell(BUFF_ID)
+            call SpellBuff.initialize()
             call SystemTest.end()
         endmethod
         

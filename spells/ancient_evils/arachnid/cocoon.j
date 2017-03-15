@@ -3,7 +3,6 @@ scope Cocoon
     globals
         private constant integer SPELL_ID = 'A414'
         private constant integer UNIT_ID = 'uCoc'
-        private constant integer SPELL_BUFF = 'D414'
         private constant integer TRANSFORM_ID = 'TCoc'
     endglobals
     
@@ -18,18 +17,10 @@ scope Cocoon
         
         readonly Atkspeed as
         private Root r
-        
-        method rawcode takes nothing returns integer
-            return SPELL_BUFF
-        endmethod
-        
-        method dispelType takes nothing returns integer
-            return BUFF_NEGATIVE
-        endmethod
-        
-        method stackType takes nothing returns integer
-            return BUFF_STACK_FULL //do not change
-        endmethod
+
+        private static constant integer RAWCODE = 'D414'
+        private static constant integer DISPEL_TYPE = BUFF_NEGATIVE
+        private static constant integer STACK_TYPE = BUFF_STACK_FULL //do not change
         
         method onRemove takes nothing returns nothing
             call this.as.destroy()
@@ -40,12 +31,15 @@ scope Cocoon
             set this.as = Atkspeed.create(this.target, 0)
             set this.r = Root.create(this.target)
         endmethod
+
+        private static method init takes nothing returns nothing
+            call PreloadSpell(thistype.RAWCODE)
+        endmethod
         
         implement BuffApply
     endstruct
     
     struct Cocoon extends array
-        implement Alloc
         
         private unit cocoon
         private unit target
@@ -111,7 +105,7 @@ scope Cocoon
             set thistype.tb = Table.create()
             call RegisterSpellEffectEvent(SPELL_ID, function thistype.onCast)    
             call PreloadUnit(UNIT_ID)
-            call PreloadSpell(SPELL_BUFF)
+            call SpellBuff.initialize()
             call SystemTest.end()
         endmethod
         

@@ -5,6 +5,9 @@ library Stun uses TimerUtilsEx, Table, DummyRecycler
         - Stun a unit for a certain duration preventing it from doing anything.
         - Duration of zero means infinite.
         - Buff indicator appears.
+	
+	this.destroy()
+		- Destroy a Stun instance.
 */
 
     globals

@@ -79,7 +79,6 @@ scope Fetch
     endstruct
     
     private struct SpellBuff extends Buff
-        implement List
 
         public SightSource ss
         public FlySight fs
@@ -88,19 +87,11 @@ scope Fetch
         private group visible
         private effect sfx
 
-        public static group g
+        private static group g
 
-        method rawcode takes nothing returns integer
-            return BUFF_ID
-        endmethod
-        
-        method dispelType takes nothing returns integer
-            return BUFF_POSITIVE
-        endmethod
-        
-        method stackType takes nothing returns integer
-            return BUFF_STACK_NONE
-        endmethod
+        private static constant integer RAWCODE = 'B233'
+        private static constant integer DISPEL_TYPE = BUFF_POSITIVE
+        private static constant integer STACK_TYPE = BUFF_STACK_NONE
         
         method onRemove takes nothing returns nothing
             local SightSource sight = this.ss.next
@@ -168,6 +159,8 @@ scope Fetch
                 set this = this.next
             endloop
         endmethod
+
+        implement List
         
         method onApply takes nothing returns nothing
             set this.sfx = AddSpecialEffectTarget(SFX, this.target, "overhead")
@@ -177,6 +170,11 @@ scope Fetch
                 set this.ss = SightSource.head()
             endif
             call this.push(TIMEOUT)
+        endmethod
+
+        private static method init takes nothing returns nothing
+            call PreloadSpell(thistype.RAWCODE)
+            set thistype.g = CreateGroup()
         endmethod
         
         implement BuffApply
@@ -211,8 +209,7 @@ scope Fetch
         
         static method init takes nothing returns nothing
             call SystemTest.start("Initializing thistype: ")
-            set SpellBuff.g = CreateGroup()
-            call PreloadSpell(BUFF_ID)
+            call SpellBuff.initialize()
             call RegisterSpellEffectEvent(SPELL_ID, function thistype.onCast)
             call SystemTest.end()
         endmethod

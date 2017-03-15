@@ -2,7 +2,6 @@ scope EarthShatter
 
     globals
         private constant integer SPELL_ID = 'A612'
-        private constant integer BUFF_ID = 'D612'
         private constant string SFX = "Models\\Effects\\EarthShatter.mdx"
         private constant string SFX_TARGET = "Abilities\\Spells\\Orc\\StasisTrap\\StasisTotemTarget.mdl"
         private constant attacktype ATTACK_TYPE = ATTACK_TYPE_NORMAL
@@ -44,18 +43,10 @@ scope EarthShatter
         readonly Movespeed ms
         readonly Atkspeed as 
         private effect sfx
-        
-        method rawcode takes nothing returns integer
-            return BUFF_ID
-        endmethod
-        
-        method dispelType takes nothing returns integer
-            return BUFF_NEGATIVE
-        endmethod
-        
-        method stackType takes nothing returns integer
-            return BUFF_STACK_PARTIAL
-        endmethod
+
+        private static constant integer RAWCODE = 'D612'
+        private static constant integer DISPEL_TYPE = BUFF_NEGATIVE
+        private static constant integer STACK_TYPE = BUFF_STACK_PARTIAL
         
         method onRemove takes nothing returns nothing
             call DestroyEffect(this.sfx)
@@ -68,6 +59,10 @@ scope EarthShatter
             set this.as = Atkspeed.create(this.target, 0)
             set this.ms = Movespeed.create(this.target, 0, 0)
             set this.sfx = AddSpecialEffectTarget(SFX_TARGET, this.target, "origin")
+        endmethod
+
+        private static method init takes nothing returns nothing
+            call PreloadSpell(thistype.RAWCODE)
         endmethod
         
         implement BuffApply
@@ -109,13 +104,14 @@ scope EarthShatter
             set g = null
             set u = null
             set dummy = null
+			set owner = null
             call SystemMsg.create(GetUnitName(GetTriggerUnit()) + " cast thistype")
         endmethod
         
         static method init takes nothing returns nothing
             call SystemTest.start("Initializing thistype: ")
             call RegisterSpellEffectEvent(SPELL_ID, function thistype.onCast)
-            call PreloadSpell(BUFF_ID)
+            call SpellBuff.initialize()
             call SystemTest.end()
         endmethod
         

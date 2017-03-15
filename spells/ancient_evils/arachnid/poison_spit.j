@@ -2,7 +2,6 @@ scope PoisonSpit
  
     globals
         private constant integer SPELL_ID = 'A413'
-        private constant integer SPELL_BUFF = 'D413'
         private constant boolean SILENCE_STACK = false //If true, targeting a silenced unit will result to additive duration
         private constant attacktype ATTACK_TYPE = ATTACK_TYPE_NORMAL
         private constant damagetype DAMAGE_TYPE = DAMAGE_TYPE_MAGIC
@@ -36,18 +35,10 @@ scope PoisonSpit
         private Silence s
         private effect sfx
         public real dmg
-        
-        method rawcode takes nothing returns integer
-            return SPELL_BUFF
-        endmethod
-        
-        method dispelType takes nothing returns integer
-            return BUFF_NEGATIVE
-        endmethod
-        
-        method stackType takes nothing returns integer
-            return BUFF_STACK_PARTIAL
-        endmethod
+
+        private static constant integer RAWCODE = 'D413'
+        private static constant integer DISPEL_TYPE = BUFF_NEGATIVE
+        private static constant integer STACK_TYPE = BUFF_STACK_PARTIAL
         
         method onRemove takes nothing returns nothing
             call ReleaseTimer(this.t)
@@ -69,6 +60,10 @@ scope PoisonSpit
             set this.s = Silence.create(this.target, 0, SILENCE_STACK)
             set this.sfx = AddSpecialEffectTarget(SFX, this.target, "chest")
             call TimerStart(this.t, 1.00, true, function thistype.onPeriod)
+        endmethod
+
+        private static method init takes nothing returns nothing
+            call PreloadSpell(thistype.RAWCODE)
         endmethod
         
         implement BuffApply
@@ -121,7 +116,7 @@ scope PoisonSpit
         static method init takes nothing returns nothing
             call SystemTest.start("Initializing thistype: ")
             call RegisterSpellEffectEvent(SPELL_ID, function thistype.onCast)
-            call PreloadSpell(SPELL_BUFF)
+            call SpellBuff.initialize()
             call SystemTest.end()
         endmethod
         

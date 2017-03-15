@@ -28,27 +28,32 @@ scope HellishCloud
     struct HellishCloud extends array
         
         private unit caster
+        private integer lvl
         private effect sfx
         private Invisible inv
         
+        private static Table tb
         private static group g
         private static trigger trg
         
         private static method onDamage takes nothing returns boolean
+            local integer id = GetHandleId(Damage.source)
             local integer level
+            local thistype this
             local unit u
             local real dmg
             local player p
             local real x
             local real y
-            if Damage.type == DAMAGE_TYPE_PHYSICAL and not Damage.element.coded and IsUnitInGroup(Damage.source, thistype.g) then
-                set dmg = DamageDealt(GetUnitAbilityLevel(Damage.source, SPELL_ID))
+            if Damage.type == DAMAGE_TYPE_PHYSICAL and not Damage.element.coded and thistype.tb.has(id) then
+                set this = thistype.tb[id]
+                set dmg = DamageDealt(this.lvl)
                 set level = GetUnitAbilityLevel(Damage.source, SPELL_ID)
                 set p = GetOwningPlayer(Damage.source)
                 set x = GetUnitX(Damage.target)
                 set y = GetUnitY(Damage.target)
                 call DestroyEffect(AddSpecialEffect(SFX, x, y))
-                call GroupUnitsInArea(thistype.g, x, y, Radius(level))
+                call GroupUnitsInArea(thistype.g, x, y, Radius(this.lvl))
                 call DisableTrigger(thistype.trg)
                 loop
                     set u = FirstOfGroup(thistype.g)
@@ -66,7 +71,7 @@ scope HellishCloud
         endmethod
         
         private method remove takes nothing returns nothing
-            call GroupRemoveUnit(thistype.g, this.caster)
+            call thistype.tb.remove(GetHandleId(this.caster))
             call DestroyEffect(this.sfx)
             call this.inv.destroy()
             set this.sfx = null
@@ -79,19 +84,27 @@ scope HellishCloud
                 call this.remove()
             endif
         implement CTLEnd
-        
+
         private static method onCast takes nothing returns nothing
-            local thistype this = thistype.create()
-            set this.caster = GetTriggerUnit()
-            set this.inv = Invisible.create(this.caster, 0)
-            set this.sfx = AddSpecialEffectTarget(SFX_BUFF, this.caster, "origin")
-            call GroupAddUnit(thistype.g, this.caster)
+            local integer id = GetHandleId(GetTriggerUnit())
+            local thistype this
+            if thistype.tb.has(id) then
+				set this = thistype.tb[id]
+			else
+                set this = thistype.create()
+                set this.caster = GetTriggerUnit()
+                set this.inv = Invisible.create(this.caster, 0)
+                set this.sfx = AddSpecialEffectTarget(SFX_BUFF, this.caster, "origin")
+                set thistype.tb[id] = this
+            endif
+			set this.lvl = GetUnitAbilityLevel(this.caster, SPELL_ID)
             call SystemMsg.create(GetUnitName(GetTriggerUnit()) + " cast thistype")
         endmethod
 
         static method init takes nothing returns nothing
             call SystemTest.start("Initializing thistype: ")
             set thistype.trg = CreateTrigger()
+            set thistype.tb = Table.create()
             set thistype.g = CreateGroup()
             call Damage.registerTrigger(thistype.trg)
             call TriggerAddCondition(thistype.trg, function thistype.onDamage)

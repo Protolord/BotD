@@ -2,7 +2,6 @@ scope EnragedKiller
     
     globals
         private constant integer SPELL_ID = 'A223'
-        private constant integer SPELL_BUFF = 'D223'
         private constant attacktype ATTACK_TYPE = ATTACK_TYPE_NORMAL
         private constant damagetype DAMAGE_TYPE = DAMAGE_TYPE_UNIVERSAL
         private constant string BUFF_SFX = "Models\\Effects\\EnragedKiller.mdx"
@@ -27,18 +26,10 @@ scope EnragedKiller
         
         private effect sfx
         public real dmg
-        
-        method rawcode takes nothing returns integer
-            return SPELL_BUFF
-        endmethod
-        
-        method dispelType takes nothing returns integer
-            return BUFF_NEGATIVE
-        endmethod
-        
-        method stackType takes nothing returns integer
-            return BUFF_STACK_PARTIAL
-        endmethod
+
+        private static constant integer RAWCODE = 'D223'
+        private static constant integer DISPEL_TYPE = BUFF_NEGATIVE
+        private static constant integer STACK_TYPE = BUFF_STACK_PARTIAL
         
         method onRemove takes nothing returns nothing
             call DestroyEffect(this.sfx)
@@ -48,6 +39,10 @@ scope EnragedKiller
         method onApply takes nothing returns nothing
             set this.dmg = 0
             set this.sfx = AddSpecialEffectTarget(BUFF_SFX, this.target, "overhead")
+        endmethod
+
+        private static method init takes nothing returns nothing
+            call PreloadSpell(thistype.RAWCODE)
         endmethod
         
         implement BuffApply
@@ -82,7 +77,7 @@ scope EnragedKiller
             set thistype.trg = CreateTrigger()
             call Damage.registerTrigger(thistype.trg)
             call TriggerAddCondition(thistype.trg, function thistype.onDamage)
-            call PreloadSpell(SPELL_BUFF)
+            call SpellBuff.initialize()
             call SystemTest.end()
         endmethod
         

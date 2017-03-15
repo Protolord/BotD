@@ -3,7 +3,6 @@ scope ImmortalForce
     globals
         private constant integer SPELL_ID = 'A111'
         private constant string MODEL = "Models\\Effects\\ImmortalForce.mdx"
-        private constant string SFX_HIT = "Abilities\\Spells\\Undead\\DeathandDecay\\DeathandDecayTarget.mdl"
         private constant attacktype ATTACK_TYPE = ATTACK_TYPE_NORMAL
         private constant damagetype DAMAGE_TYPE = DAMAGE_TYPE_MAGIC
     endglobals
@@ -41,7 +40,6 @@ scope ImmortalForce
         private static method onHit takes nothing returns nothing
             local thistype this = Missile.getHit()
             if not SpellBlock.has(this.target) and TargetFilter(this.target, this.owner) then
-                call DestroyEffect(AddSpecialEffectTarget(SFX_HIT, this.target, "origin"))
                 call Stun.create(this.target, Duration(this.lvl), false)
             endif
             call this.destroy()

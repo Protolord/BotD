@@ -18,32 +18,40 @@ scope Prowl
     private function BonusSpeed takes integer level returns real
         return -0.2
     endfunction
+
+    private function TargetFilter takes unit u, player p returns boolean
+        return UnitAlive(u) and IsUnitEnemy(u, p)
+    endfunction
     
     struct Prowl extends array
         
         private unit caster
+		private integer lvl
         private Movespeed ms
         private Invisible inv
         
-        private static group g
+        private static Table tb
         private static trigger trg
         
         private method remove takes nothing returns nothing
             call this.inv.destroy()
-            call GroupRemoveUnit(thistype.g, this.caster)
+            call thistype.tb.remove(GetHandleId(this.caster))
             call this.ms.destroy()
             set this.caster = null
             call this.destroy()
         endmethod
         
         private static method onDamage takes nothing returns boolean
+			local integer id = GetHandleId(Damage.source)
             local real dmg
-            if Damage.type == DAMAGE_TYPE_PHYSICAL and not Damage.element.coded and IsUnitInGroup(Damage.source, thistype.g) then
-                set dmg = DamageDealt(GetUnitAbilityLevel(Damage.source, SPELL_ID))
-                call DisableTrigger(thistype.trg)
-                call Damage.apply(Damage.source, Damage.target, dmg, ATTACK_TYPE, DAMAGE_TYPE)
-                call EnableTrigger(thistype.trg)
-                call FloatingTextSplat(Element.string(DAMAGE_ELEMENT_NORMAL) + "+" + I2S(R2I(dmg + 0.5)) + "|r", Damage.target, 1.0).setVisible(GetLocalPlayer() == GetOwningPlayer(Damage.source))
+            if Damage.type == DAMAGE_TYPE_PHYSICAL and not Damage.element.coded and thistype.tb.has(id) then
+                if TargetFilter(Damage.target, GetOwningPlayer(Damage.source)) then
+                    set dmg = DamageDealt(thistype(thistype.tb[id]).lvl)
+                    call DisableTrigger(thistype.trg)
+                    call Damage.apply(Damage.source, Damage.target, dmg, ATTACK_TYPE, DAMAGE_TYPE)
+                    call EnableTrigger(thistype.trg)
+                    call FloatingTextSplat(Element.string(DAMAGE_ELEMENT_NORMAL) + "+" + I2S(R2I(dmg + 0.5)) + "|r", Damage.target, 1.0).setVisible(GetLocalPlayer() == GetOwningPlayer(Damage.source))
+                endif
                 call UnitRemoveAbility(Damage.source, PROWL_BUFF)
             endif
             return false
@@ -57,18 +65,25 @@ scope Prowl
     
         
         private static method onCast takes nothing returns nothing
-            local thistype this = thistype.create()
-            set this.caster = GetTriggerUnit()
-            set this.inv = Invisible.create(this.caster, 0)
-            set this.ms = Movespeed.create(this.caster, BonusSpeed(GetUnitAbilityLevel(this.caster, SPELL_ID)), 0)
-            call GroupAddUnit(thistype.g, this.caster)
+			local integer id = GetHandleId(GetTriggerUnit())
+            local thistype this
+            if thistype.tb.has(id) then
+				set this = thistype.tb[id]
+			else
+                set this = thistype.create()
+                set this.caster = GetTriggerUnit()
+                set this.inv = Invisible.create(this.caster, 0)
+                set thistype.tb[id] = this
+            endif
+			set this.lvl = GetUnitAbilityLevel(this.caster, SPELL_ID)
+			set this.ms = Movespeed.create(this.caster, BonusSpeed(this.lvl), 0)
             call SystemMsg.create(GetUnitName(GetTriggerUnit()) + " cast thistype")
         endmethod
         
         
         static method init takes nothing returns nothing
             call SystemTest.start("Initializing thistype: ")
-            set thistype.g = CreateGroup()
+            set thistype.tb = Table.create()
             set thistype.trg = CreateTrigger()
             call Damage.registerTrigger(thistype.trg)
             call TriggerAddCondition(thistype.trg, function thistype.onDamage)

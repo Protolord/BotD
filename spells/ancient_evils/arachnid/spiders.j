@@ -41,8 +41,6 @@ scope Spiders
         
         private static thistype global
         
-        implement List
-        
         private method destroy takes nothing returns nothing
             call this.pop()
             call ReleaseGroup(this.g)
@@ -74,6 +72,8 @@ scope Spiders
                 set this = this.next
             endloop
         endmethod
+
+        implement List
         
         private static method onCast takes nothing returns nothing
             local thistype this = thistype.allocate()

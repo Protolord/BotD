@@ -3,15 +3,15 @@ To do list:
 
 
 SHORT TERM:        
-	
-	- Wind walk based abilities onDamage doesn't properly retrieve level at cast
+
 	- SystemMsg create admin parameter.
 	- Create Projectile System for arcing missiles.
 	- Arachnid, Gargoyle Animation timing.
-	- Instead of Linked list, use stack on Rabid and other permanent passive triggered abilities
+	- Heartbeat not working
+	- Add Radius SFX to Soul Rip
+	- DamageStat.get has a +-1 tolerance value.
 
 	VISUALS:
-		- Burrow Animation and SFX (requested to a modeler)
 		- Make Arachnid match animation timing
 		- BTN_BurrowOff and BTN_UnderworldFiresOff not matching
 		- Create EvilAlternation Off Icon
@@ -20,6 +20,7 @@ SHORT TERM:
 	
 	- Allow units with Rabies exceed 522 movespeed.
 	- Damage Event doesn't properly classify unit's with magic attack as magic damage.
+	- Make percent damage automatically adapt to heroes changing levels or gaining/losing primary attributes
 	
 LONG TERM:
 	

@@ -13,7 +13,6 @@ library ForcedOrder uses TimerUtilsEx
     
     struct ForcedOrder extends array
         implement Alloc
-        implement List
         
         private unit u
         private integer orderId
@@ -53,6 +52,8 @@ library ForcedOrder uses TimerUtilsEx
                 set this = this.next
             endloop
         endmethod
+
+        implement List
         
         static method change takes unit u, integer order, real x, real y returns nothing
             local thistype this = thistype.tb[GetHandleId(u)]

@@ -2,7 +2,6 @@ scope StoneGaze
 
     globals
         private constant integer SPELL_ID = 'A613'
-        private constant integer BUFF_ID = 'D613'
         private constant string MODEL = "Models\\Effects\\StoneGazeMissile.mdx"
         private constant string SFX = "Models\\Effects\\StoneGazeEffect.mdx"
         private constant attacktype ATTACK_TYPE = ATTACK_TYPE_NORMAL
@@ -42,18 +41,10 @@ scope StoneGaze
         private Stun s
         private effect sfx
         private VertexColor color 
-        
-        method rawcode takes nothing returns integer
-            return BUFF_ID
-        endmethod
-        
-        method dispelType takes nothing returns integer
-            return BUFF_NEGATIVE
-        endmethod
-        
-        method stackType takes nothing returns integer
-            return BUFF_STACK_PARTIAL
-        endmethod
+
+        private static constant integer RAWCODE = 'D613'
+        private static constant integer DISPEL_TYPE = BUFF_NEGATIVE
+        private static constant integer STACK_TYPE = BUFF_STACK_PARTIAL
         
         method onRemove takes nothing returns nothing
             call this.a.destroy()
@@ -76,6 +67,10 @@ scope StoneGaze
             call SetUnitTimeScale(this.target, 0)
         endmethod
         
+        private static method init takes nothing returns nothing
+            call PreloadSpell(thistype.RAWCODE)
+        endmethod
+
         implement BuffApply
     endstruct
     
@@ -127,6 +122,7 @@ scope StoneGaze
         static method init takes nothing returns nothing
             call SystemTest.start("Initializing thistype: ")
             call RegisterSpellEffectEvent(SPELL_ID, function thistype.onCast)
+            call SpellBuff.initialize()
             call SystemTest.end()
         endmethod
         

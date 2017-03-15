@@ -100,7 +100,6 @@ scope GhostlyBeam
     
     struct GhostlyBeam extends array
         implement Alloc
-        implement List
         
         private integer id
         private unit dummy
@@ -141,6 +140,8 @@ scope GhostlyBeam
                 set this = this.next
             endloop
         endmethod
+
+        implement List
         
         private static method onStop takes nothing returns nothing
             call thistype(thistype.tb[GetHandleId(GetTriggerUnit())]).destroy()

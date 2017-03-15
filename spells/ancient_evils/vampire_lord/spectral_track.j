@@ -2,7 +2,6 @@ scope SpectralTrack
     
     globals
         private constant integer SPELL_ID = 'A133'
-        private constant integer SPELL_BUFF = 'B133'
         private constant string MODEL = "Models\\Effects\\SpectralTrack.mdx"
     endglobals
     
@@ -26,18 +25,10 @@ scope SpectralTrack
         private effect sfx
         readonly TrueSight ts
         readonly FlySight sight
-        
-        method rawcode takes nothing returns integer
-            return SPELL_BUFF
-        endmethod
-        
-        method dispelType takes nothing returns integer
-            return BUFF_POSITIVE
-        endmethod
-        
-        method stackType takes nothing returns integer
-            return BUFF_STACK_NONE
-        endmethod
+
+        private static constant integer RAWCODE = 'B133'
+        private static constant integer DISPEL_TYPE = BUFF_POSITIVE
+        private static constant integer STACK_TYPE = BUFF_STACK_NONE
         
         method onRemove takes nothing returns nothing
             call this.ts.destroy()
@@ -51,6 +42,10 @@ scope SpectralTrack
             set this.sfx = AddSpecialEffectTarget(MODEL, this.target, "origin")
             set this.sight = FlySight.create(this.target, 0)
             set this.ts = TrueSight.create(this.target, 0)
+        endmethod
+
+        private static method init takes nothing returns nothing
+            call PreloadSpell(thistype.RAWCODE)
         endmethod
         
         implement BuffApply
@@ -73,7 +68,7 @@ scope SpectralTrack
         static method init takes nothing returns nothing
             call SystemTest.start("Initializing thistype: ")
             call RegisterSpellEffectEvent(SPELL_ID, function thistype.onCast)
-            call PreloadSpell(SPELL_BUFF)
+            call SpellBuff.initialize()
             call SystemTest.end()
         endmethod
         

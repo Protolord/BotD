@@ -20,12 +20,8 @@ scope Rabid
         private real rate
         
         private static Table tb
-        private static timer t
         
-        private thistype next
-        private thistype prev
-        
-        private static method pickAll takes nothing returns nothing
+        private static method onPeriod takes nothing returns nothing
             local thistype this = thistype(0).next
             loop
                 exitwhen this == 0
@@ -35,6 +31,8 @@ scope Rabid
                 set this = this.next
             endloop
         endmethod
+
+        implement Stack
         
         private static method ultimates takes nothing returns boolean
             local unit u = GetTriggerUnit()
@@ -42,7 +40,7 @@ scope Rabid
             local thistype this
             if thistype.tb.has(id) then
                 set this = thistype.tb[id]
-                set this.rate = Regen(11)
+                set this.rate = Regen(11)*TIMEOUT/100
             endif
             set u = null
             return false
@@ -59,13 +57,7 @@ scope Rabid
                     set this = thistype.allocate()
                     set this.u = u
                     set thistype.tb[id] = this
-                    set this.prev = thistype(0).prev
-                    set this.next = thistype(0)
-                    set this.prev.next = this
-                    set this.next.prev = this
-                    if thistype(0).next == this then
-                        call TimerStart(thistype.t, TIMEOUT, true, function thistype.pickAll)
-                    endif
+                    call this.push(TIMEOUT)
                     call UnitAddAbility(u, RABID_BUFF)
                     call UnitMakeAbilityPermanent(u, true, RABID_BUFF)
                 else
@@ -81,7 +73,6 @@ scope Rabid
             call RegisterPlayerUnitEvent(EVENT_PLAYER_HERO_SKILL, function thistype.learn)
             call PlayerStat.ultimateEvent(function thistype.ultimates)
             set thistype.tb = Table.create
-            set thistype.t = CreateTimer()
             call SystemTest.end()
         endmethod
         

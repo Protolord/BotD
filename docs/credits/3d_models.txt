@@ -16,7 +16,7 @@
 		Storm Shaman                by Pins
         
 	ABILITIES:
-		Immortal Force Effect		by nGy
+		Immortal Force Effect		by sPy
 		Corrupting Stomp Effect     by JetFangInferno
 		Soul Corruption Effect      by Glen Elendra
 		Shadows Of Corruption       by The_Swamp_Warrior
@@ -77,6 +77,13 @@
 		Stone Vision Target         by CeDiL
 		Stony Path					by EdwardSwolenToe
 		Evil Alternation			by JesusHipster
+
+		Soul Break					by nGy
+		Soul Rip Missile			by nGy
+		Reaper Buff					by JesusHipster
+		Unholy Aura					by Devine
+		Bone Arrow					by Deolrin
+		Lone Soul					by PeeKay
 	
 	OTHERS:
 		Generic CastBar             by HappyTauren

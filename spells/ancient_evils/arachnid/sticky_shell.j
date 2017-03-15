@@ -2,7 +2,6 @@ scope StickyShell
     
     globals
         private constant integer SPELL_ID = 'A423'
-        private constant integer SPELL_BUFF = 'D423'
         private constant string SFX = "Models\\Effects\\StickyShellBuff.mdx"
         private constant real TIMEOUT = 1.0
         private constant attacktype ATTACK_TYPE = ATTACK_TYPE_NORMAL
@@ -35,18 +34,9 @@ scope StickyShell
         private effect sfx
         public real dmg
         
-            
-        method rawcode takes nothing returns integer
-            return SPELL_BUFF
-        endmethod
-        
-        method dispelType takes nothing returns integer
-            return BUFF_NEGATIVE
-        endmethod
-        
-        method stackType takes nothing returns integer
-            return BUFF_STACK_PARTIAL
-        endmethod
+        private static constant integer RAWCODE = 'D423'
+        private static constant integer DISPEL_TYPE = BUFF_NEGATIVE
+        private static constant integer STACK_TYPE = BUFF_STACK_PARTIAL
         
         method onRemove takes nothing returns nothing
             call ReleaseTimer(this.t)
@@ -71,6 +61,10 @@ scope StickyShell
             set this.as = Atkspeed.create(this.target, 0)
             call TimerStart(this.t, TIMEOUT, true, function thistype.onPeriod)
         endmethod
+
+        private static method init takes nothing returns nothing
+            call PreloadSpell(thistype.RAWCODE)
+        endmethod
         
         implement BuffApply
     endstruct
@@ -92,7 +86,7 @@ scope StickyShell
         static method init takes nothing returns nothing
             call SystemTest.start("Initializing thistype: ")
             call Damage.register(function thistype.onDamage)
-            call PreloadSpell(SPELL_BUFF)
+            call SpellBuff.initialize()
             call SystemTest.end()
         endmethod
         

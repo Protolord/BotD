@@ -2,9 +2,9 @@ scope EnvenomedFangs
 
     globals
         private constant integer SPELL_ID = 'A211'
-        private constant integer BUFF_ID = 'D211'
         private constant attacktype ATTACK_TYPE = ATTACK_TYPE_NORMAL
         private constant damagetype DAMAGE_TYPE = DAMAGE_TYPE_MAGIC
+		private constant string BUFF_SFX = "Abilities\\Spells\\Undead\\Curse\\CurseTarget.mdl"
     endglobals
 
     private function Duration takes integer level returns real
@@ -27,24 +27,19 @@ scope EnvenomedFangs
     
     private struct SpellBuff extends Buff
      
+		private effect sfx
         private timer t
         public real dmg
         
-        method rawcode takes nothing returns integer
-            return BUFF_ID
-        endmethod
-        
-        method dispelType takes nothing returns integer
-            return BUFF_NEGATIVE
-        endmethod
-        
-        method stackType takes nothing returns integer
-            return BUFF_STACK_PARTIAL
-        endmethod
+        private static constant integer RAWCODE = 'D211'
+        private static constant integer DISPEL_TYPE = BUFF_NEGATIVE
+        private static constant integer STACK_TYPE = BUFF_STACK_PARTIAL
         
         method onRemove takes nothing returns nothing
+			call DestroyEffect(this.sfx)
             call ReleaseTimer(this.t)
             set this.t = null
+			set this.sfx = null
         endmethod
         
         static method onPeriod takes nothing returns nothing
@@ -56,7 +51,12 @@ scope EnvenomedFangs
         
         method onApply takes nothing returns nothing
             set this.t = NewTimerEx(this)
+			set this.sfx = AddSpecialEffectTarget(BUFF_SFX, this.target, "chest")
             call TimerStart(this.t, 1.00, true, function thistype.onPeriod)
+        endmethod
+
+        private static method init takes nothing returns nothing
+            call PreloadSpell(thistype.RAWCODE)
         endmethod
         
         implement BuffApply
@@ -78,7 +78,7 @@ scope EnvenomedFangs
         static method init takes nothing returns nothing
             call SystemTest.start("Initializing thistype: ")
             call Damage.register(function thistype.onDamage)
-            call PreloadSpell(BUFF_ID)
+            call SpellBuff.initialize()
             call SystemTest.end()
         endmethod
         

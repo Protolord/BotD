@@ -55,7 +55,7 @@ library PlayerStat uses RegisterPlayerUnitEvent, SystemConsole, HeroPool
             set fm = CreateFogModifierRect(this.player, FOG_OF_WAR_FOGGED, WorldBounds.world, false, false)
             call FogModifierStart(fm)
             call DestroyFogModifier(fm)
-            debug call SetHeroLevel(this.unit, 40, true)
+            call SetHeroLevel(this.unit, 40, true)
         endmethod
         
         private static method addUltimates takes nothing returns boolean

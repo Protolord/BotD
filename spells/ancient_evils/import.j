@@ -138,6 +138,46 @@
 //==============================================================================
 //                             Skeleton King
 //==============================================================================
+//! import "../spells/ancient_evils/skeleton_king/bones.j"
+//------------------------------------------------------------------------------
+//! import "../spells/ancient_evils/skeleton_king/soul_break.j"
+//! import "../spells/ancient_evils/skeleton_king/reaper.j"
+//! import "../spells/ancient_evils/skeleton_king/soul_rip.j"
+//! import "../spells/ancient_evils/skeleton_king/unholy_aura.j"
+//------------------------------------------------------------------------------
+//! import "../spells/ancient_evils/skeleton_king/ghost_form.j"
+//! import "../spells/ancient_evils/skeleton_king/other_side.j"
+//! import "../spells/ancient_evils/skeleton_king/death_pact.j"
+//! import "../spells/ancient_evils/skeleton_king/fear.j"
+//------------------------------------------------------------------------------
+//! import "../spells/ancient_evils/skeleton_king/heartbeat.j"
+//! import "../spells/ancient_evils/skeleton_king/soul_mark.j"
+//! import "../spells/ancient_evils/skeleton_king/lone_soul.j"
+//------------------------------------------------------------------------------
+//! import "../spells/ancient_evils/skeleton_king/regency.j"
+//! import "../spells/ancient_evils/skeleton_king/unholy_energy.j"
+//! import "../spells/ancient_evils/skeleton_king/grim_deal.j"
+//! import "../spells/ancient_evils/skeleton_king/soul_feast.j"
 //==============================================================================
 //                              Cave Troll
 //==============================================================================
+//! import "../spells/ancient_evils/cave_troll/cleave.j"
+//------------------------------------------------------------------------------
+// import "../spells/ancient_evils/cave_troll/heavy_swing.j"
+//! import "../spells/ancient_evils/cave_troll/three_sixty.j"
+//! import "../spells/ancient_evils/cave_troll/studded_club.j"
+//! import "../spells/ancient_evils/cave_troll/second_hit.j"
+//------------------------------------------------------------------------------
+//! import "../spells/ancient_evils/cave_troll/testudo.j"
+//! import "../spells/ancient_evils/cave_troll/strong_back.j"
+//! import "../spells/ancient_evils/cave_troll/inner_resistance.j"
+//! import "../spells/ancient_evils/cave_troll/bloodlust.j"
+//------------------------------------------------------------------------------
+//! import "../spells/ancient_evils/cave_troll/smell.j"
+// import "../spells/ancient_evils/cave_troll/eye_ray.j"
+// import "../spells/ancient_evils/cave_troll/cauldron.j"
+//------------------------------------------------------------------------------
+// import "../spells/ancient_evils/cave_troll/totem.j"
+//! import "../spells/ancient_evils/cave_troll/devour.j"
+//! import "../spells/ancient_evils/cave_troll/rage.j"
+//! import "../spells/ancient_evils/cave_troll/aura_of_strength.j"

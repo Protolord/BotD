@@ -2,7 +2,6 @@ scope VigilantAndTheVirtuous
 
     globals
         private constant integer SPELL_ID = 'A5XX'
-        private constant integer BUFF_ID = 'D5XX'
         private constant string SFX = "Models\\Effects\\VigilantAndTheVirtuous.mdx"
         private constant integer DURATION = 30
         private constant real DAMAGE_FACTOR = 3.0
@@ -19,18 +18,10 @@ scope VigilantAndTheVirtuous
      
         private timer t
         private effect sfx
-        
-        method rawcode takes nothing returns integer
-            return BUFF_ID
-        endmethod
-        
-        method dispelType takes nothing returns integer
-            return BUFF_NEGATIVE
-        endmethod
-        
-        method stackType takes nothing returns integer
-            return BUFF_STACK_PARTIAL
-        endmethod
+
+        private static constant integer RAWCODE = 'D5XX'
+        private static constant integer DISPEL_TYPE = BUFF_NEGATIVE
+        private static constant integer STACK_TYPE = BUFF_STACK_PARTIAL
         
         method onRemove takes nothing returns nothing
             call ReleaseTimer(this.t)
@@ -59,6 +50,10 @@ scope VigilantAndTheVirtuous
             set this.t = NewTimerEx(this)
             set this.sfx = AddSpecialEffectTarget(SFX, this.target, "overhead")
             call TimerStart(this.t, 1.00, true, function thistype.onPeriod)
+        endmethod
+
+        private static method init takes nothing returns nothing
+            call PreloadSpell(thistype.RAWCODE)
         endmethod
         
         implement BuffApply
@@ -95,7 +90,7 @@ scope VigilantAndTheVirtuous
             call TriggerAddCondition(thistype.preventDying, function thistype.onPrevent)
             call Damage.register(function thistype.onDamage)
             call Damage.registerTrigger(thistype.preventDying)
-            call PreloadSpell(BUFF_ID)
+            call SpellBuff.initialize()
             call SystemTest.end()
         endmethod
         

@@ -66,10 +66,10 @@ scope RockToss
             if x < WorldBounds.maxX and x > WorldBounds.minX and y < WorldBounds.maxY and y > WorldBounds.minY then
                 set this = thistype.allocate()
                 set this.u = GetRecycledDummyAnyAngle(x, y, 0)
+                call UnitSetBonus(this.u, BONUS_SIGHT_RANGE, 150)
                 set this.sfx = AddSpecialEffectTarget(SFX_ROCK, this.u, "origin")
                 call SetUnitOwner(this.u, owner, false)
                 call SetUnitScale(this.u, 0.5, 0, 0)
-                call UnitSetBonus(this.u, BONUS_SIGHT_RANGE, 100)
                 set this.next = head
                 set this.prev = head.prev
                 set this.prev.next = this

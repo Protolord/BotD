@@ -9,7 +9,6 @@ scope ShapeShift
     endglobals
 
     struct Shapeshift extends array
-        implement Alloc
         
         private effect sfx
         private effect sfx2
