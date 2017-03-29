@@ -133,6 +133,7 @@ scope HellfireBlast
         static method init takes nothing returns nothing
             call SystemTest.start("Initializing thistype: ")
             call RegisterSpellEffectEvent(SPELL_ID, function thistype.onCast)
+            call SpellBuff.initialize()
             call SystemTest.end()
         endmethod
         

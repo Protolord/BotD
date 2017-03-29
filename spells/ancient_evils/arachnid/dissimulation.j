@@ -34,7 +34,7 @@ scope Dissimulation
         
         private static method onDamage takes nothing returns nothing
             local integer id = GetHandleId(Damage.source)
-            if Damage.type == DAMAGE_TYPE_PHYSICAL and not Damage.element.coded and thistype.tb.has(id) then
+            if Damage.type == DAMAGE_TYPE_PHYSICAL and not Damage.coded and thistype.tb.has(id) then
                 if TargetFilter(Damage.target, GetOwningPlayer(Damage.source)) then
                     call Silence.create(Damage.target, SilenceDuration(thistype(thistype.tb[id]).lvl), SILENCE_STACK)
                 endif

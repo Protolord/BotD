@@ -3,9 +3,8 @@ scope LoneSoul
     globals
         private constant integer SPELL_ID = 'A733'
         private constant string SOUL_MODEL = "Models\\Units\\LoneSoul.mdx"
-        private constant string SFX = "Models\\Effects\\ViciousExplorersEffect.mdx"
+        private constant string SFX = "Abilities\\Spells\\Demon\\DemonBoltImpact\\DemonBoltImpact.mdl"
         private constant real SOUL_FLY_HEIGHT = 300
-        private constant real MOVE_SPEED = 300.0
         private constant real TIMEOUT = 2.0
     endglobals
     
@@ -13,8 +12,10 @@ scope LoneSoul
         return 1
     endfunction
     
+    //When too fast, there will be times when the unit is temporarily fog
+    //if the radius is too small
     private function Speed takes integer level returns real
-        return 300.0
+        return 200.0 + 0.0*level
     endfunction
     
     private function Radius takes integer level returns real
@@ -53,20 +54,20 @@ scope LoneSoul
             local unit soul
             local real x2
             local real y2
-            call DestroyEffect(AddSpecialEffect(SFX, x, y))
             loop
                 exitwhen i == 0
                 set x2 = GetRandomReal(WorldBounds.playMinX, WorldBounds.playMaxX)
                 set y2 = GetRandomReal(WorldBounds.playMinY, WorldBounds.playMaxY)
                 set soul = CreateUnit(p, 'dumi', x, y, Atan2(y2 - y, x2 - x)*bj_RADTODEG)
-                call SetUnitMoveSpeed(soul, MOVE_SPEED)
+                call SetUnitScale(soul, 1.0 + 0.1*level, 0, 0)
+                call SetUnitMoveSpeed(soul, Speed(level))
                 call IssuePointOrderById(soul, ORDER_move, x2, y2)
                 call GroupAddUnit(thistype.g, soul)
-                call SetUnitFlyHeight(soul, SOUL_FLY_HEIGHT, 300)
+                call SetUnitFlyHeight(soul, SOUL_FLY_HEIGHT, 100)
+                call AddSpecialEffectTarget(SFX, soul, "origin")
                 call AddSpecialEffectTarget(SOUL_MODEL, soul, "origin")
-                call SetUnitScale(soul, 0.40 + 0.05*level, 0, 0)
                 call TrueSight.create(soul, radius)
-                call UnitSetBonus(soul, BONUS_SIGHT_RANGE, R2I(radius))
+                call FlySight.create(soul, radius)
                 if thistype.t == null then
                     set thistype.t = CreateTimer()
                     call TimerStart(thistype.t, TIMEOUT, true, function thistype.onPeriod)

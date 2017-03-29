@@ -24,7 +24,7 @@ scope Regency
         return IsUnitEnemy(u, p)
     endfunction
 
-    private struct SpellBuff extends Buff
+    struct RegencyBuff extends Buff
         
         private effect sfx
         private real hp
@@ -34,7 +34,6 @@ scope Regency
         private textsplat ts
 
         private static Table tb
-        
 
         private static constant integer RAWCODE = 'B741'
         private static constant integer DISPEL_TYPE = BUFF_POSITIVE
@@ -42,7 +41,7 @@ scope Regency
         
         method onRemove takes nothing returns nothing
             call this.pop()
-            call thistype.tb.remove(GetHandleId(this.dmgTrg))
+            call thistype.tb.remove(GetHandleId(this.target))
             call thistype.tb.remove(GetHandleId(this.trg))
             call this.ts.destroy()
             call DestroyTrigger(this.dmgTrg)
@@ -68,7 +67,7 @@ scope Regency
         endmethod
 
         private static method expires takes nothing returns nothing
-            local SpellBuff this = ReleaseTimer(GetExpiredTimer())
+            local thistype this = ReleaseTimer(GetExpiredTimer())
             set this.charges = this.charges - 1
         endmethod
 
@@ -82,12 +81,12 @@ scope Regency
         endmethod
 
         private static method onDamage takes nothing returns boolean
-            local thistype this = thistype.tb[GetHandleId(GetTriggeringTrigger())]
+            local thistype this = thistype.tb[GetHandleId(Damage.target)]
             local integer level = GetUnitAbilityLevel(this.target, SPELL_ID)
             local real dur
-            if TargetFilter(Damage.source, GetOwningPlayer(this.target)) then
+            if level > 0 and this > 0 and TargetFilter(Damage.source, GetOwningPlayer(this.target)) then
                 set dur = Duration(level)
-                set this.duration = this.duration
+                set this.duration = dur
                 if this.charges < MaxCharges(level) then
                     set this.charges = this.charges + 1
                     call TimerStart(NewTimerEx(this), dur, false, function thistype.expires)
@@ -103,29 +102,41 @@ scope Regency
             local thistype this = thistype(0).next
             loop
                 exitwhen this == 0
-                call this.ts.setPosition(GetUnitX(this.target), GetUnitY(this.target), GetUnitFlyHeight(this.target) + 180)
+                if Buff.has(null, this.target, BonesBuff.typeid) then
+                    call this.ts.setPosition(GetUnitX(this.target) + 30, GetUnitY(this.target), GetUnitFlyHeight(this.target) + 180)
+                else
+                    call this.ts.setPosition(GetUnitX(this.target), GetUnitY(this.target), GetUnitFlyHeight(this.target) + 180)
+                endif
                 call this.ts.setText("|iREGENCY|i" + I2S(this.charges), 7.0, TEXTSPLAT_TEXT_ALIGN_CENTER)
                 set this = this.next
             endloop
         endmethod
 
         implement List
+
+        private static method delayedRegister takes nothing returns nothing
+            local thistype this = ReleaseTimer(GetExpiredTimer())
+            call Damage.registerTrigger(this.dmgTrg)
+            call TriggerAddCondition(this.dmgTrg, function thistype.onDamage)
+            set thistype.tb[GetHandleId(this.target)] = this
+        endmethod
         
         method onApply takes nothing returns nothing
+            local integer level = GetUnitAbilityLevel(this.target, SPELL_ID)
             set this.charges = 1
             set this.sfx = AddSpecialEffectTarget(BUFF_SFX, this.target, "origin")
             set this.hp = RMinBJ(I2R(R2I(GetWidgetLife(this.target))) + 0.5, GetUnitState(this.target, UNIT_STATE_MAX_LIFE))
             set this.dmgTrg = CreateTrigger()
             set this.trg = CreateTrigger()
             set this.ts = textsplat.create(TREBUCHET_MS)
-            call Damage.registerTrigger(this.dmgTrg)
-            call TriggerAddCondition(this.dmgTrg, function thistype.onDamage)
+            call this.ts.setVisible(GetLocalPlayer() == GetOwningPlayer(this.target))
             call TriggerRegisterUnitStateEvent(this.trg, this.target, UNIT_STATE_LIFE, GREATER_THAN, this.hp + 0.25)
             call TriggerAddCondition(this.trg, function thistype.onChange)
             call SetWidgetLife(this.target, this.hp)
-            set thistype.tb[GetHandleId(this.dmgTrg)] = this
             set thistype.tb[GetHandleId(this.trg)] = this
             call this.push(TIMEOUT)
+            call TimerStart(NewTimerEx(this), 0.0, false, function thistype.delayedRegister)
+            call TimerStart(NewTimerEx(this), Duration(level), false, function thistype.expires)
         endmethod
 
         private static method init takes nothing returns nothing
@@ -140,9 +151,9 @@ scope Regency
 
         private static method onDamage takes nothing returns nothing
             local integer level = GetUnitAbilityLevel(Damage.target, SPELL_ID)
-            local SpellBuff b
+            local RegencyBuff b
             if level > 0 and TargetFilter(Damage.source, GetOwningPlayer(Damage.target)) then
-                set b = SpellBuff.add(Damage.target, Damage.target)
+                set b = RegencyBuff.add(Damage.target, Damage.target)
                 set b.duration = Duration(level)
             endif
         endmethod
@@ -150,7 +161,7 @@ scope Regency
         static method init takes nothing returns nothing
             call SystemTest.start("Initializing thistype: ")
             call Damage.register(function thistype.onDamage)
-            call SpellBuff.initialize()
+            call RegencyBuff.initialize()
             call SystemTest.end()
         endmethod
         

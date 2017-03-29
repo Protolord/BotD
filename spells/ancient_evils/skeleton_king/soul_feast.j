@@ -2,7 +2,7 @@ scope SoulFeast
     
     globals
         private constant integer SPELL_ID = 'A744'
-		private constant string SFX = ""
+		private constant string SFX = "Abilities\\Spells\\Undead\\Darksummoning\\DarkSummonTarget.mdl"
     endglobals
     
     //In percent
@@ -25,7 +25,7 @@ scope SoulFeast
             local integer level = GetUnitAbilityLevel(killer, SPELL_ID)
             if level > 0 and TargetFilter(dying, GetOwningPlayer(killer)) then
                 call Heal.unit(killer, MaxHPHeal(level)*GetUnitState(killer, UNIT_STATE_MAX_LIFE)/100.0, 4.0)
-				call DestroyEffect(AddSpecialEffectTarget(SFX, killer, "chest"))
+				call AddSpecialEffectTimer(AddSpecialEffectTarget(SFX, killer, "origin"), 2.0)
             endif
             set killer = null
             set dying = null

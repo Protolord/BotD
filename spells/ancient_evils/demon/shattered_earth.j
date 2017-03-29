@@ -21,6 +21,9 @@ scope ShatteredEarth
     endfunction
     
     private function Duration takes integer level returns real
+        if level == 11 then
+            return 15.0
+        endif
         return 30 + 0.0*level
     endfunction
 
@@ -122,7 +125,7 @@ scope ShatteredEarth
         static method init takes nothing returns nothing
             call SystemTest.start("Initializing thistype: ")
             call Node.init()
-            call RegisterSpellFinishEvent(SPELL_ID, function thistype.onCast)
+            call RegisterSpellEffectEvent(SPELL_ID, function thistype.onCast)
             call SystemTest.end()
         endmethod
         

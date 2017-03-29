@@ -23,6 +23,7 @@ scope EyeOfDarkness
         
         readonly unit unit
         private effect sfx
+        private fogmodifier fm
         
         readonly thistype next
         readonly thistype prev
@@ -30,6 +31,10 @@ scope EyeOfDarkness
         method destroy takes nothing returns nothing
 			set this.prev.next = this.next
             set this.next.prev = this.prev
+            if this.fm != null then
+                call DestroyFogModifier(this.fm)
+                set this.fm = null
+            endif
             if this.unit != null then
                 call DummyAddRecycleTimer(this.unit, 1.0)
                 call UnitClearBonus(this.unit, BONUS_SIGHT_RANGE)
@@ -43,12 +48,12 @@ scope EyeOfDarkness
             call this.deallocate()
         endmethod
 
-        static method create takes player owner, thistype head, real x, real y, real angle, real scale returns thistype
+        static method create takes player owner, thistype head, real x, real y, real angle, real scale, boolean b returns thistype
             local thistype this
             if x < WorldBounds.maxX and x > WorldBounds.minX and y < WorldBounds.maxY and y > WorldBounds.minY then
                 set this = thistype.allocate()
                 set this.unit = GetRecycledDummy(x, y, 0, angle*bj_RADTODEG)
-                call UnitSetBonus(this.unit, BONUS_SIGHT_RANGE, 150)
+                //call UnitSetBonus(this.unit, BONUS_SIGHT_RANGE, 150)
                 call SetUnitScale(this.unit, scale, 0, 0)
                 set this.sfx = AddSpecialEffectTarget(MODEL, this.unit, "origin")
                 call SetUnitOwner(this.unit, owner, false)
@@ -56,6 +61,10 @@ scope EyeOfDarkness
                 set this.prev = head.prev
                 set this.next.prev = this
                 set this.prev.next = this
+                if b then
+                    set this.fm = CreateFogModifierRadius(owner, FOG_OF_WAR_VISIBLE, x, y, 130, true, false)
+                    call FogModifierStart(this.fm)
+                endif
                 return this
             endif
             return 0
@@ -110,12 +119,12 @@ scope EyeOfDarkness
             set this.head = Eye.head()
             if radius == GLOBAL_SIGHT then
                 set this.fm = CreateFogModifierRect(owner, FOG_OF_WAR_VISIBLE, WorldBounds.world, true, false)
-                set e = Eye.create(owner, this.head, x, y, -0.5*bj_PI, 5.0)
+                set e = Eye.create(owner, this.head, x, y, -0.5*bj_PI, 5.0, false)
                 call SetUnitOwner(e.unit, owner, false)
                 set this.ts = TrueSight.create(e.unit, radius)
             else
                 set this.fm = CreateFogModifierRadius(owner, FOG_OF_WAR_VISIBLE, x, y, RMaxBJ(radius, MIN_SIGHT), true, false)
-                set e = Eye.create(owner, this.head, x, y, -0.5*bj_PI, 1.0 + radius/750)
+                set e = Eye.create(owner, this.head, x, y, -0.5*bj_PI, 1.0 + radius/750, false)
                 call SetUnitOwner(e.unit, owner, false)
                 set this.ts = TrueSight.create(e.unit, radius)
                 if radius > 255 then
@@ -129,7 +138,7 @@ scope EyeOfDarkness
                         set endAngle = da + 2*bj_PI - 0.0001
                         loop
                             exitwhen angle >= endAngle
-                            call Eye.create(owner, this.head, x + radius*Cos(angle), y + radius*Sin(angle), angle - bj_PI, newScale)
+                            call Eye.create(owner, this.head, x + radius*Cos(angle), y + radius*Sin(angle), angle - bj_PI, newScale, radius == Radius(level))
                             set angle = angle + da
                         endloop
                         set radius = radius - 750

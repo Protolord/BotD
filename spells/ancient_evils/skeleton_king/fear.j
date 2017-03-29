@@ -4,8 +4,8 @@ scope Fear
         private constant integer SPELL_ID = 'A724'
         private constant integer BUFF_ID = 'B724'
         private constant real TIMEOUT = 0.125
-		private constant real ANGLE_TOLERANCE = 60.0 //In degrees
-        private constant string BUFF_SFX = ""
+		private constant real ANGLE_TOLERANCE = 30.0 //In degrees
+        private constant string BUFF_SFX = "Models\\Effects\\FearTarget.mdx"
     endglobals
 
     private function Range takes integer level returns real
@@ -40,7 +40,7 @@ scope Fear
         
         method onApply takes nothing returns nothing
             set this.ad = AtkDamage.create(this.target, R2I(-DamageStat.get(this.target)*DamageReduction(GetUnitAbilityLevel(this.source, SPELL_ID))/100))
-            set this.sfx = AddSpecialEffectTarget(BUFF_SFX, this.target, "weapon right")
+            set this.sfx = AddSpecialEffectTarget(BUFF_SFX, this.target, "origin")
         endmethod
 
         private static method init takes nothing returns nothing

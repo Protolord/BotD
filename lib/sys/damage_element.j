@@ -26,7 +26,7 @@ library DamageElement uses DamageEvent, FloatingText
         private static integer element
         private static string array path
         private static trigger trg
-        readonly static boolean coded
+        
         
         static method string takes integer element returns string
             return thistype.path[element]
@@ -42,11 +42,11 @@ library DamageElement uses DamageEvent, FloatingText
         static method apply takes unit source, unit target, real damage, attacktype at, damagetype dt, integer element returns nothing
             set thistype.source = source
             set thistype.element = element
-            set thistype.coded = true
+            set s__Damage_coded = true
             call EnableTrigger(thistype.trg)
             call UnitDamageTarget(source, target, damage, false, false, at, dt, null)
             call DisableTrigger(thistype.trg)
-            set thistype.coded = false
+            set s__Damage_coded = false
             set thistype.source = null
             set thistype.element = 0
         endmethod
@@ -64,7 +64,7 @@ library DamageElement uses DamageEvent, FloatingText
             set thistype.path[DAMAGE_ELEMENT_SPIRIT] = "|iELEMENT_SPIRIT|i|cffe1e1e1"
             set thistype.path[DAMAGE_ELEMENT_WATER] = "|iELEMENT_WATER|i|cff5890f0"
             set thistype.trg = CreateTrigger()
-            set thistype.coded = false
+            set s__Damage_coded = false
             call Damage.registerTrigger(thistype.trg)
             call TriggerAddCondition(thistype.trg, function thistype.onDamage)
             call DisableTrigger(thistype.trg)
@@ -72,10 +72,13 @@ library DamageElement uses DamageEvent, FloatingText
     endstruct
 
     module DamageElement
-        static Element element
+        public static Element element
+        readonly static boolean coded
         
         static method apply takes unit source, unit target, real amount, attacktype at, damagetype dt returns nothing
+            set thistype.coded = true
             call UnitDamageTarget(source, target, amount, true, false, at, dt, null)
+            set thistype.coded = false
         endmethod
 
         static method kill takes unit source, unit target returns nothing

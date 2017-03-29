@@ -17,7 +17,7 @@ scope InnerResistance
         
         private static method onBuff takes nothing returns nothing
             local integer level = GetUnitAbilityLevel(Damage.target, SPELL_ID)    
-            if level > 0 then
+            if level > 0 and BuffEvent.buff.dispelType == BUFF_NEGATIVE then
 				set BuffEvent.buff.duration = BuffEvent.buff.duration*(100 - DurationReduction(level))/100
             endif
         endmethod

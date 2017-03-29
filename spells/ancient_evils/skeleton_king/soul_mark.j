@@ -4,9 +4,9 @@ scope SoulMark
         private constant integer SPELL_ID = 'A732'
         private constant string MODEL = "Models\\Effects\\SoulBreak.mdx"
         private constant string BUFF_SFX = "Abilities\\Spells\\Other\\SoulBurn\\SoulBurnbuff.mdl"
-		private constant real TIMEOUT = 0.05
+		private constant real TIMEOUT = 0.1
 		private constant integer TRUE_SIGHT_ABILITY = 'ATSS'
-		private constant real RADIUS = 200.0
+		private constant real RADIUS = 300.0
     endglobals
     
     private function Duration takes integer level returns real

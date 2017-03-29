@@ -3,7 +3,7 @@ scope StrongBack
     globals
         private constant integer SPELL_ID = 'A822'
 		private constant integer BUFF_ID = 'B822'
-		private constant real ANGLE_TOLERANCE = 60.0 //In degrees
+		private constant real ANGLE_TOLERANCE = 30.0 //In degrees
     endglobals
     
 	//In percent
@@ -23,13 +23,13 @@ scope StrongBack
         private static method onDamage takes nothing returns nothing
             local integer level = GetUnitAbilityLevel(Damage.target, SPELL_ID)    
 			local real angle
-            if level > 0 and Damage.type == DAMAGE_TYPE_PHYSICAL and not Damage.element.coded and TargetFilter(Damage.source, GetOwningPlayer(Damage.target))  then
+            if level > 0 and Damage.type == DAMAGE_TYPE_PHYSICAL and not Damage.coded and TargetFilter(Damage.source, GetOwningPlayer(Damage.target))  then
 				set angle = Atan2(GetUnitY(Damage.target) - GetUnitY(Damage.source), GetUnitX(Damage.target) - GetUnitX(Damage.source))*bj_RADTODEG
 				if angle < 0 then
 					set angle = angle + 360
 				endif
 				if RAbsBJ(GetUnitFacing(Damage.target) - angle) <= ANGLE_TOLERANCE then
-					set Damage.amount = DamageReduction(level)*Damage.amount/100
+					set Damage.amount = (100 - DamageReduction(level))*Damage.amount/100
 				endif
             endif
         endmethod

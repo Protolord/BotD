@@ -15,11 +15,11 @@ scope Rage
 	
 	//In percent
 	private function UnitChance takes integer level returns real
-		return 5.0
+		return 5.0 + 0.0*level
 	endfunction
 	
 	private function StructureChance takes integer level returns real
-		return 1.0
+		return 1.0 + 0.0*level
 	endfunction
     
     private function TargetFilter takes unit u, player p returns boolean
@@ -32,7 +32,7 @@ scope Rage
             local integer level = GetUnitAbilityLevel(Damage.source, SPELL_ID)
 			local boolean proc = false
             local real rand
-            if Damage.type == DAMAGE_TYPE_PHYSICAL and not Damage.element.coded and level > 0 and TargetFilter(Damage.target, GetOwningPlayer(Damage.source)) then
+            if Damage.type == DAMAGE_TYPE_PHYSICAL and not Damage.coded and level > 0 and TargetFilter(Damage.target, GetOwningPlayer(Damage.source)) then
                 set rand = GetRandomReal(0, 100)
 				if IsUnitType(Damage.target, UNIT_TYPE_STRUCTURE) then
 					if rand <= StructureChance(level) then

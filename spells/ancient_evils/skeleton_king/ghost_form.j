@@ -30,7 +30,7 @@ scope GhostForm
         private static method onDamage takes nothing returns nothing
             local integer id = GetHandleId(Damage.source)
 			local real amount
-            if Damage.type == DAMAGE_TYPE_PHYSICAL and not Damage.element.coded and thistype.tb.has(id) then
+            if Damage.type == DAMAGE_TYPE_PHYSICAL and not Damage.coded and thistype.tb.has(id) then
                 if TargetFilter(Damage.target, GetOwningPlayer(Damage.source)) then
                     set amount = LifeSteal(thistype(thistype.tb[id]).lvl)
                     call SetWidgetLife(Damage.target, GetWidgetLife(Damage.target) - amount)

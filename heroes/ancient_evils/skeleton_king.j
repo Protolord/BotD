@@ -23,7 +23,7 @@ module SkeletonKingSpells
     
     set bones = Spell.create('A7XX')
     set bones.passive = true
-    set bones.info = "Bones|n|cfff4a460Target|r: |cff3399ffPassive, Self|n|r|cfff4a460Max Arrows|r: |cff3399ff25|n|r|cfff4a460Arrow Duration|r: |cff3399ff5 minutes|r|n|nArrow projectiles have 10% chance getting stuck on skeletal body to create temporary spiked carapace. Each arrow deals 10 damage to melee attackers."
+    set bones.info = "Bones|n|cfff4a460Target|r: |cff3399ffPassive, Self|n|r|cfff4a460Max Arrows|r: |cff3399ff25|n|r|cfff4a460Arrow Duration|r: |cff3399ff3 minutes|r|n|nArrow projectiles have 10% chance getting stuck on skeletal body to create temporary spiked carapace. Each arrow deals 10 damage to melee attackers."
 
     set soulBreak = Spell.create('A711')
     set soulBreak.info = "Soul Break|n|cfff4a460Target|r: |cff3399ffEnemy Unit|n|r|cfff4a460Range|r: |cff3399ff700|n|r|cfff4a460Damage/second|r: |cff3399ff20|n|r|cfff4a460Stun|r: |cff3399ff0.3 second |n|r|cfff4a460Duration|r: |cff3399ff(1 second x level)|n|r|cfff4a460Cooldown|r: |cff3399ff15 seconds|r|n|nSkeleton King sends a wave of unholy energy that breaks enemy soul dealing periodic damage and stun every second."

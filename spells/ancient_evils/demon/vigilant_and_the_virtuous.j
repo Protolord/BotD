@@ -78,7 +78,7 @@ scope VigilantAndTheVirtuous
         private static method onDamage takes nothing returns nothing
             local integer level
             local SpellBuff b
-            if Damage.type == DAMAGE_TYPE_PHYSICAL and not Damage.element.coded and GetUnitAbilityLevel(Damage.source, SPELL_ID) > 0 and TargetFilter(Damage.target, GetOwningPlayer(Damage.source)) then
+            if Damage.type == DAMAGE_TYPE_PHYSICAL and not Damage.coded and GetUnitAbilityLevel(Damage.source, SPELL_ID) > 0 and TargetFilter(Damage.target, GetOwningPlayer(Damage.source)) then
                 set b = SpellBuff.add(Damage.source, Damage.target)
                 set b.duration = DURATION
             endif

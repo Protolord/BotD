@@ -38,6 +38,7 @@
 		Mist of Darkness Effect     by Vortigon
 		Brain Sap Effects           by nGy
 		Horror Effect               by JetFangInferno
+		Horror Target Effect		by JetFangInferno
 		InnerDive Effect            by Razer!X
 		Spiritual Tunnel Effect     by Azsure, familla
 		Ghostly Beam Light          by JesusHipster
@@ -46,6 +47,7 @@
 		Ancestral Rift Effect       by Kino
 		Inception Heal Effect       by Thrikodius
 		
+		Burrow Animation			by Hayate
 		Dash Effect                 by Razer!X
 		Sticky Shell Slow           by icewolf055
 		Spray Heal           		by icewolf055
@@ -80,10 +82,17 @@
 
 		Soul Break					by nGy
 		Soul Rip Missile			by nGy
-		Reaper Buff					by JesusHipster
-		Unholy Aura					by Devine
+		OtherSide Buff				by JesusHipster
+		Reaper Buff					by JetFangInferno
+		Unholy Aura					by Lichkings slave
+		Fear Aura					by xyzier_24
+		Unholy Energy				by Devine
 		Bone Arrow					by Deolrin
 		Lone Soul					by PeeKay
+		
+		Cleave						by icewolf055
+		StuddedClub					by cotd333
+		Cauldron Model				by Hellish Hybrid
 	
 	OTHERS:
 		Generic CastBar             by HappyTauren

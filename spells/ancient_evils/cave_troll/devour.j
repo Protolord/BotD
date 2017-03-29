@@ -2,7 +2,7 @@ scope Devour
 
     globals
         private constant integer SPELL_ID = 'A842'
-        private constant string BUFF_SFX = "Abilities\\Spells\\Undead\\Curse\\CurseTarget.mdl"
+        private constant string BUFF_SFX = ""
 		private constant real TIMEOUT = 1.0
 		private constant real RANGE = 200.0
     endglobals
@@ -43,7 +43,7 @@ scope Devour
 					set this.ctr = this.ctr + thistype.PERIODIC
 					if this.ctr > TIMEOUT then
 						set this.ctr = 0
-						call Heal.unit(this.source, this.factor*GetUnitState(this.source, UNIT_STATE_MAX_LIFE)*TIMEOUT, 1.0)
+						call Heal.unit(this.source, this.factor*GetUnitState(this.target, UNIT_STATE_MAX_LIFE)*TIMEOUT, 1.0)
 					endif
 				else
 					call IssueImmediateOrderById(this.source, ORDER_stop)
@@ -58,7 +58,7 @@ scope Devour
             set this.sfx = AddSpecialEffectTarget(BUFF_SFX, this.target, "overhead")
 			set this.s = Stun.create(this.target, 0, false)
 			set this.ctr = 0
-			set this.factor = HealPercent(GetUnitAbilityLevel(this.source, SPELL_ID))
+			set this.factor = HealPercent(GetUnitAbilityLevel(this.source, SPELL_ID))/100.0
 			call UnitAddAbility(this.source, BUFF_RAWCODE)
 			call this.push(thistype.PERIODIC)
         endmethod
@@ -72,7 +72,7 @@ scope Devour
     
 
     struct Devour extends array
-		
+
 		private static Table tb
 			
 		private static method onStop takes nothing returns nothing
@@ -81,6 +81,9 @@ scope Devour
                 call SpellBuff(thistype.tb[id]).remove()
             endif
 		endmethod
+
+        private static method onPeriod takes nothing returns nothing
+        endmethod
         
         private static method onCast takes nothing returns nothing
             local unit caster = GetTriggerUnit()

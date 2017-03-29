@@ -35,55 +35,6 @@ scope RockToss
     private function TargetFilter takes unit u, player p returns boolean
         return UnitAlive(u) and IsUnitEnemy(u, p) and not IsUnitType(u, UNIT_TYPE_STRUCTURE) and not IsUnitType(u, UNIT_TYPE_MAGIC_IMMUNE)
     endfunction
-
-    private struct Rock extends array
-        implement Alloc
-
-        private effect sfx
-        private unit u
-        
-        readonly thistype next
-        readonly thistype prev
-        
-        method destroy takes nothing returns nothing
-            set this.prev.next = this.next
-            set this.next.prev = this.prev
-            if this.u != null then
-                call DummyAddRecycleTimer(this.u, 5.0)
-                call UnitClearBonus(this.u, BONUS_SIGHT_RANGE)
-                call SetUnitOwner(this.u, NEUTRAL, false)
-                set this.u = null
-            endif
-            if this.sfx != null then
-                call DestroyEffect(this.sfx)
-                set this.sfx = null
-            endif
-            call this.deallocate()
-        endmethod
-        
-        static method add takes player owner, thistype head, real x, real y returns nothing
-            local thistype this
-            if x < WorldBounds.maxX and x > WorldBounds.minX and y < WorldBounds.maxY and y > WorldBounds.minY then
-                set this = thistype.allocate()
-                set this.u = GetRecycledDummyAnyAngle(x, y, 0)
-                call UnitSetBonus(this.u, BONUS_SIGHT_RANGE, 150)
-                set this.sfx = AddSpecialEffectTarget(SFX_ROCK, this.u, "origin")
-                call SetUnitOwner(this.u, owner, false)
-                call SetUnitScale(this.u, 0.5, 0, 0)
-                set this.next = head
-                set this.prev = head.prev
-                set this.prev.next = this
-                set this.next.prev = this
-            endif
-        endmethod
-        
-        static method head takes nothing returns thistype
-            local thistype this = thistype.allocate()
-            set this.next = this
-            set this.prev = this
-            return this
-        endmethod
-    endstruct
     
     struct RockToss extends array
         
@@ -95,21 +46,10 @@ scope RockToss
         private Missile m
         private FlySight fs
         private TrueSight ts
-        private Rock sfxHead
 
         private static group g
         
         private method destroy takes nothing returns nothing
-            local Rock r 
-            if this.lvl < 11 then
-                set r = this.sfxHead.next
-                loop
-                    exitwhen r == this.sfxHead
-                    call r.destroy()
-                    set r = r.next
-                endloop
-                call this.sfxHead.destroy()
-            endif
             call this.fs.destroy()
             call this.m.destroy()
             set this.caster = null
@@ -125,13 +65,10 @@ scope RockToss
             local thistype this = Missile.getHit()
             local group g = NewGroup()
             local real radius = Radius(this.lvl)
-            local real da
-            local real angle
-            local real endAngle
             local unit u = GetRecycledDummyAnyAngle(this.m.x, this.m.y, 0)
             call SetUnitScale(u, StunRadius(this.lvl)/300, 0, 0)
             call DestroyEffect(AddSpecialEffectTarget(SFX_HIT, u, "origin"))
-            call DummyAddRecycleTimer(u, 5.0)
+            call DummyAddRecycleTimer(u, 6.0)
             call SetUnitOwner(this.m.u, this.owner, false)
             call ShowDummy(this.m.u, false)
             set this.fs = FlySight.create(this.m.u, radius)
@@ -147,21 +84,6 @@ scope RockToss
                 endif
             endloop
             call ReleaseGroup(g)
-            //Create SFX
-            if this.lvl < 11 then  
-                set this.sfxHead = Rock.head()
-                set da = 2*bj_PI/R2I(2*bj_PI*radius/ROCK_SPACING)
-                if da > bj_PI/3 then
-                    set da = bj_PI/3
-                endif
-                set angle = da
-                set endAngle = da + 2*bj_PI - 0.0001
-                loop
-                    exitwhen angle >= endAngle
-                    call Rock.add(this.owner, this.sfxHead, this.m.x + radius*Cos(angle), this.m.y + radius*Sin(angle))
-                    set angle = angle + da
-                endloop
-            endif
             call TimerStart(NewTimerEx(this), Duration(this.lvl), false, function thistype.expires)
             set g = null
         endmethod

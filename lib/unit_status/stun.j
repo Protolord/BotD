@@ -78,21 +78,23 @@ library Stun uses TimerUtilsEx, Table, DummyRecycler
             if duration > 0 then
                 call TimerStart(this.t, duration, false, function thistype.expire)
             endif
-            set this.dummy = GetRecycledDummyAnyAngle(GetUnitX(u), GetUnitY(u), 0)
-            call SetUnitOwner(this.dummy, GetOwningPlayer(u), false)
-            call PauseUnit(this.dummy, false)
-            call UnitAddAbility(this.dummy, STUN_SPELL)
-            call IssueTargetOrderById(this.dummy, ORDER_thunderbolt, u)
-            set thistype.counter = thistype.counter + 1
-            if thistype.counter > 10 then
-                set thistype.counter = 0
-                call DestroyTrigger(thistype.trg)
-                set thistype.trg = CreateTrigger()
-                call TriggerAddCondition(thistype.trg, Filter(function thistype.onDeath))
-                call ForGroup(thistype.g, function thistype.add)
+            if prevDuration == 0 then
+                set this.dummy = GetRecycledDummyAnyAngle(GetUnitX(u), GetUnitY(u), 0)
+                call SetUnitOwner(this.dummy, GetOwningPlayer(u), false)
+                call PauseUnit(this.dummy, false)
+                call UnitAddAbility(this.dummy, STUN_SPELL)
+                call IssueTargetOrderById(this.dummy, ORDER_thunderbolt, u)
+                set thistype.counter = thistype.counter + 1
+                if thistype.counter > 10 then
+                    set thistype.counter = 0
+                    call DestroyTrigger(thistype.trg)
+                    set thistype.trg = CreateTrigger()
+                    call TriggerAddCondition(thistype.trg, Filter(function thistype.onDeath))
+                    call ForGroup(thistype.g, function thistype.add)
+                endif
+                call TriggerRegisterUnitEvent(thistype.trg, u, EVENT_UNIT_DEATH)
+                call GroupAddUnit(thistype.g, u)
             endif
-            call TriggerRegisterUnitEvent(thistype.trg, u, EVENT_UNIT_DEATH)
-            call GroupAddUnit(thistype.g, u)
             return this
         endmethod
         

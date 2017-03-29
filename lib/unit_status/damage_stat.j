@@ -2,7 +2,7 @@ library DamageStat uses Table
 
 /*
     DamageStat.get(unit)
-        - Return the average damage of a unit as an integer.
+        - Return the average damage of a unit as a real.
             
     DamageStat.unit(unitId, baseDmg, dice, sides)
 		- Register a unitId's object editor damage data

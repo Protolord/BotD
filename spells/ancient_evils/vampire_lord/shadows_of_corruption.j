@@ -78,7 +78,7 @@ scope ShadowsOfCorruption
 			local integer id = GetHandleId(Damage.source)
             local SpellBuff b
 			local integer lvl
-             if Damage.type == DAMAGE_TYPE_PHYSICAL and not Damage.element.coded and thistype.tb.has(id) then
+             if Damage.type == DAMAGE_TYPE_PHYSICAL and not Damage.coded and thistype.tb.has(id) then
                 if TargetFilter(Damage.target, GetOwningPlayer(Damage.source)) then
                     set lvl = thistype(thistype.tb[id]).lvl
                     set b = SpellBuff.add(Damage.source, Damage.target)

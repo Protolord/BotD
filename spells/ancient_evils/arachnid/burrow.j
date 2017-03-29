@@ -14,66 +14,47 @@ scope Burrow
     endfunction
     
     struct Burrow extends array
-        implement Alloc
-
-        private unit caster
-        private real x 
-        private real y
-
-        private method destroy takes nothing returns nothing
-            set this.caster = null
-            call this.deallocate()
-        endmethod
-
-        private static method onUnburrow takes nothing returns nothing
-            local thistype this = ReleaseTimer(GetExpiredTimer())
-            local group g = NewGroup()
-            local player owner = GetOwningPlayer(this.caster)
+        
+        private static method onCast takes nothing returns nothing
+            local unit caster = GetTriggerUnit()
+            local real x = GetUnitX(caster)
+            local real y = GetUnitY(caster)
             local unit u
             local real da
             local real angle
             local real endAngle
-            call GroupUnitsInArea(g, this.x, this.y, RADIUS)
-            loop
-                set u = FirstOfGroup(g)
-                exitwhen u == null
-                call GroupRemoveUnit(g, u)
-                if TargetFilter(u, owner) then
-                    call Damage.kill(this.caster, u)
+            local group g
+            local player owner
+            if GetUnitTypeId(caster) == BURROWED_UNIT_ID then
+                set g = NewGroup()
+                set owner = GetTriggerPlayer()
+                call GroupUnitsInArea(g, x, y, RADIUS)
+                loop
+                    set u = FirstOfGroup(g)
+                    exitwhen u == null
+                    call GroupRemoveUnit(g, u)
+                    if TargetFilter(u, owner) then
+                        call Damage.kill(caster, u)
+                    endif
+                endloop
+                //Create SFX
+                set da = 2*bj_PI/R2I(2*bj_PI*(RADIUS - 25)/SPACING)
+                if da > bj_PI/3 then
+                    set da = bj_PI/3
                 endif
-            endloop
-            //Create SFX
-            set da = 2*bj_PI/R2I(2*bj_PI*RADIUS/SPACING)
-            if da > bj_PI/3 then
-                set da = bj_PI/3
-            endif
-            set angle = da
-            set endAngle = da + 2*bj_PI - 0.0001
-            loop
-                exitwhen angle >= endAngle
-                call DestroyEffect(AddSpecialEffect(SFX_SPIKE, this.x + RADIUS*Cos(angle), this.y + RADIUS*Sin(angle)))
-                set angle = angle + da
-            endloop
-            call this.destroy()
-            call ReleaseGroup(g)
-            set g = null
-            set owner = null
-        endmethod
-        
-        private static method onCast takes nothing returns nothing
-            local unit u = GetTriggerUnit()
-            local real x = GetUnitX(u)
-            local real y = GetUnitY(u)
-            local thistype this
-            if GetUnitTypeId(u) == BURROWED_UNIT_ID then
-                set this = thistype.allocate()
-                set this.caster = u
-                set this.x = x
-                set this.y = y
-                call TimerStart(NewTimerEx(this), DELAY, false, function thistype.onUnburrow)
+                set angle = da
+                set endAngle = da + 2*bj_PI - 0.0001
+                loop
+                    exitwhen angle >= endAngle
+                    call DestroyEffect(AddSpecialEffect(SFX_SPIKE, x + (RADIUS - 25)*Cos(angle), y + (RADIUS - 25)*Sin(angle)))
+                    set angle = angle + da
+                endloop
+                call ReleaseGroup(g)
+                set g = null
+                set owner = null
             endif
             call DestroyEffect(AddSpecialEffect(SFX, x, y))
-            set u = null
+            set caster = null
             call SystemMsg.create(GetUnitName(GetTriggerUnit()) + " cast thistype")
         endmethod
         

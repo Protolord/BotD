@@ -3,7 +3,7 @@ scope Dash
     globals
         private constant integer SPELL_ID = 'A411'
         private constant real SPEED = 2000.0
-        private constant real HIT_DISTANCE = SPEED*CTL_TIMEOUT
+        private constant real HIT_DISTANCE = 80.0
         private constant string MISSILE_MODEL = "Models\\Effects\\Dash.mdx"
         private constant string SFX = "Abilities\\Spells\\Orc\\StasisTrap\\StasisTotemTarget.mdl"
     endglobals
@@ -45,7 +45,6 @@ scope Dash
             call this.ms.destroy()
             set this.sfx = null
         endmethod
-        
         
         method onApply takes nothing returns nothing
             set this.sfx = AddSpecialEffectTarget(SFX, this.target, "overhead")
@@ -129,6 +128,7 @@ scope Dash
         static method init takes nothing returns nothing
             call SystemTest.start("Initializing thistype: ")
             call RegisterSpellEffectEvent(SPELL_ID, function thistype.onCast)
+            call SpellBuff.initialize()
             call SystemTest.end()
         endmethod
         

@@ -129,7 +129,7 @@ scope UnholyAura
             call SystemTest.start("Initializing thistype: ")
             call RegisterPlayerUnitEvent(EVENT_PLAYER_HERO_SKILL, function thistype.learn)
             call PlayerStat.ultimateEvent(function thistype.ultimates)
-            set thistype.tb = Table.create
+            set thistype.tb = Table.create()
             set thistype.g = CreateGroup()
             call SystemTest.end()
         endmethod

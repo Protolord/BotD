@@ -1,6 +1,6 @@
 library DamageEvent /*
             ----------------------------------
-                    DamageEvent v1.30
+                    DamageEvent v1.40
                         by Flux
             ----------------------------------
             
@@ -221,12 +221,16 @@ library DamageEvent /*
     endstruct
     
     
-    struct Damage
-        
-        readonly static real amt
-        readonly static unit target
-        readonly static unit source
-        readonly static integer type
+    struct Damage extends array
+
+        private static thistype stackTop = 0
+        private static thistype global
+        private static integer array allocator
+        private unit stackSource
+        private unit stackTarget
+        private real stackAmount
+        private integer stackType
+        private thistype stackNext
         
         private static real hp
         
@@ -240,7 +244,6 @@ library DamageEvent /*
         static if LIBRARY_DamageModify then
             private static constant real S_ETHEREAL_FACTOR = ETHEREAL_FACTOR
             private static constant real S_MIN_LIFE = MIN_LIFE
-            private static constant integer S_DAMAGE_TYPE_DETECTOR = DAMAGE_TYPE_DETECTOR
         endif
         
         static method remove takes unit u returns nothing
@@ -292,7 +295,19 @@ library DamageEvent /*
         endmethod
         
         static method operator amount takes nothing returns real
-            return thistype.amt
+            return thistype.stackTop.stackAmount
+        endmethod
+
+        static method operator type takes nothing returns integer
+            return thistype.stackTop.stackType
+        endmethod
+
+        static method operator target takes nothing returns unit
+            return thistype.stackTop.stackTarget
+        endmethod
+
+        static method operator source takes nothing returns unit
+            return thistype.stackTop.stackSource
         endmethod
 
         private static boolean prevEnable = true
@@ -332,54 +347,75 @@ library DamageEvent /*
         static method unregisterTrigger takes trigger trig returns nothing
             call DamageTrigger.unregister(trig)
         endmethod
+
+        
         
         implement optional DamageModify
         
         static if not LIBRARY_DamageModify then
             
             private static method afterDamage takes nothing returns boolean
-                call SetWidgetLife(thistype.target, thistype.hp - thistype.amt)
+                call SetWidgetLife(thistype.stackTop.stackTarget, thistype.hp - thistype.stackTop.stackAmount)
                 call DestroyTrigger(GetTriggeringTrigger())
+                if thistype.global > 0 then
+                    set thistype.allocator[thistype.global] = thistype.allocator[0]
+                    set thistype.allocator[0] = thistype.global
+                    set thistype.stackTop = thistype.stackTop.stackNext
+                endif
                 return false
             endmethod
             
             static method core takes nothing returns boolean
                 local real amount = GetEventDamage()
+                local thistype this
                 local real newHp
                 local trigger trg
+                
                 if amount == 0.0 then
                     return false
                 endif
-                                
-                set thistype.target = GetTriggerUnit()
-                set thistype.source = GetEventDamageSource()
+                
+                set this = thistype.allocator[0]
+                if (thistype.allocator[this] == 0) then
+                    set thistype.allocator[0] = this + 1
+                else
+                    set thistype.allocator[0] = thistype.allocator[this]
+                endif
+                set this.stackSource = GetEventDamageSource()
+                set this.stackTarget = GetTriggerUnit()
+                set this.stackNext = thistype.stackTop
+                set thistype.stackTop = this
                 
                 if amount > 0.0 then
-                    set thistype.type = DAMAGE_TYPE_PHYSICAL
-                    set thistype.amt = amount
-                    call DamageTrigger.executeAll()    
+                    set this.stackType = DAMAGE_TYPE_PHYSICAL
+                    set this.stackAmount = amount
+                    call DamageTrigger.executeAll()
+                    set thistype.allocator[this] = thistype.allocator[0]
+                    set thistype.allocator[0] = this
+                    set thistype.stackTop = thistype.stackTop.stackNext
                     
                 elseif amount < 0.0 then
-                    set thistype.type = DAMAGE_TYPE_MAGICAL
-                    if IsUnitType(thistype.target, UNIT_TYPE_ETHEREAL) then
-                        set thistype.amt = -amount*ETHEREAL_FACTOR
-                    else
-                        set thistype.amt = -amount
+                    set this.stackType = DAMAGE_TYPE_MAGICAL
+                    if IsUnitType(this.stackTarget, UNIT_TYPE_ETHEREAL) then
+                        set amount = amount*ETHEREAL_FACTOR
                     endif
+                    set this.stackAmount = -amount
                     call DamageTrigger.executeAll()
                     
-                    set thistype.hp = GetWidgetLife(thistype.target)
+                    set thistype.hp = GetWidgetLife(this.stackTarget)
                     set newHp = thistype.hp + amount
                     if newHp < MIN_LIFE then
                         set newHp = MIN_LIFE
                     endif
-                    call SetWidgetLife(thistype.target, newHp)
+                    call SetWidgetLife(this.stackTarget, newHp)
                     
                     set trg = CreateTrigger()
-                    call TriggerRegisterUnitStateEvent(trg, thistype.target, UNIT_STATE_LIFE, GREATER_THAN, newHp + 0.01)
+                    call TriggerRegisterUnitStateEvent(trg, this.stackTarget, UNIT_STATE_LIFE, GREATER_THAN, newHp + 0.01)
                     call TriggerAddCondition(trg, Condition(function thistype.afterDamage))
+                    set trg = null
+                    set thistype.global = this
                 endif
-
+                
                 return false
             endmethod
         endif
@@ -436,6 +472,11 @@ library DamageEvent /*
             endif
             set thistype.registered = CreateTrigger()
             call DamageTrigger.register(thistype.registered)
+            set thistype.allocator[0] = 1
+            set thistype(0).stackSource = null
+            set thistype(0).stackTarget = null
+            set thistype(0).stackAmount = 0.0
+            set thistype(0).stackType = 0
         endmethod
         
     endmodule

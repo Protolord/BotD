@@ -21,7 +21,7 @@ scope PowderisingStrength
         
         private static method onDamage takes nothing returns nothing
             local integer level = GetUnitAbilityLevel(Damage.source, SPELL_ID)
-            if level > 0 and Damage.type == DAMAGE_TYPE_PHYSICAL and not Damage.element.coded and TargetFilter(Damage.target, GetOwningPlayer(Damage.source))  then
+            if level > 0 and Damage.type == DAMAGE_TYPE_PHYSICAL and not Damage.coded and TargetFilter(Damage.target, GetOwningPlayer(Damage.source))  then
                 call Heal.unit(Damage.source, LifeSteal(level)*Damage.amount, 1.0)
                 call DestroyEffect(AddSpecialEffectTarget(SFX_SOURCE, Damage.source, "origin"))
                 call DestroyEffect(AddSpecialEffectTarget(SFX_TARGET, Damage.target, "origin"))

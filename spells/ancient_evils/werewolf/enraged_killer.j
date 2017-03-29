@@ -2,8 +2,8 @@ scope EnragedKiller
     
     globals
         private constant integer SPELL_ID = 'A223'
-        private constant attacktype ATTACK_TYPE = ATTACK_TYPE_NORMAL
-        private constant damagetype DAMAGE_TYPE = DAMAGE_TYPE_UNIVERSAL
+        private constant attacktype ATTACK_TYPE = ATTACK_TYPE_SIEGE
+        private constant damagetype DAMAGE_TYPE = DAMAGE_TYPE_NORMAL
         private constant string BUFF_SFX = "Models\\Effects\\EnragedKiller.mdx"
     endglobals
 
@@ -56,7 +56,7 @@ scope EnragedKiller
             local integer level = GetUnitAbilityLevel(Damage.source, SPELL_ID)
             local SpellBuff b
             local textsplat t
-            if Damage.type == DAMAGE_TYPE_PHYSICAL and not Damage.element.coded and level > 0 and TargetFilter(Damage.target, GetOwningPlayer(Damage.source)) then
+            if Damage.type == DAMAGE_TYPE_PHYSICAL and not Damage.coded and level > 0 and TargetFilter(Damage.target, GetOwningPlayer(Damage.source)) then
                 set b = SpellBuff.add(Damage.source, Damage.target)
                 set b.duration = Duration(level)
                 //Deal extra damage

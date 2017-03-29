@@ -39,6 +39,7 @@ library DamageStatRegister uses DamageStat
             call DamageStat.hero('Hmkg', 0, 2, 6, STAT_STR)
 
             call DamageStat.unit('hpea', 4, 1, 2)
+            call DamageStat.unit('opeo', 6, 1, 2)
             call DamageStat.unit('hTes', 4, 1, 1)
 			call DamageStat.unit('hsor', 7, 1, 3)
             call DamageStat.unit('hrif', 16, 2, 4)

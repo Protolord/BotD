@@ -45,7 +45,7 @@ scope SpiritualWalk
 			local integer id = GetHandleId(Damage.source)
             local real amount
             local real mana
-            if Damage.type == DAMAGE_TYPE_PHYSICAL and not Damage.element.coded and thistype.tb.has(id) then
+            if Damage.type == DAMAGE_TYPE_PHYSICAL and not Damage.coded and thistype.tb.has(id) then
                 if TargetFilter(Damage.target, GetOwningPlayer(Damage.source)) then
                     set mana = GetUnitState(Damage.target, UNIT_STATE_MANA)
                     set amount = StealMana(thistype(thistype.tb[id]).lvl)*GetUnitState(Damage.target, UNIT_STATE_MAX_MANA)

@@ -3,7 +3,7 @@ scope Testudo
     globals
         private constant integer SPELL_ID = 'A821'
         private constant real TIMEOUT = 1.0
-        private constant string SFX = "Models\\Effects\\StoneForm.mdx"
+        private constant string SFX = "Abilities\\Spells\\Orc\\Voodoo\\VoodooAura.mdl"
     endglobals
 
     private function ArmorBonus takes integer level returns integer
@@ -23,27 +23,34 @@ scope Testudo
     private struct SpellBuff extends Buff
 
 		private integer lvl
+        private effect sfx
         private Armor a
 		//private SpellResist sr
+        //private SpellImmune si
 
         private static constant integer RAWCODE = 'B821'
         private static constant integer DISPEL_TYPE = BUFF_NONE
         private static constant integer STACK_TYPE = BUFF_STACK_NONE
         
         method onRemove takes nothing returns nothing
-			if this.lvl < 11 then
+            call DestroyEffect(this.sfx)
+			if this.lvl == 11 then
+                //call this.si.destroy()
+            else
 				//call this.sr.destroy()
-			else
 			endif
 			call this.a.destroy()
+            set this.sfx = null
         endmethod
         
         method onApply takes nothing returns nothing
             set this.lvl = GetUnitAbilityLevel(this.target, SPELL_ID)
+            set this.sfx = AddSpecialEffectTarget(SFX, this.target, "origin")
 			set this.a = Armor.create(this.target, ArmorBonus(this.lvl))
-			if lvl < 11 then
+			if lvl == 11 then
+                //set this.si = SpellImmune.create(this.target)
+            else
 				//set this.sr = SpellResist.create(this.target, SpellResistBonus(this.lvl))
-			else
 			endif
         endmethod
 

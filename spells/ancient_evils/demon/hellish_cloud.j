@@ -45,7 +45,7 @@ scope HellishCloud
             local player p
             local real x
             local real y
-            if Damage.type == DAMAGE_TYPE_PHYSICAL and not Damage.element.coded and thistype.tb.has(id) then
+            if Damage.type == DAMAGE_TYPE_PHYSICAL and not Damage.coded and thistype.tb.has(id) then
                 set this = thistype.tb[id]
                 set dmg = DamageDealt(this.lvl)
                 set level = GetUnitAbilityLevel(Damage.source, SPELL_ID)

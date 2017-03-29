@@ -70,7 +70,7 @@ scope InfernalChains
             local SpellBuff b
             local textsplat t
             local real dmg
-            if Damage.type == DAMAGE_TYPE_PHYSICAL and not Damage.element.coded and level > 0 and GetRandomReal(0, 100) <= Chance(level) and TargetFilter(Damage.target, GetOwningPlayer(Damage.source)) then
+            if Damage.type == DAMAGE_TYPE_PHYSICAL and not Damage.coded and level > 0 and GetRandomReal(0, 100) <= Chance(level) and TargetFilter(Damage.target, GetOwningPlayer(Damage.source)) then
                 set b = SpellBuff.add(Damage.source, Damage.target)
                 //Deal extra damage
                 if b.dmg <= MaxDamage(level) then

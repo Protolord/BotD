@@ -14,8 +14,10 @@ scope ViciousExplorers
         return level
     endfunction
     
+    //When too fast, there will be times when the unit is temporarily fog
+    //if the radius is too small
     private function Speed takes integer level returns real
-        return 300.0
+        return 200.0 + 0.0*level
     endfunction
     
     private function Radius takes integer level returns real
@@ -86,8 +88,8 @@ scope ViciousExplorers
                 endif
                 call SetUnitScale(this.bat.u, 0.30 + 0.02*level, 0, 0)
                 //ViciousExplorers cannot die aside from expiration.
-                call TrueSight.createEx(this.bat.u, radius, duration)
                 call FlySight.createEx(this.bat.u, radius, duration)
+                call TrueSight.createEx(this.bat.u, radius, duration)
                 call TimerStart(NewTimerEx(this), duration, false, function thistype.expires)
                 set i = i - 1
             endloop

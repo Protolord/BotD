@@ -431,8 +431,9 @@ library Buff /*
             endif
         endmethod
 
-        /*
+        
         static if PRELOAD_BUFFS then
+            /*
             private static method onInit takes nothing returns nothing
                 local thistype this = thistype.create()   
                 call UnitAddAbility(Buff.preloader, thistype.RAWCODE)
@@ -442,11 +443,14 @@ library Buff /*
                     call thistype.initialize()
                 endif
             endmethod
+            */
         elseif AUTO_INITIALIZE then
+            /*
             private static method onInit takes nothing returns nothing
                 call thistype.initialize()
             endmethod
-        endif*/
+            */
+        endif
     endmodule
  
     module BuffListStart

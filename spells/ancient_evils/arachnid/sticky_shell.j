@@ -75,7 +75,7 @@ scope StickyShell
             local integer level = GetUnitAbilityLevel(Damage.target, SPELL_ID)
             local thistype this
             local SpellBuff b
-            if Damage.type == DAMAGE_TYPE_PHYSICAL and not Damage.element.coded and level > 0 and TargetFilter(Damage.source, GetOwningPlayer(Damage.target)) then
+            if Damage.type == DAMAGE_TYPE_PHYSICAL and not Damage.coded and level > 0 and TargetFilter(Damage.source, GetOwningPlayer(Damage.target)) then
                 set b = SpellBuff.add(Damage.target, Damage.source)
                 set b.duration = Duration(level)
                 set b.dmg = DamagePerSecond(level)*TIMEOUT

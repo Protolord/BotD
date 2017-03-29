@@ -1,11 +1,12 @@
 scope UnholyEnergy
     
     globals
-        private constant integer SPELL_ID = 'A714'
-        private constant integer BUFF_ID = 'B714'
+        private constant integer SPELL_ID = 'A742'
+        private constant integer BUFF_ID = 'B742'
         private constant real TIMEOUT = 0.1
         private constant real MIN_RANGE = 250 //Range that will deal max damage
-        private constant string SFX = "Abilities\\Weapons\\AvengerMissile\\AvengerMissile.mdl"
+        private constant string SFX_EXTRA = "Abilities\\Spells\\Other\\Drain\\DrainTarget.mdl"
+        private constant integer EXTRA_THRESHOLD = 10
     endglobals
 
     private function Range takes integer level returns real
@@ -32,6 +33,7 @@ scope UnholyEnergy
         private unit u
         private real factor
         private real range
+        private effect sfxExtra
 
         private static Table tb
         private static group g
@@ -55,6 +57,12 @@ scope UnholyEnergy
                             set i = i + 1
                         endif
                     endloop
+                    if i >= EXTRA_THRESHOLD and this.sfxExtra == null then
+                        set this.sfxExtra = AddSpecialEffectTarget(SFX_EXTRA, this.u, "overhead")
+                    elseif i < EXTRA_THRESHOLD and this.sfxExtra != null then
+                        call DestroyEffect(this.sfxExtra)
+                        set this.sfxExtra = null
+                    endif
                     call SetWidgetLife(this.u, GetWidgetLife(this.u) + i*this.factor)
                 endif
                 set this = this.next
@@ -70,7 +78,7 @@ scope UnholyEnergy
             if thistype.tb.has(id) then
                 set this = thistype.tb[id]
                 set this.range = Range(11)
-                set this.factor = BonusRegenPerUnit(11)
+                set this.factor = BonusRegenPerUnit(11)*TIMEOUT
             endif
             set u = null
             return false
@@ -96,7 +104,7 @@ scope UnholyEnergy
                 endif
                 set lvl = GetUnitAbilityLevel(u, SPELL_ID)
                 set this.range = Range(lvl)
-                set this.factor = BonusRegenPerUnit(lvl)
+                set this.factor = BonusRegenPerUnit(lvl)*TIMEOUT
                 set u = null
             endif
         endmethod
@@ -105,7 +113,7 @@ scope UnholyEnergy
             call SystemTest.start("Initializing thistype: ")
             call RegisterPlayerUnitEvent(EVENT_PLAYER_HERO_SKILL, function thistype.learn)
             call PlayerStat.ultimateEvent(function thistype.ultimates)
-            set thistype.tb = Table.create
+            set thistype.tb = Table.create()
             set thistype.g = CreateGroup()
             call SystemTest.end()
         endmethod

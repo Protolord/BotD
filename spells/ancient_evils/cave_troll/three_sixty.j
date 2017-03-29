@@ -2,7 +2,8 @@ scope ThreeSixty
 
     globals
         private constant integer SPELL_ID = 'A812'
-        private constant string SFX = "Models\\Effects\\EarthShatter.mdx"
+        private constant string SFX = ""
+        private constant string SFX_RIBBON = "Models\\Effects\\ThreeSixtyRibbon.mdx"
         private constant attacktype ATTACK_TYPE = ATTACK_TYPE_NORMAL
         private constant damagetype DAMAGE_TYPE = DAMAGE_TYPE_MAGIC
     endglobals
@@ -34,6 +35,7 @@ scope ThreeSixty
             local group g = NewGroup()
             local unit dummy = GetRecycledDummyAnyAngle(x, y, 50)
             local unit u
+            call AddSpecialEffectTimer(AddSpecialEffectTarget(SFX_RIBBON, caster, "weapon right"), 1.0)
             call DummyAddRecycleTimer(dummy, 2.5)
             call SetUnitScale(dummy, Radius(lvl)/300.0, 0, 0)
             call DestroyEffect(AddSpecialEffectTarget(SFX, dummy, "origin"))

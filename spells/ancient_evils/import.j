@@ -163,7 +163,7 @@
 //==============================================================================
 //! import "../spells/ancient_evils/cave_troll/cleave.j"
 //------------------------------------------------------------------------------
-// import "../spells/ancient_evils/cave_troll/heavy_swing.j"
+//! import "../spells/ancient_evils/cave_troll/heavy_swing.j"
 //! import "../spells/ancient_evils/cave_troll/three_sixty.j"
 //! import "../spells/ancient_evils/cave_troll/studded_club.j"
 //! import "../spells/ancient_evils/cave_troll/second_hit.j"
@@ -175,9 +175,9 @@
 //------------------------------------------------------------------------------
 //! import "../spells/ancient_evils/cave_troll/smell.j"
 // import "../spells/ancient_evils/cave_troll/eye_ray.j"
-// import "../spells/ancient_evils/cave_troll/cauldron.j"
+//! import "../spells/ancient_evils/cave_troll/cauldron.j"
 //------------------------------------------------------------------------------
-// import "../spells/ancient_evils/cave_troll/totem.j"
+//! import "../spells/ancient_evils/cave_troll/totem.j"
 //! import "../spells/ancient_evils/cave_troll/devour.j"
 //! import "../spells/ancient_evils/cave_troll/rage.j"
 //! import "../spells/ancient_evils/cave_troll/aura_of_strength.j"

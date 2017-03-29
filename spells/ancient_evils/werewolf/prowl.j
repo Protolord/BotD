@@ -4,8 +4,8 @@ scope Prowl
     globals
         private constant integer SPELL_ID = 'A221'
         private constant integer PROWL_BUFF = 'a221'
-        private constant attacktype ATTACK_TYPE = ATTACK_TYPE_NORMAL
-        private constant damagetype DAMAGE_TYPE = DAMAGE_TYPE_UNIVERSAL
+        private constant attacktype ATTACK_TYPE = ATTACK_TYPE_SIEGE
+        private constant damagetype DAMAGE_TYPE = DAMAGE_TYPE_NORMAL
     endglobals
     
     private function DamageDealt takes integer level returns real
@@ -44,7 +44,7 @@ scope Prowl
         private static method onDamage takes nothing returns boolean
 			local integer id = GetHandleId(Damage.source)
             local real dmg
-            if Damage.type == DAMAGE_TYPE_PHYSICAL and not Damage.element.coded and thistype.tb.has(id) then
+            if Damage.type == DAMAGE_TYPE_PHYSICAL and not Damage.coded and thistype.tb.has(id) then
                 if TargetFilter(Damage.target, GetOwningPlayer(Damage.source)) then
                     set dmg = DamageDealt(thistype(thistype.tb[id]).lvl)
                     call DisableTrigger(thistype.trg)

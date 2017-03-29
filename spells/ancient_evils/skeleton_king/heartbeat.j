@@ -4,11 +4,14 @@ scope Heartbeat
         private constant integer SPELL_ID = 'A731'
         private constant integer BUFF_ID = 'B731'
         private constant real TIMEOUT = 0.2
-        private constant string SFX_TARGET = ""
+        private constant string SFX_TARGET = "Abilities\\Spells\\Orc\\Bloodlust\\BloodlustTarget.mdl"
 		private constant real RADIUS = 200.0
     endglobals
 
     private function Range takes integer level returns real
+        if level == 11 then
+            return GLOBAL_SIGHT
+        endif
         return 250.0*level
     endfunction
 
@@ -54,7 +57,7 @@ scope Heartbeat
             if IsPlayerEnemy(owner, GetLocalPlayer()) then
                 set s = ""
             endif
-            set this.sfx = AddSpecialEffectTarget(s, target, "origin")
+            set this.sfx = AddSpecialEffectTarget(s, target, "chest")
             set this.next = head.next
             set this.prev = head
             set this.next.prev = this
@@ -91,7 +94,11 @@ scope Heartbeat
 			local unit u
             loop
                 exitwhen this == 0
-                call GroupUnitsInArea(thistype.g, GetUnitX(this.caster), GetUnitY(this.caster), this.range)
+                if this.range == GLOBAL_SIGHT then 
+                    call GroupEnumUnitsInRect(thistype.g, WorldBounds.world, null)
+                else
+                    call GroupUnitsInArea(thistype.g, GetUnitX(this.caster), GetUnitY(this.caster), this.range)
+                endif
                 set b = this.owner != GetOwningPlayer(this.caster)
                 if b then
                     set this.owner = GetOwningPlayer(this.caster)

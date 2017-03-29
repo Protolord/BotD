@@ -4,7 +4,7 @@ scope EnvenomedFangs
         private constant integer SPELL_ID = 'A211'
         private constant attacktype ATTACK_TYPE = ATTACK_TYPE_NORMAL
         private constant damagetype DAMAGE_TYPE = DAMAGE_TYPE_MAGIC
-		private constant string BUFF_SFX = "Abilities\\Spells\\Undead\\Curse\\CurseTarget.mdl"
+		private constant string BUFF_SFX = "Abilities\\Weapons\\PoisonSting\\PoisonStingTarget.mdl"
     endglobals
 
     private function Duration takes integer level returns real
@@ -67,8 +67,7 @@ scope EnvenomedFangs
         private static method onDamage takes nothing returns nothing
             local integer level = GetUnitAbilityLevel(Damage.source, SPELL_ID)
             local SpellBuff b
-            
-            if level > 0 and Damage.type == DAMAGE_TYPE_PHYSICAL and not Damage.element.coded and TargetFilter(Damage.target, GetOwningPlayer(Damage.source))  then
+            if level > 0 and Damage.type == DAMAGE_TYPE_PHYSICAL and not Damage.coded and TargetFilter(Damage.target, GetOwningPlayer(Damage.source)) then
                 set b = SpellBuff.add(Damage.source, Damage.target)
                 set b.dmg = DamagePerSecond(level)
                 set b.duration = Duration(level)

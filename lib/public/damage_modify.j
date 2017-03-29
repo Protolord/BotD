@@ -1,6 +1,6 @@
 library DamageModify uses DamageEvent/*
             ---------------------------------
-                    DamageModify v1.30
+                    DamageModify v1.40
                         by Flux
             ---------------------------------
     
@@ -91,34 +91,44 @@ library DamageModify uses DamageEvent/*
         endmethod
                 
         private static method afterDamage takes nothing returns boolean
-            if GetUnitAbilityLevel(thistype.target, SET_MAX_LIFE) > 0 then
-                call UnitRemoveAbility(thistype.target, SET_MAX_LIFE)
+            if GetUnitAbilityLevel(thistype.stackTop.stackTarget, SET_MAX_LIFE) > 0 then
+                call UnitRemoveAbility(thistype.stackTop.stackTarget, SET_MAX_LIFE)
             endif
-            call SetWidgetLife(thistype.target, thistype.hp - thistype.amt)
+            call SetWidgetLife(thistype.stackTop.stackTarget, thistype.hp - thistype.stackTop.stackAmount)
             call DestroyTrigger(GetTriggeringTrigger())
+            if thistype.global > 0 then
+                set thistype.allocator[thistype.global] = thistype.allocator[0]
+                set thistype.allocator[0] = thistype.global
+                set thistype.stackTop = thistype.stackTop.stackNext
+            endif
             return false
         endmethod
             
         static method core takes nothing returns boolean
             local real amount = GetEventDamage()
             local boolean changed = false
+            local thistype this
             local trigger trg
             local real newHp
             
             if amount == 0.0 then
                 return false
             endif
-            
-            set thistype.target = GetTriggerUnit()
-            set thistype.source = GetEventDamageSource()
-                            
-            if amount == 0.0 then
-                return false
+
+            set this = thistype.allocator[0]
+            if (thistype.allocator[this] == 0) then
+                set thistype.allocator[0] = this + 1
+            else
+                set thistype.allocator[0] = thistype.allocator[this]
             endif
+            set this.stackSource = GetEventDamageSource()
+            set this.stackTarget = GetTriggerUnit()
+            set this.stackNext = thistype.stackTop
+            set thistype.stackTop = this
             
             if amount > 0.0 then
-                set thistype.type = DAMAGE_TYPE_PHYSICAL
-                set thistype.amt = amount
+                set this.stackType = DAMAGE_TYPE_PHYSICAL
+                set this.stackAmount = amount
                 call DamageTrigger2.executeAll()
                 set changed = thistype.changed
                 if changed then
@@ -127,12 +137,11 @@ library DamageModify uses DamageEvent/*
                 call DamageTrigger.executeAll()
                 
             elseif amount < 0.0 then
-                set thistype.type = DAMAGE_TYPE_MAGICAL
-                if IsUnitType(thistype.target, UNIT_TYPE_ETHEREAL) then
-                    set thistype.amt = -amount*S_ETHEREAL_FACTOR
-                else
-                    set thistype.amt = -amount
+                set this.stackType = DAMAGE_TYPE_MAGICAL
+                if IsUnitType(this.stackTarget, UNIT_TYPE_ETHEREAL) then
+                    set amount = amount*S_ETHEREAL_FACTOR
                 endif
+                set this.stackAmount = -amount
                 call DamageTrigger2.executeAll()
                 set changed = thistype.changed
                 if changed then
@@ -140,39 +149,46 @@ library DamageModify uses DamageEvent/*
                 endif
                 call DamageTrigger.executeAll()
             endif
-            
+
             if amount < 0.0 or changed then
-                set thistype.hp = GetWidgetLife(thistype.target)
-                
+                set thistype.hp = GetWidgetLife(this.stackTarget)
                 set trg = CreateTrigger()
                 if amount > 0.0 then
                     set newHp = thistype.hp + amount
-                    if newHp > GetUnitState(thistype.target, UNIT_STATE_MAX_LIFE) then
-                        call UnitAddAbility(thistype.target, SET_MAX_LIFE)
+                    if newHp > GetUnitState(this.stackTarget, UNIT_STATE_MAX_LIFE) then
+                        call UnitAddAbility(this.stackTarget, SET_MAX_LIFE)
                     endif
-                    call SetWidgetLife(thistype.target, newHp)
+
+                    call SetWidgetLife(this.stackTarget, newHp)
                     if amount > 1.0 then
-                        call TriggerRegisterUnitStateEvent(trg, thistype.target, UNIT_STATE_LIFE, LESS_THAN, newHp - 0.01*amount)
+                        call TriggerRegisterUnitStateEvent(trg, this.stackTarget, UNIT_STATE_LIFE, LESS_THAN, newHp - 0.01*amount)
                     else
-                        call TriggerRegisterUnitStateEvent(trg, thistype.target, UNIT_STATE_LIFE, LESS_THAN, newHp - 0.01)
+                        call TriggerRegisterUnitStateEvent(trg, this.stackTarget, UNIT_STATE_LIFE, LESS_THAN, newHp - 0.01)
                     endif
                 else
                     set newHp = thistype.hp + amount
                     if newHp < S_MIN_LIFE then
                         set newHp = S_MIN_LIFE
                     endif
-                    call SetWidgetLife(thistype.target, newHp)
-                    call TriggerRegisterUnitStateEvent(trg, thistype.target, UNIT_STATE_LIFE, GREATER_THAN, newHp + 0.01)
+                    call SetWidgetLife(this.stackTarget, newHp)
+                    call TriggerRegisterUnitStateEvent(trg, this.stackTarget, UNIT_STATE_LIFE, GREATER_THAN, newHp + 0.01)
                 endif
                 call TriggerAddCondition(trg, Condition(function thistype.afterDamage))
-                
-            endif
+                set trg = null
+                set thistype.global = this
+            
+            else
+                set thistype.allocator[this] = thistype.allocator[0]
+                set thistype.allocator[0] = this
+                set thistype.stackTop = thistype.stackTop.stackNext
 
+            endif
+            
             return false
         endmethod
         
         static method operator amount= takes real r returns nothing
-            set thistype.amt = r
+            set thistype.stackTop.stackAmount = r
             set thistype.changed = true
         endmethod
         

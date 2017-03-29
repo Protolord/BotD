@@ -19,6 +19,8 @@ module MissileTrajectory
     private real dx
     private real dy
     private real dz
+
+    private static constant real MIN_COLLISION = 50.0
     
     method move takes real x, real y, real z returns nothing
         set this.x = x
@@ -133,7 +135,7 @@ module MissileTrajectory
     
     method operator speed= takes real speed returns nothing
         set this.spd = speed*TIMEOUT
-        set this.chkDist = this.spd*this.spd
+        set this.chkDist = RMaxBJ(this.spd*this.spd, thistype.MIN_COLLISION*thistype.MIN_COLLISION)
     endmethod
     
     method operator speed takes nothing returns real

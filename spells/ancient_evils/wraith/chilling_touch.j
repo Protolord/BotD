@@ -51,7 +51,7 @@ scope ChillingTouch
             local real slow
             local SpellBuff b
             
-            if Damage.type == DAMAGE_TYPE_PHYSICAL and not Damage.element.coded and level > 0 and TargetFilter(Damage.target, GetOwningPlayer(Damage.source))  then
+            if Damage.type == DAMAGE_TYPE_PHYSICAL and not Damage.coded and level > 0 and TargetFilter(Damage.target, GetOwningPlayer(Damage.source))  then
                 set slow = -0.01*GetHeroLevel(Damage.source)
                 set b = SpellBuff.add(Damage.source, Damage.target)
                 set b.duration = Duration(level)

@@ -3,7 +3,7 @@ scope Reaper
     globals
         private constant integer SPELL_ID = 'A712'
         private constant string BUFF_SFX = "Models\\Effects\\Reaper.mdx"
-        private constant real LIMIT = 500.0
+        private constant real LIMIT = 2000.0
     endglobals
 
     private function Duration takes integer level returns real
@@ -60,7 +60,7 @@ scope Reaper
         private static method onDamage takes nothing returns boolean
             local integer level = GetUnitAbilityLevel(Damage.source, SPELL_ID)
             local SpellBuff b
-            if Damage.type == DAMAGE_TYPE_PHYSICAL and not Damage.element.coded and level > 0 and TargetFilter(Damage.target, GetOwningPlayer(Damage.source)) then
+            if Damage.type == DAMAGE_TYPE_PHYSICAL and not Damage.coded and level > 0 and TargetFilter(Damage.target, GetOwningPlayer(Damage.source)) then
                 set b = SpellBuff.add(Damage.source, Damage.source)
                 set b.duration = Duration(level)
                 set b.bonus = b.bonus + DamageGrowth(level)

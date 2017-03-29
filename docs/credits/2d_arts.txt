@@ -70,10 +70,10 @@
 		BTN_Camouflage				by PeeKay
 		BTN_Terror					by Valve Corporation
 		BTN_StonyPath               by Praytic
-		BTN_RockToss                by -Berz-
+		BTN_RockToss                by Valve Corporation
 		BTN_Crack                   by Valve Corporation
 		BTN_Fissure                 by Valve Corporation
-		BTN_RockHard				by Kimbo
+		BTN_RockHard                by Valve Corporation
 		BTN_PowderisingStrength     by CRAZYRUSSIAN
 		BTN_Rebuild                 by Nudl9
 		BTN_UpliftPurpose           by inhuman89
@@ -88,10 +88,20 @@
 		BTN_DeathPact				by PeeKay
 		BTN_Regency					by NFWar
 		BTN_OtherSide				by 4eNNightmare
-		BTN_SoulFeast				by San
+		BTN_SoulFeast				by Valve Corporation
 		BTN_GrimDeal				by -Berz-
 		BTN_SoulMark				by CRAZYRUSSIAN
 		BTN_LoneSoul				by Paladon
+	
+	Cave Troll Abilities
+		BTN_HeavySwing				by Stanakin
+		BTN_Rage	 				by PeeKay
+		BTN_StuddedClub				by JollyD
+		BTN_Smell					by Stanakin
+		BTN_EyeRay					by Paladon
+		BTN_StrongBack				by Valve Corporation
+		BTN_Cleave					by Valve Corporation
+		BTN_ThreeSixty				by Valve Corporation
 		
 	Others:
 		BTN_Check                   by Lockheart 

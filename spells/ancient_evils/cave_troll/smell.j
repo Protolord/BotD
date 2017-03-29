@@ -2,8 +2,8 @@ scope Smell
     
     globals
         private constant integer SPELL_ID = 'A831'
-        private constant string SFX = ""
-		private constant real RADIUS = 200.0
+        private constant string SFX = "Models\\Effects\\SmellTarget.mdx"
+		private constant real RADIUS = 300.0
 		private constant integer TRUE_SIGHT_ABILITY = 'ATSS'
 		private constant real TIMEOUT = 0.05
     endglobals
@@ -69,7 +69,7 @@ scope Smell
             local integer level = GetUnitAbilityLevel(Damage.source, SPELL_ID)
 			local real duration
 			local SpellBuff b
-            if Damage.type == DAMAGE_TYPE_PHYSICAL and not Damage.element.coded and level > 0 and TargetFilter(Damage.target, GetOwningPlayer(Damage.source)) then
+            if Damage.type == DAMAGE_TYPE_PHYSICAL and not Damage.coded and level > 0 and TargetFilter(Damage.target, GetOwningPlayer(Damage.source)) then
                 set b = SpellBuff.add(Damage.source, Damage.target)
 				set duration = Duration(level)
 				if duration > 0 then
@@ -81,6 +81,7 @@ scope Smell
         static method init takes nothing returns nothing
             call SystemTest.start("Initializing thistype: ")
             call Damage.register(function thistype.onDamage)
+            call SpellBuff.initialize()
             call SystemTest.end()
         endmethod
         

@@ -56,7 +56,7 @@ scope UpliftPurpose
 
         private static method onDamage takes nothing returns boolean
             local SpellBuff b
-            if Damage.type == DAMAGE_TYPE_PHYSICAL and not Damage.element.coded and Buff.has(Damage.source, Damage.source, SpellBuff.typeid) and TargetFilter(Damage.target, GetOwningPlayer(Damage.source)) then
+            if Damage.type == DAMAGE_TYPE_PHYSICAL and not Damage.coded and Buff.has(Damage.source, Damage.source, SpellBuff.typeid) and TargetFilter(Damage.target, GetOwningPlayer(Damage.source)) then
                 set b = Buff.get(Damage.source, Damage.source, SpellBuff.typeid)
                 if b > 0 then
                     call DisableTrigger(thistype.trg)

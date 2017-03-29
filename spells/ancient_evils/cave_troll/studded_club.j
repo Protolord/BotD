@@ -1,8 +1,8 @@
 scope StuddedClub
 
     globals
-        private constant integer SPELL_ID = 'A813'
-		private constant string SFX = ""
+        private constant integer SPELL_ID = 'A814'
+		private constant string SFX = "Models\\Effects\\StuddedClub.mdx"
         private constant attacktype ATTACK_TYPE = ATTACK_TYPE_NORMAL
         private constant damagetype DAMAGE_TYPE = DAMAGE_TYPE_MAGIC
     endglobals
@@ -31,7 +31,7 @@ scope StuddedClub
         private timer t
         public real dmg
         
-        private static constant integer RAWCODE = 'D813'
+        private static constant integer RAWCODE = 'D814'
         private static constant integer DISPEL_TYPE = BUFF_NEGATIVE
         private static constant integer STACK_TYPE = BUFF_STACK_PARTIAL
         
@@ -68,7 +68,7 @@ scope StuddedClub
             local integer level = GetUnitAbilityLevel(Damage.source, SPELL_ID)
             local SpellBuff b
             
-            if level > 0 and Damage.type == DAMAGE_TYPE_PHYSICAL and not Damage.element.coded and TargetFilter(Damage.target, GetOwningPlayer(Damage.source))  then
+            if level > 0 and Damage.type == DAMAGE_TYPE_PHYSICAL and not Damage.coded and TargetFilter(Damage.target, GetOwningPlayer(Damage.source))  then
                 set b = SpellBuff.add(Damage.source, Damage.target)
                 set b.dmg = DamagePerSecond(level)
                 set b.duration = Duration(level)

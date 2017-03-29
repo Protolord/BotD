@@ -30,7 +30,7 @@ scope ClawPierce
             local integer level = GetUnitAbilityLevel(Damage.source, SPELL_ID)
             local real angle
             local textsplat t
-            if Damage.type == DAMAGE_TYPE_PHYSICAL and not Damage.element.coded and level > 0  then
+            if Damage.type == DAMAGE_TYPE_PHYSICAL and not Damage.coded and level > 0  then
                 if GetRandomReal(0, 100) <= Chance(level) and Damage.amount < GetWidgetLife(Damage.target) then
                     if TargetFilter(Damage.target, GetOwningPlayer(Damage.source)) and SourceFilter(Damage.source) then
                         set angle = Atan2(GetUnitY(Damage.target) - GetUnitY(Damage.source), GetUnitX(Damage.target) - GetUnitX(Damage.source))*bj_RADTODEG
