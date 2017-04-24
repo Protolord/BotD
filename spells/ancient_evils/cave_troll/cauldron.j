@@ -72,7 +72,7 @@ scope Cauldron
 			call PauseUnit(this.dummy, false)
 			call UnitSetBonus(this.dummy, BONUS_SIGHT_RANGE, R2I(RADIUS))
 			call UnitAddAbility(this.dummy, TRUE_SIGHT_ABILITY)
-			call this.push(0.1)
+			call this.push(0.05)
         endmethod
 
         private static method init takes nothing returns nothing

@@ -31,8 +31,14 @@ scope SecondHit
         private static constant integer RAWCODE = 'B813'
         private static constant integer DISPEL_TYPE = BUFF_POSITIVE
         private static constant integer STACK_TYPE = BUFF_STACK_FULL
+
+		private static method delay takes nothing returns nothing
+			local thistype this = ReleaseTimer(GetExpiredTimer())
+			call AddUnitAnimationProperties(this.target, "alternate", true)
+		endmethod
         
         method onRemove takes nothing returns nothing
+			call AddUnitAnimationProperties(this.target, "alternate", false)
             call DestroyEffect(this.sfx)
             call this.as.destroy()
             set this.sfx = null
@@ -40,7 +46,8 @@ scope SecondHit
         
         method onApply takes nothing returns nothing
             set this.as = Atkspeed.create(this.target, 0xFFFF)
-            set this.sfx = AddSpecialEffectTarget(BUFF_SFX, this.target, "hand right")
+            set this.sfx = AddSpecialEffectTarget(BUFF_SFX, this.target, "hand left")
+			call TimerStart(NewTimerEx(this), 0.25, false, function thistype.delay)
         endmethod
 
         private static method init takes nothing returns nothing
@@ -61,17 +68,22 @@ scope SecondHit
 		
 		private static Table tb
 		
+		private static method delay takes nothing returns nothing
+			local thistype this = ReleaseTimer(GetExpiredTimer())
+			call this.buff.remove()
+			call this.deallocate()
+		endmethod
+
 		private method destroy takes nothing returns nothing
 			call thistype.tb.remove(GetHandleId(this.trg))
 			call thistype.tb.remove(GetHandleId(this.orderTrg))
 			call thistype.tb.boolean.remove(GetHandleId(this.buff.source))
-			call this.buff.remove()
 			call DestroyTrigger(this.trg)
 			call DestroyTrigger(this.orderTrg)
 			set this.target = null
 			set this.trg = null
 			set this.orderTrg = null
-			call this.deallocate()
+			call TimerStart(NewTimerEx(this), 0.2, false, function thistype.delay)
 		endmethod
 
 		private static method expires takes nothing returns nothing

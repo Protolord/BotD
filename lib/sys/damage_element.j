@@ -57,7 +57,7 @@ library DamageElement uses DamageEvent, FloatingText
             set thistype.path[DAMAGE_ELEMENT_EARTH] = "|iELEMENT_EARTH|i|cfff09140"
             set thistype.path[DAMAGE_ELEMENT_ELECTRIC] = "|iELEMENT_ELECTRIC|i|cff30ccf8"
             set thistype.path[DAMAGE_ELEMENT_FIRE] = "|iELEMENT_FIRE|i|cfff08030"
-            set thistype.path[DAMAGE_ELEMENT_ICE] = "|iELEMENT_ICE|i|cff987e7e"
+            set thistype.path[DAMAGE_ELEMENT_ICE] = "|iELEMENT_ICE|i|cff96c8ff"
             set thistype.path[DAMAGE_ELEMENT_NORMAL] = "|iELEMENT_NORMAL|i|cffff0000"
             set thistype.path[DAMAGE_ELEMENT_PLANT] = "|iELEMENT_PLANT|i|cff50a43b"
             set thistype.path[DAMAGE_ELEMENT_POISON] = "|iELEMENT_POISON|i|cff7ca700"

@@ -2,8 +2,8 @@ scope Bloodthirst
     
     globals
         private constant integer SPELL_ID = 'A242'
-        private constant string LIGHTNING = "HWPB"
-        private constant real LINK_LIFE = 0.75
+        private constant string LIGHTNING_CODE = "HWPB"
+		private constant real LIGHTNING_DURATION = 0.75
     endglobals
     
     private function HealFixed takes integer level returns real
@@ -28,32 +28,6 @@ scope Bloodthirst
         return UnitAlive(u) and not IsUnitType(u, UNIT_TYPE_UNDEAD) and not IsUnitType(u, UNIT_TYPE_STRUCTURE) and IsUnitEnemy(u, p) 
     endfunction
     
-    private struct Wave extends array
-    
-        private lightning link
-        private real duration
-        
-        implement CTLExpire
-            set this.duration = this.duration - CTL_TIMEOUT
-            if this.duration > 0 then
-                call SetLightningColor(this.link, 1.0, 0.0, 0.0, this.duration/LINK_LIFE)
-            else
-                call DestroyLightning(this.link)
-                set this.link = null
-                call this.destroy()
-            endif
-        implement CTLEnd
-        
-        static method add takes real x, real y, real z, unit u returns thistype
-            local thistype this = thistype.create()
-            set this.duration = LINK_LIFE
-            set this.link = AddLightningEx(LIGHTNING, true, GetUnitX(u), GetUnitY(u), GetUnitZ(u) + 50, x, y, z + 50)
-            call SetLightningColor(this.link, 1.0, 0.0, 0.0, 1.0)
-            return this
-        endmethod
-        
-    endstruct
-    
     struct Bloodthirst extends array
         implement Alloc
         
@@ -76,6 +50,7 @@ scope Bloodthirst
             local real y = GetUnitY(caster)
             local real z = GetUnitZ(caster)
             local player p = GetTriggerPlayer()
+			local Lightning l
             local unit u
             call GroupUnitsInArea(g, x, y, Radius(level))
             loop
@@ -83,7 +58,10 @@ scope Bloodthirst
                 exitwhen u == null
                 call GroupRemoveUnit(g, u)
                 if TargetFilter(u, p) then
-                    call Wave.add(x, y, z, u)
+					set l = Lightning.createUnits(LIGHTNING_CODE, u, caster)
+					set l.duration = LIGHTNING_DURATION
+					call l.startColor(1.0, 0.0, 0.0, 1.0)
+					call l.endColor(1.0, 0.0, 0.0, 0.0)
                     set amount = amount + inc
                 endif
             endloop

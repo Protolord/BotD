@@ -6,7 +6,15 @@ library DayNight
 
     DayNight.registerNight(code)
         - Registers code that will execute when it becomes night time.
+    
+    DayNight.get()
+        - Returns TIME_DAY for day time and TIME_NIGHT for night time.
 */
+
+    globals
+        constant integer TIME_DAY = 1
+        constant integer TIME_NIGHT = 2
+    endglobals
 
     struct DayNight
         
@@ -14,6 +22,14 @@ library DayNight
         private static trigger trgDay = CreateTrigger()
         private static trigger trgNight= CreateTrigger()
         
+        static method get takes nothing returns integer 
+            local real time = GetFloatGameState(GAME_STATE_TIME_OF_DAY)
+            if (time >= 6.00 and time < 18.00) then
+                return TIME_DAY
+            endif
+            return TIME_NIGHT
+        endmethod
+
         private static method run takes nothing returns boolean
             local thistype this
             if GetFloatGameState(GAME_STATE_TIME_OF_DAY) == 6.00 then

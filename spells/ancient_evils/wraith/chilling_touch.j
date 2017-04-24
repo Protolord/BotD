@@ -19,6 +19,7 @@ scope ChillingTouch
         readonly Movespeed ms
         readonly Atkspeed as
         private effect sfx
+        private VertexColor vc
 
         private static constant integer RAWCODE = 'D3XX'
         private static constant integer DISPEL_TYPE = BUFF_NEGATIVE
@@ -28,6 +29,7 @@ scope ChillingTouch
             call this.ms.destroy()
             call this.as.destroy()
             call DestroyEffect(this.sfx)
+            call this.vc.destroy()
             set this.sfx = null
         endmethod
         
@@ -35,7 +37,15 @@ scope ChillingTouch
             set this.ms = Movespeed.create(this.target, 0, 0)
             set this.as = Atkspeed.create(this.target, 0)
             set this.sfx = AddSpecialEffectTarget(SFX, this.target, "chest")
+            set this.vc = VertexColor.create(this.target, -200, -50, 255, 0)
+            set this.vc.speed = 500
         endmethod
+
+        method reapply takes nothing returns nothing
+            local real slow = -0.01*GetHeroLevel(this.source)
+			call this.ms.change(slow, 0)
+			call this.as.change(slow)
+		endmethod
         
         private static method init takes nothing returns nothing
             call PreloadSpell(thistype.RAWCODE)
@@ -48,15 +58,12 @@ scope ChillingTouch
         
         private static method onDamage takes nothing returns nothing
             local integer level = GetUnitAbilityLevel(Damage.source, SPELL_ID)
-            local real slow
             local SpellBuff b
             
             if Damage.type == DAMAGE_TYPE_PHYSICAL and not Damage.coded and level > 0 and TargetFilter(Damage.target, GetOwningPlayer(Damage.source))  then
-                set slow = -0.01*GetHeroLevel(Damage.source)
                 set b = SpellBuff.add(Damage.source, Damage.target)
                 set b.duration = Duration(level)
-                call b.ms.change(slow, 0)
-                call b.as.change(slow)
+                call b.reapply()
             endif
         endmethod
         

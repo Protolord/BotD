@@ -24,7 +24,6 @@ scope ChildOfTheNight
         
         private static Table tb
         
-        
         private static method day takes nothing returns boolean
             local thistype this = thistype(0).next
             loop
@@ -67,7 +66,6 @@ scope ChildOfTheNight
         private static method start takes unit u, integer level returns nothing
             local integer id = GetHandleId(u)
             local thistype this
-            local real time
             if not thistype.tb.has(id) then
                 set this = thistype.allocate()
                 set this.next = thistype(0).next
@@ -79,8 +77,7 @@ scope ChildOfTheNight
                 set this = thistype.tb[id]
             endif
             set this.lvl = level
-            set time = GetFloatGameState(GAME_STATE_TIME_OF_DAY)
-            if not (time >= 6.00 and time < 18.00) then //If it learned during night time
+            if DayNight.get() == TIME_NIGHT then
                 if this.lvl < 11 then
                     if this.sight > 0 then
                         //Update true sight radius

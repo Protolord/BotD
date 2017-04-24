@@ -3,7 +3,7 @@ scope Cocoon
     globals
         private constant integer SPELL_ID = 'A414'
         private constant integer UNIT_ID = 'uCoc'
-        private constant integer TRANSFORM_ID = 'TCoc'
+        private constant integer TRANSFORM_ID = 'T414'
     endglobals
     
     private function UnitHP takes integer level returns real

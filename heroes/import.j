@@ -8,3 +8,9 @@
 //! import "../heroes/ancient_evils/wraith.j"
 
 //! import "../heroes/living_force/storm_shaman.j"
+//! import "../heroes/living_force/crusader.j"
+//! import "../heroes/living_force/dwarf_defender.j"
+//! import "../heroes/living_force/elementalist.j"
+//! import "../heroes/living_force/firelord.j"
+// import "../heroes/living_force/gnome_technician.j"
+//! import "../heroes/living_force/witch.j"

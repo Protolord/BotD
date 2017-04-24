@@ -51,7 +51,7 @@ module CaveTrollSpells
 
     set bloodlust = Spell.create('A824')
     set bloodlust.passive = true
-    set bloodlust.info = "Bloodlust|n|cfff4a460Target|r: |cff3399ffPassive, Self|n|r|cfff4a460Speed Bonus/Hit|r: |cff3399ff(0.1% x level)|n|r|cfff4a460Duration|r: |cff3399ff10 seconds|n|r|nCave Troll rage reaches critical levels and continuously increasing his speed on each attack. Attacking structures only gives 10% of this bonus."
+    set bloodlust.info = "Bloodlust|n|cfff4a460Target|r: |cff3399ffPassive, Self|n|r|cfff4a460Speed Bonus/Hit|r: |cff3399ff(0.5% x level)|n|r|cfff4a460Duration|r: |cff3399ff10 seconds|n|r|nCave Troll rage reaches critical levels and continuously increasing his speed on each attack. Attacking structures only gives 10% of this bonus."
 
     set smell = Spell.create('A831')
     set smell.passive = true
@@ -59,7 +59,7 @@ module CaveTrollSpells
 
     set eyeRay = Spell.create('A832')
     set eyeRay.passive = true
-    set eyeRay.info = "Eye Ray"
+    set eyeRay.info = "Eye Ray|n|cfff4a460Target|r: |cff3399ffPassive|n|r|cfff4a460Range|r: |cff3399ff1800 + (100 x level)|n|r|nCave Troll gains line of sight vision in front of him that can see through obstacles."
 
     set cauldron = Spell.create('A833')
     set cauldron.info = "Cauldron|n|cfff4a460Target|r: |cff3399ffPoint|n|r|cfff4a460Radius|r: |cff3399ff1000|n|r|cfff4a460Debuff Duration|r: |cff3399ff(3 x level) seconds|r|n|cfff4a460Duration|r: |cff3399ff(240 + 10 x level) seconds|r|n|cfff4a460Cooldown|r: |cff3399ff60 seconds|r|n|nCave Troll places smelly cauldron. Any units walking in the range of cauldron will carry it's smell and will be revealed for certain period of time. Also reveals invisible units."
@@ -68,14 +68,14 @@ module CaveTrollSpells
     set totem.info = "Totem|n|cfff4a460Target|r: |cff3399ffPoint|n|r|cfff4a460Range|r: |cff3399ff2500|n|r|cfff4a460Heal/Second|r: |cff3399ff(100 + 10 x level)|n|r|cfff4a460Attacks To Destroy|r: |cff3399ff(10 + 1 x level)|r|n|cfff4a460Duration|r: |cff3399ff60 seconds|r|n|cfff4a460Cooldown|r: |cff3399ff60 seconds|r|n|nCave Troll plants a Totem that will provide additional healing for himself and his allies. For every 250 range away from Totem 10% healing strength is lost. Heals 4x on ethereal units."
 
     set devour = Spell.create('A842')
-    set devour.info = "Devour|n|cfff4a460Target|r: |cff3399ffEnemy Unit|n|r|cfff4a460Range|r: |cff3399ffMelee|n|r|cfff4a460Heal/Second|r: |cff3399ff10% Target Max HP|n|r|cfff4a460Duration|r: |cff3399ff(1 x level) seconds|n|r|cfff4a460Cooldown|r: |cff3399ff20 seconds|r|n|nCave Troll eats enemy alive gaining 10% its maximum health per second for a certain duration. During feast Cave Troll is unmoved by Area Damage."
+    set devour.info = "Devour|n|cfff4a460Target|r: |cff3399ffEnemy Unit|n|r|cfff4a460Range|r: |cff3399ffMelee|n|r|cfff4a460Health/Second|r: |cff3399ff10% Target Max HP|n|r|cfff4a460Duration|r: |cff3399ff(1 x level) seconds|n|r|cfff4a460Cooldown|r: |cff3399ff20 seconds|r|n|nCave Troll eats enemy alive stealing 10% its maximum health per second for a certain duration. During feast Cave Troll is unmoved by Area Damage."
 
     set rage = Spell.create('A843')
     set rage.passive = true
     set rage.info = "Rage|n|cfff4a460Target|r: |cff3399ffPassive, Enemy|n|r|cfff4a460Heal|r: |cff3399ff(1.5% Max HP x level)|n|r|nWhenever Cave Troll lands a hit he has a 5% chance to heal himself. Hitting structures only has 1% chance to heal. Heals 4x on ethereal units."
 
     set auraOfStrength = Spell.create('A844')
-    set auraOfStrength.info = "Aura of Strength"
+    set auraOfStrength.info = "Aura Of Strength|n|cfff4a460Target|r: |cff3399ffSelf|n|r|cfff4a460Radius|r: |cff3399ff600|n|r|cfff4a460Heal/Second|r: |cff3399ff(60 x ability level)|n|r|cfff4a460Manacost/Second|r: |cff3399ff(10 x ability level)|r|n|nOnce activated drains mana to heal Cave Troll and nearby allies. Heals 4x on ethereal units."
 endmodule
 
 module CaveTrollConfig

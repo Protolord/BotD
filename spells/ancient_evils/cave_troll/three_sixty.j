@@ -33,12 +33,8 @@ scope ThreeSixty
             local real x = GetUnitX(caster)
             local real y = GetUnitY(caster)
             local group g = NewGroup()
-            local unit dummy = GetRecycledDummyAnyAngle(x, y, 50)
             local unit u
-            call AddSpecialEffectTimer(AddSpecialEffectTarget(SFX_RIBBON, caster, "weapon right"), 1.0)
-            call DummyAddRecycleTimer(dummy, 2.5)
-            call SetUnitScale(dummy, Radius(lvl)/300.0, 0, 0)
-            call DestroyEffect(AddSpecialEffectTarget(SFX, dummy, "origin"))
+            call AddSpecialEffectTimer(AddSpecialEffectTarget(SFX_RIBBON, caster, "weapon right"), 0.8)
             call GroupUnitsInArea(g, x, y, Radius(lvl))
             loop
                 set u = FirstOfGroup(g)
@@ -51,7 +47,6 @@ scope ThreeSixty
             call ReleaseGroup(g)
             set g = null
             set u = null
-            set dummy = null
 			set owner = null
             call SystemMsg.create(GetUnitName(GetTriggerUnit()) + " cast thistype")
         endmethod

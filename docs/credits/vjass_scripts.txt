@@ -1,7 +1,7 @@
 -------------------------
    Systems and Snippets
 -------------------------
-	Alloc & Memory Analysis     by Nestharus
+	Alloc					    by Sevion
 	Ascii                       by Bribe
     ARGB                        by Vexorian
     BonusMod                    by Earth-Fury

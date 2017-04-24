@@ -16,17 +16,17 @@ scope Bloodlust
 	//Speed Growth when unit is hit
     private function UnitGrowth takes integer level returns real
         if level == 11 then
-            return 0.01 //1%
+            return 0.05 //5%
         endif
-        return 0.001*level //0.1%
+        return 0.005*level //0.5%
     endfunction
 	
 	//Speed Growth when building is hit
 	private function StructureGrowth takes integer level returns real
         if level == 11 then
-            return 0.001 //0.1%
+            return 0.005 //0.5%
         endif
-        return 0.0001*level //0.01%
+        return 0.0005*level //0.05%
     endfunction
     
     private function TargetFilter takes unit u, player p returns boolean

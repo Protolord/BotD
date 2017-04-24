@@ -29,6 +29,11 @@ scope HeavySwing
     endfunction
 
     struct HeavySwing extends array
+        implement Alloc
+
+        private integer run
+        private boolean hasMana
+        private trigger manaTrg
 
         private static trigger trg
         private static Table tb
@@ -36,7 +41,8 @@ scope HeavySwing
         static method get takes unit u returns real
             local integer id = GetHandleId(u)
             local integer level = GetUnitAbilityLevel(u, SPELL_ID)
-            if level > 0 and thistype.tb[id] > 0 then
+            local thistype this = thistype.tb[id]
+            if level > 0 and this.run > 0 and this.hasMana then
                 return 1.0 + ExtraDamage(level)/100.0
             endif
             return 1.0
@@ -44,8 +50,9 @@ scope HeavySwing
         
         private static method onDamage takes nothing returns boolean
             local integer level = GetUnitAbilityLevel(Damage.source, SPELL_ID)
+            local thistype this = thistype.tb[GetHandleId(Damage.source)]
             local real dmg
-            if level > 0 and Damage.type == DAMAGE_TYPE_PHYSICAL and not Damage.coded and thistype.tb[GetHandleId(Damage.source)] > 0 and GetUnitState(Damage.source, UNIT_STATE_MANA) >= Manacost(level) then
+            if this > 0 and level > 0 and Damage.type == DAMAGE_TYPE_PHYSICAL and not Damage.coded and this.run > 0 and this.hasMana then
                 set dmg = DamageStat.get(Damage.source)*ExtraDamage(level)/100.0
                 call DisableTrigger(thistype.trg)
                 call Stun.create(Damage.target, StunDuration(level), false)
@@ -56,34 +63,81 @@ scope HeavySwing
             return false
         endmethod
 
-        private static method delay takes nothing returns nothing
-            local integer id = ReleaseTimer(GetExpiredTimer())
-            set thistype.tb[id] = thistype.tb[id] - 1
+        private static method castDelay takes nothing returns nothing
+            local thistype this = ReleaseTimer(GetExpiredTimer())
+            set this.run = this.run - 1
         endmethod
 
         private static method onCast takes nothing returns nothing
-            local integer id = GetHandleId(GetTriggerUnit())
-            set thistype.tb[id] = thistype.tb[id] + 1
-            call TimerStart(NewTimerEx(id), 0.01, false, function thistype.delay) //Because of missile delay
+            local thistype this = thistype.tb[GetHandleId(GetTriggerUnit())]
+            set this.run = this.run + 1
+            call TimerStart(NewTimerEx(this), 0.01, false, function thistype.castDelay) //Because of missile delay
             call SystemMsg.create(GetUnitName(GetTriggerUnit()) + " cast thistype")
         endmethod
 
         private static method onOrder takes nothing returns boolean
             local integer order = GetIssuedOrderId()
-            local integer id = GetHandleId(GetTriggerUnit())
-            local thistype this
+            local thistype this = thistype.tb[GetHandleId(GetTriggerUnit())]
             if order == ORDER_flamingarrows then
-                set thistype.tb[id] = thistype.tb[id] + 1
+                set this.run = this.run + 1
             elseif order == ORDER_unflamingarrows then
-                set thistype.tb[id] = thistype.tb[id] - 1
+                set this.run = this.run - 1
             endif
             return false
         endmethod
 
+        private static method manaDelay takes nothing returns nothing
+            local thistype this = ReleaseTimer(GetExpiredTimer())
+            set this.hasMana = not this.hasMana
+        endmethod
+
+        private static method onMana takes nothing returns boolean
+            local unit u = GetTriggerUnit()
+            local thistype this = thistype.tb[GetHandleId(u)]
+            call DestroyTrigger(this.manaTrg)
+            set this.manaTrg = CreateTrigger()
+            if this.hasMana then 
+                call TriggerRegisterUnitStateEvent(this.manaTrg, u, UNIT_STATE_MANA, GREATER_THAN_OR_EQUAL, Manacost(GetUnitAbilityLevel(u, SPELL_ID)))
+            else
+                call TriggerRegisterUnitStateEvent(this.manaTrg, u, UNIT_STATE_MANA, LESS_THAN, Manacost(GetUnitAbilityLevel(u, SPELL_ID)))
+            endif
+            call TriggerAddCondition(this.manaTrg, function thistype.onMana)
+            call TimerStart(NewTimerEx(this), 0.01, false, function thistype.manaDelay)
+            return false
+        endmethod
+
+        private static method onLevel takes nothing returns nothing
+            local unit u
+            local thistype this
+            local integer lvl
+            if GetLearnedSkill() == SPELL_ID then
+                set u = GetTriggerUnit()
+                set this = thistype.tb[GetHandleId(u)]
+                set lvl = GetUnitAbilityLevel(u, SPELL_ID)
+                if this.manaTrg != null then
+                    call DestroyTrigger(this.manaTrg)
+                endif
+                set this.manaTrg = CreateTrigger()
+                if GetUnitState(u, UNIT_STATE_MANA) >= Manacost(lvl) then
+                    set this.hasMana = true 
+                    call TriggerRegisterUnitStateEvent(this.manaTrg, u, UNIT_STATE_MANA, LESS_THAN, Manacost(lvl))
+                else
+                    set this.hasMana = false
+                    call TriggerRegisterUnitStateEvent(this.manaTrg, u, UNIT_STATE_MANA, GREATER_THAN_OR_EQUAL, Manacost(lvl))
+                endif
+                call TriggerAddCondition(this.manaTrg, function thistype.onMana)
+                set u = null
+            endif
+        endmethod
+
         static method register takes unit u returns nothing
+            local thistype this = thistype.allocate()
             local trigger orderTrg = CreateTrigger()
+            set this.run = 0
+            set this.manaTrg = null
 			call TriggerRegisterUnitEvent(orderTrg, u, EVENT_UNIT_ISSUED_ORDER)
             call TriggerAddCondition(orderTrg, function thistype.onOrder)
+            set thistype.tb[GetHandleId(u)] = this
         endmethod
         
         static method init takes nothing returns nothing
@@ -93,6 +147,7 @@ scope HeavySwing
             set thistype.trg = CreateTrigger()
             call Damage.registerModifierTrigger(thistype.trg)
             call TriggerAddCondition(thistype.trg, function thistype.onDamage)
+            call RegisterPlayerUnitEvent(EVENT_PLAYER_HERO_SKILL, function thistype.onLevel)
             call thistype.register(PlayerStat.initializer.unit)
             call SystemTest.end()
         endmethod

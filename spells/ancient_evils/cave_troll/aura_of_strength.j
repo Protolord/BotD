@@ -2,6 +2,8 @@ scope AuraOfStrength
  
     globals
         private constant integer SPELL_ID = 'A844'
+        private constant string SFX = "Models\\Effects\\AuraOfStrength.mdx"
+        private constant string SFX_HEALED = "Abilities\\Spells\\NightElf\\ManaBurn\\ManaBurnTarget.mdl"
 		private constant real TIMEOUT = 1.0
     endglobals
     
@@ -55,8 +57,10 @@ scope AuraOfStrength
 				call GroupRemoveUnit(thistype.g, u)
 				if TargetFilter(u, p) then
 					call Heal.unit(u, this.hps, 4.0)
+                    call DestroyEffect(AddSpecialEffectTarget(SFX_HEALED, u, "chest"))
 				endif
 			endloop
+            call DestroyEffect(AddSpecialEffectTarget(SFX, this.caster, "origin"))
 		endmethod
 
         private static method onManaDeplete takes nothing returns boolean

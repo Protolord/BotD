@@ -3,6 +3,7 @@ scope StuddedClub
     globals
         private constant integer SPELL_ID = 'A814'
 		private constant string SFX = "Models\\Effects\\StuddedClub.mdx"
+        private constant string SFX_ATTACH = "Models\\Effects\\StuddedClubAttach.mdx"
         private constant attacktype ATTACK_TYPE = ATTACK_TYPE_NORMAL
         private constant damagetype DAMAGE_TYPE = DAMAGE_TYPE_MAGIC
     endglobals
@@ -64,6 +65,8 @@ scope StuddedClub
     
     struct StuddedClub extends array
         
+        private static Table tb
+
         private static method onDamage takes nothing returns nothing
             local integer level = GetUnitAbilityLevel(Damage.source, SPELL_ID)
             local SpellBuff b
@@ -74,11 +77,22 @@ scope StuddedClub
                 set b.duration = Duration(level)
             endif
         endmethod
+
+        private static method learn takes nothing returns nothing   
+			local unit u = GetTriggerUnit()
+            if GetLearnedSkill() == SPELL_ID and not thistype.tb.has(GetHandleId(u)) then
+                set thistype.tb[GetHandleId(u)] = 1
+                call AddSpecialEffectTarget(SFX_ATTACH, u, "weapon right")
+            endif
+			set u = null
+        endmethod
         
         static method init takes nothing returns nothing
             call SystemTest.start("Initializing thistype: ")
             call Damage.register(function thistype.onDamage)
             call SpellBuff.initialize()
+            call RegisterPlayerUnitEvent(EVENT_PLAYER_HERO_SKILL, function thistype.learn)
+            set thistype.tb = Table.create()
             call SystemTest.end()
         endmethod
         

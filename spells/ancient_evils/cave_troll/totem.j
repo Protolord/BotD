@@ -4,7 +4,6 @@ scope Totem
         private constant integer SPELL_ID = 'A841'
 		private constant integer UNIT_ID = 'uTot'
 		private constant real MIN_RANGE = 250 //Range that will deal max healing
-		private constant string SFX = "Units\\Orc\\HealingWard\\HealingWard.mdx"
 		private constant string HEAL_SFX = "Abilities\\Spells\\Human\\Heal\\HealTarget.mdl"
 		private constant real TIMEOUT = 1.0
     endglobals
@@ -39,10 +38,7 @@ scope Totem
 	endfunction
 	
 	private function Duration takes integer level returns real
-        if level == 11 then
-            return 0.0
-        endif
-        return 60 + 10.0*level
+        return 60 + 0.0*level
     endfunction
 	
 	private function TargetFilter takes unit u, player p returns boolean
@@ -55,7 +51,6 @@ scope Totem
 		private unit caster
 		private player owner
 		private unit totem
-		private effect sfx
 		private real x
 		private real y
 		private real range
@@ -69,7 +64,6 @@ scope Totem
 		private static group g
 		
 		private method destroy takes nothing returns nothing
-			call DestroyEffect(this.sfx)
 			call ReleaseTimer(this.t)
 			set this.totem = null
 			set this.caster = null
@@ -118,7 +112,6 @@ scope Totem
 			set this.x = GetSpellTargetX()
 			set this.y = GetSpellTargetY()
 			set this.totem = CreateUnit(this.owner, UNIT_ID, this.x, this.y, 0)
-			set this.sfx = AddSpecialEffectTarget(SFX, this.totem, "origin")
 			set this.range = Range(lvl)
 			set this.maxHeal = HealPerSecond_Max(lvl)*TIMEOUT
 			set this.minHeal = HealPerSecond_Min(lvl)*TIMEOUT

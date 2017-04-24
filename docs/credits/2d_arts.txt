@@ -9,6 +9,9 @@
 		BTN_Gargoyle                by PeeKay
 		BTN_SkeletonKing            by -Grendel
 		BTN_CaveTroll               by Marshmallo
+		BTN_StormShaman				by wij
+		BTN_Crusader				by CloudWolf
+		BTN_Witch					by Daenar7
 		
 		
 	Vampire Lord Abilities:
@@ -84,8 +87,8 @@
 		BTN_SoulBreak	            by 4eNNightmare
 		BTN_Reaper					by PeeKay
 		BTN_SoulRip					by -Berz-
-		BTN_GhostForm				by DarkFang
-		BTN_DeathPact				by PeeKay
+		BTN_GhostForm				by Darkfang
+		BTN_DeathPact				by Valve Corporation
 		BTN_Regency					by NFWar
 		BTN_OtherSide				by 4eNNightmare
 		BTN_SoulFeast				by Valve Corporation
@@ -99,10 +102,21 @@
 		BTN_StuddedClub				by JollyD
 		BTN_Smell					by Stanakin
 		BTN_EyeRay					by Paladon
+		BTN_Testudo					by zbc
 		BTN_StrongBack				by Valve Corporation
 		BTN_Cleave					by Valve Corporation
 		BTN_ThreeSixty				by Valve Corporation
-		
+	
+	Storm Shaman
+		BTN_ChainLightning			by Valve Corporation
+		BTN_Tornado					by Valve Corporation
+		BTN_Storm					by Valve Corporation
+	
+	Elementalist
+		BTN_Mirage					by Valve Corporation 
+		BTN_FrostNova				by CRAZYRUSSIAN
+		BTN_FrostArmor				by Darkfang
+
 	Others:
 		BTN_Check                   by Lockheart 
 		BTN_Phased                  by Riley
@@ -114,3 +128,7 @@
 		  Skins
 -------------------------
 		Blue Laser Lightning        by Erkki2
+
+		Crusader					by CloudWolf
+		Dwarf Defender				by camel's_hump
+		Witch						by Daenar7

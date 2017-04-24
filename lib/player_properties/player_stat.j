@@ -60,19 +60,30 @@ library PlayerStat uses RegisterPlayerUnitEvent, SystemConsole, HeroPool
         
         private static method addUltimates takes nothing returns boolean
             local thistype this = thistype.get(GetTriggerPlayer())
-            if GetHeroLevel(this.unit) > 40 and not this.ultimateAdded then
-                call SystemTest.start("Changing " + GetUnitName(this.unit) + "'s ability to Ultimate Form")
-                call SelectHeroSkill(this.unit, this.spell1.id)
-                call SelectHeroSkill(this.unit, this.spell2.id)
-                call SelectHeroSkill(this.unit, this.spell3.id)
-                call SelectHeroSkill(this.unit, this.spell4.id)
-                call SetUnitAbilityLevel(this.unit, this.spell1.id, 11)
-                call SetUnitAbilityLevel(this.unit, this.spell2.id, 11)
-                call SetUnitAbilityLevel(this.unit, this.spell3.id, 11)
-                call SetUnitAbilityLevel(this.unit, this.spell4.id, 11)
-                call UnitModifySkillPoints(this.unit, 0 - GetHeroSkillPoints(this.unit))
-                set this.ultimateAdded = true
-                call SystemTest.end()
+            if this.hero.faction == ANCIENT_EVILS then
+                if GetHeroLevel(this.unit) > 40 and not this.ultimateAdded then
+                    call SystemTest.start("Changing " + GetUnitName(this.unit) + "'s abilities to Ultimate Form")
+                    call SelectHeroSkill(this.unit, this.spell1.id)
+                    call SelectHeroSkill(this.unit, this.spell2.id)
+                    call SelectHeroSkill(this.unit, this.spell3.id)
+                    call SelectHeroSkill(this.unit, this.spell4.id)
+                    call SetUnitAbilityLevel(this.unit, this.spell1.id, 11)
+                    call SetUnitAbilityLevel(this.unit, this.spell2.id, 11)
+                    call SetUnitAbilityLevel(this.unit, this.spell3.id, 11)
+                    call SetUnitAbilityLevel(this.unit, this.spell4.id, 11)
+                    call UnitModifySkillPoints(this.unit, 0 - GetHeroSkillPoints(this.unit))
+                    set this.ultimateAdded = true
+                    call SystemTest.end()
+                endif
+            elseif this.hero.faction == LIVING_FORCE then
+                if GetHeroLevel(this.unit) >= 60 and not this.ultimateAdded then
+                    call SystemTest.start("Changing " + GetUnitName(this.unit) + "'s offensive ability to Ultimate Form")
+                    call SelectHeroSkill(this.unit, this.spell2.id)
+                    call UnitModifySkillPoints(this.unit, -(10 - GetUnitAbilityLevel(this.unit, this.spell2.id)))
+                    call SetUnitAbilityLevel(this.unit, this.spell2.id, 11)
+                    set this.ultimateAdded = true
+                    call SystemTest.end()
+                endif
             endif
             return false
         endmethod

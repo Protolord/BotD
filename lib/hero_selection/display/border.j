@@ -1,4 +1,4 @@
-library Border requires ErrorMessage
+library Border
 
     struct Border extends array
         implement Alloc

@@ -3,7 +3,7 @@ scope Hatch
     globals
         private constant integer SPELL_ID = 'A422'
         private constant integer UNIT_ID = 'uHat'
-        private constant integer TRANSFORM_ID = 'THat'
+        private constant integer TRANSFORM_ID = 'T422'
         private constant real PERIMETER = 800.0
         private constant integer INIT_DAMAGE = 1
         private constant string SFX = "Doodads\\Dungeon\\Terrain\\EggSack\\EggSack0.mdl"

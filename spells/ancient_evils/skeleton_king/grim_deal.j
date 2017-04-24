@@ -5,6 +5,7 @@ scope GrimDeal
         private constant real DELAY = 1.5
         private constant string SFX_DEATH = "Abilities\\Spells\\Undead\\AnimateDead\\AnimateDeadTarget.mdl"
         private constant string SFX_HEAL = "Models\\Effects\\GrimDeal.mdx"
+        private constant string SFX = "Objects\\Spawnmodels\\Undead\\UndeadDissipate\\UndeadDissipate.mdl"
     endglobals
     
     private function Chance takes integer level returns real
@@ -29,6 +30,7 @@ scope GrimDeal
             call SetUnitAnimation(Damage.target, "stand")
             call Heal.unit(this.u, 0xFFFFFF, 1.0)
             call DestroyEffect(AddSpecialEffectTarget(SFX_HEAL, this.u, "origin"))
+            call DestroyEffect(AddSpecialEffect(SFX, GetUnitX(this.u), GetUnitY(this.u)))
             call thistype.tb.remove(id)
             set this.u = null
             call this.deallocate()

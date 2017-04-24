@@ -31,6 +31,7 @@ scope Rage
         private static method onDamage takes nothing returns nothing
             local integer level = GetUnitAbilityLevel(Damage.source, SPELL_ID)
 			local boolean proc = false
+            local VertexColor vc
             local real rand
             if Damage.type == DAMAGE_TYPE_PHYSICAL and not Damage.coded and level > 0 and TargetFilter(Damage.target, GetOwningPlayer(Damage.source)) then
                 set rand = GetRandomReal(0, 100)
@@ -46,6 +47,9 @@ scope Rage
 				if proc then
 					call Heal.unit(Damage.source, MaxHPHeal(level)*GetUnitState(Damage.source, UNIT_STATE_MAX_LIFE)/100.0, 4.0)
 					call DestroyEffect(AddSpecialEffectTarget(SFX, Damage.source, "chest"))
+                    set vc = VertexColor.create(Damage.source, 0, -225, -225, 0)
+                    set vc.speed = 765
+                    set vc.duration = 0.75
 				endif
             endif
         endmethod

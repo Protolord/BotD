@@ -5,6 +5,8 @@ scope Devour
         private constant string BUFF_SFX = ""
 		private constant real TIMEOUT = 1.0
 		private constant real RANGE = 200.0
+        private constant attacktype ATTACK_TYPE = ATTACK_TYPE_NORMAL
+        private constant damagetype DAMAGE_TYPE = DAMAGE_TYPE_MAGIC
     endglobals
 	
 	private function HealPercent takes integer level returns real
@@ -29,6 +31,7 @@ scope Devour
         
         method onRemove takes nothing returns nothing
 			call this.pop()
+            call IssueImmediateOrderById(this.source, ORDER_stop)
 			call UnitRemoveAbility(this.source, BUFF_RAWCODE)
             call DestroyEffect(this.sfx)
 			call this.s.destroy()
@@ -37,13 +40,16 @@ scope Devour
         
         static method onPeriod takes nothing returns nothing
             local thistype this = thistype(0).next
+            local real amount
             loop
                 exitwhen this == 0
-				if IsUnitInRange(this.source, this.target, RANGE) then
+				if IsUnitInRange(this.source, this.target, RANGE) and UnitAlive(this.target) then
 					set this.ctr = this.ctr + thistype.PERIODIC
 					if this.ctr > TIMEOUT then
 						set this.ctr = 0
-						call Heal.unit(this.source, this.factor*GetUnitState(this.target, UNIT_STATE_MAX_LIFE)*TIMEOUT, 1.0)
+                        set amount = this.factor*GetUnitState(this.target, UNIT_STATE_MAX_LIFE)*TIMEOUT
+                        call Damage.element.apply(this.source, this.target, amount, ATTACK_TYPE, DAMAGE_TYPE, DAMAGE_ELEMENT_NORMAL)
+						call Heal.unit(this.source, amount, 1.0)
 					endif
 				else
 					call IssueImmediateOrderById(this.source, ORDER_stop)

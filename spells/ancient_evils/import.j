@@ -174,7 +174,7 @@
 //! import "../spells/ancient_evils/cave_troll/bloodlust.j"
 //------------------------------------------------------------------------------
 //! import "../spells/ancient_evils/cave_troll/smell.j"
-// import "../spells/ancient_evils/cave_troll/eye_ray.j"
+//! import "../spells/ancient_evils/cave_troll/eye_ray.j"
 //! import "../spells/ancient_evils/cave_troll/cauldron.j"
 //------------------------------------------------------------------------------
 //! import "../spells/ancient_evils/cave_troll/totem.j"

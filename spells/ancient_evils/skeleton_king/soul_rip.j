@@ -4,10 +4,10 @@ scope SoulRip
         private constant integer SPELL_ID = 'A713'
         private constant string MODEL = "Models\\Effects\\SoulRipMissile.mdx"
         private constant string SFX_HIT = "Abilities\\Spells\\Undead\\DeathCoil\\DeathCoilSpecialArt.mdl"
-        private constant string AREA_NODE = "Objects\\Spawnmodels\\Undead\\UndeadDissipate\\UndeadDissipate.mdl"
+        private constant string AREA_NODE = "Models\\Effects\\SoulRipEffect.mdx"
         private constant attacktype ATTACK_TYPE = ATTACK_TYPE_NORMAL
         private constant damagetype DAMAGE_TYPE = DAMAGE_TYPE_MAGIC
-		private constant real SPACING = 200.0
+		private constant real SPACING = 150.0
     endglobals
     
     private function HealPerUnit takes integer level returns real

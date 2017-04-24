@@ -40,8 +40,7 @@ scope ClawPierce
                         if RAbsBJ(GetUnitFacing(Damage.target) - angle) <= ANGLE_TOLERANCE then
                             set Damage.amount = GetWidgetLife(Damage.target) - 1.0
                             call DestroyEffect(AddSpecialEffect(SFX, GetUnitX(Damage.target), GetUnitY(Damage.target)))
-                            set t = FloatingTextSplat(Element.string(DAMAGE_ELEMENT_NORMAL) + I2S(R2I(GetWidgetLife(Damage.target) - 1.0)) + "|r", Damage.target, 2.0)
-                            call t.setVisible(GetLocalPlayer() == GetOwningPlayer(Damage.source))
+                            call FloatingTextSplat(Element.string(DAMAGE_ELEMENT_NORMAL) + I2S(R2I(GetWidgetLife(Damage.target) - 1.0)) + "|r", Damage.target, 2.0).setVisible(GetLocalPlayer() == GetOwningPlayer(Damage.source))
                         endif
                         call SystemMsg.create(GetUnitName(GetTriggerUnit()) + " procs thistype")
                     endif

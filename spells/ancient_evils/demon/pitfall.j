@@ -2,9 +2,9 @@ scope Pitfall
  
     globals
         private constant integer SPELL_ID = 'A512'
-        private constant integer PITFALL_ID = 'B512'
         private constant attacktype ATTACK_TYPE = ATTACK_TYPE_NORMAL
         private constant damagetype DAMAGE_TYPE = DAMAGE_TYPE_MAGIC
+        private constant string SFX = "Models\\Effects\\Pitfall.mdx"
         private constant string SFX_BUFF = "Abilities\\Spells\\Human\\FlameStrike\\FlameStrikeDamageTarget.mdl"
         private constant real TIMEOUT = 1.0
         private constant real SPACING = 100.0
@@ -117,7 +117,7 @@ scope Pitfall
         
         private unit caster
         private Flame sfxHead
-        private destructable pit
+        private Effect pit
         private real x
         private real y
         private real dmg
@@ -145,10 +145,9 @@ scope Pitfall
                 set f = f.next
             endloop
             call this.sfxHead.destroy()
-            call KillDestructable(this.pit)
+            call this.pit.destroy()
             call this.tb.destroy()
             call ReleaseGroup(this.g)
-            set this.pit = null
             set this.g = null
             set this.caster = null
             call this.destroy()
@@ -219,8 +218,8 @@ scope Pitfall
             set this.moveSlow = -MoveSlow(lvl)
             set this.dmg = DamagePerSecond(lvl)*TIMEOUT
             set this.tb = Table.create()
-            set this.pit = CreateDestructable(PITFALL_ID, this.x, this.y, GetRandomReal(0, 360), this.radius/80, 0)
-            call SetDestructableAnimation(this.pit, "birth")
+            set this.pit = Effect.createAnyAngle(SFX, this.x, this.y, 0)
+            set this.pit.scale = this.radius/115.0
             set this.sfxHead = Flame.head()
             set da = 2*bj_PI/R2I(2*bj_PI*radius/SPACING)
 			if da > bj_PI/3 then
