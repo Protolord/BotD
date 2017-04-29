@@ -3,7 +3,6 @@ scope Firebolt
     globals
         private constant integer SPELL_ID = 'AH52'
         private constant string MODEL = "Models\\Effects\\Firebolt.mdx"
-        private constant string SFX_BUFF = "Environment\\LargeBuildingFire\\LargeBuildingFire2.mdl"
         private constant attacktype ATTACK_TYPE = ATTACK_TYPE_NORMAL
         private constant damagetype DAMAGE_TYPE = DAMAGE_TYPE_MAGIC
     endglobals
@@ -13,10 +12,6 @@ scope Firebolt
             return 1200.0
         endif
         return 60.0*level
-    endfunction
-    
-    private function DamagePerSecond takes integer level returns real
-        return 10.0 + 0.0*level
     endfunction
 
     private function Duration takes integer level returns real
@@ -31,45 +26,6 @@ scope Firebolt
         return UnitAlive(u) and IsUnitEnemy(u, p) and not IsUnitType(u, UNIT_TYPE_STRUCTURE) and not IsUnitType(u, UNIT_TYPE_MAGIC_IMMUNE)
     endfunction
 
-    private struct SpellBuff extends Buff
-
-        private effect sfx
-        private timer t
-        private real dmg
-        
-		private static constant integer RAWCODE = 'DH52'
-        private static constant integer DISPEL_TYPE = BUFF_NEGATIVE
-        private static constant integer STACK_TYPE = BUFF_STACK_PARTIAL
-        
-        method onRemove takes nothing returns nothing
-            call ReleaseTimer(this.t)
-            call DestroyEffect(this.sfx)
-            set this.t = null
-            set this.sfx = null
-        endmethod
-
-        private static method onPeriod takes nothing returns nothing
-            local thistype this = GetTimerData(GetExpiredTimer())
-            call Damage.element.apply(this.source, this.target, this.dmg, ATTACK_TYPE, DAMAGE_TYPE, DAMAGE_ELEMENT_FIRE)
-        endmethod
-        
-        method onApply takes nothing returns nothing
-            set this.sfx = AddSpecialEffectTarget(SFX_BUFF, this.target, "chest")
-            set this.t = NewTimerEx(this)
-            call TimerStart(this.t, 1.0, true, function thistype.onPeriod)
-        endmethod
-
-        method reapply takes integer lvl returns nothing
-			set this.dmg = DamagePerSecond(lvl)
-		endmethod
-
-        private static method init takes nothing returns nothing
-            call PreloadSpell(thistype.RAWCODE)
-        endmethod
-        
-        implement BuffApply
-    endstruct
-    
     struct Firebolt extends array
         
         private unit caster
@@ -87,12 +43,16 @@ scope Firebolt
         
         private static method onHit takes nothing returns nothing
             local thistype this = Missile.getHit()
-            local SpellBuff b
+            local Burn b
             if not SpellBlock.has(this.target) and TargetFilter(this.target, this.owner) then
                 call Damage.element.apply(this.caster, this.target, DamageDealt(this.lvl), ATTACK_TYPE, DAMAGE_TYPE, DAMAGE_ELEMENT_FIRE)
-                set b = SpellBuff.add(this.caster, this.target)
-                set b.duration = Duration(this.lvl)
-                call b.reapply(this.lvl)
+                set b = Buff.get(null, this.target, Burn.typeid)
+                if b > 0 then
+                    set b.duration = b.duration + Duration(this.lvl)
+                else
+                    set b = Burn.add(this.caster, this.target)
+                    set b.duration = Duration(this.lvl)
+                endif
             endif
             call this.destroy()
         endmethod
@@ -116,7 +76,6 @@ scope Firebolt
         static method init takes nothing returns nothing
             call SystemTest.start("Initializing thistype: ")
             call RegisterSpellEffectEvent(SPELL_ID, function thistype.onCast)
-            call SpellBuff.initialize()
             call SystemTest.end()
         endmethod
         

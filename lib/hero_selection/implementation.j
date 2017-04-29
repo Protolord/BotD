@@ -2,7 +2,7 @@
     implement VampireLordSpells
     implement WerewolfSpells
     implement WraithSpells
-    implement ArachnidSpells
+    implement AncientArachnidSpells
     implement DemonSpells
     implement GargoyleSpells
     implement SkeletonKingSpells
@@ -12,7 +12,7 @@
     implement DwarfDefenderSpells
     implement ElementalistSpells
     implement FirelordSpells
-    //implement GnomeTechnicianSpells
+    implement GnomeTechnicianSpells
     implement WitchSpells
 //! endtextmacro
 
@@ -20,7 +20,7 @@
     implement VampireLordConfig
     implement WerewolfConfig
     implement WraithConfig
-    implement ArachnidConfig
+    implement AncientArachnidConfig
     implement DemonConfig
     implement GargoyleConfig
     implement SkeletonKingConfig
@@ -30,7 +30,7 @@
     implement DwarfDefenderConfig
     implement ElementalistConfig
     implement FirelordConfig
-    //implement GnomeTechnicianConfig
+    implement GnomeTechnicianConfig
     implement WitchConfig
 //! endtextmacro
 
@@ -42,14 +42,14 @@
     implement DwarfDefenderButton
     implement ElementalistButton
     implement FirelordButton
-    //implement GnomeTechnicianButton
+    implement GnomeTechnicianButton
     implement WitchButton
     set HeroButton.buttonX = HERO_BUTTON_ORIGIN_X
     set HeroButton.buttonY = HERO_BUTTON_ORIGIN_Y - 180
     implement VampireLordButton
     implement WerewolfButton
     implement WraithButton
-    implement ArachnidButton
+    implement AncientArachnidButton
     implement DemonButton
     implement GargoyleButton
     implement SkeletonKingButton

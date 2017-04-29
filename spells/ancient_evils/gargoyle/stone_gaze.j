@@ -37,8 +37,8 @@ scope StoneGaze
     private struct SpellBuff extends Buff
      
         readonly Armor a 
-        private SpellImmune si
-        private Stun s
+        private SpellImmunity si
+        private Pause p
         private effect sfx
         private VertexColor color 
 
@@ -48,7 +48,7 @@ scope StoneGaze
         
         method onRemove takes nothing returns nothing
             call this.a.destroy()
-            call this.s.destroy()
+            call this.p.destroy()
             call this.si.destroy()
             call DestroyEffect(this.sfx)
             set this.color.speed = 500
@@ -59,11 +59,11 @@ scope StoneGaze
         
         method onApply takes nothing returns nothing
             set this.a = Armor.create(this.target, 0)
-            set this.s = Stun.create(this.target, 0, false)
+            set this.p = Pause.create(this.target)
             set this.sfx = AddSpecialEffectTarget(SFX, this.target, "origin")
             set this.color = VertexColor.create(this.target, -215, -215, -215, 0)
             set this.color.speed = 255
-            set this.si = SpellImmune.create(this.target)
+            set this.si = SpellImmunity.create(this.target)
             call SetUnitTimeScale(this.target, 0)
         endmethod
         

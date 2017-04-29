@@ -8,7 +8,7 @@
 //==============================================================================
 //                                Crusader
 //==============================================================================
-// import "../spells/living_force/crusader/enlighten.j"
+//! import "../spells/living_force/crusader/enlight.j"
 //! import "../spells/living_force/crusader/destinction.j"
 //! import "../spells/living_force/crusader/aura_of_prayer.j"
 //! import "../spells/living_force/crusader/avander.j"
@@ -17,16 +17,33 @@
 //==============================================================================
 //! import "../spells/living_force/dwarf_defender/storm_bolt.j"
 //! import "../spells/living_force/dwarf_defender/thunder_clap.j"
-// import "../spells/living_force/dwarf_defender/treasury.j"
+//! import "../spells/living_force/dwarf_defender/treasury.j"
 //! import "../spells/living_force/dwarf_defender/ancestral_power.j"
 //==============================================================================
 //                               Elementalist
 //==============================================================================
+//! import "../spells/living_force/elementalist/mirage.j"
 //! import "../spells/living_force/elementalist/frost_nova.j"
+//! import "../spells/living_force/elementalist/frost_armor.j"
 //! import "../spells/living_force/elementalist/fire_devastation.j"
 //==============================================================================
 //                                 Firelord
 //==============================================================================
+//! import "../spells/living_force/firelord/pyro.j"
 //! import "../spells/living_force/firelord/firebolt.j"
 //! import "../spells/living_force/firelord/enchanted_fires.j"
 //! import "../spells/living_force/firelord/meteor.j"
+//==============================================================================
+//                              Gnome Technician
+//==============================================================================
+// import "../spells/living_force/gnome_technician/statis_trap.j"
+// import "../spells/living_force/gnome_technician/bomb.j"
+// import "../spells/living_force/gnome_technician/sticky_liquid.j"
+// import "../spells/living_force/gnome_technician/motion_controller.j"
+//==============================================================================
+//                                   Witch
+//==============================================================================
+// import "../spells/living_force/witch/frog_transformation.j"
+// import "../spells/living_force/witch/envenomed_darts.j"
+// import "../spells/living_force/witch/sanctuary.j"
+// import "../spells/living_force/witch/spiritual_wall.j"

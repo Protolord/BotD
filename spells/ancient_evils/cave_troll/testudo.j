@@ -4,7 +4,7 @@ scope Testudo
         private constant integer SPELL_ID = 'A821'
         private constant integer UNIT_ID = 'UTCT'
         private constant real DELAY = 1.0
-        private constant string SFX = "Abilities\\Spells\\Orc\\Voodoo\\VoodooAura.mdl"
+        private constant string SFX = "Abilities\\Spells\\Orc\\Voodoo\\VoodooAuraTarget.mdl"
     endglobals
 
     private function ArmorBonus takes integer level returns integer
@@ -26,8 +26,8 @@ scope Testudo
 		private integer lvl
         private effect sfx
         private Armor a
-		//private SpellResist sr
-        //private SpellImmune si
+		private SpellResistance sr
+        private SpellImmunity si
 
         private static constant integer RAWCODE = 'B821'
         private static constant integer DISPEL_TYPE = BUFF_NONE
@@ -36,9 +36,9 @@ scope Testudo
         method onRemove takes nothing returns nothing
             call DestroyEffect(this.sfx)
 			if this.lvl == 11 then
-                //call this.si.destroy()
+                call this.si.destroy()
             else
-				//call this.sr.destroy()
+				call this.sr.destroy()
 			endif
 			call this.a.destroy()
             set this.sfx = null
@@ -46,12 +46,12 @@ scope Testudo
         
         method onApply takes nothing returns nothing
             set this.lvl = GetUnitAbilityLevel(this.target, SPELL_ID)
-            set this.sfx = AddSpecialEffectTarget(SFX, this.target, "origin")
+            set this.sfx = AddSpecialEffectTarget(SFX, this.target, "chest")
 			set this.a = Armor.create(this.target, ArmorBonus(this.lvl))
 			if lvl == 11 then
-                //set this.si = SpellImmune.create(this.target)
+                set this.si = SpellImmunity.create(this.target)
             else
-				//set this.sr = SpellResist.create(this.target, SpellResistBonus(this.lvl))
+				set this.sr = SpellResistance.create(this.target, SpellResistBonus(this.lvl))
 			endif
         endmethod
 
@@ -67,12 +67,18 @@ scope Testudo
 
         private unit caster
         private SpellBuff b
+        private TimeScale ts
 
         private static Table tb
 
         private method destroy takes nothing returns nothing
             call thistype.tb.remove(GetHandleId(this.caster))
+            call SetUnitAnimation(this.caster, "stand")
             call this.b.remove()
+            if this.ts > 0 then
+                call this.ts.destroy()
+                set this.ts = 0
+            endif
             set this.caster = null
             call this.deallocate()
         endmethod
@@ -80,6 +86,12 @@ scope Testudo
         private static method expire takes nothing returns nothing
             local thistype this = ReleaseTimer(GetExpiredTimer())
             set this.b = SpellBuff.add(this.caster, this.caster)
+        endmethod
+
+        private static method freeze takes nothing returns nothing
+            local thistype this = ReleaseTimer(GetExpiredTimer())
+            set this.ts = TimeScale.create(this.caster, -1.0)
+            set this.ts.speed = 5
         endmethod
 
         private static method onCast takes nothing returns nothing
@@ -90,7 +102,8 @@ scope Testudo
                 set this = thistype.allocate()
                 set this.caster = u
 			    set thistype.tb[id] = this
-                call SetUnitAnimation(this.caster, "spell slam")
+                call SetUnitAnimation(this.caster, "death")
+                call TimerStart(NewTimerEx(this), 0.25, false, function thistype.freeze)
                 call TimerStart(NewTimerEx(this), DELAY, false, function thistype.expire)
                 call SystemMsg.create(GetUnitName(GetTriggerUnit()) + " activates thistype")
             elseif GetUnitTypeId(u) == UNIT_ID and thistype.tb.has(id) then

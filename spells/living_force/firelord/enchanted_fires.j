@@ -2,7 +2,7 @@ scope EnchantedFires
 
     globals
         private constant integer SPELL_ID = 'AH53'
-        private constant string SFX = "Models\\Effects\\EnchantedFiresExplosion.mdx"
+        private constant string SFX = "Models\\Effects\\EnchantedFires.mdx"
         private constant attacktype ATTACK_TYPE = ATTACK_TYPE_NORMAL
         private constant damagetype DAMAGE_TYPE = DAMAGE_TYPE_MAGIC
     endglobals

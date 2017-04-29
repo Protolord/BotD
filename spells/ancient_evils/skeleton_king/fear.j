@@ -26,7 +26,7 @@ scope Fear
 	private struct SpellBuff extends Buff
 	
 		private effect sfx
-        private AtkDamage ad
+        private AtkDamagePercent adp
 
         private static constant integer RAWCODE = 'D724'
         private static constant integer DISPEL_TYPE = BUFF_NEGATIVE
@@ -34,12 +34,12 @@ scope Fear
         
         method onRemove takes nothing returns nothing
             call DestroyEffect(this.sfx)
-            call this.ad.destroy()
+            call this.adp.destroy()
             set this.sfx = null
         endmethod
         
         method onApply takes nothing returns nothing
-            set this.ad = AtkDamage.create(this.target, R2I(-DamageStat.get(this.target)*DamageReduction(GetUnitAbilityLevel(this.source, SPELL_ID))/100))
+            set this.adp = AtkDamagePercent.create(this.target, -DamageReduction(GetUnitAbilityLevel(this.source, SPELL_ID))/100)
             set this.sfx = AddSpecialEffectTarget(BUFF_SFX, this.target, "origin")
         endmethod
 

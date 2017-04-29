@@ -17,8 +17,8 @@ scope FrostNova
     endfunction
 	
 	//In Percent
-	private function AttackSlow takes integer level returns integer
-		return 50 + 0*level
+	private function AttackSlow takes integer level returns real
+		return 0.5 + 0*level
 	endfunction
 	
 	private function MoveSlow takes integer level returns real

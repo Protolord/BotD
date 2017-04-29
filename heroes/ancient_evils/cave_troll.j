@@ -39,7 +39,7 @@ module CaveTrollSpells
     set studdedClub.info = "Studded Club|n|cfff4a460Target|r: |cff3399ffPassive, Enemy Units|n|r|cfff4a460Damage/second|r: |cff3399ff15|n|r|cfff4a460Duration|r: |cff3399ff(10 + 2 x level) seconds|n|r|nCave Troll attacks with a studded club that causes additional bleeding to his opponents dealing damage per second for a set period of time."
 
     set testudo = Spell.create('A821')
-    set testudo.info = "Testudo"
+    set testudo.info = "Testudo|n|cfff4a460Target|r: |cff3399ffSelf|n|r|cfff4a460Armor Bonus|r: |cff3399ff(30 x level)|n|r|cfff4a460Effect|r: |cff3399ff+50% Spell Resistance|n|r|cfff4a460Delay|r: |cff3399ff1 second|n|r|cfff4a460Cooldown|r: |cff3399ff1 second|r|n|nCave Troll takes cover to gain huge armor bonus and magic resistance. During Testudo Cave Troll loses ability to move and attack."
 
     set strongBack = Spell.create('A822')
     set strongBack.passive = true
@@ -75,7 +75,7 @@ module CaveTrollSpells
     set rage.info = "Rage|n|cfff4a460Target|r: |cff3399ffPassive, Enemy|n|r|cfff4a460Heal|r: |cff3399ff(1.5% Max HP x level)|n|r|nWhenever Cave Troll lands a hit he has a 5% chance to heal himself. Hitting structures only has 1% chance to heal. Heals 4x on ethereal units."
 
     set auraOfStrength = Spell.create('A844')
-    set auraOfStrength.info = "Aura Of Strength|n|cfff4a460Target|r: |cff3399ffSelf|n|r|cfff4a460Radius|r: |cff3399ff600|n|r|cfff4a460Heal/Second|r: |cff3399ff(60 x ability level)|n|r|cfff4a460Manacost/Second|r: |cff3399ff(10 x ability level)|r|n|nOnce activated drains mana to heal Cave Troll and nearby allies. Heals 4x on ethereal units."
+    set auraOfStrength.info = "Aura Of Strength|n|cfff4a460Target|r: |cff3399ffSelf|n|r|cfff4a460Radius|r: |cff3399ff600|n|r|cfff4a460Heal/Second|r: |cff3399ff(60 x level)|n|r|cfff4a460Manacost/Second|r: |cff3399ff(10 x level)|r|n|nOnce activated drains mana to heal Cave Troll and nearby allies. Heals 4x on ethereal units."
 endmodule
 
 module CaveTrollConfig

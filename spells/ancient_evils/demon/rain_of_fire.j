@@ -45,10 +45,44 @@ scope RainOfFire
             if this.w.fires == 0 then
                 call this.w.destroy()
             endif
-            call this.pop()
+            //call this.pop()
             call this.m.destroy()
         endmethod
 
+        private static method onHit takes nothing returns nothing
+            local thistype this = thistype(Missile.getHit())
+            local unit u
+            local real a
+            call GroupUnitsInArea(thistype.g, this.w.r.x, this.w.r.y, this.w.r.radius)
+            if this.part == -1 then
+                loop
+                    set u = FirstOfGroup(thistype.g)
+                    exitwhen u == null
+                    call GroupRemoveUnit(thistype.g, u)
+                    if not IsUnitInGroup(u, this.w.hit) and IsUnitInRangeXY(u, this.w.r.x, this.w.r.y, 0.5*this.w.r.radius) and TargetFilter(u, this.w.r.owner) then
+                        call GroupAddUnit(this.w.hit, u)
+                        call Damage.element.apply(this.w.r.caster, u, this.w.r.dmg, ATTACK_TYPE, DAMAGE_TYPE, DAMAGE_ELEMENT_FIRE)
+                    endif
+                endloop
+            else
+                loop
+                    set u = FirstOfGroup(thistype.g)
+                    exitwhen u == null
+                    call GroupRemoveUnit(thistype.g, u)
+                    set a = Atan2(GetUnitY(u) - this.w.r.y, GetUnitX(u) - this.w.r.x)
+                    if a < 0 then
+                        set a = a + 2*bj_PI
+                    endif
+                    if a >= this.part*bj_PI/3 and a < (this.part + 1)*bj_PI/3 and not IsUnitInGroup(u, this.w.hit) and TargetFilter(u, this.w.r.owner) then
+                        call GroupAddUnit(this.w.hit, u)
+                        call Damage.element.apply(this.w.r.caster, u, this.w.r.dmg, ATTACK_TYPE, DAMAGE_TYPE, DAMAGE_ELEMENT_FIRE)
+                    endif
+                endloop
+            endif
+            call this.destroy()
+        endmethod
+
+        /*
         private static method onPeriod takes nothing returns nothing
             local thistype this = thistype(0).next
             local unit u
@@ -86,9 +120,9 @@ scope RainOfFire
                 endif
                 set this = this.next
             endloop
-        endmethod
+        endmethod*/
 
-        implement List
+        //implement List
 
         static method add takes Wave w, real x, real y, integer part returns nothing
             local thistype this = thistype(Missile.create())
@@ -101,8 +135,9 @@ scope RainOfFire
             call this.m.targetXYZ(x, y, -HEIGHT)
             set this.m.speed = SPEED
             set this.m.model = MISSILE_MODEL
+            call this.m.registerOnHit(function thistype.onHit)
             call this.m.launch()
-            call this.push(0.05)
+            //call this.push(0.05)
         endmethod
 
         static method init takes nothing returns nothing

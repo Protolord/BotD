@@ -1,4 +1,4 @@
-library Armor uses Table, BonusMod, TimerUtilsEx
+library Armor uses Table, BonusMod
 
 /*
     Armor.create(unit, bonus)
@@ -44,7 +44,8 @@ library Armor uses Table, BonusMod, TimerUtilsEx
                 call thistype.tb.remove(GetHandleId(this.u))
                 call head.deallocate()
             endif
-            call UnitSetBonus(u, BONUS_ARMOR, Range(head.b))
+            call UnitSetBonus(this.u, BONUS_ARMOR, Range(head.b))
+            set this.u = null
             call this.deallocate()
         endmethod
         
@@ -52,7 +53,7 @@ library Armor uses Table, BonusMod, TimerUtilsEx
             local thistype head = this.head
             set head.b = head.b + newBonus - this.b
             set this.b = newBonus
-            call UnitSetBonus(u, BONUS_ARMOR, Range(head.b))
+            call UnitSetBonus(this.u, BONUS_ARMOR, Range(head.b))
         endmethod
         
         static method create takes unit u, real bonus returns thistype

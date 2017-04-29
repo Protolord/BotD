@@ -1,4 +1,4 @@
-//! import "../heroes/ancient_evils/arachnid.j"
+//! import "../heroes/ancient_evils/ancient_arachnid.j"
 //! import "../heroes/ancient_evils/cave_troll.j"
 //! import "../heroes/ancient_evils/demon.j"
 //! import "../heroes/ancient_evils/gargoyle.j"
@@ -12,5 +12,5 @@
 //! import "../heroes/living_force/dwarf_defender.j"
 //! import "../heroes/living_force/elementalist.j"
 //! import "../heroes/living_force/firelord.j"
-// import "../heroes/living_force/gnome_technician.j"
+//! import "../heroes/living_force/gnome_technician.j"
 //! import "../heroes/living_force/witch.j"

@@ -60,7 +60,7 @@ module DemonSpells
     set shatteredEarth.info = "Shattered Earth|n|cfff4a460Target|r: |cff3399ffSelf|n|r|cfff4a460Explosions|r: |cff3399ff1 x level|n|r|cfff4a460Sight|r: |cff3399ff1500 x level|n|r|cfff4a460Duration|r: |cff3399ff30 seconds|n|r|cfff4a460Cooldown|r: |cff3399ff30 seconds|r|n|nDemon slams the ground and makes the earth to split open and create random explosions around the map. Each explosion provide vision and reveals invisible units."
     
     set darkLordPowers = Spell.create('A541')
-    set darkLordPowers.info = "Dark Lord Powers|cfff4a460Target|r: |cff3399ffSelf (500)|n|r|cfff4a460Healing|r: |cff3399ff(450 x level)|n|r|cfff4a460Cooldown|r: |cff3399ff30 seconds|r|n|nDemon creates a Fire Nova which heals any nearby allies in a range of 500. If Demon or any allies are currently on fire it will increase healing by 50%. Heals 4x more hitpoints on ethereal units."
+    set darkLordPowers.info = "Dark Lord Powers|n|cfff4a460Target|r: |cff3399ffSelf (500)|n|r|cfff4a460Healing|r: |cff3399ff(450 x level)|n|r|cfff4a460Cooldown|r: |cff3399ff30 seconds|r|n|nDemon creates a Fire Nova which heals any nearby allies in a range of 500. If Demon or any allies are currently on fire it will increase healing by 50%. Heals 4x more hitpoints on ethereal units."
     
     set hellfireBlast = Spell.create('A542')
     set hellfireBlast.info = "Hellfire Blast|n|cfff4a460Target|r: |cff3399ffSelf (300)|n|r|cfff4a460Heal/explosion|r: |cff3399ff40 x level|n|r|cfff4a460Cooldown|r: |cff3399ff30 seconds|r|n|nDemon uses his demonic powers to create a Hellfire Blast each second. Each of them heals Demon and his nearby allies and damage enemies for the same amount. Lasts 10 seconds. Ethereal units are damaged or healed 4x stronger."

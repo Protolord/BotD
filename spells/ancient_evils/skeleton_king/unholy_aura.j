@@ -4,7 +4,7 @@ scope UnholyAura
         private constant integer SPELL_ID = 'A714'
         private constant integer BUFF_ID = 'B714'
         private constant real TIMEOUT = 1.0
-        private constant real MIN_RANGE = 250 //Range that will deal max damage
+        private constant real MIN_RANGE = 150 //Range that will deal max damage
         private constant attacktype ATTACK_TYPE = ATTACK_TYPE_NORMAL
         private constant damagetype DAMAGE_TYPE = DAMAGE_TYPE_MAGIC
         private constant string SFX = "Abilities\\Weapons\\AvengerMissile\\AvengerMissile.mdl"
@@ -13,7 +13,7 @@ scope UnholyAura
     //When unit is at this range, the damage is minimum
     //Units farther than this range takes no dmg
     private function Range takes integer level returns real
-        return 0.0*level + 1250.0
+        return 0.0*level + 750.0
     endfunction
 
     //In percent

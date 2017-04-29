@@ -25,7 +25,6 @@ library Invulnerable uses Table, TimerUtilsEx
                 call thistype.tb.remove(id)
             endif
             set this.u = null
-            call SystemMsg.create("Invulnerability removed from " + GetUnitName(u))
             call this.deallocate()
         endmethod
         
@@ -39,7 +38,6 @@ library Invulnerable uses Table, TimerUtilsEx
                 set thistype.tb[id] = 1
                 call SetUnitInvulnerable(u, true)
             endif
-            call SystemMsg.create("Invulnerability applied to " + GetUnitName(u))
             return this
         endmethod
         

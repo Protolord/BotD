@@ -28,6 +28,7 @@ scope GrimDeal
             local integer id = GetHandleId(this.u)
             call PauseUnit(this.u, false)
             call SetUnitAnimation(Damage.target, "stand")
+            call Buff.dispelAll(this.u)
             call Heal.unit(this.u, 0xFFFFFF, 1.0)
             call DestroyEffect(AddSpecialEffectTarget(SFX_HEAL, this.u, "origin"))
             call DestroyEffect(AddSpecialEffect(SFX, GetUnitX(this.u), GetUnitY(this.u)))

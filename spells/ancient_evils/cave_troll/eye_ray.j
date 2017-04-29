@@ -75,6 +75,16 @@ scope EyeRay
                 if r < range then
                     set x = GetUnitX(u) + r*Cos(facing)
                     set y = GetUnitY(u) + r*Sin(facing)
+                    if x > WorldBounds.maxX then
+                        set x = WorldBounds.maxX
+                    elseif x < WorldBounds.minX then
+                        set x = WorldBounds.minX
+                    endif
+                    if y > WorldBounds.maxY then
+                        set y = WorldBounds.maxY
+                    elseif y < WorldBounds.minY then
+                        set y = WorldBounds.minY
+                    endif
                     if node == this then
                         set node = thistype.create(this, x, y, GetOwningPlayer(u))
                     endif

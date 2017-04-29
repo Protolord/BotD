@@ -3,7 +3,7 @@ scope StaticCharge
     globals
         private constant integer SPELL_ID = 'AH13'
         private constant string SFX = "Models\\Effects\\StaticCharge.mdx"
-		private constant string LIGHTNING_CODE = "CPLB"
+		private constant string LIGHTNING_CODE = "CLSB"
 		private constant real LIGHTNING_DURATION = 0.4
 		private constant attacktype ATTACK_TYPE = ATTACK_TYPE_NORMAL
         private constant damagetype DAMAGE_TYPE = DAMAGE_TYPE_MAGIC
@@ -24,7 +24,7 @@ scope StaticCharge
     
     struct StaticCharge extends array
         
-        private static method onCast takes nothing returns nothing
+        private static method onCast takes nothing returns boolean
 			local unit caster = GetTriggerUnit()
             local unit target = GetSpellTargetUnit()
 			local integer lvl = GetUnitAbilityLevel(target, SPELL_ID)
@@ -41,11 +41,19 @@ scope StaticCharge
 			endif
 			set caster = null
             set target = null
+            return false
         endmethod
         
         static method init takes nothing returns nothing
+            local integer index = 0
+            local trigger trg = CreateTrigger()
             call SystemTest.start("Initializing thistype: ")
-            call RegisterSpellEffectEvent(SPELL_ID, function thistype.onCast)
+            loop
+                call TriggerRegisterPlayerUnitEvent(trg, Player(index), EVENT_PLAYER_UNIT_SPELL_EFFECT, null)
+                set index = index + 1
+                exitwhen index == bj_MAX_PLAYER_SLOTS
+            endloop
+            call TriggerAddCondition(trg, function thistype.onCast)
             call SystemTest.end()
         endmethod
         

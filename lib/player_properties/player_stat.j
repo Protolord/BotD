@@ -51,10 +51,13 @@ library PlayerStat uses RegisterPlayerUnitEvent, SystemConsole, HeroPool
                 call SetCameraPosition(SPAWN_X, SPAWN_Y)
                 call SetCameraField(CAMERA_FIELD_TARGET_DISTANCE, 1600, 0)
             endif
-            call ExecuteFunc("s__" + this.hero.innateSpell.name + "_init")
+            if this.hero.faction == ANCIENT_EVILS then
+                call ExecuteFunc("s__" + this.hero.innateSpell.name + "_init")
+            endif
             set fm = CreateFogModifierRect(this.player, FOG_OF_WAR_FOGGED, WorldBounds.world, false, false)
             call FogModifierStart(fm)
             call DestroyFogModifier(fm)
+            //Remove before Final Release
             call SetHeroLevel(this.unit, 40, true)
         endmethod
         

@@ -20,6 +20,7 @@ library Stun uses TimerUtilsEx, Table, DummyRecycler
         
         private unit u
         private unit dummy
+        private effect sfx
         private timer t
         
         private static Table tb

@@ -25,7 +25,6 @@ library Root uses Table, TimerUtilsEx
                 call thistype.tb.remove(id)
             endif
             set this.u = null
-            call SystemMsg.create("Root removed from " + GetUnitName(u))
             call this.deallocate()
         endmethod
         
@@ -39,7 +38,6 @@ library Root uses Table, TimerUtilsEx
                 set thistype.tb[id] = 1
                 call SetUnitPropWindow(u, 0)
             endif
-            call SystemMsg.create("Root applied to " + GetUnitName(u))
             return this
         endmethod
         

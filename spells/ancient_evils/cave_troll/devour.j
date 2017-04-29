@@ -21,7 +21,7 @@ scope Devour
         private effect sfx
 		private real ctr
 		private real factor
-		private Stun s
+		private Pause p
         
 		private static constant integer RAWCODE = 'D842'
         private static constant integer DISPEL_TYPE = BUFF_NONE
@@ -34,7 +34,7 @@ scope Devour
             call IssueImmediateOrderById(this.source, ORDER_stop)
 			call UnitRemoveAbility(this.source, BUFF_RAWCODE)
             call DestroyEffect(this.sfx)
-			call this.s.destroy()
+			call this.p.destroy()
             set this.sfx = null
         endmethod
         
@@ -43,7 +43,7 @@ scope Devour
             local real amount
             loop
                 exitwhen this == 0
-				if IsUnitInRange(this.source, this.target, RANGE) and UnitAlive(this.target) then
+				if IsUnitInRange(this.source, this.target, RANGE) and UnitAlive(this.target) and not IsUnitType(this.source, UNIT_TYPE_ETHEREAL) and not IsUnitType(this.target, UNIT_TYPE_ETHEREAL) then
 					set this.ctr = this.ctr + thistype.PERIODIC
 					if this.ctr > TIMEOUT then
 						set this.ctr = 0
@@ -62,7 +62,7 @@ scope Devour
         
         method onApply takes nothing returns nothing
             set this.sfx = AddSpecialEffectTarget(BUFF_SFX, this.target, "overhead")
-			set this.s = Stun.create(this.target, 0, false)
+			set this.p = Pause.create(this.target)
 			set this.ctr = 0
 			set this.factor = HealPercent(GetUnitAbilityLevel(this.source, SPELL_ID))/100.0
 			call UnitAddAbility(this.source, BUFF_RAWCODE)
@@ -87,9 +87,6 @@ scope Devour
                 call SpellBuff(thistype.tb[id]).remove()
             endif
 		endmethod
-
-        private static method onPeriod takes nothing returns nothing
-        endmethod
         
         private static method onCast takes nothing returns nothing
             local unit caster = GetTriggerUnit()

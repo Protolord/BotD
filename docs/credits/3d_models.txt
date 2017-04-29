@@ -14,6 +14,7 @@
 		Cave Troll Club				by Hayate
             
 		Storm Shaman                by Ujimasa Hojo
+		Crusader					by Direfury
         
 	ABILITIES:
 		Immortal Force Effect		by sPy
@@ -59,6 +60,7 @@
 		Taunt                       by JetFangInferno
 		Hellish Cloud Buff          by JetFangInferno
 		Hellish Cloud Effect        by Vortigon
+		Pitfall						by Hayate
 		Diabolic Senses				by D4RK_G4ND4LF
 		Dark Lord Vision Buff		by Shyster
 		Dark Lord Vision Target  	by Shyster
@@ -92,15 +94,23 @@
 		Lone Soul					by PeeKay
 		
 		Cleave						by icewolf055
-		StuddedClub					by cotd333
+		Three Sixty Animation		by Hayate
+		Second Hit Animation		by Hayate
 		Cauldron Model				by Hellish Hybrid
 		Aura of Strength Effect		by Malvodion
 
 		Static Charge Effect		by PeeKay
 		Storm Effect				by HappyCockroach
 
+		AuraOfPrayer		  	    by Tranquil
+		Avander Effect				by JetFangInferno
+		Avander Buff				by JetFangInferno
+		
+		Mirage Buff					by icewolf055
 		Frost Nova Effect			by Daelin
-		Fire Devastation Effect		by WILL THE ALMIGHTY
+		Fire Devastation Explosion  by kellym0
+		Fire Devastation Flame      by Talon the Mage
+		
 
 		Firebolt Missile			by UgoUgo
 		Enchanted Fires	Explosion   by WILL THE ALMIGHTY

@@ -29,7 +29,6 @@ library Disarm uses Table, TimerUtilsEx
                 call thistype.tb.remove(id)
             endif
             set this.u = null
-            call SystemMsg.create("Disarm removed from " + GetUnitName(u))
             call this.deallocate()
         endmethod
         
@@ -43,7 +42,6 @@ library Disarm uses Table, TimerUtilsEx
                 set thistype.tb[id] = 1
                 call UnitAddAbility(u, DISARM_ID)
             endif
-            call SystemMsg.create("Disarm applied to " + GetUnitName(u))
             return this
         endmethod
         

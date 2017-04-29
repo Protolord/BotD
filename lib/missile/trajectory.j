@@ -7,20 +7,28 @@ module MissileTrajectory
     this.launch()
         - Launch a Missile. The Missile will begin to move based on its target type.
 
-    this.speed = <missile speed>
+    this.speed = <Missile speed>
         - Changes a Missile's speed.
 
     this.speed
         - Returns a Missile's speed.
+    
+    this.projectile = <Is the Missile treated as a Projectile?>
+        - If true, the Missile is treated as a Projectile.
+        - Only Point-target Missiles can only be a Projectile.
 */
     public boolean stop
+    public boolean projectile
     private real spd
     private real chkDist
     private real dx
     private real dy
     private real dz
 
+    readonly static constant real GRAVITY = 1536
+    private static constant real g = 1.5
     private static constant real MIN_COLLISION = 50.0
+    
     
     method move takes real x, real y, real z returns nothing
         set this.x = x
@@ -75,6 +83,9 @@ module MissileTrajectory
             set this.x = this.x + this.dx
             set this.y = this.y + this.dy
             set this.z = this.z + this.dz
+            if this.projectile then
+                set this.dz = this.dz - thistype.g
+            endif
             call SetUnitX(this.u, this.x)
             call SetUnitY(this.u, this.y)
             set height = this.z - GetPointZ(this.x, this.y)
@@ -86,6 +97,11 @@ module MissileTrajectory
                 elseif not this.hidden and height < 0 then
                     set this.hidden = true
                     call ShowDummy(this.u, false)
+                endif
+            else
+                if height <= 0 then 
+                    set this.stop = true
+                    call this.callbackOnHit()
                 endif
             endif
         endif
@@ -111,35 +127,47 @@ module MissileTrajectory
             set this = this.next
         endloop
     endmethod
+
+    method operator speed= takes real speed returns nothing
+        set this.spd = speed*thistype.TIMEOUT
+        set this.chkDist = RMaxBJ(this.spd*this.spd, thistype.MIN_COLLISION*thistype.MIN_COLLISION)
+    endmethod
+    
+    method operator speed takes nothing returns real
+        return this.spd/thistype.TIMEOUT
+    endmethod
     
     method launch takes nothing returns nothing
         local real dx = this.x2 - this.x
         local real dy = this.y2 - this.y
+        local real dz = this.z2 - this.z
         local real facing = Atan2(dy, dx)
         local real xy = SquareRoot(dx*dx + dy*dy)
         local real pitch = 0
+        local real spd2
+        local real gd
         set this.stop = false
-        if xy > 0 then
-            set pitch = Atan((this.z2 - this.z)/xy)
-        endif
-        if this.target == null then
+        if this.projectile and this.target == null then
+            set spd2 = this.spd*this.spd/(thistype.TIMEOUT*thistype.TIMEOUT)
+            set gd = -thistype.GRAVITY*xy
+            set pitch = Atan((-1 - SquareRoot(1 - (2*gd/spd2)*((gd/(2*spd2)) - dz/xy)))/(gd/spd2))
             set this.dx = this.spd*Cos(facing)*Cos(pitch)
             set this.dy = this.spd*Sin(facing)*Cos(pitch)
             set this.dz = this.spd*Sin(pitch)
+        else
+            if xy > 0 then
+                set pitch = Atan((this.z2 - this.z)/xy)
+            endif
+            if this.target == null then
+                set this.dx = this.spd*Cos(facing)*Cos(pitch)
+                set this.dy = this.spd*Sin(facing)*Cos(pitch)
+                set this.dz = this.spd*Sin(pitch)
+            endif
         endif
         if this.u == null then
             set this.u = GetRecycledDummy(this.x, this.y, this.z, facing*bj_RADTODEG)
             set this.mdl = AddSpecialEffectTarget(this.mdlPath, this.u, "origin")
         endif
-    endmethod
-    
-    method operator speed= takes real speed returns nothing
-        set this.spd = speed*TIMEOUT
-        set this.chkDist = RMaxBJ(this.spd*this.spd, thistype.MIN_COLLISION*thistype.MIN_COLLISION)
-    endmethod
-    
-    method operator speed takes nothing returns real
-        return this.spd/TIMEOUT
     endmethod
 
 endmodule

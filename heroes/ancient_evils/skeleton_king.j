@@ -70,7 +70,7 @@ module SkeletonKingSpells
 
     set unholyEnergy = Spell.create('A742')
     set unholyEnergy.passive = true
-    set unholyEnergy.info = "Unholy Energy|n|cfff4a460Target|r: |cff3399ffPassive, Self|n|r|cfff4a460Range|r: |cff3399ff(150 x level)|n|r|cfff4a460Bonus Regeneration|r: |cff3399ff50 per unit|r|n|nSkeleton King receives additional +50 hitpoints regeneration for each living creature nearby. Heals 4x on ethereal units."
+    set unholyEnergy.info = "Unholy Energy|n|cfff4a460Target|r: |cff3399ffPassive, Self|n|r|cfff4a460Range|r: |cff3399ff(250 + 50 x ability level)|n|r|cfff4a460Bonus Regeneration|r: |cff3399ff50 per unit|r|n|nSkeleton King receives additional +50 hitpoints regeneration for each living creature nearby. Heals 4x on ethereal units."
 
     set grimDeal = Spell.create('A743')
     set grimDeal.passive = true

@@ -102,6 +102,12 @@ scope Totem
 				call this.destroy()
 			endif
 		endmethod
+
+		private static method onDamage takes nothing returns nothing
+			if GetUnitTypeId(Damage.target) == UNIT_ID then
+				set Damage.amount = 1.0
+			endif
+		endmethod
 		
         private static method onCast takes nothing returns nothing
 			local thistype this = thistype.allocate()
@@ -126,6 +132,7 @@ scope Totem
         static method init takes nothing returns nothing
             call SystemTest.start("Initializing thistype: ")
             call RegisterSpellEffectEvent(SPELL_ID, function thistype.onCast)
+			call Damage.registerModifier(function thistype.onDamage)
 			set thistype.g = CreateGroup()
 			call PreloadUnit(UNIT_ID)
             call SystemTest.end()

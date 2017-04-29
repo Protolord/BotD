@@ -22,14 +22,12 @@ library Spell requires StringSize
         
         method add takes unit u returns nothing
             local string s
-            debug call SystemTest.start("Adding " + this.name + " to " + GetUnitName(u))
             if not this.initialized then
                 set this.initialized = true
                 call ExecuteFunc("s__" + this.name + "_init")
             endif
             call UnitAddAbility(u, this.addId)
             call UnitRemoveAbility(u, this.addId)
-            debug call SystemTest.end()
         endmethod
         
         method operator info1 takes nothing returns string

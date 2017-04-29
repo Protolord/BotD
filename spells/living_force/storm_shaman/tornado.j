@@ -17,6 +17,7 @@ scope Tornado
         implement List
 
         private Effect e
+        private VertexColor vc
 
         private static constant integer RAWCODE = 'BH11'
         private static constant integer DISPEL_TYPE = BUFF_POSITIVE
@@ -25,6 +26,7 @@ scope Tornado
         method onRemove takes nothing returns nothing
             call this.pop()
             call this.e.destroy()
+            call this.vc.destroy()
             call UnitRemoveAbility(this.target, TORNADO_EVASION_ID)
         endmethod
 
@@ -40,6 +42,8 @@ scope Tornado
         method onApply takes nothing returns nothing
             set this.e = Effect.createAnyAngle(SFX, GetUnitX(this.target), GetUnitY(this.target), 0)
             set this.e.scale = 0.75
+            set this.vc = VertexColor.create(this.target, 0, 0, 0, -200)
+            set this.vc.speed = 400
             call UnitAddAbility(this.target, TORNADO_EVASION_ID)
             call this.push(0.03125)
         endmethod

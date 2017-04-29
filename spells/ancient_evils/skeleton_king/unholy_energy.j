@@ -11,9 +11,9 @@ scope UnholyEnergy
 
     private function Range takes integer level returns real
         if level == 11 then
-            return 1500.0
+            return 1000.0
         endif
-        return 150.0*level
+        return 250 + 50.0*level
     endfunction
 
     private function BonusRegenPerUnit takes integer level returns real
@@ -57,6 +57,9 @@ scope UnholyEnergy
                             set i = i + 1
                         endif
                     endloop
+                    if IsUnitType(u, UNIT_TYPE_ETHEREAL) then
+                        set i = 4*i
+                    endif
                     if i >= EXTRA_THRESHOLD and this.sfxExtra == null then
                         set this.sfxExtra = AddSpecialEffectTarget(SFX_EXTRA, this.u, "overhead")
                     elseif i < EXTRA_THRESHOLD and this.sfxExtra != null then

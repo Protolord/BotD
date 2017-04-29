@@ -20,7 +20,7 @@ scope Cauldron
         if level == 11 then
             return 340.0
         endif
-        return 240 + 10.0*level
+        return 1.0//240 + 10.0*level
     endfunction
 	
 	private function DebuffDuration takes integer level returns real

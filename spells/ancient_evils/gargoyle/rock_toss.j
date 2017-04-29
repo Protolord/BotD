@@ -6,6 +6,7 @@ scope RockToss
         private constant string SFX_HIT = "Models\\Effects\\RockToss.mdx"
         private constant string SFX_ROCK = "Doodads\\LordaeronSummer\\Rocks\\Lords_Rock\\Lords_Rock9.mdl"
         private constant real ROCK_SPACING = 200.0
+        private constant real MIN_SPEED = 1000.0
         private constant player NEUTRAL = Player(14)
     endglobals
     
@@ -26,10 +27,6 @@ scope RockToss
     
     private function StunDuration takes integer level returns real
         return 1.0 + 0.0*level
-    endfunction
-
-    private function Speed takes integer level returns real
-        return 1500.0 + 0.0*level
     endfunction
 
     private function TargetFilter takes unit u, player p returns boolean
@@ -98,9 +95,11 @@ scope RockToss
             set this.lvl = GetUnitAbilityLevel(this.caster, SPELL_ID)
             set this.m = Missile(this)
             set this.m.sourceUnit = this.caster
-            call this.m.targetXYZ(x, y, GetPointZ(x, y) + 20.0)
-            set this.m.speed = Speed(this.lvl)
+            call this.m.targetXYZ(x, y, GetPointZ(x, y) + 5.0)
+            set this.m.speed = RMaxBJ(1.1*SquareRoot(this.m.getDistance()*Missile.GRAVITY), MIN_SPEED) + 150.0
             set this.m.model = MODEL
+            set this.m.autohide = false
+            set this.m.projectile = true
             call this.m.registerOnHit(function thistype.onHit)
             call this.m.launch()
             call SystemMsg.create(GetUnitName(GetTriggerUnit()) + " cast thistype")

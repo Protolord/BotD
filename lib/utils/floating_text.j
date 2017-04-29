@@ -30,7 +30,7 @@ library FloatingText uses TextSplat2
     function FloatingTextSplatEx takes string s, unit u, real time, real extraHeight returns textsplat
         local textsplat text = textsplat.create(TREBUCHET_MS)
         call text.setPosition(GetUnitX(u) + GetRandomReal(-OFFSET, OFFSET), GetUnitY(u) + GetRandomReal(-OFFSET, OFFSET), GetUnitFlyHeight(u) + HEIGHT + extraHeight)
-        call text.setText(s, 8.0, TEXTSPLAT_TEXT_ALIGN_CENTER)
+        call text.setText(s, 7.0, TEXTSPLAT_TEXT_ALIGN_CENTER)
         call text.setVelocity(0, 50, 10)
         set text.fadepoint = time
         set text.lifespan = time + 1.5
@@ -41,7 +41,7 @@ library FloatingText uses TextSplat2
     function FloatingTextSplat takes string s, unit u, real time returns textsplat
         local textsplat text = textsplat.create(TREBUCHET_MS)
         call text.setPosition(GetUnitX(u) + GetRandomReal(-OFFSET, OFFSET), GetUnitY(u) + GetRandomReal(-OFFSET, OFFSET), GetUnitFlyHeight(u) + HEIGHT)
-        call text.setText(s, 8.0, TEXTSPLAT_TEXT_ALIGN_CENTER)
+        call text.setText(s, 7.0, TEXTSPLAT_TEXT_ALIGN_CENTER)
         call text.setVelocity(0, 50, 10)
         set text.fadepoint = time
         set text.lifespan = time + 1.5

@@ -1,30 +1,14 @@
 
-To do list:
-- Meteor use Missile instead
-- Create Projectile system for Rock Toss and Fire Devastation
-- Living Force manacost and cooldown not correct
-- Spike Model
+MODEL CONCERNS:  
+- Cleave change Visual Effect
+- Add Spike Model
+- Testudo Animation
+- Storm Shaman needs a levitate animation put into "stand alternate", "attack alternate" and "walk alternate"
 
-SHORT TERM:        
+CODING CONCERNS:       
+- SystemMsg create admin parameter.
+- DamageStat.get has a +-1 tolerance value.
+- Test if Inception takes the correct damage taken factor
+- Allow units with Rabies exceed 522 movespeed.
+- DamageEvent doesn't properly classify units with magic attack as magic damage.
 
-	- SystemMsg create admin parameter.
-	- Create Projectile System for arcing missiles.
-	- DamageStat.get has a +-1 tolerance value.
-	- Make AtkDamagePercent system that periodically updates in case target leveled up or somethings
-	
-	- Test if Inception takes the correct damage taken factor
-	
-	- Allow units with Rabies exceed 522 movespeed.
-	- Damage Event doesn't properly classify units with magic attack as magic damage.
-
-
-	
-LONG TERM:
-	
-	- Add more Heroes and Spells to the Selection System
-	
-	- Use the correct Hero Stats in Selection System.
-	
-	- Check if manacost and cooldown is correct.
-
-	- Test in Multiplayer

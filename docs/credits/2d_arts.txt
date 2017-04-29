@@ -10,7 +10,7 @@
 		BTN_SkeletonKing            by -Grendel
 		BTN_CaveTroll               by Marshmallo
 		BTN_StormShaman				by wij
-		BTN_Crusader				by CloudWolf
+		BTN_Crusader				by Eagle XI
 		BTN_Witch					by Daenar7
 		
 		
@@ -112,10 +112,20 @@
 		BTN_Tornado					by Valve Corporation
 		BTN_Storm					by Valve Corporation
 	
+	Crusader
+		BTN_Avander					by Palaslayer
+	
 	Elementalist
 		BTN_Mirage					by Valve Corporation 
 		BTN_FrostNova				by CRAZYRUSSIAN
 		BTN_FrostArmor				by Darkfang
+		BTN_FireDevastation			by Valve Corporation
+	
+	Gnome Technician
+		BTN_StatisTrap				by Valve Corporation
+		BTN_Bomb					by bigapple90
+		BTN_StickyLiquid			by NFWar
+		BTN_MotionController		by 67chrome
 
 	Others:
 		BTN_Check                   by Lockheart 

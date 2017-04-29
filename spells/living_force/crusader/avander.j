@@ -2,19 +2,17 @@ scope Avander
     
     globals
         private constant integer SPELL_ID = 'AH24'
-        private constant string SFX = ""
+        private constant string SFX = "Models\\Effects\\AvanderEffect.mdx"
+        private constant string SFX_BUFF = "Models\\Effects\\Avander.mdx"
     endglobals
 
     private function Duration takes integer level returns real
-        if level == 11 then
-            return 30.0
-        endif
-        return 10.0 + 2.0*level
+        return 1.0*level
     endfunction
     
 	//In percent
     private function Chance takes integer level returns real
-        return 30.0*level
+        return 99.9//30.0*level
     endfunction
     
     private function TargetFilter takes unit u, player p returns boolean
@@ -25,6 +23,7 @@ scope Avander
         
         private effect sfx
         private Root r 
+        private TurningOff to
 
         private static constant integer RAWCODE = 'BH24'
         private static constant integer DISPEL_TYPE = BUFF_NEGATIVE
@@ -32,13 +31,15 @@ scope Avander
         
         method onRemove takes nothing returns nothing
 			call this.r.destroy()
+            call this.to.destroy()
             call DestroyEffect(this.sfx)
             set this.sfx = null
         endmethod
         
         method onApply takes nothing returns nothing
-            set this.sfx = AddSpecialEffectTarget(SFX, this.target, "origin")
+            set this.sfx = AddSpecialEffectTarget(SFX_BUFF, this.target, "origin")
 			set this.r = Root.create(this.target)
+            set this.to = TurningOff.create(this.target)
         endmethod
 
         private static method init takes nothing returns nothing
@@ -53,8 +54,9 @@ scope Avander
         private static method onDamage takes nothing returns nothing
             local integer level = GetUnitAbilityLevel(Damage.source, SPELL_ID)
             local SpellBuff b
-            if Damage.type == DAMAGE_TYPE_PHYSICAL and not Damage.coded and level > 0 and TargetFilter(Damage.target, GetOwningPlayer(Damage.source)) and Chance(level) <= GetRandomReal(0, 100) then
+            if Damage.type == DAMAGE_TYPE_PHYSICAL and not Damage.coded and level > 0 and TargetFilter(Damage.target, GetOwningPlayer(Damage.source)) and GetRandomReal(0, 100) <= Chance(level) then
                 set SpellBuff.add(Damage.source, Damage.target).duration = Duration(level)
+                call DestroyEffect(AddSpecialEffect(SFX, GetUnitX(Damage.target), GetUnitY(Damage.target)))
             endif
         endmethod
         

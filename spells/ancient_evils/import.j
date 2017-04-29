@@ -68,28 +68,28 @@
 //! import "../spells/ancient_evils/wraith/ancestral_rift.j"
 //! import "../spells/ancient_evils/wraith/inception.j"
 //==============================================================================
-//                              Arachnid
+//                           Ancient Arachnid
 //==============================================================================
-//! import "../spells/ancient_evils/arachnid/burrow.j"
+//! import "../spells/ancient_evils/ancient_arachnid/burrow.j"
 //------------------------------------------------------------------------------
-//! import "../spells/ancient_evils/arachnid/dash.j"
-//! import "../spells/ancient_evils/arachnid/locust_swarm.j"
-//! import "../spells/ancient_evils/arachnid/poison_spit.j"
-//! import "../spells/ancient_evils/arachnid/cocoon.j"
+//! import "../spells/ancient_evils/ancient_arachnid/dash.j"
+//! import "../spells/ancient_evils/ancient_arachnid/locust_swarm.j"
+//! import "../spells/ancient_evils/ancient_arachnid/poison_spit.j"
+//! import "../spells/ancient_evils/ancient_arachnid/cocoon.j"
 //------------------------------------------------------------------------------
-//! import "../spells/ancient_evils/arachnid/dissimulation.j"
-//! import "../spells/ancient_evils/arachnid/hatch.j"
-//! import "../spells/ancient_evils/arachnid/sticky_shell.j"
-//! import "../spells/ancient_evils/arachnid/web.j"
+//! import "../spells/ancient_evils/ancient_arachnid/dissimulation.j"
+//! import "../spells/ancient_evils/ancient_arachnid/hatch.j"
+//! import "../spells/ancient_evils/ancient_arachnid/sticky_shell.j"
+//! import "../spells/ancient_evils/ancient_arachnid/web.j"
 //------------------------------------------------------------------------------
-//! import "../spells/ancient_evils/arachnid/spiders.j"
-//! import "../spells/ancient_evils/arachnid/web_spin.j"
-//! import "../spells/ancient_evils/arachnid/tunnel.j"
+//! import "../spells/ancient_evils/ancient_arachnid/spiders.j"
+//! import "../spells/ancient_evils/ancient_arachnid/web_spin.j"
+//! import "../spells/ancient_evils/ancient_arachnid/tunnel.j"
 //------------------------------------------------------------------------------
-//! import "../spells/ancient_evils/arachnid/spray.j"
-//! import "../spells/ancient_evils/arachnid/feed.j"
-//! import "../spells/ancient_evils/arachnid/poison_blast.j"
-//! import "../spells/ancient_evils/arachnid/severe_wounds.j"
+//! import "../spells/ancient_evils/ancient_arachnid/spray.j"
+//! import "../spells/ancient_evils/ancient_arachnid/feed.j"
+//! import "../spells/ancient_evils/ancient_arachnid/poison_blast.j"
+//! import "../spells/ancient_evils/ancient_arachnid/severe_wounds.j"
 //==============================================================================
 //                               Demon
 //==============================================================================
