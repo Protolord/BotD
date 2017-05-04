@@ -1,11 +1,11 @@
 scope HeavySwing
- 
+
     globals
         private constant integer SPELL_ID = 'A811'
         private constant attacktype ATTACK_TYPE = ATTACK_TYPE_SIEGE
         private constant damagetype DAMAGE_TYPE = DAMAGE_TYPE_NORMAL
     endglobals
-    
+
     //Percentage of Normal damage
     private function ExtraDamage takes integer level returns real
         if level == 11 then
@@ -28,6 +28,10 @@ scope HeavySwing
         return 10.0*level
     endfunction
 
+    private function TargetFilter takes unit u, player p returns boolean
+        return UnitAlive(u) and IsUnitEnemy(u, p) and not IsUnitType(u, UNIT_TYPE_STRUCTURE)
+    endfunction
+
     struct HeavySwing extends array
         implement Alloc
 
@@ -35,7 +39,6 @@ scope HeavySwing
         private boolean hasMana
         private trigger manaTrg
 
-        private static trigger trg
         private static Table tb
 
         static method get takes unit u returns real
@@ -47,18 +50,19 @@ scope HeavySwing
             endif
             return 1.0
         endmethod
-        
+
         private static method onDamage takes nothing returns boolean
             local integer level = GetUnitAbilityLevel(Damage.source, SPELL_ID)
             local thistype this = thistype.tb[GetHandleId(Damage.source)]
-            local real dmg
+            local player p
             if this > 0 and level > 0 and Damage.type == DAMAGE_TYPE_PHYSICAL and not Damage.coded and this.run > 0 and this.hasMana then
-                set dmg = DamageStat.get(Damage.source)*ExtraDamage(level)/100.0
-                call DisableTrigger(thistype.trg)
-                call Stun.create(Damage.target, StunDuration(level), false)
-                set Damage.amount = (1.0 + ExtraDamage(level)/100.0)*Damage.amount
-                call EnableTrigger(thistype.trg)
-                call FloatingTextSplat(Element.string(DAMAGE_ELEMENT_NORMAL) + "+" + I2S(R2I(dmg + 0.5)) + "|r", Damage.target, 1.0).setVisible(GetLocalPlayer() == GetOwningPlayer(Damage.source))
+                set p = GetOwningPlayer(Damage.source)
+                if TargetFilter(Damage.target, p) then
+                    call Stun.create(Damage.target, StunDuration(level), false)
+                    set Damage.amount = (1.0 + ExtraDamage(level)/100.0)*Damage.amount
+                    call FloatingTextSplat(Element.string(DAMAGE_ELEMENT_NORMAL) + "+" + I2S(R2I((CombatStat.getDamage(Damage.source) + AtkDamage.get(Damage.source))*ExtraDamage(level)/100.0 + 0.5)) + "|r", Damage.target, 1.0).setVisible(GetLocalPlayer() == p)
+                endif
+                set p = null
             endif
             return false
         endmethod
@@ -96,7 +100,7 @@ scope HeavySwing
             local thistype this = thistype.tb[GetHandleId(u)]
             call DestroyTrigger(this.manaTrg)
             set this.manaTrg = CreateTrigger()
-            if this.hasMana then 
+            if this.hasMana then
                 call TriggerRegisterUnitStateEvent(this.manaTrg, u, UNIT_STATE_MANA, GREATER_THAN_OR_EQUAL, Manacost(GetUnitAbilityLevel(u, SPELL_ID)))
             else
                 call TriggerRegisterUnitStateEvent(this.manaTrg, u, UNIT_STATE_MANA, LESS_THAN, Manacost(GetUnitAbilityLevel(u, SPELL_ID)))
@@ -119,7 +123,7 @@ scope HeavySwing
                 endif
                 set this.manaTrg = CreateTrigger()
                 if GetUnitState(u, UNIT_STATE_MANA) >= Manacost(lvl) then
-                    set this.hasMana = true 
+                    set this.hasMana = true
                     call TriggerRegisterUnitStateEvent(this.manaTrg, u, UNIT_STATE_MANA, LESS_THAN, Manacost(lvl))
                 else
                     set this.hasMana = false
@@ -135,23 +139,21 @@ scope HeavySwing
             local trigger orderTrg = CreateTrigger()
             set this.run = 0
             set this.manaTrg = null
-			call TriggerRegisterUnitEvent(orderTrg, u, EVENT_UNIT_ISSUED_ORDER)
+            call TriggerRegisterUnitEvent(orderTrg, u, EVENT_UNIT_ISSUED_ORDER)
             call TriggerAddCondition(orderTrg, function thistype.onOrder)
             set thistype.tb[GetHandleId(u)] = this
         endmethod
-        
+
         static method init takes nothing returns nothing
             call SystemTest.start("Initializing thistype: ")
             call RegisterSpellEffectEvent(SPELL_ID, function thistype.onCast)
             set thistype.tb = Table.create()
-            set thistype.trg = CreateTrigger()
-            call Damage.registerModifierTrigger(thistype.trg)
-            call TriggerAddCondition(thistype.trg, function thistype.onDamage)
+            call Damage.registerModifier(function thistype.onDamage)
             call RegisterPlayerUnitEvent(EVENT_PLAYER_HERO_SKILL, function thistype.onLevel)
             call thistype.register(PlayerStat.initializer.unit)
             call SystemTest.end()
         endmethod
-        
+
     endstruct
-    
+
 endscope

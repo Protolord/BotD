@@ -115,7 +115,7 @@ scope SpiritualLights
                             call GroupRemoveUnit(thistype.g, u)
                             if TargetFilter(u, owner) then
                                 call AddSpecialEffectTimer(AddSpecialEffectTarget(HEAL_SFX, u, "origin"), 1.25)
-                                call Heal.unit(u, healAmount, 4.0)
+                                call Heal.unit(this.caster, u, healAmount, 4.0, true)
                             endif
                         endloop
                     endif

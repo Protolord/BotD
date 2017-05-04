@@ -36,10 +36,10 @@
 //==============================================================================
 //                              Gnome Technician
 //==============================================================================
-// import "../spells/living_force/gnome_technician/statis_trap.j"
-// import "../spells/living_force/gnome_technician/bomb.j"
-// import "../spells/living_force/gnome_technician/sticky_liquid.j"
-// import "../spells/living_force/gnome_technician/motion_controller.j"
+//! import "../spells/living_force/gnome_technician/stasis_trap.j"
+//! import "../spells/living_force/gnome_technician/bomb.j"
+//! import "../spells/living_force/gnome_technician/sticky_liquid.j"
+//! import "../spells/living_force/gnome_technician/motion_controller.j"
 //==============================================================================
 //                                   Witch
 //==============================================================================

@@ -15,7 +15,7 @@ scope EarthShatter
     private function MoveSpeedSlow takes integer level returns real
         return 0.5 + 0.0*level
     endfunction
-    
+
     private function Duration takes integer level returns real
         if level == 11 then
             return 4.0
@@ -29,32 +29,32 @@ scope EarthShatter
         endif
         return 50.0*level
     endfunction
-    
+
     private function Radius takes integer level returns real
         return 400.0 + 0.0*level
     endfunction
-    
+
     private function TargetFilter takes unit u, player p returns boolean
         return UnitAlive(u) and IsUnitEnemy(u, p) and not IsUnitType(u, UNIT_TYPE_STRUCTURE) and not IsUnitType(u, UNIT_TYPE_MAGIC_IMMUNE)
     endfunction
-    
+
     private struct SpellBuff extends Buff
 
         readonly Movespeed ms
-        readonly Atkspeed as 
+        readonly Atkspeed as
         private effect sfx
 
         private static constant integer RAWCODE = 'D612'
         private static constant integer DISPEL_TYPE = BUFF_NEGATIVE
         private static constant integer STACK_TYPE = BUFF_STACK_PARTIAL
-        
+
         method onRemove takes nothing returns nothing
             call DestroyEffect(this.sfx)
             call this.as.destroy()
             call this.ms.destroy()
             set this.sfx = null
         endmethod
-        
+
         method onApply takes nothing returns nothing
             set this.as = Atkspeed.create(this.target, 0)
             set this.ms = Movespeed.create(this.target, 0, 0)
@@ -64,12 +64,12 @@ scope EarthShatter
         private static method init takes nothing returns nothing
             call PreloadSpell(thistype.RAWCODE)
         endmethod
-        
+
         implement BuffApply
     endstruct
-    
+
     struct EarthShatter extends array
-        
+
         private static method onCast takes nothing returns nothing
             local unit caster = GetTriggerUnit()
             local player owner = GetTriggerPlayer()
@@ -104,16 +104,16 @@ scope EarthShatter
             set g = null
             set u = null
             set dummy = null
-			set owner = null
+            set owner = null
             call SystemMsg.create(GetUnitName(GetTriggerUnit()) + " cast thistype")
         endmethod
-        
+
         static method init takes nothing returns nothing
             call SystemTest.start("Initializing thistype: ")
             call RegisterSpellEffectEvent(SPELL_ID, function thistype.onCast)
             call SpellBuff.initialize()
             call SystemTest.end()
         endmethod
-        
+
     endstruct
 endscope

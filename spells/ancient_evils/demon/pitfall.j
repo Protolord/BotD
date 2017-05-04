@@ -1,5 +1,5 @@
 scope Pitfall
- 
+
     globals
         private constant integer SPELL_ID = 'A512'
         private constant attacktype ATTACK_TYPE = ATTACK_TYPE_NORMAL
@@ -9,34 +9,34 @@ scope Pitfall
         private constant real TIMEOUT = 1.0
         private constant real SPACING = 100.0
     endglobals
-    
+
     private function AttackSlow takes integer level returns real
         return 0.0*level + 0.50
     endfunction
-    
+
     private function MoveSlow takes integer level returns real
         return 0.0*level + 0.50
     endfunction
-    
+
     private function DamagePerSecond takes integer level returns real
         return 30.0*level
     endfunction
-    
+
     private function Duration takes integer level returns real
         return 0.0*level + 10.0
     endfunction
-    
+
     private function Radius takes integer level returns real
         return 0.0*level + 300.0
     endfunction
-    
+
     private function TargetFilter takes unit u, player p returns boolean
         return UnitAlive(u) and IsUnitEnemy(u, p) and not IsUnitType(u, UNIT_TYPE_STRUCTURE) and not IsUnitType(u, UNIT_TYPE_MAGIC_IMMUNE)
     endfunction
 
     private struct Flame extends array
         implement Alloc
-        
+
         private effect sfx
         readonly thistype next
         readonly thistype prev
@@ -68,9 +68,9 @@ scope Pitfall
         endmethod
 
     endstruct
-    
+
     private struct SpellBuff extends Buff
-        
+
         readonly Movespeed ms
         readonly Atkspeed as
         private effect sfx
@@ -80,7 +80,7 @@ scope Pitfall
         private static constant integer RAWCODE = 'D512'
         private static constant integer DISPEL_TYPE = BUFF_NONE
         private static constant integer STACK_TYPE = BUFF_STACK_FULL
-        
+
         method onRemove takes nothing returns nothing
             call this.ms.destroy()
             call this.as.destroy()
@@ -89,7 +89,7 @@ scope Pitfall
             set this.sfx = null
             set this.t = null
         endmethod
-        
+
         private static method onPeriod takes nothing returns nothing
             local thistype this = GetTimerData(GetExpiredTimer())
             if TargetFilter(this.target, GetOwningPlayer(this.source)) then
@@ -98,7 +98,7 @@ scope Pitfall
                 call this.remove()
             endif
         endmethod
-        
+
         method onApply takes nothing returns nothing
             set this.ms = Movespeed.create(this.target, 0, 0)
             set this.as = Atkspeed.create(this.target, 0)
@@ -106,7 +106,7 @@ scope Pitfall
             set this.t = NewTimerEx(this)
             call TimerStart(this.t, TIMEOUT, true, function thistype.onPeriod)
         endmethod
-        
+
         private static method init takes nothing returns nothing
             call PreloadSpell(thistype.RAWCODE)
         endmethod
@@ -114,7 +114,7 @@ scope Pitfall
     endstruct
 
     struct Pitfall extends array
-        
+
         private unit caster
         private Flame sfxHead
         private Effect pit
@@ -127,9 +127,9 @@ scope Pitfall
         private real moveSlow
         private real atkSlow
         private Table tb
-        
+
         private static group enumG
-        
+
         private method remove takes nothing returns nothing
             local unit u
             local Flame f = this.sfxHead.next
@@ -139,7 +139,7 @@ scope Pitfall
                 call GroupRemoveUnit(this.g, u)
                 call Buff(this.tb[GetHandleId(u)]).remove()
             endloop
-            loop 
+            loop
                 exitwhen f == this.sfxHead
                 call f.destroy()
                 set f = f.next
@@ -152,7 +152,7 @@ scope Pitfall
             set this.caster = null
             call this.destroy()
         endmethod
-        
+
         private static method picked takes nothing returns nothing
             local unit u = GetEnumUnit()
             local SpellBuff b
@@ -166,9 +166,9 @@ scope Pitfall
             endif
             set u = null
         endmethod
-        
+
         private static thistype global
-        
+
         implement CTL
             local unit u
             local SpellBuff b
@@ -199,12 +199,12 @@ scope Pitfall
         implement CTLNull
             set owner = null
         implement CTLEnd
-        
-        
+
+
         private static method onCast takes nothing returns nothing
             local thistype this = thistype.create()
             local integer lvl
-            local real da 
+            local real da
             local real angle
             local real endAngle
             set this.caster = GetTriggerUnit()
@@ -222,19 +222,19 @@ scope Pitfall
             set this.pit.scale = this.radius/115.0
             set this.sfxHead = Flame.head()
             set da = 2*bj_PI/R2I(2*bj_PI*radius/SPACING)
-			if da > bj_PI/3 then
-				set da = bj_PI/3
-			endif
-			set angle = da
-			set endAngle = da + 2*bj_PI - 0.0001
-			loop
-				exitwhen angle >= endAngle
+            if da > bj_PI/3 then
+                set da = bj_PI/3
+            endif
+            set angle = da
+            set endAngle = da + 2*bj_PI - 0.0001
+            loop
+                exitwhen angle >= endAngle
                 call Flame.add(this.sfxHead, this.x + this.radius*Cos(angle), this.y + this.radius*Sin(angle))
-				set angle = angle + da
-			endloop
+                set angle = angle + da
+            endloop
             call SystemMsg.create(GetUnitName(GetTriggerUnit()) + " cast thistype")
         endmethod
-        
+
         static method init takes nothing returns nothing
             call SystemTest.start("Initializing thistype: ")
             set thistype.enumG = CreateGroup()
@@ -242,7 +242,7 @@ scope Pitfall
             call RegisterSpellEffectEvent(SPELL_ID, function thistype.onCast)
             call SystemTest.end()
         endmethod
-        
+
     endstruct
-    
+
 endscope

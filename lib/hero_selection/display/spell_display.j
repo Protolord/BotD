@@ -20,7 +20,7 @@ library SpellDisplay/*
             private texttag text2$NUM$
             private Border selected$NUM$
         //! endtextmacro
-        
+
         //! runtextmacro SELECTION_SYSTEM_SPELL_DISPLAYS("1")
         //! runtextmacro SELECTION_SYSTEM_SPELL_DISPLAYS("2")
         //! runtextmacro SELECTION_SYSTEM_SPELL_DISPLAYS("3")
@@ -41,7 +41,7 @@ library SpellDisplay/*
             call SetImageRenderAlways(this.spell$NUM$4, h.spell$NUM$4 != 0 and b)
             call this.selected$NUM$.show(false)
         //! endtextmacro
-        
+
         //! textmacro SELECTION_SYSTEM_CHANGE_SPELL takes SPELL, NUM
             call ReleaseImage(this.spell$NUM$)
             set this.spell$NUM$ = NewImage($SPELL$.iconPath, 64, 64, SPELL$NUM$_X, SPELL$NUM$_Y, 1, 1)
@@ -52,7 +52,7 @@ library SpellDisplay/*
             call SetTextTagPos(this.text2$NUM$, spellBtnX[$NUM$*4 + 1] - 20, spellBtnY[$NUM$*4 + 1] - 80 - $SPELL$.yOffset2, 0)
             set PlayerStat(this).spell$NUM$ = $SPELL$
         //! endtextmacro
-        
+
         //! textmacro SELECTION_SYSTEM_DESTROY_ICONS takes NUM
             call ReleaseImage(this.spell$NUM$1)
             call ReleaseImage(this.spell$NUM$2)
@@ -63,7 +63,7 @@ library SpellDisplay/*
             set this.spell$NUM$3 = null
             set this.spell$NUM$4 = null
         //! endtextmacro
-        
+
         method destroy takes nothing returns nothing
             call SystemTest.start("Destroying " + GetPlayerName(Player(this)) + "'s SpellDisplay: ")
             //! runtextmacro SELECTION_SYSTEM_DESTROY_ICONS("")
@@ -85,7 +85,7 @@ library SpellDisplay/*
             call DestroyTextTag(this.text24)
             call SystemTest.end()
         endmethod
-        
+
         //Changes the description and displayed selected spell
         static method change takes player p, integer spellNum, integer order returns nothing
             local thistype this = GetPlayerId(p)
@@ -138,7 +138,7 @@ library SpellDisplay/*
                 //! runtextmacro SELECTION_SYSTEM_CHANGE_SPELL("Spell.BLANK", "4")
             endif
         endmethod
-        
+
         //! textmacro SELECTION_SYSTEM_SPELL_INIT takes NUM
             set this.spell$NUM$ = NewImage(BLACK_IMAGE, 0, 0, 0, 0, 0, 1)
             set this.spell$NUM$1 = NewImage(BLACK_IMAGE, 0, 0, 0, 0, 0, 1)
@@ -152,7 +152,7 @@ library SpellDisplay/*
             set this.selected$NUM$ = Border.create(0, 70, 0, 70)
             call this.selected$NUM$.show(false)
         //! endtextmacro
-        
+
         private static method create takes player p returns thistype
             local thistype this = GetPlayerId(p)
             local boolean b = p == GetLocalPlayer()
@@ -162,18 +162,18 @@ library SpellDisplay/*
             //! runtextmacro SELECTION_SYSTEM_SPELL_INIT("4")
             return this
         endmethod
-        
+
         private static method perPlayer takes nothing returns nothing
             call thistype.create(GetEnumPlayer())
         endmethod
-        
+
         static method init takes nothing returns boolean
             call SystemTest.start("Creating SpellDisplay: ")
             call ForForce(Players.users, function thistype.perPlayer)
             call SystemTest.end()
             return false
         endmethod
-        
+
     endstruct
 
 endlibrary

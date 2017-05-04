@@ -50,7 +50,7 @@ scope Inception
                 endif
             endloop
             if addHp > 0 then
-                call SetWidgetLife(this.caster, GetWidgetLife(this.caster) + addHp)
+                call Heal.unit(this.caster, this.caster, addHp, 1.0, true)
                 call DestroyEffect(AddSpecialEffectTarget(SFX_TARGET, this.caster, "origin"))
             endif
             call DestroyGroup(this.g)

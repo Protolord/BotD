@@ -60,7 +60,7 @@ scope PoisonBlast
             call SetUnitVertexColor(dummy, 255, 255, 255, 150)
             
             call DestroyEffect(AddSpecialEffectTarget(SFX, dummy, "origin"))
-            call Heal.unit(caster, total, 1.0)
+            call Heal.unit(caster, caster, total, 1.0, true)
             call ReleaseGroup(g)
             set g = null
             set caster = null

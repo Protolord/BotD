@@ -79,7 +79,7 @@ scope HellfireBlast
                     call DestroyEffect(AddSpecialEffectTarget(SFX_TARGET, u, "overhead"))
                 endif
                 if HealFilter(u, owner) then
-                    call Heal.unit(u, this.heal, 4.0)
+                    call Heal.unit(this.target, u, this.heal, 4.0, true)
                     call DestroyEffect(AddSpecialEffectTarget(SFX_TARGET, u, "overhead"))                  
                 endif
             endloop

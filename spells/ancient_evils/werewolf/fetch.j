@@ -5,7 +5,7 @@ scope Fetch
         private constant integer BUFF_ID = 'B233'
         private constant string SFX = ""
         private constant string SFX_TARGET = "Models\\Effects\\FetchTarget.mdx"
-        private constant real NODE_RADIUS = 250
+        private constant real NODE_RADIUS = 400
         private constant real TIMEOUT = 0.05
     endglobals
     

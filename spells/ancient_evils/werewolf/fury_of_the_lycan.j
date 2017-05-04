@@ -52,7 +52,7 @@ scope FuryOfTheLycan
         
         private static method onDamage takes nothing returns nothing
             if IsUnitInGroup(Damage.target, SpellBuff.g) then
-                call Heal.unit(Damage.target, 2.0*Damage.amount, 1)
+                call Heal.unit(Damage.target, Damage.target, 2.0*Damage.amount, 1.0, true)
                 set Damage.amount = 0
             endif
         endmethod

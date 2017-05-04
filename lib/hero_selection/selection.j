@@ -16,7 +16,7 @@ library SelectionMain /*
 
 */
     //Hero Selection System Configuration
-    globals 
+    globals
         //Display coordinates
         constant real CENTER_X = 0
         constant real CENTER_Y = 0
@@ -24,11 +24,11 @@ library SelectionMain /*
         constant real MODEL_Y = CENTER_Y + 75
         constant real ICON_X = CENTER_X - 870
         constant real ICON_Y = CENTER_Y + 440
-        constant real NAME_X = ICON_X + 70   
+        constant real NAME_X = ICON_X + 70
         constant real NAME_Y = ICON_Y
         constant real ATTR_X = MODEL_X - 170
         constant real ATTR_Y = MODEL_Y - 130
-        constant real INFO_X = MODEL_X + 195  
+        constant real INFO_X = MODEL_X + 195
         constant real INFO_Y = MODEL_Y - 160
         constant real INNATE_SPELL_X = ICON_X + 10
         constant real INNATE_SPELL_Y = CENTER_Y - 115
@@ -62,7 +62,7 @@ library SelectionMain /*
         real array spellBtnX
         real array spellBtnY
     endglobals
-    
+
     struct SelectionMain extends array
 
         private static method onInit takes nothing returns nothing
@@ -81,5 +81,5 @@ library SelectionMain /*
         endmethod
 
     endstruct
-    
+
 endlibrary

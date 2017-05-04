@@ -12,7 +12,7 @@ module CrusaderSpells
     set destinction.info = "Destinction|n|cfff4a460Target|r: |cff3399ffAlly Units|n|r|cfff4a460Range|r: |cff3399ff300|n|r|cfff4a460Duration|r: |cff3399ff(0.5 x level) seconds|n|r|cfff4a460Cooldown|r: |cff3399ff20 seconds|r|n|nDestincts an ally unit and temporarily turns it invulnerable but disables it's ability to attack."
 
     set enlight = Spell.create('AH22')
-    set enlight.info = "Enlight|n|cfff4a460Target|r: |cff3399ffAncient|n|r|cfff4a460Range|r: |cff3399ffMelee|n|r|cfff4a460Duration|r: |cff3399ff(0.3 second x level)|n|r|cfff4a460Damage|r: |cff3399ff(25 + 25 x Enlight Duration)|r|n|nEnlightens enemy unit and deals magic damage depending on the previous Enlight debuff duration. Duration stacks additively."
+    set enlight.info = "Enlight|n|cfff4a460Target|r: |cff3399ffEnemy Hero|n|r|cfff4a460Range|r: |cff3399ffMelee|n|r|cfff4a460Duration|r: |cff3399ff(0.3 x level) seconds|n|r|cfff4a460Damage|r: |cff3399ff(25 + 25 x Enlight Duration)|r|n|nEnlightens enemy unit and deals extra magic damage depending on the previous Enlight debuff duration. Duration stacks additively."
 
     set auraOfPrayer = Spell.create('AH23')
     set auraOfPrayer.passive = true
@@ -30,9 +30,9 @@ module CrusaderConfig
     set crusader.iconPath = "ReplaceableTextures\\CommandButtons\\BTN_Crusader.blp"
     set crusader.modelPath = "Models\\Units\\Crusader.mdl"
     set crusader.info = "<NOTHING YET>"
-    set crusader.attribute = "19 +3.0    7 +4.3   12 +1.5"
-    set crusader.primary = STR
-    
+    set crusader.attribute = "20 +2.0   20 +3.0   20 +1.3"
+    set crusader.primary = AGI
+
     //Configure Spells
     set crusader.spell11 = destinction
     set crusader.spell21 = enlight

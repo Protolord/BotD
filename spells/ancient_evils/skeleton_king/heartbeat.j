@@ -1,11 +1,11 @@
 scope Heartbeat
-    
+
     globals
         private constant integer SPELL_ID = 'A731'
         private constant integer BUFF_ID = 'B731'
         private constant real TIMEOUT = 0.2
         private constant string SFX_TARGET = "Abilities\\Spells\\Orc\\Bloodlust\\BloodlustTarget.mdl"
-		private constant real RADIUS = 200.0
+        private constant real RADIUS = 200.0
     endglobals
 
     private function Range takes integer level returns real
@@ -19,16 +19,16 @@ scope Heartbeat
         return UnitAlive(u) and IsUnitEnemy(u, p) and not IsUnitType(u, UNIT_TYPE_STRUCTURE) and not IsUnitType(u, UNIT_TYPE_MAGIC_IMMUNE)
     endfunction
 
-    private struct SightSource extends array 
+    private struct SightSource extends array
         implement Alloc
-        
+
         private effect sfx
         readonly unit u
         readonly unit target
-        
+
         readonly thistype next
         readonly thistype prev
-        
+
         method destroy takes nothing returns nothing
             set this.prev.next = this.next
             set this.next.prev = this.prev
@@ -44,7 +44,7 @@ scope Heartbeat
             set this.target = null
             call this.deallocate()
         endmethod
-        
+
         static method create takes thistype head, unit target, player owner returns thistype
             local thistype this = thistype.allocate()
             local string s = SFX_TARGET
@@ -52,7 +52,7 @@ scope Heartbeat
             set this.u = GetRecycledDummyAnyAngle(GetUnitX(target), GetUnitY(target), 0)
             call PauseUnit(this.u, false)
             call SetUnitOwner(this.u, owner, false)
-			call UnitSetBonus(this.u, BONUS_SIGHT_RANGE, R2I(RADIUS))
+            call UnitSetBonus(this.u, BONUS_SIGHT_RANGE, R2I(RADIUS))
             call UnitAddAbility(this.u, 'ATSS')
             if IsPlayerEnemy(owner, GetLocalPlayer()) then
                 set s = ""
@@ -64,37 +64,37 @@ scope Heartbeat
             set this.prev.next = this
             return this
         endmethod
-        
+
         static method head takes nothing returns thistype
             local thistype this = thistype.allocate()
             set this.next = this
             set this.prev = this
             return this
         endmethod
-        
+
     endstruct
-    
+
     struct Heartbeat extends array
         implement Alloc
-        
+
         private unit caster
         private player owner
         private group visible
         private real range
         private SightSource ss
-        
+
         private static Table tb
         private static group g
-        
+
         private static method onPeriod takes nothing returns nothing
             local thistype this = thistype.top
             local SightSource ss
             local player p
-			local boolean b
-			local unit u
+            local boolean b
+            local unit u
             loop
                 exitwhen this == 0
-                if this.range == GLOBAL_SIGHT then 
+                if this.range == GLOBAL_SIGHT then
                     call GroupEnumUnitsInRect(thistype.g, WorldBounds.world, null)
                 else
                     call GroupUnitsInArea(thistype.g, GetUnitX(this.caster), GetUnitY(this.caster), this.range)
@@ -133,7 +133,7 @@ scope Heartbeat
         endmethod
 
         implement Stack
-        
+
         private static method ultimates takes nothing returns boolean
             local unit u = GetTriggerUnit()
             local integer id = GetHandleId(u)
@@ -145,8 +145,8 @@ scope Heartbeat
             set u = null
             return false
         endmethod
-        
-        private static method learn takes nothing returns nothing   
+
+        private static method learn takes nothing returns nothing
             local thistype this
             local unit u
             local integer id
@@ -172,7 +172,7 @@ scope Heartbeat
                 set u = null
             endif
         endmethod
-        
+
         static method init takes nothing returns nothing
             call SystemTest.start("Initializing thistype: ")
             call RegisterPlayerUnitEvent(EVENT_PLAYER_HERO_SKILL, function thistype.learn)
@@ -181,7 +181,7 @@ scope Heartbeat
             set thistype.g = CreateGroup()
             call SystemTest.end()
         endmethod
-        
+
     endstruct
-    
+
 endscope

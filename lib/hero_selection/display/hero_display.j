@@ -15,7 +15,7 @@ library HeroDisplay/*
 
     struct HeroDisplay extends array
         //Instance is per player
-        
+
         private textsplat name
         private textsplat info
         private textsplat attribute
@@ -24,17 +24,17 @@ library HeroDisplay/*
         private fogmodifier heroVision
         private Border primary
         private Border selected
-        
+
         private static timer t = CreateTimer()
         private static rect r
         private static rect modelRect
-        
+
         //How many active HeroDisplays
         private static integer count = 0
 
         //local data for camerafield
         private static boolean has = false
-        
+
         method destroy takes nothing returns nothing
             local Hero h = PlayerStat(this).hero
             call SystemTest.start("Destroying " + GetPlayerName(Player(this)) + "'s HeroDisplay: ")
@@ -77,16 +77,16 @@ library HeroDisplay/*
                 call SetCameraField(CAMERA_FIELD_TARGET_DISTANCE, 1700, 0)
             endif
         endmethod
-        
+
         private static method endAll takes nothing returns nothing
             call thistype(GetPlayerId(GetEnumPlayer())).destroy()
         endmethod
-        
+
         static method remove takes nothing returns nothing
             //Pick all players with endAll as callback
             call ForForce(Players.users, function thistype.endAll)
         endmethod
-        
+
         static method change takes player p, Hero h returns nothing
             local thistype this = GetPlayerId(p)
             local boolean b = GetLocalPlayer() == p
@@ -115,7 +115,7 @@ library HeroDisplay/*
             set PlayerStat(this).hero = h
             call ConfirmButton.show(p, false)
         endmethod
-        
+
         static method create takes player p returns thistype
             local thistype this = GetPlayerId(p)
             local boolean b = p == GetLocalPlayer()
@@ -143,7 +143,7 @@ library HeroDisplay/*
             endif
             return this
         endmethod
-        
+
         private static method perPlayer takes nothing returns nothing
             local player p = GetEnumPlayer()
             local thistype this = thistype.create(p)
@@ -154,7 +154,7 @@ library HeroDisplay/*
             call this.change(p, defaultHero)
             call SpellDisplay.reset(p, defaultHero)
         endmethod
-        
+
         static method init takes nothing returns boolean
             call SystemTest.start("Creating HeroDisplay: ")
             call SetMapFlag(MAP_FOG_HIDE_TERRAIN, true)

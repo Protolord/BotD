@@ -67,7 +67,7 @@ function RegisterSpellEffectEvent takes integer abil, code onCast returns nothin
         if not HaveSavedHandle(S.ht, 0, abil) then
             call SaveTriggerHandle(S.ht, 0, abil, CreateTrigger())
         endif
-        call TriggerAddCondition(LoadTriggerHandle(S.ht, 0, abil), Filter(onCast)
+        call TriggerAddCondition(LoadTriggerHandle(S.ht, 0, abil), Filter(onCast))
     endif
 endfunction
  

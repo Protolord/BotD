@@ -2,7 +2,7 @@ library Border
 
     struct Border extends array
         implement Alloc
-        
+
         public lightning lineTop
         public lightning lineBot
         public lightning lineRight
@@ -12,7 +12,7 @@ library Border
         public real red
         public real green
         public real blue
-        
+
         method move takes real x, real y returns nothing
             local real h = 0.5*this.height
             local real l = 0.5*this.length
@@ -21,7 +21,7 @@ library Border
             call MoveLightningEx(this.lineRight, false, x + l, y + h, 0, x + l, y - h, 0)
             call MoveLightningEx(this.lineLeft, false, x - l, y + h, 0, x - l, y - h, 0)
         endmethod
-        
+
         method destroy takes nothing returns nothing
             call DestroyLightning(this.lineTop)
             call DestroyLightning(this.lineBot)
@@ -35,7 +35,7 @@ library Border
             set this.length = 0
             call this.deallocate()
         endmethod
-        
+
         method show takes boolean flag returns nothing
             if flag then
                 call SetLightningColor(this.lineTop, this.red, this.green, this.blue, 1)
@@ -49,7 +49,7 @@ library Border
                 call SetLightningColor(this.lineLeft, 1, 1, 1, 0)
             endif
         endmethod
-        
+
         method color takes real red, real green, real blue returns nothing
             set this.red = red
             set this.green = green
@@ -59,7 +59,7 @@ library Border
             call SetLightningColor(this.lineRight, this.red, this.green, this.blue, 1)
             call SetLightningColor(this.lineLeft, this.red, this.green, this.blue, 1)
         endmethod
-        
+
         static method create takes real top, real bot, real right, real left returns thistype
             local thistype this = thistype.allocate()
             set this.lineTop = AddLightningEx(LINE, false, left, top, 0, right, top, 0)
@@ -73,7 +73,7 @@ library Border
             set this.blue = 1
             return this
         endmethod
-        
+
     endstruct
 
 endlibrary

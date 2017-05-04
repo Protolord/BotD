@@ -4,9 +4,7 @@ scope RockToss
         private constant integer SPELL_ID = 'A632'
         private constant string MODEL = "Abilities\\Weapons\\AncientProtectorMissile\\AncientProtectorMissile.mdl"
         private constant string SFX_HIT = "Models\\Effects\\RockToss.mdx"
-        private constant string SFX_ROCK = "Doodads\\LordaeronSummer\\Rocks\\Lords_Rock\\Lords_Rock9.mdl"
-        private constant real ROCK_SPACING = 200.0
-        private constant real MIN_SPEED = 1000.0
+        private constant real SPEED = 1000.0
         private constant player NEUTRAL = Player(14)
     endglobals
     
@@ -36,7 +34,6 @@ scope RockToss
     struct RockToss extends array
         
         private unit caster
-        private unit target
         private unit dummy
         private integer lvl
         private player owner
@@ -48,9 +45,9 @@ scope RockToss
         
         private method destroy takes nothing returns nothing
             call this.fs.destroy()
+            call this.ts.destroy()
             call this.m.destroy()
             set this.caster = null
-            set this.target = null
             set this.owner = null
         endmethod
 
@@ -60,7 +57,6 @@ scope RockToss
         
         private static method onHit takes nothing returns nothing
             local thistype this = Missile.getHit()
-            local group g = NewGroup()
             local real radius = Radius(this.lvl)
             local unit u = GetRecycledDummyAnyAngle(this.m.x, this.m.y, 0)
             call SetUnitScale(u, StunRadius(this.lvl)/300, 0, 0)
@@ -71,18 +67,16 @@ scope RockToss
             set this.fs = FlySight.create(this.m.u, radius)
             set this.ts = TrueSight.create(this.m.u, radius)
             //Stun
-            call GroupUnitsInArea(g, this.m.x, this.m.y, StunRadius(this.lvl))
+            call GroupUnitsInArea(thistype.g, this.m.x, this.m.y, StunRadius(this.lvl))
             loop
-                set u = FirstOfGroup(g)
+                set u = FirstOfGroup(thistype.g)
                 exitwhen u == null
-                call GroupRemoveUnit(g, u)
+                call GroupRemoveUnit(thistype.g, u)
                 if TargetFilter(u, this.owner) then
                     call Stun.create(u, StunDuration(this.lvl), false)
                 endif
             endloop
-            call ReleaseGroup(g)
             call TimerStart(NewTimerEx(this), Duration(this.lvl), false, function thistype.expires)
-            set g = null
         endmethod
         
         private static method onCast takes nothing returns nothing
@@ -91,15 +85,15 @@ scope RockToss
             local real y = GetSpellTargetY()
             set this.caster = GetTriggerUnit()
             set this.owner = GetTriggerPlayer()
-            set this.target = GetSpellTargetUnit()
             set this.lvl = GetUnitAbilityLevel(this.caster, SPELL_ID)
             set this.m = Missile(this)
             set this.m.sourceUnit = this.caster
             call this.m.targetXYZ(x, y, GetPointZ(x, y) + 5.0)
-            set this.m.speed = RMaxBJ(1.1*SquareRoot(this.m.getDistance()*Missile.GRAVITY), MIN_SPEED) + 150.0
+            set this.m.speed = SPEED
             set this.m.model = MODEL
-            set this.m.autohide = false
+            set this.m.autohide = true
             set this.m.projectile = true
+            set this.m.arc = 1.75
             call this.m.registerOnHit(function thistype.onHit)
             call this.m.launch()
             call SystemMsg.create(GetUnitName(GetTriggerUnit()) + " cast thistype")

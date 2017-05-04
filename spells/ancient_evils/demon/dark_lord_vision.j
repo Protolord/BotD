@@ -5,7 +5,7 @@ scope DarkLordVision
         private constant integer BUFF_ID = 'B532'
         private constant string SFX = "Models\\Effects\\DarkLordVisionBuff.mdx"
         private constant string SFX_TARGET = "Models\\Effects\\DarkLordVisionTarget.mdx"
-        private constant real NODE_RADIUS = 200
+        private constant real NODE_RADIUS = 400
         private constant real TIMEOUT = 0.05
     endglobals
 

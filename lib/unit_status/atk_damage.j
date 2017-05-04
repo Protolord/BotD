@@ -55,6 +55,14 @@ library AtkDamage uses Table, BonusMod
             set this.b = newBonus
             call UnitSetBonus(this.u, BONUS_DAMAGE, Range(head.b))
         endmethod
+
+        static method get takes unit u returns real
+            local thistype this = thistype.tb[GetHandleId(u)]
+            if this > 0 then
+                return this.head.b
+            endif
+            return 0.0
+        endmethod
         
         static method create takes unit u, real bonus returns thistype
             local thistype this = thistype.allocate()

@@ -71,7 +71,7 @@ scope Feed
                 set angle = Atan2(y1 - y2, x1 - x2)*bj_RADTODEG 
                 if thistype.angleDiff(GetUnitFacing(this.target), angle) <= ANGLE_TOLERANCE then
                     set id = GetHandleId(this.caster)
-                    call SetWidgetLife(this.target, GetWidgetLife(this.target) + GetWidgetLife(this.caster)*HealFactor(thistype.tb[id]))
+                    call Heal.unit(this.caster, this.target, GetWidgetLife(this.caster)*HealFactor(thistype.tb[id]), 1.0, true)
                     call DestroyEffect(AddSpecialEffect(FEED_SFX1, x1, y1))
                     call DestroyEffect(AddSpecialEffect(FEED_SFX2, x2, y2))
                     call thistype.tb.remove(id)

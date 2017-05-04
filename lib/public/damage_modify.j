@@ -3,21 +3,22 @@ library DamageModify uses DamageEvent/*
                     DamageModify v1.40
                         by Flux
             ---------------------------------
-    
-        An add-on to DamageEvent that allows modification 
+
+        An add-on to DamageEvent that allows modification
         of damage taken before it is applied.
     */
-    
+
     globals
         private constant integer SET_MAX_LIFE = 'ASML'
+        private constant boolean DEBUG_SYSTEM = true
     endglobals
-    
+
     struct DamageTrigger2
-        
+
         private trigger trg
         private thistype next
         private thistype prev
-        
+
         method destroy takes nothing returns nothing
             set this.next.prev = this.prev
             set this.prev.next = this.next
@@ -29,7 +30,7 @@ library DamageModify uses DamageEvent/*
             set this.trg = null
             call this.deallocate()
         endmethod
-        
+
         static method unregister takes trigger t returns nothing
             local integer id = GetHandleId(t)
             static if LIBRARY_Table then
@@ -42,7 +43,7 @@ library DamageModify uses DamageEvent/*
                 endif
             endif
         endmethod
-        
+
         static method register takes trigger t returns nothing
             local thistype this = thistype.allocate()
             set this.trg = t
@@ -56,7 +57,7 @@ library DamageModify uses DamageEvent/*
                 call SaveInteger(Damage.hash, GetHandleId(t), 0, this)
             endif
         endmethod
-        
+
         static method executeAll takes nothing returns nothing
             local thistype this = thistype(0).next
             loop
@@ -69,27 +70,35 @@ library DamageModify uses DamageEvent/*
                 set this = this.next
             endloop
         endmethod
-        
+
     endstruct
-    
+
     module DamageModify
-        
+
         private static boolean changed = false
         private static trigger registered2 = CreateTrigger()
+        private static boolean locked = false
+        static if DEBUG_SYSTEM then
+            private static integer instanceCount = 0
+        endif
 
         static method registerModifier takes code c returns boolean
             call TriggerAddCondition(thistype.registered2, Condition(c))
             return false    //Prevents inlining
         endmethod
-        
+
         static method registerModifierTrigger takes trigger trg returns nothing
             call DamageTrigger2.register(trg)
         endmethod
-        
+
         static method unregisterModifierTrigger takes trigger trg returns nothing
             call DamageTrigger2.unregister(trg)
         endmethod
-                
+
+        static method lockAmount takes nothing returns nothing
+            set thistype.locked = true
+        endmethod
+
         private static method afterDamage takes nothing returns boolean
             if GetUnitAbilityLevel(thistype.stackTop.stackTarget, SET_MAX_LIFE) > 0 then
                 call UnitRemoveAbility(thistype.stackTop.stackTarget, SET_MAX_LIFE)
@@ -101,16 +110,19 @@ library DamageModify uses DamageEvent/*
                 set thistype.allocator[0] = thistype.global
                 set thistype.stackTop = thistype.stackTop.stackNext
             endif
+            static if DEBUG_SYSTEM then
+                set thistype.instanceCount = thistype.instanceCount - 1
+            endif
             return false
         endmethod
-            
+
         static method core takes nothing returns boolean
             local real amount = GetEventDamage()
             local boolean changed = false
             local thistype this
             local trigger trg
             local real newHp
-            
+
             if amount == 0.0 then
                 return false
             endif
@@ -125,7 +137,11 @@ library DamageModify uses DamageEvent/*
             set this.stackTarget = GetTriggerUnit()
             set this.stackNext = thistype.stackTop
             set thistype.stackTop = this
-            
+
+            static if DEBUG_SYSTEM then
+                set thistype.instanceCount = thistype.instanceCount + 1
+            endif
+
             if amount > 0.0 then
                 set this.stackType = DAMAGE_TYPE_PHYSICAL
                 set this.stackAmount = amount
@@ -133,9 +149,12 @@ library DamageModify uses DamageEvent/*
                 set changed = thistype.changed
                 if changed then
                     set thistype.changed = false
+                    if thistype.locked then
+                        set thistype.locked = false
+                    endif
                 endif
                 call DamageTrigger.executeAll()
-                
+
             elseif amount < 0.0 then
                 set this.stackType = DAMAGE_TYPE_MAGICAL
                 if IsUnitType(this.stackTarget, UNIT_TYPE_ETHEREAL) then
@@ -146,6 +165,9 @@ library DamageModify uses DamageEvent/*
                 set changed = thistype.changed
                 if changed then
                     set thistype.changed = false
+                    if thistype.locked then
+                        set thistype.locked = false
+                    endif
                 endif
                 call DamageTrigger.executeAll()
             endif
@@ -171,27 +193,42 @@ library DamageModify uses DamageEvent/*
                         set newHp = S_MIN_LIFE
                     endif
                     call SetWidgetLife(this.stackTarget, newHp)
-                    call TriggerRegisterUnitStateEvent(trg, this.stackTarget, UNIT_STATE_LIFE, GREATER_THAN, newHp + 0.01)
+                    if amount < -1.0 then
+                        call TriggerRegisterUnitStateEvent(trg, this.stackTarget, UNIT_STATE_LIFE, GREATER_THAN, newHp - 0.01*amount)
+                    else
+                        call TriggerRegisterUnitStateEvent(trg, this.stackTarget, UNIT_STATE_LIFE, GREATER_THAN, newHp + 0.01)
+                    endif
                 endif
                 call TriggerAddCondition(trg, Condition(function thistype.afterDamage))
                 set trg = null
                 set thistype.global = this
-            
+
             else
                 set thistype.allocator[this] = thistype.allocator[0]
                 set thistype.allocator[0] = this
                 set thistype.stackTop = thistype.stackTop.stackNext
+                static if DEBUG_SYSTEM then
+                    set thistype.instanceCount = thistype.instanceCount - 1
+                endif
 
             endif
-            
+
             return false
         endmethod
-        
+
         static method operator amount= takes real r returns nothing
-            set thistype.stackTop.stackAmount = r
-            set thistype.changed = true
+            if not thistype.locked then
+                set thistype.stackTop.stackAmount = r
+                set thistype.changed = true
+            endif
         endmethod
-        
+
+        static if DEBUG_SYSTEM then
+            private static method instancePrint takes nothing returns nothing
+                call BJDebugMsg("Damage.instances = " + I2S(thistype.instanceCount))
+            endmethod
+        endif
+
         private static method onInit takes nothing returns nothing
             local unit u = CreateUnit(Player(14), 'hfoo', 0, 0, 0)
             call UnitAddAbility(u, SET_MAX_LIFE)
@@ -199,7 +236,10 @@ library DamageModify uses DamageEvent/*
             set thistype.registered2 = CreateTrigger()
             call DamageTrigger2.register(thistype.registered2)
             set u = null
+            static if DEBUG_SYSTEM then
+                call TimerStart(CreateTimer(), 3.0, true, function thistype.instancePrint)
+            endif
         endmethod
     endmodule
-    
+
 endlibrary

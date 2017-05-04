@@ -32,7 +32,7 @@ scope UnstoppableHunger
         private static method expires takes nothing returns nothing
             local thistype this = ReleaseTimer(GetExpiredTimer())
             if UnitAlive(this.u) then
-                call Heal.unit(this.u, this.heal, 1)
+                call Heal.unit(this.u, this.u, this.heal, 1.0, true)
                 call DestroyEffect(AddSpecialEffectTarget(HEAL_EFFECT, u, "origin"))
             endif
             set this.u = null

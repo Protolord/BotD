@@ -7,24 +7,38 @@ library Heal uses FloatingText
 
     struct Heal extends array
         
-        static method unit takes unit u, real amount, real factor returns nothing
-            local real max = GetUnitState(u, UNIT_STATE_MAX_LIFE)
+        private static Table self
+        private static Table other
+
+        static method unit takes unit source, unit target, real amount, real factor, boolean show returns nothing
+            local real max = GetUnitState(target, UNIT_STATE_MAX_LIFE)
+            local integer id = GetHandleId(source)
             local texttag text
             local real hp
-            if IsUnitType(u, UNIT_TYPE_ETHEREAL) then
+            if IsUnitType(target, UNIT_TYPE_ETHEREAL) then
                 set amount = factor*amount
             endif
-            set hp = GetWidgetLife(u)
+            set hp = GetWidgetLife(target)
             if hp + amount >= max then
                 set amount = max - hp
             endif
-            call SetWidgetLife(u, hp + amount)
-            if R2I(amount) > 0 then
-                set text = FloatingTextTag("|cff00ff00+" + I2S(R2I(amount)), u, 1.5)
-                if IsUnitEnemy(u, GetLocalPlayer()) or not IsUnitVisible(u, GetLocalPlayer()) then
+            call SetWidgetLife(target, hp + amount)
+            if R2I(amount) > 0 and show then
+                set text = FloatingTextTag("|cff00ff00+" + I2S(R2I(amount)), target, 1.5)
+                if IsUnitEnemy(target, GetLocalPlayer()) or not IsUnitVisible(target, GetLocalPlayer()) then
                     call SetTextTagVisibility(text, false)
                 endif
             endif
+            if source == target then
+                set thistype.self.real[id] = thistype.self.real[id] + amount
+            else
+                set thistype.other.real[id] = thistype.other.real[id] + amount
+            endif
+        endmethod
+
+        private static method onInit takes nothing returns nothing
+            set thistype.self = Table.create()
+            set thistype.other = Table.create()
         endmethod
         
     endstruct

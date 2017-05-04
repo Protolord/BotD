@@ -64,7 +64,7 @@ scope SevereWound
                     exitwhen u == null
                     call GroupRemoveUnit(thistype.g, u)
                     if TargetFilter(u, owner) then
-                        call Heal.unit(u, this.hps, 4.0)
+                        call Heal.unit(this.u, u, this.hps, 4.0, true)
                         call DestroyEffect(AddSpecialEffectTarget(HEALED_SFX, u, "origin"))
                     endif
                 endloop

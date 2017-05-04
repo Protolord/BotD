@@ -122,7 +122,8 @@ scope Hellguard
         endmethod
 
         private static method debuff takes nothing returns nothing
-            call UnitRemoveAbility(thistype(ReleaseTimer(GetExpiredTimer())).caster, 'Bbsk')
+            local thistype this = ReleaseTimer(GetExpiredTimer())
+            call UnitRemoveAbility(this.caster, 'Bbsk')
         endmethod
 
         private static method onPeriod takes nothing returns nothing
@@ -143,7 +144,7 @@ scope Hellguard
                         set id = GetHandleId(u)
                         set i = this.tb[id]
                         set this.tb[id] = i + 1
-                        call Heal.unit(u, this.heal + this.bonus*this.heal*I2R(i)/TIMEOUT, 4.0)
+                        call Heal.unit(this.caster, u, this.heal + this.bonus*this.heal*I2R(i)/TIMEOUT, 4.0, true)
                     endif
                 endloop
             else

@@ -46,7 +46,7 @@ scope BloodExtremity
             local thistype this = thistype.allocate()
             set this.target = GetSpellTargetUnit()
             set this.caster = GetTriggerUnit()
-            call Heal.unit(this.target, HealAmount(GetUnitAbilityLevel(this.caster, SPELL_ID)), 4)
+            call Heal.unit(this.caster, this.target, HealAmount(GetUnitAbilityLevel(this.caster, SPELL_ID)), 4.0, true)
             set this.l = AddLightning(LIGHT, true, GetUnitX(this.caster), GetUnitY(this.caster), GetUnitX(this.target), GetUnitY(this.target))
             call SetLightningColor(this.l, 1, 0.25, 0.25, 1)
             call DestroyEffect(AddSpecialEffectTarget(HEAL_EFFECT, target, "origin"))

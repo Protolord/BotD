@@ -11,10 +11,10 @@ library ConfirmButton/*
     */ Track /*
 */
     struct ConfirmButton extends array
-        
+
         private Track trk
         private image icon
-        
+
         static method show takes player p, boolean flag returns nothing
             local thistype this = GetPlayerId(p)
             if flag then
@@ -23,7 +23,7 @@ library ConfirmButton/*
                 call SetImageColor(this.icon, 25, 25, 25, 255)
             endif
         endmethod
-        
+
         static method remove takes player p returns nothing
             local thistype this = GetPlayerId(p)
             call SystemTest.start("Removing ConfirmButton for " + GetPlayerName(p) + ": ")
@@ -31,7 +31,7 @@ library ConfirmButton/*
             call ReleaseImage(this.icon)
             call SystemTest.end()
         endmethod
-        
+
         private static method clicked takes nothing returns nothing
             local thistype this = GetPlayerId(Track.tracker)
             local PlayerStat p = PlayerStat(this)
@@ -43,12 +43,12 @@ library ConfirmButton/*
                     //Remove this hero from other player's HeroPool
                     call HeroPool.removeHero(p.hero)
                     //Hide StaticDisplay for this player
-                    call StaticDisplay.hide(Track.tracker) 
+                    call StaticDisplay.hide(Track.tracker)
                     //Hide all other HeroButtons from this player
-                    call HeroButton.hideAll(Track.tracker)  
+                    call HeroButton.hideAll(Track.tracker)
                     //Hide all other SpellButtons from this player
                     call SpellButton.hideAll(Track.tracker)
-                    //Remove ConfirmButton and RandomButton from this player              
+                    //Remove ConfirmButton and RandomButton from this player
                     call ConfirmButton.remove(Track.tracker)
                     call RandomButton.remove(Track.tracker)
                     //Hide this player's Spell Display
@@ -56,7 +56,7 @@ library ConfirmButton/*
                     //Hide this player's Hero Display
                     call HeroDisplay(this).destroy()
                     //Create selected Hero for this player
-                    call PlayerStat(this).createHero()                   
+                    call PlayerStat(this).createHero()
                 else
                     call PlayerStat.errorMsg(Track.tracker, "Not enough spells selected")
                 endif
@@ -64,7 +64,7 @@ library ConfirmButton/*
                 call PlayerStat.errorMsg(Track.tracker, "Hero already taken")
             endif
         endmethod
-        
+
         private static method createTrack takes nothing returns nothing
             local player p = GetEnumPlayer()
             local thistype this = GetPlayerId(p)
@@ -73,14 +73,14 @@ library ConfirmButton/*
             call SetImageRenderAlways(this.icon, true)
             call this.trk.registerClick(function thistype.clicked)
         endmethod
-        
+
         static method init takes nothing returns boolean
             call SystemTest.start("Creating ConfirmButton: ")
             call ForForce(Players.users, function thistype.createTrack)
             call SystemTest.end()
             return false
         endmethod
-        
+
     endstruct
 
 endlibrary

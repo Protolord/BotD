@@ -88,6 +88,7 @@ scope EngulfedFires
             local thistype this = ReleaseTimer(GetExpiredTimer())
             call UnitRemoveAbility(this.u, 'Bbsk')
             set this.u = null
+            call this.deallocate()
         endmethod
         
         private static method onCast takes nothing returns nothing

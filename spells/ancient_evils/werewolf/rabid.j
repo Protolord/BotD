@@ -26,7 +26,7 @@ scope Rabid
             loop
                 exitwhen this == 0
                 if UnitAlive(this.u) then
-                    call SetWidgetLife(this.u, GetWidgetLife(this.u) + this.rate*GetUnitState(this.u, UNIT_STATE_MAX_LIFE))
+                    call Heal.unit(this.u, this.u, this.rate*GetUnitState(this.u, UNIT_STATE_MAX_LIFE), 1.0, false)
                 endif
                 set this = this.next
             endloop

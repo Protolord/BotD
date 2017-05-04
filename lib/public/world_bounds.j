@@ -1,21 +1,21 @@
 library WorldBounds /* v2.0.0.0
 ************************************************************************************
 *
-*	struct WorldBounds extends array
+*    struct WorldBounds extends array
 *
-*	Fields
-*	-------------------------
+*    Fields
+*    -------------------------
 *
-*	readonly static integer maxX
-*	readonly static integer maxY
-*	readonly static integer minX
-*	readonly static integer minY
+*    readonly static integer maxX
+*    readonly static integer maxY
+*    readonly static integer minX
+*    readonly static integer minY
 *
-*	readonly static integer centerX
-*	readonly static integer centerY
+*    readonly static integer centerX
+*    readonly static integer centerY
 *
-*	readonly static rect world
-*	readonly static region worldRegion
+*    readonly static rect world
+*    readonly static region worldRegion
 *
 ************************************************************************************/
 private module WorldBoundInit
@@ -36,7 +36,7 @@ private module WorldBoundInit
         call RegionAddRect(worldRegion, world)
         endmethod
     endmodule
-    
+
     struct WorldBounds extends array
         readonly static integer maxX
         readonly static integer maxY
@@ -52,7 +52,7 @@ private module WorldBoundInit
         readonly static real playMinY
         implement WorldBoundInit
     endstruct
-    
+
 endlibrary
 
 //! textmacro WORLDBOUNDS_CHECK takes X, Y

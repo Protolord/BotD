@@ -3,28 +3,28 @@ library Effect uses TimerUtilsEx, DummyRecycler
 /*
     Effect.create(string, x, y, z, angle)
         - Create an Effect instnace, a special effect attached to a dummy facing <angle>.
-    
+
     Effect.createAnyAngle(string, x, y, z)
        - Create an Effect instnace, a special effect attached to a dummy facing random angle.
-	
-	this.duration = <duration>
-		- How long the Effect lasts.
-    
+
+    this.duration = <duration>
+        - How long the Effect lasts.
+
     this.scale = <newScale>
         - Set the scale of the Effect.
-	
-	this.destroy()
-		- Destroy the Effect instance.
+
+    this.destroy()
+        - Destroy the Effect instance.
 */
-    
-	globals
-		private constant real ALLOCATED_DESTROY_TIME = 5.0
-	endglobals
-	
+
+    globals
+        private constant real ALLOCATED_DESTROY_TIME = 5.0
+    endglobals
+
     struct Effect extends array
         implement Alloc
 
-        private unit u 
+        private unit u
         private effect e
         private timer t
 
@@ -42,6 +42,22 @@ library Effect uses TimerUtilsEx, DummyRecycler
 
         private static method expires takes nothing returns nothing
             call thistype(GetTimerData(GetExpiredTimer())).destroy()
+        endmethod
+
+        method operator facing= takes real r returns nothing
+            call SetUnitFacing(this.u, r)
+        endmethod
+
+        method operator facing takes nothing returns real
+            return GetUnitFacing(this.u)
+        endmethod
+
+        method operator x takes nothing returns real
+            return GetUnitX(this.u)
+        endmethod
+
+        method operator y takes nothing returns real
+            return GetUnitY(this.u)
         endmethod
 
         method operator duration= takes real r returns nothing
@@ -79,7 +95,7 @@ library Effect uses TimerUtilsEx, DummyRecycler
             set this.e = AddSpecialEffectTarget(s, this.u, "origin")
             return this
         endmethod
-        
+
     endstruct
-    
+
 endlibrary

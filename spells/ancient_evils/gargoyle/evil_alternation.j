@@ -24,7 +24,7 @@ scope EvilAlternation
 
         private method destroy takes nothing returns nothing
             call DestroyTrigger(this.manaTrg)
-            call Heal.unit(this.caster, this.absorbed, 1.0)
+            call Heal.unit(this.caster, this.caster, this.absorbed, 1.0, true)
             call thistype.tb.remove(GetHandleId(this.caster))
             call thistype.tb.remove(GetHandleId(this.manaTrg))
             set this.caster = null

@@ -13,7 +13,7 @@ scope Bones
     endglobals
     
     private function TargetFilter takes unit u, player owner returns boolean
-        return UnitAlive(u) and IsUnitEnemy(u, owner) and IsUnitType(u, UNIT_TYPE_MELEE_ATTACKER)
+        return UnitAlive(u) and IsUnitEnemy(u, owner) and CombatStat.isMelee(u)
     endfunction
     
     private function SourceFilter takes unit u returns boolean

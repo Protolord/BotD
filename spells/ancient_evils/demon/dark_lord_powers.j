@@ -30,6 +30,7 @@ scope DarkLordPowers
             local thistype this = ReleaseTimer(GetExpiredTimer())
             call UnitRemoveAbility(this.u, 'Bbsk')
             set this.u = null
+            call this.deallocate()
         endmethod
         
         private static method onCast takes nothing returns nothing
@@ -52,7 +53,7 @@ scope DarkLordPowers
                 exitwhen u == null
                 call GroupRemoveUnit(g, u)
                 if TargetFilter(u, p) then
-                    call Heal.unit(u, amount, 4)
+                    call Heal.unit(caster, u, amount, 4.0, true)
                     call DestroyEffect(AddSpecialEffectTarget(HEAL_ATTACHED, u, "origin"))
                 endif
             endloop

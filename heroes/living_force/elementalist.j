@@ -28,9 +28,9 @@ module ElementalistConfig
     set elementalist.iconPath = "ReplaceableTextures\\CommandButtons\\BTN_Elementalist.blp"
     set elementalist.modelPath = "Units\\Human\\HeroBloodElf\\HeroBloodElf.mdl"
     set elementalist.info = "<NOTHING YET>"
-    set elementalist.attribute = "19 +3.0    7 +4.3   12 +1.5"
-    set elementalist.primary = STR
-    
+    set elementalist.attribute = "20 +1.0   20 +1.5   20 +3.5"
+    set elementalist.primary = INT
+
     //Configure Spells
     set elementalist.spell11 = mirage
     set elementalist.spell21 = frostNova

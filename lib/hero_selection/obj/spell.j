@@ -2,10 +2,10 @@ library Spell requires StringSize
 
     struct Spell extends array
         implement Alloc
-        
+
         readonly image icon
         readonly real x
-        readonly real y 
+        readonly real y
         readonly boolean passive
         readonly integer id
         readonly integer addId
@@ -13,13 +13,13 @@ library Spell requires StringSize
         readonly string name
         readonly real yOffset1
         readonly real yOffset2
-        
+
         private boolean initialized
         private string pInfo1
         private string pInfo2
-        
+
         readonly static thistype BLANK
-        
+
         method add takes unit u returns nothing
             local string s
             if not this.initialized then
@@ -29,19 +29,19 @@ library Spell requires StringSize
             call UnitAddAbility(u, this.addId)
             call UnitRemoveAbility(u, this.addId)
         endmethod
-        
+
         method operator info1 takes nothing returns string
             return this.pInfo1
         endmethod
-        
+
         method operator info2 takes nothing returns string
             return this.pInfo2
         endmethod
-        
+
         private static thistype global
         private static string text
         private static trigger trg = CreateTrigger()
-        
+
         private static method setText takes nothing returns boolean
             local thistype this = thistype.global
             local integer lines = 0
@@ -52,10 +52,10 @@ library Spell requires StringSize
             local string word = ""
             local string char
             local boolean getName = true
-            
+
             set this.pInfo1 = ""
             set this.pInfo2 = ""
-            
+
             if thistype.text != null then
                 loop
                     set char = SubString(thistype.text, i, i + 1)
@@ -98,7 +98,7 @@ library Spell requires StringSize
                             else
                                 set this.pInfo2 = this.pInfo2 + word + " "
                             endif
-                            set word = ""     
+                            set word = ""
                             set length = 0
                         else
                             set word = word + char
@@ -141,13 +141,13 @@ library Spell requires StringSize
             endif
             return false
         endmethod
-        
+
         method operator info= takes string str returns nothing
             set thistype.global = this
             set thistype.text = str
             call TriggerEvaluate(thistype.trg)
         endmethod
-        
+
         static method create takes integer id returns thistype
             local thistype this = thistype.allocate()
             set this.id = id
@@ -157,14 +157,14 @@ library Spell requires StringSize
             set this.passive = false
             return this
         endmethod
-        
+
         static method initialize takes nothing returns nothing
             call SystemTest.start("Initializing thistype" + "s:")
             //! runtextmacro SELECTION_SYSTEM_SPELL_IMPLEMENTATION()
             call DestroyTrigger(thistype.trg)
             call SystemTest.end()
         endmethod
-        
+
         private static method onInit takes nothing returns nothing
             set thistype.BLANK = 0
             set thistype.BLANK.id = 0
@@ -173,7 +173,7 @@ library Spell requires StringSize
             set thistype.BLANK.iconPath = "UI\\BlackImage.blp"
             call TriggerAddCondition(thistype.trg, function thistype.setText)
         endmethod
-        
+
     endstruct
 
 endlibrary

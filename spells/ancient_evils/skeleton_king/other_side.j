@@ -1,5 +1,5 @@
 scope OtherSide
-    
+
     globals
         private constant integer SPELL_ID = 'A722'
         private constant integer BUFF_ID = 'B722'
@@ -8,7 +8,7 @@ scope OtherSide
         private constant string SFX2 = "Models\\Effects\\OtherSide2.mdx"
         private constant string SFX3 = "Models\\Effects\\OtherSide3.mdx"
     endglobals
-    
+
     private function MaxDamage takes integer level returns real
         if level == 11 then
             return 200.0
@@ -26,30 +26,30 @@ scope OtherSide
 
     struct OtherSide extends array
         implement Alloc
-        
+
         private unit u
-		private AtkDamage ad
+        private AtkDamage ad
         private real hpMissing
         private real max
-		private real ratio
+        private real ratio
         private effect sfx1
         private effect sfx2
         private effect sfx3
 
         private static Table tb
         private static group g
-        
+
         private static method onPeriod takes nothing returns nothing
             local thistype this = thistype.top
-			local integer dmg
+            local integer dmg
             loop
                 exitwhen this == 0
                 if UnitAlive(this.u) then
                      //Do stuffs
-					set dmg = R2I(DamageStat.get(this.u))
+                    set dmg = R2I(CombatStat.getDamage(this.u))
                     set this.hpMissing = (1.0 - GetWidgetLife(this.u)/GetUnitState(this.u, UNIT_STATE_MAX_LIFE))
-					call this.ad.change(R2I(RMinBJ(this.ratio*this.hpMissing*dmg, this.max*dmg/100)))
-                    //SFX 
+                    call this.ad.change(R2I(RMinBJ(this.ratio*this.hpMissing*dmg, this.max*dmg/100)))
+                    //SFX
                     if this.hpMissing > 0.25 and this.sfx1 == null then
                         set this.sfx1 = AddSpecialEffectTarget(SFX1, this.u, "chest")
                     endif
@@ -77,7 +77,7 @@ scope OtherSide
         endmethod
 
         implement Stack
-        
+
         private static method ultimates takes nothing returns boolean
             local unit u = GetTriggerUnit()
             local integer id = GetHandleId(u)
@@ -90,8 +90,8 @@ scope OtherSide
             set u = null
             return false
         endmethod
-        
-        private static method learn takes nothing returns nothing   
+
+        private static method learn takes nothing returns nothing
             local thistype this
             local unit u
             local integer id
@@ -103,7 +103,7 @@ scope OtherSide
                     set this = thistype.allocate()
                     set this.u = u
                     set this.hpMissing = 0
-					set this.ad = AtkDamage.create(u, 0)
+                    set this.ad = AtkDamage.create(u, 0)
                     set thistype.tb[id] = this
                     call this.push(TIMEOUT)
                     call UnitAddAbility(u, BUFF_ID)
@@ -117,7 +117,7 @@ scope OtherSide
                 set u = null
             endif
         endmethod
-        
+
         static method init takes nothing returns nothing
             call SystemTest.start("Initializing thistype: ")
             call RegisterPlayerUnitEvent(EVENT_PLAYER_HERO_SKILL, function thistype.learn)
@@ -126,7 +126,7 @@ scope OtherSide
             set thistype.g = CreateGroup()
             call SystemTest.end()
         endmethod
-        
+
     endstruct
-    
+
 endscope

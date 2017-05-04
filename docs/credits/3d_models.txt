@@ -1,123 +1,128 @@
 -------------------------
-		Models
+        Models
 -------------------------
-          
-	HEROES:
-		Vampire Lord                by -Grendel
-		Werewolf                    by WhiteDeath
-		Wraith                      by donut3.5
-		Arachnid                    by A.R.
-		Demon                       by Werewulf
-		Gargoyle                    by Sellenisko
-		Skeleton King               by -Grendel
-		Cave Troll                  by Sellenisko
-		Cave Troll Club				by Hayate
-            
-		Storm Shaman                by Ujimasa Hojo
-		Crusader					by Direfury
-        
-	ABILITIES:
-		Immortal Force Effect		by sPy
-		Corrupting Stomp Effect     by JetFangInferno
-		Soul Corruption Effect      by Glen Elendra
-		Shadows Of Corruption       by The_Swamp_Warrior
-		Vicious Explorers Effect    by JetFangInferno
-		Eye of Darkness Effect      by kellym0
-		Spectral Track Effect       by Sandro
-		Veins of Blood Effect       by Kino
-		Bloodlines Effect           by WILL THE ALMIGHTY
-            
-		ShapeShift Blast Effects    by WILL THE ALMIGHTY
-		ShapeShifting Effect        by Hermit
-		Force of the Lycan Buff     by PeeKay
-		Flesh Hunger Effects        by cotd333
-		Lycanthrope Effect          by JetFangInferno
-		Fury of the Lycan Buff      by Power
-		Revitalize Effect           by DarkEvil
-            
-		Death and Decay Effect      by dhguardianes
-		Mist of Darkness Effect     by Vortigon
-		Brain Sap Effects           by nGy
-		Horror Effect               by JetFangInferno
-		Horror Target Effect		by JetFangInferno
-		InnerDive Effect            by Razer!X
-		Spiritual Tunnel Effect     by Azsure, familla
-		Ghostly Beam Light          by JesusHipster
-		Repression Scout            by -Grendel
-		Avante Effect               by JesusHipster
-		Ancestral Rift Effect       by Kino
-		Inception Heal Effect       by Thrikodius
-		
-		Burrow Animation			by Hayate
-		Dash Effect                 by Razer!X
-		Sticky Shell Slow           by icewolf055
-		Spray Heal           		by icewolf055
-		Poison Blast                by icewolf055
-		Severe Wound Heal			by WILL THE ALMIGHTY
-		
-		Vigilant and Virtuous       by ChaoticHunter
-		Doom						by xyzier_24
-		Taunt                       by JetFangInferno
-		Hellish Cloud Buff          by JetFangInferno
-		Hellish Cloud Effect        by Vortigon
-		Pitfall						by Hayate
-		Diabolic Senses				by D4RK_G4ND4LF
-		Dark Lord Vision Buff		by Shyster
-		Dark Lord Vision Target  	by Shyster
-		Infernal Chains Buff		by Power
-		Shattered Earth Ash Effect  by PeeKay
-		Dark Lord Powers			by DCrimson
-		Hellfire Blast				by WILL THE ALMIGHTY
-		Hellguard					by Kuhneghetz
-		Hellguard Pentagram			by Skizzik
-		Engulfed Fires Buff         by sPy
 
-		Earth Shatter				by JetFangInferno
-		Stone Gaze Effect 			by Ergius
-		Ston Gaze Missile			by 00110000
-		Fissure Missile				by nGy
-		Uplift Purpose Buff			by ChaoticHunter
-		Rock Toss Effect			by WILL THE ALMIGHTY
-		Stone Vision Target         by CeDiL
-		Stony Path					by EdwardSwolenToe
-		Evil Alternation			by JesusHipster
+    HEROES:
+        Vampire Lord                by -Grendel
+        Werewolf                    by WhiteDeath
+        Wraith                      by donut3.5
+        Arachnid                    by A.R.
+        Demon                       by Werewulf
+        Gargoyle                    by Sellenisko
+        Skeleton King               by -Grendel
+        Cave Troll                  by Sellenisko
+        Cave Troll Club             by Hayate
+        Storm Shaman                by Ujimasa Hojo
+        Crusader                    by Forgotten_Warlord and Takakenji
+        Firelord                    by Gluma
+        Pyro                        by Illidan(Evil)X
 
-		Soul Break					by nGy
-		Soul Rip Missile			by nGy
-		OtherSide Buff				by JesusHipster
-		Reaper Buff					by JetFangInferno
-		DeathPact Effect			by icewolf055
-		Unholy Aura					by Lichkings slave
-		Fear Aura					by xyzier_24
-		Unholy Energy				by Devine
-		Bone Arrow					by Deolrin
-		Lone Soul					by PeeKay
-		
-		Cleave						by icewolf055
-		Three Sixty Animation		by Hayate
-		Second Hit Animation		by Hayate
-		Cauldron Model				by Hellish Hybrid
-		Aura of Strength Effect		by Malvodion
+    ABILITIES:
+        Immortal Force Effect       by sPy
+        Corrupting Stomp Effect     by JetFangInferno
+        Soul Corruption Effect      by Glen Elendra
+        Shadows Of Corruption       by The_Swamp_Warrior
+        Vicious Explorers Effect    by JetFangInferno
+        Eye of Darkness Effect      by kellym0
+        Spectral Track Effect       by Sandro
+        Veins of Blood Effect       by Kino
+        Bloodlines Effect           by WILL THE ALMIGHTY
 
-		Static Charge Effect		by PeeKay
-		Storm Effect				by HappyCockroach
+        ShapeShift Blast Effects    by WILL THE ALMIGHTY
+        ShapeShifting Effect        by Hermit
+        Force of the Lycan Buff     by PeeKay
+        Flesh Hunger Effects        by cotd333
+        Lycanthrope Effect          by JetFangInferno
+        Fury of the Lycan Buff      by Power
+        Revitalize Effect           by DarkEvil
 
-		AuraOfPrayer		  	    by Tranquil
-		Avander Effect				by JetFangInferno
-		Avander Buff				by JetFangInferno
-		
-		Mirage Buff					by icewolf055
-		Frost Nova Effect			by Daelin
-		Fire Devastation Explosion  by kellym0
-		Fire Devastation Flame      by Talon the Mage
-		
+        Death and Decay Effect      by dhguardianes
+        Mist of Darkness Effect     by Vortigon
+        Brain Sap Effects           by nGy
+        Horror Effect               by JetFangInferno
+        Horror Target Effect        by JetFangInferno
+        InnerDive Effect            by Razer!X
+        Spiritual Tunnel Effect     by Azsure, familla
+        Ghostly Beam Light          by JesusHipster
+        Repression Scout            by -Grendel
+        Avante Effect               by JesusHipster
+        Ancestral Rift Effect       by Kino
+        Inception Heal Effect       by Thrikodius
 
-		Firebolt Missile			by UgoUgo
-		Enchanted Fires	Explosion   by WILL THE ALMIGHTY
-		Meteor 						by icewolf055
-		Meteor Impact				by WILL THE ALMIGHTY
-	
-	OTHERS:
-		Generic CastBar             by HappyTauren
-		Dummy Model                 by Vexorian
-		Silence SFX                 by icewolf055
+        Burrow Animation            by Hayate
+        Dash Effect                 by Razer!X
+        Sticky Shell Slow           by icewolf055
+        Spray Heal                  by icewolf055
+        Poison Blast                by icewolf055
+        Severe Wound Heal           by WILL THE ALMIGHTY
+
+        Vigilant and Virtuous       by ChaoticHunter
+        Doom                        by xyzier_24
+        Taunt                       by JetFangInferno
+        Hellish Cloud Buff          by JetFangInferno
+        Hellish Cloud Effect        by Vortigon
+        Pitfall                     by Hayate
+        Diabolic Senses             by D4RK_G4ND4LF
+        Dark Lord Vision Buff       by Shyster
+        Dark Lord Vision Target     by Shyster
+        Infernal Chains Buff        by Power
+        Shattered Earth Ash Effect  by PeeKay
+        Dark Lord Powers            by DCrimson
+        Hellfire Blast              by WILL THE ALMIGHTY
+        Hellguard                   by Kuhneghetz
+        Hellguard Pentagram         by Skizzik
+        Engulfed Fires Buff         by sPy
+
+        Earth Shatter               by JetFangInferno
+        Stone Gaze Effect           by Ergius
+        Ston Gaze Missile           by 00110000
+        Fissure Missile             by nGy
+        Uplift Purpose Buff         by ChaoticHunter
+        Rock Toss Effect            by WILL THE ALMIGHTY
+        Stone Vision Target         by CeDiL
+        Stony Path                  by EdwardSwolenToe
+        Evil Alternation            by JesusHipster
+
+        Soul Break                  by nGy
+        Soul Rip Missile            by nGy
+        OtherSide Buff              by JesusHipster
+        Reaper Buff                 by JetFangInferno
+        DeathPact Effect            by icewolf055
+        Unholy Aura                 by Lichkings slave
+        Fear Aura                   by xyzier_24
+        Unholy Energy               by Devine
+        Bone Arrow                  by Deolrin
+        Lone Soul                   by PeeKay
+
+        Cleave                      by icewolf055
+        Three Sixty Animation       by Hayate
+        Second Hit Animation        by Hayate
+        Cauldron Model              by Hellish Hybrid
+        Aura of Strength Effect     by Malvodion
+
+        Static Charge Effect        by PeeKay
+        Storm Effect                by HappyCockroach
+        AuraOfPrayer                by Tranquil
+        Avander Effect              by JetFangInferno
+        Avander Buff                by JetFangInferno
+
+        Mirage Buff                 by icewolf055
+        Frost Nova Effect           by Daelin
+        Fire Devastation Explosion  by kellym0
+        Fire Devastation Flame      by Talon the Mage
+
+        Firebolt Missile            by UgoUgo
+        Enchanted Fires Explosion   by WILL THE ALMIGHTY
+        Meteor                      by icewolf055
+
+        Bomb Explosion              by WILL THE ALMIGHTY
+        Motion Controller (MC)      by Pvt.Toma
+        MC Laser Entrance           by WILL THE ALMIGHTY
+        MC Chain Head               by Infrisios
+        MC Chain Elements           by Illustrike
+
+
+    OTHERS:
+        Generic CastBar             by HappyTauren
+        Dummy Model                 by Vexorian
+        Silence SFX                 by icewolf055

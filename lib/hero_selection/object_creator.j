@@ -150,5 +150,9 @@
 //! runtextmacro CREATE_SPELL_SELECT_OBJECT("H32", "2")
 //! runtextmacro CREATE_SPELL_SELECT_OBJECT("H42", "2")
 //! runtextmacro CREATE_SPELL_SELECT_OBJECT("H52", "2")
+//! runtextmacro CREATE_SPELL_SELECT_OBJECT("H62", "2")
+//! runtextmacro CREATE_SPELL_SELECT_OBJECT("H72", "2")
+//! runtextmacro CREATE_SPELL_SELECT_OBJECT("H82", "2")
+//! runtextmacro CREATE_SPELL_SELECT_OBJECT("H92", "2")
 */
 

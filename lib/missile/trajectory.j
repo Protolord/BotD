@@ -3,7 +3,7 @@ module MissileTrajectory
 /*
     this.move(x, y, z)
         - Instantly move a missile.
-    
+
     this.launch()
         - Launch a Missile. The Missile will begin to move based on its target type.
 
@@ -12,24 +12,30 @@ module MissileTrajectory
 
     this.speed
         - Returns a Missile's speed.
-    
+
     this.projectile = <Is the Missile treated as a Projectile?>
         - If true, the Missile is treated as a Projectile.
         - Only Point-target Missiles can only be a Projectile.
+
+    this.arc = <Projectile Arc value)
 */
+
     public boolean stop
     public boolean projectile
+    public real arc
     private real spd
     private real chkDist
     private real dx
     private real dy
     private real dz
+    private real z0
+    private real dist
+    private real distF
 
-    readonly static constant real GRAVITY = 1536
-    private static constant real g = 1.5
+    private static constant real MAX_HEIGHT = 500.0
     private static constant real MIN_COLLISION = 50.0
-    
-    
+
+
     method move takes real x, real y, real z returns nothing
         set this.x = x
         set this.y = y
@@ -38,7 +44,7 @@ module MissileTrajectory
         call SetUnitY(this.u, y)
         call SetUnitFlyHeight(u, z - GetPointZ(x, y), 0)
     endmethod
-    
+
     //! textmacro MISSILE_UPDATE_HAS_TARGET
         set dx = GetUnitX(this.target) - this.x
         set dy = GetUnitY(this.target) - this.y
@@ -70,7 +76,7 @@ module MissileTrajectory
             call SetUnitAnimationByIndex(this.u, R2I(pitch*bj_RADTODEG + 90.5))
         endif
     //! endtextmacro
-        
+
     //! textmacro MISSILE_UPDATE_NO_TARGET
         set dx = this.x2 - this.x
         set dy = this.y2 - this.y
@@ -82,9 +88,11 @@ module MissileTrajectory
         else
             set this.x = this.x + this.dx
             set this.y = this.y + this.dy
-            set this.z = this.z + this.dz
             if this.projectile then
-                set this.dz = this.dz - thistype.g
+                set this.dist = this.dist + this.spd
+                set this.z = this.z0 + this.arc*this.dist*(this.distF - this.dist)/this.distF + this.dist*(this.z2 - this.z0)/this.distF
+            else
+                set this.z = this.z + this.dz
             endif
             call SetUnitX(this.u, this.x)
             call SetUnitY(this.u, this.y)
@@ -98,15 +106,15 @@ module MissileTrajectory
                     set this.hidden = true
                     call ShowDummy(this.u, false)
                 endif
-            else
-                if height <= 0 then 
+            elseif this.projectile then
+                if height <= 0 then
                     set this.stop = true
                     call this.callbackOnHit()
                 endif
             endif
         endif
     //! endtextmacro
-    
+
     static method pickAll takes nothing returns nothing
         local thistype this = thistype(0).next
         local real dx
@@ -132,11 +140,11 @@ module MissileTrajectory
         set this.spd = speed*thistype.TIMEOUT
         set this.chkDist = RMaxBJ(this.spd*this.spd, thistype.MIN_COLLISION*thistype.MIN_COLLISION)
     endmethod
-    
+
     method operator speed takes nothing returns real
         return this.spd/thistype.TIMEOUT
     endmethod
-    
+
     method launch takes nothing returns nothing
         local real dx = this.x2 - this.x
         local real dy = this.y2 - this.y
@@ -148,12 +156,12 @@ module MissileTrajectory
         local real gd
         set this.stop = false
         if this.projectile and this.target == null then
-            set spd2 = this.spd*this.spd/(thistype.TIMEOUT*thistype.TIMEOUT)
-            set gd = -thistype.GRAVITY*xy
-            set pitch = Atan((-1 - SquareRoot(1 - (2*gd/spd2)*((gd/(2*spd2)) - dz/xy)))/(gd/spd2))
-            set this.dx = this.spd*Cos(facing)*Cos(pitch)
-            set this.dy = this.spd*Sin(facing)*Cos(pitch)
-            set this.dz = this.spd*Sin(pitch)
+            set this.dx = this.spd*Cos(facing)
+            set this.dy = this.spd*Sin(facing)
+            set this.dz = 0
+            set this.z0 = this.z
+            set this.dist = 0
+            set this.distF = xy
         else
             if xy > 0 then
                 set pitch = Atan((this.z2 - this.z)/xy)

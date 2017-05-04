@@ -4,7 +4,7 @@ scope StoneVision
         private constant integer SPELL_ID = 'A631'
         private constant string SFX = "Models\\Effects\\StoneVisionTarget.mdx"
         private constant string SFX_TARGET = "Models\\Effects\\StoneVisionTarget.mdx"
-        private constant real NODE_RADIUS = 200
+        private constant real NODE_RADIUS = 400
         private constant real TIMEOUT = 0.05
     endglobals
 

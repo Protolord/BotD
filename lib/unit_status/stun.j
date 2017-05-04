@@ -1,33 +1,33 @@
 library Stun uses TimerUtilsEx, Table, DummyRecycler
-    
+
 /*
     Stun.create(unit, duration, additiveTime)
         - Stun a unit for a certain duration preventing it from doing anything.
         - Duration of zero means infinite.
         - Buff indicator appears.
-	
-	this.destroy()
-		- Destroy a Stun instance.
+
+    this.destroy()
+        - Destroy a Stun instance.
 */
 
     globals
         private constant integer STUN_SPELL = 'AStn'
         private constant integer STUN_BUFF = 'BPSE'
     endglobals
-    
+
     struct Stun extends array
         implement Alloc
-        
+
         private unit u
         private unit dummy
         private effect sfx
         private timer t
-        
+
         private static Table tb
         private static trigger trg
         private static group g = CreateGroup()
         private static integer counter = 0
-        
+
         method destroy takes nothing returns nothing
             call UnitRemoveAbility(this.u, STUN_BUFF)
             call GroupRemoveUnit(thistype.g, this.u)
@@ -40,11 +40,11 @@ library Stun uses TimerUtilsEx, Table, DummyRecycler
             set this.t = null
             call this.deallocate()
         endmethod
-        
+
         private static method expire takes nothing returns nothing
             call thistype(GetTimerData(GetExpiredTimer())).destroy()
         endmethod
-        
+
         private static method onDeath takes nothing returns boolean
             local thistype this = thistype.tb[GetHandleId(GetTriggerUnit())]
             if this != 0 then
@@ -52,11 +52,11 @@ library Stun uses TimerUtilsEx, Table, DummyRecycler
             endif
             return false
         endmethod
-        
+
         private static method add takes nothing returns nothing
             call TriggerRegisterUnitEvent(thistype.trg, GetEnumUnit(), EVENT_UNIT_DEATH)
         endmethod
-        
+
         static method create takes unit u, real duration, boolean stack returns thistype
             local integer id = GetHandleId(u)
             local thistype this = thistype.tb[id]
@@ -98,13 +98,13 @@ library Stun uses TimerUtilsEx, Table, DummyRecycler
             endif
             return this
         endmethod
-        
+
         private static method onInit takes nothing returns nothing
             set thistype.tb = Table.create()
             set thistype.trg = CreateTrigger()
             call TriggerAddCondition(thistype.trg, Filter(function thistype.onDeath))
         endmethod
-        
+
     endstruct
-    
+
 endlibrary

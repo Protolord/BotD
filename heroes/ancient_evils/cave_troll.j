@@ -88,7 +88,7 @@ module CaveTrollConfig
     set caveTroll.info = "<NOTHING YET>"
     set caveTroll.attribute = "19 +4.5    7 +2.5   12 +1.2"
     set caveTroll.primary = STR
-    
+
     //Configure Spells
     set caveTroll.innateSpell = cleave
     set caveTroll.spell11 = heavySwing

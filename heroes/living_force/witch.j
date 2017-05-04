@@ -28,9 +28,9 @@ module WitchConfig
     set witch.iconPath = "ReplaceableTextures\\CommandButtons\\BTN_Witch.blp"
     set witch.modelPath = "Models\\Units\\Witch.mdl"
     set witch.info = "<NOTHING YET>"
-    set witch.attribute = "19 +3.0    7 +4.3   12 +1.5"
-    set witch.primary = STR
-    
+    set witch.attribute = "20 +1.0   20 +1.5   20 +3.5"
+    set witch.primary = INT
+
     //Configure Spells
     set witch.spell11 = frogTransformation
     set witch.spell21 = envenomedDart

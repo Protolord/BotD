@@ -1,5 +1,5 @@
 scope EyeRay
-    
+
     globals
         private constant integer SPELL_ID = 'A832'
         private constant integer BUFF_ID = 'B832'
@@ -68,13 +68,15 @@ scope EyeRay
             local thistype node = this.next
             local real facing = GetUnitFacing(u)*bj_DEGTORAD
             local real r = DISTANCE
+            local real unitX = GetUnitX(u)
+            local real unitY = GetUnitY(u)
             local real x
             local real y
             loop
                 exitwhen node == this and r >= range
                 if r < range then
-                    set x = GetUnitX(u) + r*Cos(facing)
-                    set y = GetUnitY(u) + r*Sin(facing)
+                    set x = unitX + r*Cos(facing)
+                    set y = unitY + r*Sin(facing)
                     if x > WorldBounds.maxX then
                         set x = WorldBounds.maxX
                     elseif x < WorldBounds.minX then
@@ -87,9 +89,10 @@ scope EyeRay
                     endif
                     if node == this then
                         set node = thistype.create(this, x, y, GetOwningPlayer(u))
+                    else
+                        call SetUnitX(node.u, x)
+                        call SetUnitY(node.u, y)
                     endif
-                    call SetUnitX(node.u, x)
-                    call SetUnitY(node.u, y)
                 else
                     call node.destroy()
                 endif
@@ -98,18 +101,18 @@ scope EyeRay
             endloop
         endmethod
     endstruct
-    
+
     struct EyeRay extends array
         implement Alloc
         implement List
-        
+
         private unit u
         private real range
         private Vision visionHead
         private fogmodifier fm
 
         private static Table tb
-        
+
         private static method onPeriod takes nothing returns nothing
             local thistype this = thistype(0).next
             loop
@@ -117,14 +120,14 @@ scope EyeRay
                 if UnitAlive(this.u) then
                     if this.range < GLOBAL_SIGHT then
                         call this.visionHead.update(this.u, this.range)
-                    elseif this.fm == null then 
+                    elseif this.fm == null then
                         set this.fm = CreateFogModifierRect(GetOwningPlayer(this.u), FOG_OF_WAR_VISIBLE, WorldBounds.world, true, false)
-                        call FogModifierStart(this.fm) 
+                        call FogModifierStart(this.fm)
                     endif
                 else
                     if this.range < GLOBAL_SIGHT then
                         call this.visionHead.clear()
-                    elseif this.fm != null then 
+                    elseif this.fm != null then
                         call DestroyFogModifier(this.fm)
                         set this.fm = null
                     endif
@@ -152,7 +155,7 @@ scope EyeRay
             endloop
             return false
         endmethod
-        
+
         private static method ultimates takes nothing returns boolean
             local unit u = GetTriggerUnit()
             local integer id = GetHandleId(u)
@@ -168,8 +171,8 @@ scope EyeRay
             set u = null
             return false
         endmethod
-        
-        private static method learn takes nothing returns nothing   
+
+        private static method learn takes nothing returns nothing
             local thistype this
             local unit u
             local integer id
@@ -197,7 +200,7 @@ scope EyeRay
                 set u = null
             endif
         endmethod
-        
+
         static method init takes nothing returns nothing
             call SystemTest.start("Initializing thistype: ")
             call RegisterPlayerUnitEvent(EVENT_PLAYER_HERO_SKILL, function thistype.learn)
@@ -208,7 +211,7 @@ scope EyeRay
             call PreloadUnit(UNIT_ID)
             call SystemTest.end()
         endmethod
-        
+
     endstruct
-    
+
 endscope

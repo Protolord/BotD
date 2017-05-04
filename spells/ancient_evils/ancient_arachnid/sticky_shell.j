@@ -24,7 +24,7 @@ scope StickyShell
     endfunction
     
     private function TargetFilter takes unit u, player p returns boolean
-        return UnitAlive(u) and IsUnitEnemy(u, p) and IsUnitType(u, UNIT_TYPE_MELEE_ATTACKER) and not IsUnitType(u, UNIT_TYPE_STRUCTURE) and not IsUnitType(u, UNIT_TYPE_MAGIC_IMMUNE)
+        return UnitAlive(u) and IsUnitEnemy(u, p) and CombatStat.isMelee(u) and not IsUnitType(u, UNIT_TYPE_STRUCTURE) and not IsUnitType(u, UNIT_TYPE_MAGIC_IMMUNE)
     endfunction
     
     private struct SpellBuff extends Buff

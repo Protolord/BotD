@@ -57,16 +57,13 @@ scope UnholyEnergy
                             set i = i + 1
                         endif
                     endloop
-                    if IsUnitType(u, UNIT_TYPE_ETHEREAL) then
-                        set i = 4*i
-                    endif
                     if i >= EXTRA_THRESHOLD and this.sfxExtra == null then
                         set this.sfxExtra = AddSpecialEffectTarget(SFX_EXTRA, this.u, "overhead")
                     elseif i < EXTRA_THRESHOLD and this.sfxExtra != null then
                         call DestroyEffect(this.sfxExtra)
                         set this.sfxExtra = null
                     endif
-                    call SetWidgetLife(this.u, GetWidgetLife(this.u) + i*this.factor)
+                    call Heal.unit(this.u, this.u, i*this.factor, 4.0, false)
                 endif
                 set this = this.next
             endloop

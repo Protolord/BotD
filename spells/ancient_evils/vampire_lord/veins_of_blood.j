@@ -39,7 +39,7 @@ scope VeinsOfBlood
         
         static method onPeriod takes nothing returns nothing
             local thistype this = GetTimerData(GetExpiredTimer())
-            call Heal.unit(this.target, this.heal, 4)
+            call Heal.unit(this.target, this.target, this.heal, 4.0, true)
         endmethod
         
         method onApply takes nothing returns nothing

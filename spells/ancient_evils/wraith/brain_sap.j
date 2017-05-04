@@ -22,7 +22,7 @@ scope BrainSap
             local unit target = GetSpellTargetUnit()
             local real amount = Amount(GetUnitAbilityLevel(caster, SPELL_ID))
             call Damage.element.apply(caster, target, amount, ATTACK_TYPE, DAMAGE_TYPE, DAMAGE_ELEMENT_SPIRIT)
-            call SetWidgetLife(caster, GetWidgetLife(caster) + RMinBJ(amount, GetWidgetLife(target)))
+            call Heal.unit(caster, caster, RMinBJ(amount, GetWidgetLife(target)), 1.0, true)
             call DestroyEffect(AddSpecialEffectTarget(SFX_CASTER, caster, "origin"))
             call DestroyEffect(AddSpecialEffectTarget(SFX_TARGET, target, "origin"))
             set caster = null

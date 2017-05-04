@@ -1,14 +1,19 @@
 
-MODEL CONCERNS:  
+MODEL CONCERNS:
+- Gnome Technician spells' manacost, range and cooldown are incorrect.
+- Change Stasis Trap model.
+- Motion Controller Chain colors make it match Chain Head color
 - Cleave change Visual Effect
 - Add Spike Model
 - Testudo Animation
+- Devour Change animation
 - Storm Shaman needs a levitate animation put into "stand alternate", "attack alternate" and "walk alternate"
 
-CODING CONCERNS:       
+CODING CONCERNS:
 - SystemMsg create admin parameter.
-- DamageStat.get has a +-1 tolerance value.
+- CombatStat.get has a +-1 tolerance value.
 - Test if Inception takes the correct damage taken factor
 - Allow units with Rabies exceed 522 movespeed.
 - DamageEvent doesn't properly classify units with magic attack as magic damage.
+- Transform spells remove attached effects. Attach spell buff effects to Object Editor data instead.
 

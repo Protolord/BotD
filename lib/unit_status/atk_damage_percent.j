@@ -1,4 +1,4 @@
-library AtkDamagePercent uses Table, BonusMod, AtkDamage, DamageStat
+library AtkDamagePercent uses Table, BonusMod, AtkDamage, CombatStat
 
 /*
     AtkDamagePercent.create(unit, bonus)
@@ -39,7 +39,7 @@ library AtkDamagePercent uses Table, BonusMod, AtkDamage, DamageStat
                 call head.pop()
                 call head.deallocate()
             endif
-            call head.ad.change(head.b*DamageStat.get(head.u))
+            call head.ad.change(head.b*CombatStat.getDamage(head.u))
             call this.deallocate()
         endmethod
         
@@ -47,14 +47,14 @@ library AtkDamagePercent uses Table, BonusMod, AtkDamage, DamageStat
             local thistype head = this.head
             set head.b = head.b + newBonus - this.b
             set this.b = newBonus
-            call head.ad.change(head.b*DamageStat.get(head.u))
+            call head.ad.change(head.b*CombatStat.getDamage(head.u))
         endmethod
 
         private static method onPeriod takes nothing returns nothing
             local thistype head = thistype(0).next
             loop
                 exitwhen head == 0
-                call head.ad.change(head.b*DamageStat.get(head.u))
+                call head.ad.change(head.b*CombatStat.getDamage(head.u))
                 set head = head.next
             endloop
         endmethod
@@ -79,7 +79,7 @@ library AtkDamagePercent uses Table, BonusMod, AtkDamage, DamageStat
             set this.b = bonus
             set this.head = head
             set head.b = head.b + this.b
-            call head.ad.change(head.b*DamageStat.get(head.u))
+            call head.ad.change(head.b*CombatStat.getDamage(head.u))
             return this
         endmethod
         

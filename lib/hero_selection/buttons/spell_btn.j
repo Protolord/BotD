@@ -7,22 +7,22 @@ library SpellButton/*
 
     struct SpellButton extends array
         implement Alloc
-        
+
         public TrackList tHead
-        
+
         public static real buttonX
         public static real buttonY
         public static thistype global
         public static integer order
         public static integer spellNum
-        
+
         public static integer orderCtr = 1
         public static integer array spellNumValues
         public static integer array orderValues
-        
+
         public thistype next
         public thistype prev
-        
+
         method destroy takes nothing returns nothing
             local TrackList tl = this.tHead.next
             set this.prev.next = this.next
@@ -34,7 +34,7 @@ library SpellButton/*
             endloop
             call this.deallocate()
         endmethod
-        
+
         static method destroyAll takes nothing returns nothing
             local thistype this = thistype(0).next
             loop
@@ -43,7 +43,7 @@ library SpellButton/*
                 set this = this.next
             endloop
         endmethod
-        
+
         method hide takes player p returns nothing
             local TrackList tl = this.tHead.next
             loop
@@ -55,7 +55,7 @@ library SpellButton/*
                 set tl = tl.next
             endloop
         endmethod
-        
+
         static method hideAll takes player p returns nothing
             local thistype this = thistype(0).next
             call SystemTest.start("Disabling SpellButtons for " + GetPlayerName(p) + ": ")
@@ -65,8 +65,8 @@ library SpellButton/*
                 set this = this.next
             endloop
             call SystemTest.end()
-        endmethod    
-        
+        endmethod
+
         static method clicked takes nothing returns nothing
             local PlayerStat ps = GetPlayerId(Track.tracker)
             local integer spellNum = thistype.spellNumValues[Track.instance]
@@ -76,7 +76,7 @@ library SpellButton/*
                 call ConfirmButton.show(Track.tracker, true)
             endif
         endmethod
-        
+
         public static method changeButtonPos takes integer spellNum, integer order returns nothing
             set spellBtnX[spellNum*4 + order] = thistype.buttonX
             set spellBtnY[spellNum*4 + order] = thistype.buttonY
@@ -86,7 +86,7 @@ library SpellButton/*
                 set thistype.buttonX = thistype.buttonX + SPELL_GROUP_BUTTON_SPACING
             endif
         endmethod
-        
+
         public static method createTrack takes nothing returns nothing
             local thistype this = thistype.global
             local player p = GetEnumPlayer()
@@ -96,7 +96,7 @@ library SpellButton/*
             set thistype.orderValues[t] = thistype.order
             call TrackList.create(this.tHead, t, p)
         endmethod
-        
+
         public static method create takes integer spellNum, integer order returns thistype
             local thistype this = thistype.allocate()
             set this.tHead = TrackList.head()
@@ -114,14 +114,14 @@ library SpellButton/*
             set this.prev.next = this
             return this
         endmethod
-        
+
         //! textmacro SELECTION_SYSTEM_SPELL_CREATE takes NUM
             call SpellButton.create($NUM$,1)
             call SpellButton.create($NUM$,2)
             call SpellButton.create($NUM$,3)
             call SpellButton.create($NUM$,4)
         //! endtextmacro
-        
+
         static method init takes nothing returns boolean
             call SystemTest.start("Creating SpellButtons: ")
             set thistype.buttonX = SPELL_BUTTON_ORIGIN_X
@@ -133,7 +133,7 @@ library SpellButton/*
             call SystemTest.end()
             return false
         endmethod
-        
+
     endstruct
 
 endlibrary

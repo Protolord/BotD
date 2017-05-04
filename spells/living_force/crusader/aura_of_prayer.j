@@ -3,9 +3,9 @@ scope AuraOfPrayer
     globals
         private constant integer SPELL_ID = 'AH23'
         private constant integer BUFF_ID = 'BH23'
-        private constant real TIMEOUT = 1.0
+        private constant real TIMEOUT = 0.25
         private constant real MIN_RANGE = 0 //Range that will deal max healing
-        private constant string SFX = ""
+        private constant string SFX = "Models\\Effects\\AuraOfPrayer.mdx"
     endglobals
 
     //When unit is at this range, the damage is minimum
@@ -15,9 +15,6 @@ scope AuraOfPrayer
     endfunction
 
     private function Regen_Max takes integer level returns real
-        if level == 11 then
-            return 20.0
-        endif
         return 2.0*level
     endfunction
 
@@ -37,9 +34,22 @@ scope AuraOfPrayer
         private real maxHeal
         private real minHeal
         private real m
+        private effect sfx
+        private group affected
         
         private static Table tb
         private static group g
+        private static thistype global
+
+        private static method picked takes nothing returns nothing
+            local unit u = GetEnumUnit()
+            if not IsUnitInRange(u, thistype.global.u, thistype.global.range) then
+                call GroupRemoveUnit(thistype.global.affected, u)
+                call UnitRemoveAbility(u, BUFF_ID)
+                call UnitRemoveAbility(u, 'bH23')
+            endif
+            set u = null
+        endmethod
         
         private static method onPeriod takes nothing returns nothing
             local thistype this = GetTimerData(GetExpiredTimer())
@@ -69,10 +79,15 @@ scope AuraOfPrayer
                         else
                             set regen = this.maxHeal - this.m*(d - MIN_RANGE)
                         endif
-                        call SetWidgetLife(u, GetWidgetLife(u) + regen)
-                        call DestroyEffect(AddSpecialEffectTarget(SFX, u, "chest"))
+                        call Heal.unit(this.u, u, regen*TIMEOUT, 1.0, false)
+                        if not IsUnitInGroup(u, this.affected) then
+                            call GroupAddUnit(this.affected, u)
+                            call UnitAddAbility(u, BUFF_ID)
+                        endif
                     endif
                 endloop
+                set thistype.global = this
+                call ForGroup(this.affected, function thistype.picked)
             endif
         endmethod
         
@@ -102,6 +117,8 @@ scope AuraOfPrayer
                 if not thistype.tb.has(id) then
                     set this = thistype.allocate()
                     set this.u = u
+                    set this.sfx = AddSpecialEffectTarget(SFX, u, "origin")
+                    set this.affected = CreateGroup()
                     set thistype.tb[id] = this
                     call TimerStart(NewTimerEx(this), TIMEOUT, true, function thistype.onPeriod)
                     call UnitAddAbility(u, BUFF_ID)

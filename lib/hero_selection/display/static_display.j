@@ -6,8 +6,8 @@ library StaticDisplay/*
     */ ImageTools /*
     */ SystemConsole /*
 */
-    
-    
+
+
     //Hero and Spell Selection Static Display, same for all players
     struct StaticDisplay extends array
         //Instance is per player
@@ -25,7 +25,7 @@ library StaticDisplay/*
         public static image agi
         public static image int
         public static image randomPick
-        
+
         static method remove takes nothing returns nothing
             call Hero.cleanAll()
             call ReleaseImage(thistype.str)
@@ -46,7 +46,7 @@ library StaticDisplay/*
             set thistype.int = null
             set thistype.background = null
         endmethod
-        
+
         static method hide takes player p returns nothing
             if GetLocalPlayer() == p then
                 call SetImageRenderAlways(thistype.str, false)
@@ -67,7 +67,7 @@ library StaticDisplay/*
                 call SetCameraField(CAMERA_FIELD_ANGLE_OF_ATTACK, -60, 0)
             endif
         endmethod
-        
+
         public static method init takes nothing returns boolean
             local real xLimit = CENTER_X + 895
             local real spellTop = SPELL_BUTTON_ORIGIN_Y - 40
@@ -99,7 +99,7 @@ library StaticDisplay/*
             call SystemTest.end()
             return false
         endmethod
-        
+
     endstruct
 
 endlibrary

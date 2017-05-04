@@ -62,8 +62,9 @@ scope Tornado
         
         private static method expires takes nothing returns nothing
             local thistype this = ReleaseTimer(GetExpiredTimer())
-            call UnitRemoveAbility(this.u, 'Bbsk')
+            call UnitRemoveAbility(this.u, 'BOwk')
             set this.u = null
+            call this.deallocate()
         endmethod
         
         private static method onCast takes nothing returns nothing

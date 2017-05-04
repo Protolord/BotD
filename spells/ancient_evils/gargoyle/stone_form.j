@@ -33,7 +33,7 @@ scope StoneForm
 
         private static method onPeriod takes nothing returns nothing
             local thistype this = GetTimerData(GetExpiredTimer())
-            call Heal.unit(this.target, this.hps, 4.0)
+            call Heal.unit(this.target, this.target, this.hps, 4.0, true)
         endmethod
         
         method onApply takes nothing returns nothing

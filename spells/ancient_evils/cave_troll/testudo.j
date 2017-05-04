@@ -1,5 +1,5 @@
 scope Testudo
- 
+
     globals
         private constant integer SPELL_ID = 'A821'
         private constant integer UNIT_ID = 'UTCT'
@@ -13,55 +13,55 @@ scope Testudo
         endif
         return 30*level
     endfunction
-	
-	private function SpellResistBonus takes integer level returns real
-		if level == 11 then
-			return 0.0  //Spell Immunity will be added instead
-		endif
-		return 50.0
-	endfunction
+
+    private function SpellResistBonus takes integer level returns real
+        if level == 11 then
+            return 0.0  //Spell Immunity will be added instead
+        endif
+        return 50.0
+    endfunction
 
     private struct SpellBuff extends Buff
 
-		private integer lvl
+        private integer lvl
         private effect sfx
         private Armor a
-		private SpellResistance sr
+        private SpellResistance sr
         private SpellImmunity si
 
         private static constant integer RAWCODE = 'B821'
         private static constant integer DISPEL_TYPE = BUFF_NONE
         private static constant integer STACK_TYPE = BUFF_STACK_NONE
-        
+
         method onRemove takes nothing returns nothing
             call DestroyEffect(this.sfx)
-			if this.lvl == 11 then
+            if this.lvl == 11 then
                 call this.si.destroy()
             else
-				call this.sr.destroy()
-			endif
-			call this.a.destroy()
+                call this.sr.destroy()
+            endif
+            call this.a.destroy()
             set this.sfx = null
         endmethod
-        
+
         method onApply takes nothing returns nothing
             set this.lvl = GetUnitAbilityLevel(this.target, SPELL_ID)
             set this.sfx = AddSpecialEffectTarget(SFX, this.target, "chest")
-			set this.a = Armor.create(this.target, ArmorBonus(this.lvl))
-			if lvl == 11 then
+            set this.a = Armor.create(this.target, ArmorBonus(this.lvl))
+            if lvl == 11 then
                 set this.si = SpellImmunity.create(this.target)
             else
-				set this.sr = SpellResistance.create(this.target, SpellResistBonus(this.lvl))
-			endif
+                set this.sr = SpellResistance.create(this.target, SpellResistBonus(this.lvl))
+            endif
         endmethod
 
         private static method init takes nothing returns nothing
             call PreloadSpell(thistype.RAWCODE)
         endmethod
-        
+
         implement BuffApply
     endstruct
-    
+
     struct Testudo extends array
         implement Alloc
 
@@ -101,7 +101,7 @@ scope Testudo
             if GetUnitTypeId(u) == 'UCav' then
                 set this = thistype.allocate()
                 set this.caster = u
-			    set thistype.tb[id] = this
+                set thistype.tb[id] = this
                 call SetUnitAnimation(this.caster, "death")
                 call TimerStart(NewTimerEx(this), 0.25, false, function thistype.freeze)
                 call TimerStart(NewTimerEx(this), DELAY, false, function thistype.expire)
@@ -112,7 +112,7 @@ scope Testudo
             endif
             set u = null
         endmethod
-        
+
         static method init takes nothing returns nothing
             call SystemTest.start("Initializing thistype: ")
             set thistype.tb = Table.create()
@@ -121,7 +121,7 @@ scope Testudo
             call SpellBuff.initialize()
             call SystemTest.end()
         endmethod
-        
+
     endstruct
-    
+
 endscope

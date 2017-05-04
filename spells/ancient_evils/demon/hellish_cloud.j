@@ -1,5 +1,5 @@
 scope HellishCloud
-  
+
     //Configuration
     globals
         private constant integer SPELL_ID = 'A522'
@@ -9,33 +9,33 @@ scope HellishCloud
         private constant attacktype ATTACK_TYPE = ATTACK_TYPE_NORMAL
         private constant damagetype DAMAGE_TYPE = DAMAGE_TYPE_MAGIC
     endglobals
-    
+
     private function DamageDealt takes integer level returns real
         if level == 11 then
             return 1000.0
         endif
         return 50.0*level
     endfunction
-    
+
     private function Radius takes integer level returns real
         return 0.0*level + 400.0
     endfunction
-    
+
     private function TargetFilter takes unit u, player p returns boolean
         return UnitAlive(u) and IsUnitEnemy(u, p) and not IsUnitType(u, UNIT_TYPE_STRUCTURE) and not IsUnitType(u, UNIT_TYPE_MAGIC_IMMUNE)
     endfunction
 
     struct HellishCloud extends array
-        
+
         private unit caster
         private integer lvl
         private effect sfx
         private Invisible inv
-        
+
         private static Table tb
         private static group g
         private static trigger trg
-        
+
         private static method onDamage takes nothing returns boolean
             local integer id = GetHandleId(Damage.source)
             local integer level
@@ -69,7 +69,7 @@ scope HellishCloud
             endif
             return false
         endmethod
-        
+
         private method remove takes nothing returns nothing
             call thistype.tb.remove(GetHandleId(this.caster))
             call DestroyEffect(this.sfx)
@@ -78,7 +78,7 @@ scope HellishCloud
             set this.caster = null
             call this.destroy()
         endmethod
-        
+
         implement CTLExpire
             if GetUnitAbilityLevel(this.caster, SPELL_BUFF) == 0 then
                 call this.remove()
@@ -89,15 +89,15 @@ scope HellishCloud
             local integer id = GetHandleId(GetTriggerUnit())
             local thistype this
             if thistype.tb.has(id) then
-				set this = thistype.tb[id]
-			else
+                set this = thistype.tb[id]
+            else
                 set this = thistype.create()
                 set this.caster = GetTriggerUnit()
                 set this.inv = Invisible.create(this.caster, 0)
                 set this.sfx = AddSpecialEffectTarget(SFX_BUFF, this.caster, "origin")
                 set thistype.tb[id] = this
             endif
-			set this.lvl = GetUnitAbilityLevel(this.caster, SPELL_ID)
+            set this.lvl = GetUnitAbilityLevel(this.caster, SPELL_ID)
             call SystemMsg.create(GetUnitName(GetTriggerUnit()) + " cast thistype")
         endmethod
 
@@ -111,7 +111,7 @@ scope HellishCloud
             call RegisterSpellEffectEvent(SPELL_ID, function thistype.onCast)
             call SystemTest.end()
         endmethod
-        
+
     endstruct
-    
+
 endscope

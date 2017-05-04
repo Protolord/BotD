@@ -58,6 +58,7 @@ scope UnderworldFires
                 if TargetFilter(u, this.owner) then
                     call AddSpecialEffectTimer(AddSpecialEffectTarget(SFX_TARGET, u, "head"), TIMEOUT)
                     call Damage.element.apply(this.caster, u, this.dmg, ATTACK_TYPE, DAMAGE_TYPE, DAMAGE_ELEMENT_FIRE)
+                    call BJDebugMsg("hp = " + R2S(GetWidgetLife(u)))
                 endif
             endloop
         endmethod

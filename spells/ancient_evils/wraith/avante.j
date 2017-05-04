@@ -49,7 +49,7 @@ scope Avante
         
         private static method onFinish takes nothing returns nothing
             local unit u = GetTriggerUnit()
-            call Heal.unit(u, 0xFFFFFF, 1.0) 
+            call Heal.unit(u, u, 0xFFFFFF, 1.0, true) 
             call DestroyEffect(AddSpecialEffectTarget(HEAL_SFX, u, "origin"))
             set u = null
             call SystemMsg.create(GetUnitName(GetTriggerUnit()) + " finished casting thistype")

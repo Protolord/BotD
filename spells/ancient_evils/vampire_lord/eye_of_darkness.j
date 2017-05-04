@@ -1,35 +1,35 @@
 scope EyeOfDarkness
-    
+
     globals
         private constant integer SPELL_ID = 'A131'
         private constant string MODEL = "Models\\Effects\\EyeOfDarkness.mdx"
         private constant real EYE_SPACING = 300
         private constant player NEUTRAL = Player(14)
     endglobals
-    
+
     private function Radius takes integer level returns real
         if level == 11 then
             return GLOBAL_SIGHT
         endif
         return 250.0*level
     endfunction
-    
+
     private function Duration takes integer level returns real
         return 9.0 + 0.0*level
     endfunction
-    
+
     private struct Eye extends array
         implement Alloc
-        
+
         readonly unit unit
         private effect sfx
         private fogmodifier fm
-        
+
         readonly thistype next
         readonly thistype prev
-        
+
         method destroy takes nothing returns nothing
-			set this.prev.next = this.next
+            set this.prev.next = this.next
             set this.next.prev = this.prev
             if this.fm != null then
                 call DestroyFogModifier(this.fm)
@@ -69,23 +69,23 @@ scope EyeOfDarkness
             endif
             return 0
         endmethod
-        
+
         static method head takes nothing returns thistype
             local thistype this = thistype.allocate()
             set this.next = this
             set this.prev = this
             return this
         endmethod
-        
+
     endstruct
-    
+
     struct EyeOfDarkness extends array
         implement Alloc
-        
+
         private fogmodifier fm
         private Eye head
         private TrueSight ts
-        
+
         method destroy takes nothing returns nothing
             local Eye e = this.head.next
             loop
@@ -98,11 +98,11 @@ scope EyeOfDarkness
             set this.fm = null
             call this.deallocate()
         endmethod
-        
+
         private static method expire takes nothing returns nothing
             call thistype(ReleaseTimer(GetExpiredTimer())).destroy()
         endmethod
-        
+
         private static method onCast takes nothing returns nothing
             local thistype this = thistype.allocate()
             local unit u = GetTriggerUnit()
@@ -128,7 +128,7 @@ scope EyeOfDarkness
                 call SetUnitOwner(e.unit, owner, false)
                 set this.ts = TrueSight.create(e.unit, radius)
                 if radius > 255 then
-                    loop 
+                    loop
                         set da = 2*bj_PI/R2I(2*bj_PI*radius/EYE_SPACING)
                         if da > bj_PI/3 then
                             set da = bj_PI/3
@@ -146,19 +146,19 @@ scope EyeOfDarkness
                     endloop
                 endif
             endif
-            call FogModifierStart(this.fm)            
+            call FogModifierStart(this.fm)
             call TimerStart(NewTimerEx(this), Duration(level), false, function thistype.expire)
             set u = null
             set owner = null
             call SystemMsg.create(GetUnitName(GetTriggerUnit()) + " cast thistype")
         endmethod
-        
+
         static method init takes nothing returns nothing
             call SystemTest.start("Initializing thistype: ")
             call RegisterSpellEffectEvent(SPELL_ID, function thistype.onCast)
             call SystemTest.end()
         endmethod
-        
+
     endstruct
-    
+
 endscope

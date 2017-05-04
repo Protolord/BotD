@@ -21,12 +21,13 @@ scope Revitalize
             local thistype this = ReleaseTimer(GetExpiredTimer())
             call UnitRemoveAbility(this.u, 'Bbsk')
             set this.u = null
+            call this.deallocate()
         endmethod
         
         private static method onCast takes nothing returns nothing
             local thistype this = thistype.allocate()
             set this.u = GetTriggerUnit()
-            call Heal.unit(this.u, 0.01*HealBase(GetUnitAbilityLevel(this.u, SPELL_ID))*GetUnitState(this.u, UNIT_STATE_MAX_LIFE), 4)
+            call Heal.unit(this.u, this.u, 0.01*HealBase(GetUnitAbilityLevel(this.u, SPELL_ID))*GetUnitState(this.u, UNIT_STATE_MAX_LIFE), 4.0, true)
             call DestroyEffect(AddSpecialEffectTarget(HEAL_ATTACHED, this.u, "origin"))
             call TimerStart(NewTimerEx(this), 0.00, false, function thistype.debuff)
             call SystemMsg.create(GetUnitName(GetTriggerUnit()) + " cast thistype")

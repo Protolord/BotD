@@ -9,16 +9,10 @@ scope EnchantedFires
     
     //In Percent
     private function Chance takes integer level returns real
-        if level == 11 then
-            return 20.0
-        endif
         return 1.0*level
     endfunction
 
     private function Chance_Pyro takes integer level returns real 
-        if level == 11 then
-            return 40.0
-        endif
         return 2.0*level
     endfunction
 
@@ -41,12 +35,12 @@ scope EnchantedFires
             local real x 
             local real y
             local unit u 
-            if Damage.type == DAMAGE_TYPE_PHYSICAL and not Damage.coded and level > 0 and TargetFilter(Damage.source, p) and IsUnitType(Damage.source, UNIT_TYPE_MELEE_ATTACKER) then
-                //if Pyro.has(Damage.target) then
-                    //set b = GetRandomReal(0, 100) <= Chance_Pyro(level)
-                //else
+            if Damage.type == DAMAGE_TYPE_PHYSICAL and not Damage.coded and level > 0 and TargetFilter(Damage.source, p) and CombatStat.isMelee(Damage.source) then
+                if Pyro.has(Damage.target) then
+                    set b = GetRandomReal(0, 100) <= Chance_Pyro(level)
+                else
                     set b = GetRandomReal(0, 100) <= Chance(level)
-                //endif
+                endif
                 if b then
                     set x = GetUnitX(Damage.source)
                     set y = GetUnitY(Damage.source)
@@ -60,10 +54,10 @@ scope EnchantedFires
                         endif
                     endloop
                     call DestroyEffect(AddSpecialEffect(SFX, x, y))
+                    call SystemMsg.create(GetUnitName(Damage.target) + " procs thistype")
                 endif
             endif
             set p = null
-            call SystemMsg.create(GetUnitName(GetTriggerUnit()) + " cast thistype")
         endmethod
         
         static method init takes nothing returns nothing
