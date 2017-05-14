@@ -34,6 +34,10 @@ scope Testudo
         private static constant integer STACK_TYPE = BUFF_STACK_NONE
 
         method onRemove takes nothing returns nothing
+            local PlayerStat ps = PlayerStat.get(GetOwningPlayer(this.target))
+            call SetPlayerAbilityAvailable(ps.player, ps.spell1.id, true)
+            call SetPlayerAbilityAvailable(ps.player, ps.spell3.id, true)
+            call SetPlayerAbilityAvailable(ps.player, ps.spell4.id, true)
             call DestroyEffect(this.sfx)
             if this.lvl == 11 then
                 call this.si.destroy()
@@ -45,6 +49,7 @@ scope Testudo
         endmethod
 
         method onApply takes nothing returns nothing
+            local PlayerStat ps = PlayerStat.get(GetOwningPlayer(this.target))
             set this.lvl = GetUnitAbilityLevel(this.target, SPELL_ID)
             set this.sfx = AddSpecialEffectTarget(SFX, this.target, "chest")
             set this.a = Armor.create(this.target, ArmorBonus(this.lvl))
@@ -53,6 +58,9 @@ scope Testudo
             else
                 set this.sr = SpellResistance.create(this.target, SpellResistBonus(this.lvl))
             endif
+            call SetPlayerAbilityAvailable(ps.player, ps.spell1.id, false)
+            call SetPlayerAbilityAvailable(ps.player, ps.spell3.id, false)
+            call SetPlayerAbilityAvailable(ps.player, ps.spell4.id, false)
         endmethod
 
         private static method init takes nothing returns nothing
@@ -67,7 +75,6 @@ scope Testudo
 
         private unit caster
         private SpellBuff b
-        private TimeScale ts
 
         private static Table tb
 
@@ -75,10 +82,6 @@ scope Testudo
             call thistype.tb.remove(GetHandleId(this.caster))
             call SetUnitAnimation(this.caster, "stand")
             call this.b.remove()
-            if this.ts > 0 then
-                call this.ts.destroy()
-                set this.ts = 0
-            endif
             set this.caster = null
             call this.deallocate()
         endmethod
@@ -86,12 +89,6 @@ scope Testudo
         private static method expire takes nothing returns nothing
             local thistype this = ReleaseTimer(GetExpiredTimer())
             set this.b = SpellBuff.add(this.caster, this.caster)
-        endmethod
-
-        private static method freeze takes nothing returns nothing
-            local thistype this = ReleaseTimer(GetExpiredTimer())
-            set this.ts = TimeScale.create(this.caster, -1.0)
-            set this.ts.speed = 5
         endmethod
 
         private static method onCast takes nothing returns nothing
@@ -103,7 +100,6 @@ scope Testudo
                 set this.caster = u
                 set thistype.tb[id] = this
                 call SetUnitAnimation(this.caster, "death")
-                call TimerStart(NewTimerEx(this), 0.25, false, function thistype.freeze)
                 call TimerStart(NewTimerEx(this), DELAY, false, function thistype.expire)
                 call SystemMsg.create(GetUnitName(GetTriggerUnit()) + " activates thistype")
             elseif GetUnitTypeId(u) == UNIT_ID and thistype.tb.has(id) then

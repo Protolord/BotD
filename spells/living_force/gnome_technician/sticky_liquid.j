@@ -1,42 +1,42 @@
 scope StickyLiquid
- 
+
     globals
         private constant integer SPELL_ID = 'AH63'
-        private constant string SFX = "Models\\Effects\\WebSpin.mdx"
+        private constant string SFX = "Models\\Effects\\StickyLiquid.mdx"
         private constant string SFX_BUFF = ""
     endglobals
-    
+
     private function Radius takes integer level returns real
         return 0.0*level + 350.0
     endfunction
-    
+
     private function Slow takes integer level returns real
-        return 0.0*level + 0.9
+        return 0.0*level + 0.45
     endfunction
-    
+
     private function Duration takes integer level returns real
-        return 2.0*level + 10.0
+        return 0.3*level
     endfunction
-    
+
     private function TargetFilter takes unit u, player p returns boolean
         return UnitAlive(u) and IsUnitEnemy(u, p) and not IsUnitType(u, UNIT_TYPE_STRUCTURE) and not IsUnitType(u, UNIT_TYPE_MAGIC_IMMUNE)
     endfunction
-    
+
     private struct SpellBuff extends Buff
-    
+
         private effect sfx
         readonly Movespeed ms
 
         private static constant integer RAWCODE = 'DH63'
         private static constant integer DISPEL_TYPE = BUFF_NONE
         private static constant integer STACK_TYPE = BUFF_STACK_FULL
-        
+
         method onRemove takes nothing returns nothing
             call DestroyEffect(this.sfx)
             call this.ms.destroy()
             set this.sfx = null
         endmethod
-        
+
         method onApply takes nothing returns nothing
             set this.sfx = AddSpecialEffectTarget(SFX_BUFF, this.target, "chest")
             set this.ms = Movespeed.create(this.target, 0, 0)
@@ -45,12 +45,12 @@ scope StickyLiquid
         private static method init takes nothing returns nothing
             call PreloadSpell(thistype.RAWCODE)
         endmethod
-        
+
         implement BuffApply
     endstruct
-    
+
     struct StickyLiquid extends array
-        
+
         private unit caster
         private player owner
         private Effect e
@@ -62,10 +62,10 @@ scope StickyLiquid
         private real slow
         private SpellBuff b
         private Table tb
-        
+
         private static thistype global
         private static group enumG
-        
+
         private method remove takes nothing returns nothing
             local unit u
             loop
@@ -81,7 +81,7 @@ scope StickyLiquid
             set this.caster = null
             call this.destroy()
         endmethod
-        
+
         private static method picked takes nothing returns nothing
             local unit u = GetEnumUnit()
             local SpellBuff b
@@ -95,20 +95,20 @@ scope StickyLiquid
             endif
             set u = null
         endmethod
-        
+
         implement CTL
             local unit u
             local SpellBuff b
         implement CTLExpire
             set this.duration = this.duration - CTL_TIMEOUT
             if this.duration > 0 then
-                call GroupUnitsInArea(thistype.enumG, this.x, this.y, this.radius)
+                call GroupEnumUnitsInRange(thistype.enumG, this.x, this.y, this.radius + MAX_COLLISION_SIZE, null)
                 set thistype.global = this
                 loop
                     set u = FirstOfGroup(thistype.enumG)
                     exitwhen u == null
                     call GroupRemoveUnit(thistype.enumG, u)
-                    if TargetFilter(u, this.owner) and not IsUnitInGroup(u, this.g) then
+                    if IsUnitInRangeXY(u, this.x, this.y, this.radius) and TargetFilter(u, this.owner) and not IsUnitInGroup(u, this.g) then
                         set b = SpellBuff.add(this.caster, u)
                         call b.ms.change(this.slow, 0)
                         set this.tb[GetHandleId(u)] = b
@@ -120,7 +120,7 @@ scope StickyLiquid
                 call this.remove()
             endif
         implement CTLEnd
-        
+
         private static method onCast takes nothing returns nothing
             local thistype this = thistype.create()
             local integer lvl
@@ -128,16 +128,17 @@ scope StickyLiquid
             set this.g = NewGroup()
             set this.owner = GetTriggerPlayer()
             set lvl = GetUnitAbilityLevel(this.caster, SPELL_ID)
-            set this.x = GetUnitX(this.caster)
-            set this.y = GetUnitY(this.caster)
+            set this.x = GetSpellTargetX()
+            set this.y = GetSpellTargetY()
             set this.radius = Radius(lvl)
             set this.duration = Duration(lvl)
             set this.slow = -Slow(lvl)
             set this.e = Effect.createAnyAngle(SFX, this.x, this.y, 0)
+            set this.e.scale = this.radius/160.0
             set this.tb = Table.create()
             call SystemMsg.create(GetUnitName(GetTriggerUnit()) + " cast thistype")
         endmethod
-        
+
         static method init takes nothing returns nothing
             call SystemTest.start("Initializing thistype: ")
             call RegisterSpellEffectEvent(SPELL_ID, function thistype.onCast)
@@ -145,7 +146,7 @@ scope StickyLiquid
             call SpellBuff.initialize()
             call SystemTest.end()
         endmethod
-        
+
     endstruct
-    
+
 endscope

@@ -12,6 +12,7 @@ module CrusaderSpells
     set destinction.info = "Destinction|n|cfff4a460Target|r: |cff3399ffAlly Units|n|r|cfff4a460Range|r: |cff3399ff300|n|r|cfff4a460Duration|r: |cff3399ff(0.5 x level) seconds|n|r|cfff4a460Cooldown|r: |cff3399ff20 seconds|r|n|nDestincts an ally unit and temporarily turns it invulnerable but disables it's ability to attack."
 
     set enlight = Spell.create('AH22')
+    set enlight.autocast = true
     set enlight.info = "Enlight|n|cfff4a460Target|r: |cff3399ffEnemy Hero|n|r|cfff4a460Range|r: |cff3399ffMelee|n|r|cfff4a460Duration|r: |cff3399ff(0.3 x level) seconds|n|r|cfff4a460Damage|r: |cff3399ff(25 + 25 x Enlight Duration)|r|n|nEnlightens enemy unit and deals extra magic damage depending on the previous Enlight debuff duration. Duration stacks additively."
 
     set auraOfPrayer = Spell.create('AH23')

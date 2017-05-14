@@ -135,6 +135,7 @@
 //! import "../spells/ancient_evils/gargoyle/powderising_strength.j"
 //! import "../spells/ancient_evils/gargoyle/stone_form.j"
 //! import "../spells/ancient_evils/gargoyle/evil_alternation.j"
+//! import "../spells/ancient_evils/gargoyle/rebuild.j"
 //==============================================================================
 //                             Skeleton King
 //==============================================================================

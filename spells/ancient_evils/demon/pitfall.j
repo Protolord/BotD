@@ -176,14 +176,14 @@ scope Pitfall
         implement CTLExpire
             set this.duration = this.duration - CTL_TIMEOUT
             if this.duration > 0 then
-                call GroupUnitsInArea(thistype.enumG, this.x, this.y, this.radius)
+                call GroupEnumUnitsInRange(thistype.enumG, this.x, this.y, this.radius + MAX_COLLISION_SIZE, null)
                 set thistype.global = this
                 set owner = GetOwningPlayer(this.caster)
                 loop
                     set u = FirstOfGroup(thistype.enumG)
                     exitwhen u == null
                     call GroupRemoveUnit(thistype.enumG, u)
-                    if TargetFilter(u, owner) and not IsUnitInGroup(u, this.g) then
+                    if IsUnitInRangeXY(u, this.x, this.y, this.radius) and TargetFilter(u, owner) and not IsUnitInGroup(u, this.g) then
                         set b = SpellBuff.add(this.caster, u)
                         set b.dmg = this.dmg
                         call b.ms.change(this.moveSlow, 0)

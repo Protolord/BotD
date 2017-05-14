@@ -25,6 +25,7 @@ module CaveTrollSpells
     set cleave.info = "Cleave|n|cfff4a460Target|r: |cff3399ffPassive, Self|n|r|cfff4a460Min Cleave Damage|r: |cff3399ff20%|n|r|cfff4a460Max Cleave Damage|r: |cff3399ff50%|n|r|cfff4a460Range|r: |cff3399ff200|r|n|nCave Troll attacks with such force, cleaving nearby enemy units in each attack based on their distance."
 
     set heavySwing = Spell.create('A811')
+    set heavySwing.autocast = true
     set heavySwing.info = "Heavy Swing|n|cfff4a460Target|r: |cff3399ffEnemy Unit|n|r|cfff4a460Range|r: |cff3399ffMelee|n|r|cfff4a460Damage Dealt|r: |cff3399ff150%|n|r|cfff4a460Stun Duration|r: |cff3399ff(0.2 x level) seconds|r|n|nCave Troll attacks with all his strength to deliver excruciating blow dealing extra damage and temporarily stunning the target."
 
     set threeSixty = Spell.create('A812')

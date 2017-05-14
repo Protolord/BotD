@@ -53,7 +53,7 @@ scope CursedRift
             local player owner
         implement CTLExpire
             if GetUnitAbilityLevel(this.caster, SPELL_BUFF) > 0 then
-                call GroupUnitsInArea(thistype.g, GetUnitX(this.caster), GetUnitY(this.caster), RADIUS)
+                call GroupEnumUnitsInRange(thistype.g, GetUnitX(this.caster), GetUnitY(this.caster), RADIUS, null)
                 set owner = GetOwningPlayer(this.caster)
                 loop
                     set u = FirstOfGroup(thistype.g)

@@ -1,14 +1,14 @@
 library DummyRecycler /*
-    
+
 //                      DummyRecycler v1.25
 //                          by Flux
-//  
+//
 //  A system that recycles dummy units while considering their facing angle.
 //  It can be used as attachment dummies for visual effects or as dummy caster.
 //
 //  Why is recycling a unit important?
 //      Because creating a unit is is one of the slowest function in the game
-//      and there are reports that will always leave a permanent tiny bit of 
+//      and there are reports that will always leave a permanent tiny bit of
 //      memory (0.04 KB).
 //      On average, retrieving a pending Dummy is approximately 4x faster compared
 //      to creating a new one and recycling a Dummy compared to removing it is
@@ -20,11 +20,11 @@ library DummyRecycler /*
 
     */ requires /*
        nothing
-       
+
     */ optional Table/*
         if not found, this system will use a hashtable. Hashtables are limited to
         255 per map.
-        
+
     */ optional WorldBounds /*
         if not found, this system will initialize its own Map Boundaries.
 //
@@ -32,10 +32,10 @@ library DummyRecycler /*
 //  Features:
 //
 //    -- Dummy Sharing
-//        When a Dummy List gets low on unit count, it will borrow Dummy Units 
+//        When a Dummy List gets low on unit count, it will borrow Dummy Units
 //        from the Dummy List with the highest unit count. The transfer is not
-//        instant because the shared Dummy Unit has to turn to the appropriate 
-//        angle of its new Dummy List before it can be recycled. 
+//        instant because the shared Dummy Unit has to turn to the appropriate
+//        angle of its new Dummy List before it can be recycled.
 //        See BORROW_REQUEST.
 //
 //    -- Self-balancing recycling algorithm
@@ -45,7 +45,7 @@ library DummyRecycler /*
 //    -- Recycling least used
 //        Allows recycling a Dummy from the Dummy List with the highest
 //        unit count. It is useful when the facing angle of the Dummy Unit
-//        does not matter. 
+//        does not matter.
 //        See GetRecycledDummyAnyAngle.
 //
 //    -- Self-adaptation
@@ -54,12 +54,12 @@ library DummyRecycler /*
 //        Unit to be recycled increasing the overall total Dummy Unit count.
 //
 //    -- Count control
-//        Allows limiting the overall number of Dummy Units. 
+//        Allows limiting the overall number of Dummy Units.
 //        See MAX_DUMMY_COUNT.
 //
 //    -- Delayed Recycle
-//        Allows recycling Dummy Units after some delay to allocate time for the 
-//        death animation of Special Effects to be seen. 
+//        Allows recycling Dummy Units after some delay to allocate time for the
+//        death animation of Special Effects to be seen.
 //        See DummyAddRecycleTimer.
 //
 // ******************************************************************
@@ -81,8 +81,8 @@ library DummyRecycler /*
 //      - The equivalent of RemoveUnit.
 //
 //  function DummyAddRecycleTimer takes unit u, real time returns nothing
-//      - Recycle the Dummy unit after a certain time. 
-//      - Use this to allocate time for the the death animation of an effect attached to the 
+//      - Recycle the Dummy unit after a certain time.
+//      - Use this to allocate time for the the death animation of an effect attached to the
 //        Dummy Unit to finish..
 //      - The equivalent of UnitApplyTimedLife.
 //
@@ -109,46 +109,46 @@ library DummyRecycler /*
     globals
         //The rawcode of the Dummy Unit
         private constant integer DUMMY_ID = 'dumi'
-        
+
         //The owner of the Dummy Unit
         private constant player OWNER = Player(14)
-        
+
         //The number of indexed angle. The higher the value the:
         // - Lesser the turning time for the Dummy Units.
         // - Higher the total number of Dummy Units created at Map Initialization.
         //          Recommended Value: 10 (Max difference of 18 degrees)
         private constant integer ANGLES_COUNT = 10
-        
+
         //The number of Dummy units per ANGLES_COUNT. The higher the value the:
-        // - Higher the number of units that can be recycled per angle, when 
+        // - Higher the number of units that can be recycled per angle, when
         //   no more units are in queue, the system will resort to use CreateUnit.
         // - Higher the total number of Dummy Units created at Map Initialization.
         //    Recommended Value: 3 to 5 (for less overhead in Map Loading Screen)
         private constant integer STORED_UNIT_COUNT = 3
-        
+
         //The maximum number of Dummy units that can exist. When the system resort
         //to using CreateUnit, the unit will be permanently added to the Dummy
         //List. To avoid spamming Dummy Units and having too much free Dummy
         //Units to allocate, the maximum number of Dummy Units is capped.
         //               Recommended Value: 80 to 120
         private constant integer MAX_DUMMY_COUNT = 100
-        
+
         //When a certain angle have less than BORROW_REQUEST units in its list,
         //it will start to borrow Dummy Units from the list with the highest
         //Dummy Unit count.
         //      Recommended Value: Half of maximum STORED_UNIT_COUNT
         private constant integer BORROW_REQUEST = 5
-        
+
         //It will only return a Dummy if the current dummy is close
         //to it's appropriate facing angle. This is to avoid returning
         //a Dummy which is still turning to face it's list angle.
         private constant real ANGLE_TOLERANCE = 10.0
-        
+
         //An additional option to automatically hide recycled dummy units in the
         //corner of the map camera bounds
         private constant boolean HIDE_ON_MAP_CORNER = true
     endglobals
-    
+
     //Every time a new dummy unit is retrieved, it will apply this resets
     //If it is redundant/you dont need it, remove it.
     //! textmacro DUMMY_UNIT_RESET
@@ -160,12 +160,12 @@ library DummyRecycler /*
 // =============================================================== //
 // ==================== END CONFIGURATION ======================== //
 // =============================================================== //
-    
-    
+
+
     globals
         private integer dummyCount = ANGLES_COUNT*STORED_UNIT_COUNT
-        private real array angle 
-        private integer array count 
+        private real array angle
+        private integer array count
         private integer array countHead
         private integer array countNext
         private integer array countPrev
@@ -177,13 +177,13 @@ library DummyRecycler /*
         private integer lastInstance
         private constant real FACING_OFFSET = 180.0/ANGLES_COUNT
     endglobals
-    
+
     static if HIDE_ON_MAP_CORNER and not LIBRARY_WorldBounds then
         private module BoundsInit
-        
+
             readonly static real x
             readonly static real y
-            
+
             private static method onInit takes nothing returns nothing
                 local rect map = GetWorldBounds()
                 set thistype.x = GetRectMaxX(map)
@@ -191,22 +191,22 @@ library DummyRecycler /*
                 call RemoveRect(map)
                 set map = null
             endmethod
-            
+
         endmodule
-        
+
         private struct Bounds extends array
             implement BoundsInit
         endstruct
     endif
-    
+
     private module M
-        
+
         static if LIBRARY_Table then
             static Table tb
         else
             static hashtable hash = InitHashtable()
         endif
-        
+
         private static method onInit takes nothing returns nothing
             local real add = 360.0/ANGLES_COUNT
             local real a = 0
@@ -237,7 +237,7 @@ library DummyRecycler /*
                 set prev[head] = head
                 set count[head] = STORED_UNIT_COUNT
                 set angle[head] = a
-                //Insert head in the Count List 
+                //Insert head in the Count List
                 set countNext[head] = cHead
                 set countPrev[head] = countPrev[cHead]
                 set countNext[countPrev[head]] = head
@@ -273,13 +273,13 @@ library DummyRecycler /*
             endloop
             set lastInstance = this
         endmethod
-        
+
     endmodule
-    
+
     private struct S extends array
         implement M
     endstruct
-    
+
     private function GetHead takes integer facing returns integer
         if facing < 0 or facing >= 360 then
             set facing = facing - (facing/360)*360
@@ -289,7 +289,7 @@ library DummyRecycler /*
         endif
         return R2I((facing*ANGLES_COUNT/360.0))
     endfunction
-    
+
     function ShowDummy takes unit u, boolean flag returns nothing
         if IsUnitHidden(u) == flag then
             call ShowUnit(u, flag)
@@ -299,12 +299,12 @@ library DummyRecycler /*
             endif
         endif
     endfunction
-    
+
     function GetRecycledDummy takes real x, real y, real z, real facing returns unit
         local integer head = GetHead(R2I(facing + FACING_OFFSET))
         local integer this = next[head]
         local integer cHead
-        
+
         //If there are Dummy Units in the Queue List already facing close to the appropriate angle
         if this != head and RAbsBJ(GetUnitFacing(dummy[this]) - angle[head]) <= ANGLE_TOLERANCE then
             //Remove from the Queue List
@@ -321,7 +321,7 @@ library DummyRecycler /*
             //! runtextmacro DUMMY_UNIT_RESET()
             //Update Count and Bounds
             set count[head] = count[head] - 1
-            
+
             //------------------------------------------------
             //                 Unit Sharing
             //------------------------------------------------
@@ -340,7 +340,7 @@ library DummyRecycler /*
                 set head = countNext[countHead[upper]]
                 set count[head] = count[head] - 1
             endif
-            
+
             //---------------------------
             //Update Count Lists
             //---------------------------
@@ -353,7 +353,7 @@ library DummyRecycler /*
             set countPrev[head] = countPrev[cHead]
             set countNext[countPrev[head]] = head
             set countPrev[countNext[head]] = head
-            
+
             //---------------------------
             //  Update Bounds
             //---------------------------
@@ -385,7 +385,7 @@ library DummyRecycler /*
 
         return bj_lastCreatedUnit
     endfunction
-    
+
     function RecycleDummy takes unit u returns nothing
         static if LIBRARY_Table then
             local integer this = S.tb[GetHandleId(u)]
@@ -394,7 +394,7 @@ library DummyRecycler /*
         endif
         local integer head
         local integer cHead
-        
+
         //If the unit is a legit Dummy Unit
         if this > 0 and next[this] == -1 then
             //Find where to insert based on the list having the least number of units
@@ -420,7 +420,7 @@ library DummyRecycler /*
                 call SetUnitVertexColor(u, 0, 0, 0, 0)
             endif
             set count[head] = count[head] + 1
-            
+
             //---------------------------
             //    Update Count Lists
             //---------------------------
@@ -433,7 +433,7 @@ library DummyRecycler /*
             set countPrev[head] = countPrev[cHead]
             set countNext[countPrev[head]] = head
             set countPrev[countNext[head]] = head
-            
+
             //---------------------------
             //  Update Bounds
             //---------------------------
@@ -449,9 +449,9 @@ library DummyRecycler /*
         debug elseif next[this] != -1 then
             debug call BJDebugMsg("|cffffcc00[DummyRecycler]:|r Attempted to recycle a pending/free Dummy Unit.")
         endif
-        
+
     endfunction
-    
+
     private function Expires takes nothing returns nothing
         local timer t = GetExpiredTimer()
         local integer id = GetHandleId(t)
@@ -476,11 +476,11 @@ library DummyRecycler /*
         call TimerStart(t, time, false, function Expires)
         set t = null
     endfunction
-    
+
     function GetRecycledDummyAnyAngle takes real x, real y, real z returns unit
         return GetRecycledDummy(x, y, z, angle[countNext[countHead[upper]]])
     endfunction
-    
+
     // runtextmacro DUMMY_DEBUG_TOOLS()
-    
+
 endlibrary

@@ -97,10 +97,13 @@
         Cleave                      by icewolf055
         Three Sixty Animation       by Hayate
         Second Hit Animation        by Hayate
+        Testudo Animation           by Hayate
+        Devour Animation            by Hayate
         Cauldron Model              by Hellish Hybrid
         Aura of Strength Effect     by Malvodion
 
         Static Charge Effect        by PeeKay
+        Storm Levitate Animation    by Hayate
         Storm Effect                by HappyCockroach
         AuraOfPrayer                by Tranquil
         Avander Effect              by JetFangInferno
@@ -115,11 +118,16 @@
         Enchanted Fires Explosion   by WILL THE ALMIGHTY
         Meteor                      by icewolf055
 
+        Stasis Trap                 by icewolf055
         Bomb Explosion              by WILL THE ALMIGHTY
         Motion Controller (MC)      by Pvt.Toma
         MC Laser Entrance           by WILL THE ALMIGHTY
         MC Chain Head               by Infrisios
         MC Chain Elements           by Illustrike
+
+        Sanctuary Missile           by Boogles
+        Spiritual Wall              by icewolf055
+        Spiritual Wall Spirit       by JetFangInferno
 
 
     OTHERS:

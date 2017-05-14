@@ -123,6 +123,10 @@
         BTN_StickyLiquid            by NFWar
         BTN_MotionController        by 67chrome
 
+    Witch:
+        BTN_SpiritualWall           by Infinitynexus
+        BTN_Sanctuary               by Valve Corporation
+
     Others:
         BTN_Check                   by Lockheart
         BTN_Phased                  by Riley

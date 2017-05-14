@@ -1,70 +1,70 @@
 library Buff /*
                            Buff v1.30
                             by Flux
-             
+
             Handles all interactions of self-defined buffs.
-         
+
             Features:
                 - Can dispel positive/negative/both/all buffs.
                 - Supports 3 types of buff stacking.
                 - Buffs with duration.
                 - Pick all Buffs of a unit easily.
-             
-         
+
+
         */ requires /*
            (nothing)
-     
+
         */ optional TimerUtils /*
         */ optional RegisterPlayerUnitEvent /*
 
- 
+
     ******************
          CREDITS
     ******************
-     
+
         muzzel          - For BuffHandler which this resource is heavily based upon.
         Vexorian        - For the optional TimerUtils.
         Magtheridon96   - For the optional RegisterPlayerUnitEvent
 
     */
- 
-    globals      
+
+    globals
         //-----------------------------//
         //--------- BUFF TYPES --------//
         //-----------------------------//
-        constant integer BUFF_NONE = 0  
-        constant integer BUFF_POSITIVE = 1    
+        constant integer BUFF_NONE = 0
+        constant integer BUFF_POSITIVE = 1
         constant integer BUFF_NEGATIVE = 2
-     
+
         //-----------------------------//
         //------ BUFF STACK TYPES -----//
         //-----------------------------//
         //Applying the same buff only refreshes the duration
         //If the buff is reapplied but from a different source, the Buff unit source gets replaced.
         constant integer BUFF_STACK_NONE = 0
-     
+
         //Each buff from different source stacks.
         //Re-applying the same buff from the same source only refreshes the duration
         constant integer BUFF_STACK_PARTIAL = 1
-     
+
         //Each buff applied fully stacks.
         constant integer BUFF_STACK_FULL = 2
-        
+
         //Determines the automatic Buff rawcode based on the Ability rawcode
         //If BUFF_OFFSET = 0x01000000, then Ability rawcode of 'AXXX' will have Buff rawcode of 'BXXX'
         //If BUFF_OFFSET = 0x20000000, then Ability rawcode of 'AXXX' will have Buff rawcode of 'aXXX'
         private constant integer BUFF_OFFSET = 0x20000000
-        
-     
+
+
         //Automatically Preloads all Buff abilities
         //but will generate a lot of scripts in the process
         private constant boolean PRELOAD_BUFFS = false
-        
+
         //Automatically initialize a Buff type.
         //If false, initialize it using <MyBuff>.initialize()
         private constant boolean AUTO_INITIALIZE = false
     endglobals
-    
+
 
     struct Buff
         //Buff properties
@@ -75,10 +75,10 @@ library Buff /*
         readonly integer buffId
         readonly integer stackType
         readonly integer dispelType
-        
+
         //For duration
         private timer t
-        
+
         //Buff Enumeration
         private thistype bnext
         private thistype bprev
@@ -86,16 +86,16 @@ library Buff /*
         private static thistype callback
         private static trigger array onApply
         private static trigger array onRemove
-     
+
         method operator name takes nothing returns string
             return GetObjectName(this.rawcode)
         endmethod
-        
+
         private static hashtable hash = InitHashtable()
-        
+
         //===============================================================
         //======================== BUFF CORE ============================
-        //===============================================================    
+        //===============================================================
         static method get takes unit source, unit target, integer typeid returns thistype
             local integer id = GetHandleId(target)
             local thistype this
@@ -113,23 +113,23 @@ library Buff /*
             endif
             return 0
         endmethod
-        
+
         static method has takes unit source, unit target, integer typeid returns boolean
             return thistype.get(source, target, typeid) > 0
         endmethod
-        
+
         method remove takes nothing returns nothing
             local boolean remove = false
             local integer id
             local thistype head
             local integer count
-         
+
             if this.exist then
                 set id = GetHandleId(this.target)
-                
+
                 set thistype.callback = this
                 call TriggerEvaluate(thistype.onRemove[this.getType()])
-             
+
                 if this.t != null then
                     static if LIBRARY_TimerUtils then
                         call ReleaseTimer(this.t)
@@ -139,25 +139,25 @@ library Buff /*
                     endif
                     set this.t = null
                 endif
-             
+
                 if this.stackType == BUFF_STACK_FULL or this.stackType == BUFF_STACK_PARTIAL then
                     //Update Buff count
                     set count = LoadInteger(thistype.hash, this.getType(), id) - 1
                     call SaveInteger(thistype.hash, this.getType(), id, count)
-                    
+
                     if count == 0 then
                         set remove = true
                     endif
-                 
+
                 elseif this.stackType == BUFF_STACK_NONE then
                     set remove = true
                 endif
-             
+
                 if remove then
                     call UnitRemoveAbility(this.target, this.rawcode)
                     call UnitRemoveAbility(this.target, this.buffId)
                 endif
-             
+
                 //Remove from the BuffList
                 set head = LoadInteger(thistype.hash, id, 0)
                 if this == head and this.bnext == head then //If this is the only Buff of the unit
@@ -171,7 +171,7 @@ library Buff /*
                     set this.bnext.bprev = this.bprev
                     set this.bprev.bnext = this.bnext
                 endif
-             
+
                 set this.exist = false
                 set this.target = null
                 set this.source = null
@@ -180,7 +180,7 @@ library Buff /*
                 debug call DisplayTextToPlayer(GetLocalPlayer(), 0, 0, "[Buff]: Attempted to remove non-existing Buff instance.")
             endif
         endmethod
-     
+
         private static method expires takes nothing returns nothing
             static if LIBRARY_TimerUtils then
                 local thistype this = GetTimerData(GetExpiredTimer())
@@ -196,14 +196,14 @@ library Buff /*
                 call this.remove()
             endif
         endmethod
-     
+
         method operator duration takes nothing returns real
             if this.t != null then
                 return TimerGetRemaining(this.t)
             endif
             return 0.0
         endmethod
-     
+
         method operator duration= takes real time returns nothing
             if this.t == null then
                 static if LIBRARY_TimerUtils then
@@ -215,7 +215,7 @@ library Buff /*
             endif
             call TimerStart(this.t, time, false, function thistype.expires)
         endmethod
-    
+
         method check takes unit source, unit target returns thistype
             local boolean apply = false
             local integer id = GetHandleId(target)
@@ -224,12 +224,12 @@ library Buff /*
             static if not LIBRARY_TimerUtils then
                 local timer t
             endif
-         
+
             if this.stackType == BUFF_STACK_FULL then
                 //Count how many buffs are stored in a certain unit
-                call SaveInteger(thistype.hash, this.getType(), id, LoadInteger(thistype.hash, this.getType(), id) + 1)              
+                call SaveInteger(thistype.hash, this.getType(), id, LoadInteger(thistype.hash, this.getType(), id) + 1)
                 set apply = true
-             
+
             elseif this.stackType == BUFF_STACK_PARTIAL then
                  //Check if a similar buff type with the same target and source exist
                 set temp = thistype.get(source, target, this.getType())
@@ -252,19 +252,19 @@ library Buff /*
                     set this = temp
                 endif
             endif
-         
+
             set this.source = source
             set this.target = target
             set this.exist = true
             set this.buffId = this.rawcode + BUFF_OFFSET
-         
+
             if apply then
-             
+
                 if GetUnitAbilityLevel(target, this.rawcode) == 0 then
                     call UnitAddAbility(target, this.rawcode)
                     call UnitMakeAbilityPermanent(target, true, this.rawcode)
                 endif
-             
+
                 //Add the Buff to a BuffList of this unit
                     //If BuffList already exist
                 if HaveSavedInteger(thistype.hash, id, 0) then
@@ -279,11 +279,11 @@ library Buff /*
                     set this.bnext = this
                     set this.bprev = this
                 endif
-                
+
                 set thistype.callback = this
                 call TriggerEvaluate(thistype.onApply[this.getType()])
             endif
-         
+
             static if LIBRARY_BuffEvent then
                 static if LIBRARY_TimerUtils then
                     call TimerStart(NewTimerEx(this), 0.0, false, function BuffEvent.pickAll)
@@ -295,13 +295,13 @@ library Buff /*
             endif
             return this
         endmethod
-     
+
         //===============================================================
         //======================== BUFF ENUM ============================
         //===============================================================
         readonly static thistype buffHead
         readonly static thistype picked
-     
+
         static method pickBuffs takes unit u returns nothing
             local integer id = GetHandleId(u)
             if HaveSavedInteger(thistype.hash, id, 0) then
@@ -310,8 +310,8 @@ library Buff /*
                 set thistype.buffHead = 0
             endif
         endmethod
-     
-     
+
+
         //===============================================================
         //======================= BUFF DISPEL ===========================
         //===============================================================
@@ -332,7 +332,7 @@ library Buff /*
             endif
         endmethod
 
-     
+
         static method dispelBoth takes unit u returns nothing
             local integer id = GetHandleId(u)
             local thistype head
@@ -349,7 +349,7 @@ library Buff /*
                 endloop
             endif
         endmethod
-     
+
         static method dispelAll takes unit u returns nothing
             local integer id = GetHandleId(u)
             local thistype head
@@ -364,13 +364,13 @@ library Buff /*
                 endloop
             endif
         endmethod
-     
+
         private static method onDeath takes nothing returns nothing
             call thistype.dispelAll(GetTriggerUnit())
         endmethod
-     
+
         implement optional BuffInit
-     
+
         private static method onInit takes nothing returns nothing
             static if LIBRARY_RegisterPlayerUnitEvent then
                 call RegisterPlayerUnitEvent(EVENT_PLAYER_UNIT_DEATH, function thistype.onDeath)
@@ -381,24 +381,24 @@ library Buff /*
                 call TriggerAddCondition(t, Condition(c))
             endif
         endmethod
-     
+
     endstruct
- 
+
     static if PRELOAD_BUFFS then
         module BuffInit
             readonly static unit preloader
-         
+
             private static method onInit takes nothing returns nothing
                 set thistype.preloader = CreateUnit(Player(14), 'ushd', GetRectMaxX(bj_mapInitialPlayableArea), GetRectMaxY(bj_mapInitialPlayableArea), 0)
                 call UnitApplyTimedLife(thistype.preloader, 'BTLF', 1.0)
             endmethod
         endmodule
     endif
- 
+
     module BuffApply
-        
+
         static method add takes unit source, unit target returns thistype
-            local thistype this = thistype.create()  
+            local thistype this = thistype.create()
             //Write into readonly attributes
             set s__Buff_rawcode[this] = thistype.RAWCODE
             set s__Buff_stackType[this] = thistype.STACK_TYPE
@@ -406,17 +406,21 @@ library Buff /*
             set this = this.check(source, target)
             return this
         endmethod
-        
-        private static method onApplyInit takes nothing returns boolean
-            call thistype(s__Buff_callback).onApply()
-            return false
-        endmethod
-        
-        private static method onRemoveInit takes nothing returns boolean
-            call thistype(s__Buff_callback).onRemove()
-            return false
-        endmethod
-        
+
+        static if thistype.onApply.exists then
+            private static method onApplyInit takes nothing returns boolean
+                call thistype(s__Buff_callback).onApply()
+                return false
+            endmethod
+        endif
+
+        static if thistype.onRemove.exists then
+            private static method onRemoveInit takes nothing returns boolean
+                call thistype(s__Buff_callback).onRemove()
+                return false
+            endmethod
+        endif
+
         static method initialize takes nothing returns nothing
             static if thistype.onApply.exists then
                 set s__Buff_onApply[thistype.typeid] = CreateTrigger()
@@ -431,11 +435,11 @@ library Buff /*
             endif
         endmethod
 
-        
+
         static if PRELOAD_BUFFS then
             /*
             private static method onInit takes nothing returns nothing
-                local thistype this = thistype.create()   
+                local thistype this = thistype.create()
                 call UnitAddAbility(Buff.preloader, thistype.RAWCODE)
                 call UnitRemoveAbility(Buff.preloader, thistype.RAWCODE)
                 call this.destroy()
@@ -452,18 +456,18 @@ library Buff /*
             */
         endif
     endmodule
- 
+
     module BuffListStart
         if Buff.buffHead > 0 then
             set s__Buff_picked = s__Buff_buffHead
             loop
     endmodule
- 
+
     module BuffListEnd
                 exitwhen Buff.picked == s__Buff_bprev[s__Buff_buffHead]
                 set s__Buff_picked = s__Buff_bnext[s__Buff_picked]
             endloop
         endif
     endmodule
- 
+
 endlibrary

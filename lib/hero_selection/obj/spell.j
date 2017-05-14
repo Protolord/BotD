@@ -7,6 +7,7 @@ library Spell requires StringSize
         readonly real x
         readonly real y
         readonly boolean passive
+        readonly boolean autocast
         readonly integer id
         readonly integer addId
         readonly string iconPath
@@ -135,6 +136,8 @@ library Spell requires StringSize
             if this.iconPath == null then
                 if this.passive then
                     set this.iconPath = "ReplaceableTextures\\PassiveButtons\\PASBTN_" + this.name + ".blp"
+                elseif this.autocast then
+                    set this.iconPath = "ReplaceableTextures\\CommandButtons\\ATC_" + this.name + ".blp"
                 else
                     set this.iconPath = "ReplaceableTextures\\CommandButtons\\BTN_" + this.name + ".blp"
                 endif
@@ -155,6 +158,7 @@ library Spell requires StringSize
             set this.initialized = false
             set this.name = ""
             set this.passive = false
+            set this.autocast = false
             return this
         endmethod
 

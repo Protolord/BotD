@@ -45,7 +45,7 @@ scope Cleave
                 set y2 = GetUnitY(Damage.target)
                 set dmg = CombatStat.getDamage(Damage.source)*HeavySwing.get(Damage.source)
                 set angle = Atan2(y2 - y, x2 - x)
-                call GroupUnitsInArea(thistype.g, x2, y2, MAX_RANGE)
+                call GroupEnumUnitsInRange(thistype.g, x2, y2, MAX_RANGE, null)
                 call DisableTrigger(thistype.trg)
                 loop
                     set u = FirstOfGroup(thistype.g)

@@ -38,18 +38,23 @@ scope Devour
             set this.sfx = null
         endmethod
 
+        private method eat takes nothing returns nothing
+            local real amount = this.factor*GetUnitState(this.target, UNIT_STATE_MAX_LIFE)*TIMEOUT
+            call Damage.element.apply(this.source, this.target, amount, ATTACK_TYPE, DAMAGE_TYPE, DAMAGE_ELEMENT_NORMAL)
+            call Heal.unit(this.source, this.source, amount, 1.0, true)
+            call DestroyEffect(AddSpecialEffectTarget(BUFF_SFX, this.target, "chest"))
+            call DestroyEffect(AddSpecialEffectTarget(BUFF_SFX, this.source, "chest"))
+        endmethod
+
         static method onPeriod takes nothing returns nothing
             local thistype this = thistype(0).next
-            local real amount
             loop
                 exitwhen this == 0
                 if IsUnitInRange(this.source, this.target, RANGE) and UnitAlive(this.target) and not IsUnitType(this.source, UNIT_TYPE_ETHEREAL) and not IsUnitType(this.target, UNIT_TYPE_ETHEREAL) then
                     set this.ctr = this.ctr + thistype.PERIODIC
                     if this.ctr > TIMEOUT then
                         set this.ctr = 0
-                        set amount = this.factor*GetUnitState(this.target, UNIT_STATE_MAX_LIFE)*TIMEOUT
-                        call Damage.element.apply(this.source, this.target, amount, ATTACK_TYPE, DAMAGE_TYPE, DAMAGE_ELEMENT_NORMAL)
-                        call Heal.unit(this.source, this.source, amount, 1.0, true)
+                        call this.eat()
                     endif
                 else
                     call IssueImmediateOrderById(this.source, ORDER_stop)
@@ -66,6 +71,7 @@ scope Devour
             set this.ctr = 0
             set this.factor = HealPercent(GetUnitAbilityLevel(this.source, SPELL_ID))/100.0
             call UnitAddAbility(this.source, BUFF_RAWCODE)
+            call this.eat()
             call this.push(thistype.PERIODIC)
         endmethod
 

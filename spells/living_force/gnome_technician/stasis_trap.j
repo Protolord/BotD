@@ -3,8 +3,13 @@ scope StasisTrap
     globals
         private constant integer SPELL_ID = 'AH61'
         private constant integer UNIT_ID = 'hSta'
+        private constant string SFX_SLOW = "Abilities\\Spells\\Orc\\StasisTrap\\StasisTotemTarget.mdl"
         private constant real TIMEOUT = 0.05
     endglobals
+
+    private function UnitHP takes integer level returns real
+        return 100.0 + 0.0*level
+    endfunction
 
     private function TriggerRadius takes integer level returns real
         return 200.0 + 0.0*level
@@ -38,17 +43,21 @@ scope StasisTrap
 
         private Atkspeed as
         private Movespeed ms
+        private effect sfx
 
         private static constant integer RAWCODE = 'DH61'
         private static constant integer DISPEL_TYPE = BUFF_NEGATIVE
         private static constant integer STACK_TYPE = BUFF_STACK_PARTIAL
 
         method onRemove takes nothing returns nothing
+            call DestroyEffect(this.sfx)
             call this.as.destroy()
             call this.ms.destroy()
+            set this.sfx = null
         endmethod
 
         method onApply takes nothing returns nothing
+            set this.sfx = AddSpecialEffectTarget(SFX_SLOW, this.target, "overhead")
             set this.ms = Movespeed.create(this.target, 0, 0)
             set this.as = Atkspeed.create(this.target, 0)
         endmethod
@@ -65,22 +74,21 @@ scope StasisTrap
         implement BuffApply
     endstruct
 
-    struct StatisTrap extends array
+    struct StasisTrap extends array
         implement Alloc
         implement List
 
-        private real x
-        private real y
+        private unit trap
         private player p
         private integer lvl
         private real triggerRadius
         private real detonateRadius
-        private unit trap
 
         private static group g
         private static group g2
 
         private method destroy takes nothing returns nothing
+            call this.pop()
             set this.trap = null
             set this.p = null
             call this.deallocate()
@@ -92,7 +100,7 @@ scope StasisTrap
             local real slowDuration = SlowDuration(this.lvl)
             local SpellBuff b
             local unit u
-            call GroupUnitsInArea(thistype.g2, this.x, this.y, this.detonateRadius)
+            call GroupUnitsInArea(thistype.g2, GetUnitX(this.trap), GetUnitY(this.trap), this.detonateRadius)
             loop
                 set u = FirstOfGroup(thistype.g2)
                 exitwhen u == null
@@ -113,7 +121,7 @@ scope StasisTrap
             loop
                 exitwhen this == 0
                 if UnitAlive(this.trap) then
-                    call GroupUnitsInArea(thistype.g, this.x, this.y, this.triggerRadius)
+                    call GroupEnumUnitsInRange(thistype.g, GetUnitX(this.trap), GetUnitY(this.trap), this.triggerRadius, null)
                     loop
                         set u = FirstOfGroup(thistype.g)
                         exitwhen u == null
@@ -134,11 +142,16 @@ scope StasisTrap
         private static method onCast takes nothing returns nothing
             local thistype this = thistype.allocate()
             local unit caster = GetTriggerUnit()
-            set this.x = GetSpellTargetX()
-            set this.y = GetSpellTargetY()
+            local real x = GetSpellTargetX()
+            local real y = GetSpellTargetY()
             set this.p = GetTriggerPlayer()
-            set this.trap = CreateUnit(this.p, UNIT_ID, this.x, this.y, 0)
+            set this.trap = CreateUnit(this.p, UNIT_ID, x, y, 0)
             set this.lvl = GetUnitAbilityLevel(caster, SPELL_ID)
+            call SetUnitMaxState(this.trap, UNIT_STATE_MAX_LIFE, UnitHP(this.lvl))
+            set this.triggerRadius = TriggerRadius(this.lvl)
+            set this.detonateRadius = DetonateRadius(this.lvl)
+            call this.push(TIMEOUT)
+            set caster = null
             call SystemMsg.create(GetUnitName(GetTriggerUnit()) + " cast thistype")
         endmethod
 

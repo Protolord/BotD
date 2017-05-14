@@ -8,7 +8,7 @@ scope MotionController
         private constant string SFX_APPEAR = "Models\\Effects\\MotionControllerEntrance.mdx"
         private constant real SUMMON_OFFSET = 100.0
         private constant real TIMEOUT = 0.03125
-        private constant real CHAIN_INTERVAL = 50.0
+        private constant real CHAIN_INTERVAL = 55.0
         private constant real BREAK_DISTANCE = 500.0
         private constant real ANGLE_TOLERANCE = 30
     endglobals
@@ -18,12 +18,25 @@ scope MotionController
     endfunction
 
     private function Duration takes integer level returns real
-        return 100.0//10.0*level - 5.0
+        return 10.0*level - 5.0
     endfunction
 
     private function DeviceHP takes integer level returns real
         return 5.0 + 0.0*level
     endfunction
+
+    private struct SpellBuff extends Buff
+
+        private static constant integer RAWCODE = 'DH64'
+        private static constant integer DISPEL_TYPE = BUFF_NEGATIVE
+        private static constant integer STACK_TYPE = BUFF_STACK_FULL
+
+        private static method init takes nothing returns nothing
+            call PreloadSpell(thistype.RAWCODE)
+        endmethod
+
+        implement BuffApply
+    endstruct
 
     private struct Chain extends array
         implement Alloc
@@ -112,11 +125,15 @@ scope MotionController
         private real range
         private unit device
         private Chain chainHead
+        private Lightning l
+        private SpellBuff b
 
         private static Table tb
 
         private method destroy takes nothing returns nothing
             call this.pop()
+            call this.b.remove()
+            call this.l.destroy()
             call thistype.tb.remove(GetHandleId(this.device))
             call this.chainHead.clear()
             call this.chainHead.destroy()
@@ -196,9 +213,12 @@ scope MotionController
             set this.device = CreateUnit(GetTriggerPlayer(), UNIT_ID, this.x, this.y, 0)
             call UnitApplyTimedLife(this.device, 'BTLF', Duration(lvl))
             call SetUnitMaxState(this.device, UNIT_STATE_MAX_LIFE, DeviceHP(lvl))
+            set this.l = Lightning.createUnits("MCLI", this.device, this.target)
+            set this.b = SpellBuff.add(caster, this.target)
             set thistype.tb[GetHandleId(this.device)] = this
             call this.push(TIMEOUT)
             call DestroyEffect(AddSpecialEffect(SFX_APPEAR, this.x, this.y))
+            set caster = null
             call SystemMsg.create(GetUnitName(GetTriggerUnit()) + " cast thistype")
         endmethod
 
@@ -208,6 +228,7 @@ scope MotionController
             call RegisterSpellEffectEvent(SPELL_ID, function thistype.onCast)
             call Damage.registerModifier(function thistype.onDamage)
             call PreloadUnit(UNIT_ID)
+            call SpellBuff.initialize()
             call SystemTest.end()
         endmethod
 

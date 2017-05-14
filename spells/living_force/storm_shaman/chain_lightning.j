@@ -76,7 +76,7 @@ scope ChainLightning
             local real dy
             local unit u
             if this.bounces > 0 then
-                call GroupUnitsInArea(thistype.g, x, y, this.radius)
+                call GroupEnumUnitsInRange(thistype.g, x, y, this.radius, null)
                 loop
                     set u = FirstOfGroup(thistype.g)
                     exitwhen u == null

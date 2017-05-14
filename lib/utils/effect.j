@@ -7,6 +7,8 @@ library Effect uses TimerUtilsEx, DummyRecycler
     Effect.createAnyAngle(string, x, y, z)
        - Create an Effect instnace, a special effect attached to a dummy facing random angle.
 
+    this.setXY(x, y)
+
     this.duration = <duration>
         - How long the Effect lasts.
 

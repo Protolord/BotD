@@ -1,5 +1,5 @@
 scope DeadlyRepulse
- 
+
     globals
         private constant integer SPELL_ID = 'A6XX'
         private constant integer UNIT_ID = 'uDeR'
@@ -7,7 +7,7 @@ scope DeadlyRepulse
         private constant real RADIUS = 400.0
         private constant real TIMEOUT = 1.0
     endglobals
-    
+
     struct DeadlyRepulse extends array
         implement Alloc
 
@@ -27,7 +27,7 @@ scope DeadlyRepulse
             local player p = GetOwningPlayer(this.ward)
             local unit u
             if UnitAlive(this.ward) then
-                call GroupUnitsInArea(thistype.g, GetUnitX(this.ward), GetUnitY(this.ward), RADIUS)
+                call GroupEnumUnitsInRange(thistype.g, GetUnitX(this.ward), GetUnitY(this.ward), RADIUS,null)
                 loop
                     set u = FirstOfGroup(thistype.g)
                     exitwhen u == null
@@ -63,7 +63,7 @@ scope DeadlyRepulse
             set caster = null
             call SystemMsg.create(GetUnitName(GetTriggerUnit()) + " cast thistype")
         endmethod
-        
+
         static method init takes nothing returns nothing
             call SystemTest.start("Initializing thistype: ")
             call PreloadUnit(UNIT_ID)
@@ -71,7 +71,7 @@ scope DeadlyRepulse
             call RegisterSpellEffectEvent(SPELL_ID, function thistype.onCast)
             call SystemTest.end()
         endmethod
-        
+
     endstruct
-    
+
 endscope

@@ -68,7 +68,8 @@ module GargoyleSpells
     set evilAlternation.info = "Evil Alternation|n|cfff4a460Target|r: |cff3399ffSelf|n|r|cfff4a460Damage healed|r: |cff3399ff(75% of damage taken + (5% x level))|r|n|nGargoyle activates spiritual shield which gains damage Gargoyle is taking and upon deactivation restores some of it's power to heal Gargoyle. Drains 25 mana per second."
 
     set rebuild = Spell.create('A644')
-    set rebuild.info = "Rebuild"
+    set rebuild.passive = true
+    set rebuild.info = "Rebuild|n|cfff4a460Target|r: |cff3399ffSelf, Passive|n|r|cfff4a460Recovery|r: |cff3399ff(25% + (5% x level))|n|r|cfff4a460Damage Threshold|r: |cff3399ff200|r|n|nEvery time damage taken by Gargoyle is reaches or exceeds the damage threshold, a piece of him falls to the ground. Gargoyle can collect these pieces and recover certain percentage from the rock piece. These segments degrade rapidly losing 5% life every second."
 endmodule
 
 module GargoyleConfig

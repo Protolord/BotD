@@ -80,12 +80,12 @@ scope Totem
             local real dx
             local real dy
             if UnitAlive(this.totem) then
-                call GroupUnitsInArea(thistype.g, this.x, this.y, this.range)
+                call GroupEnumUnitsInRange(thistype.g, this.x, this.y, this.range + MAX_COLLISION_SIZE, null)
                 loop
                     set u = FirstOfGroup(thistype.g)
                     exitwhen u == null
                     call GroupRemoveUnit(thistype.g, u)
-                    if TargetFilter(u, this.owner) then
+                    if IsUnitInRangeXY(u, this.x, this.y, this.range) and TargetFilter(u, this.owner) then
                         set dx = this.x - GetUnitX(u)
                         set dy = this.y - GetUnitY(u)
                         set d = SquareRoot(dx*dx + dy*dy)

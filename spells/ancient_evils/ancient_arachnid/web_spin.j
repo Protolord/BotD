@@ -1,5 +1,5 @@
 scope WebSpin
- 
+
     globals
         private constant integer SPELL_ID = 'A432'
         private constant integer SPELL_BUFF = 'B432'
@@ -8,48 +8,48 @@ scope WebSpin
         private constant string BUFF_SFX = "Models\\Effects\\StickyShellBuff.mdx"
         private constant string BONUS_SFX = "Models\\Effects\\Haste.mdx"
     endglobals
-    
+
     private function Radius takes integer level returns real
         return 0.0*level + 350.0
     endfunction
-    
+
     private function SightRadius takes integer level returns real
         if level == 11 then
             return GLOBAL_SIGHT
         endif
         return 350.0
     endfunction
-    
+
     private function Slow takes integer level returns real
         return 0.0*level + 0.9
     endfunction
-    
+
     private function Duration takes integer level returns real
         if level == 11 then
             return 60.0
         endif
         return 2.0*level + 10.0
     endfunction
-    
+
     private function TargetFilter takes unit u, player p returns boolean
         return UnitAlive(u) and IsUnitEnemy(u, p) and not IsUnitType(u, UNIT_TYPE_STRUCTURE) and not IsUnitType(u, UNIT_TYPE_MAGIC_IMMUNE)
     endfunction
-    
+
     private struct Bonus extends Buff
-        
+
         private effect sfx
         readonly Movespeed ms
 
         private static constant integer RAWCODE = 'B432'
         private static constant integer DISPEL_TYPE = BUFF_POSITIVE
         private static constant integer STACK_TYPE = BUFF_STACK_FULL //do not change
-        
+
         method onRemove takes nothing returns nothing
             call this.ms.destroy()
             call DestroyEffect(this.sfx)
             set this.sfx = null
         endmethod
-        
+
         method onApply takes nothing returns nothing
             set this.ms = Movespeed.create(this.target, 999.9, 999)
             set this.sfx = AddSpecialEffectTarget(BONUS_SFX, this.target, "chest")
@@ -58,25 +58,25 @@ scope WebSpin
         private static method init takes nothing returns nothing
             call PreloadSpell(thistype.RAWCODE)
         endmethod
-        
+
         implement BuffApply
     endstruct
-    
+
     private struct SpellBuff extends Buff
-    
+
         private effect sfx
         readonly Movespeed ms
 
         private static constant integer RAWCODE = 'D432'
         private static constant integer DISPEL_TYPE = BUFF_NONE
         private static constant integer STACK_TYPE = BUFF_STACK_FULL
-        
+
         method onRemove takes nothing returns nothing
             call DestroyEffect(this.sfx)
             call this.ms.destroy()
             set this.sfx = null
         endmethod
-        
+
         method onApply takes nothing returns nothing
             set this.sfx = AddSpecialEffectTarget(BUFF_SFX, this.target, "chest")
             set this.ms = Movespeed.create(this.target, 0, 0)
@@ -85,12 +85,12 @@ scope WebSpin
         private static method init takes nothing returns nothing
             call PreloadSpell(thistype.RAWCODE)
         endmethod
-        
+
         implement BuffApply
     endstruct
-    
+
     struct WebSpin extends array
-        
+
         private unit caster
         private unit dummy
         private player owner
@@ -105,10 +105,10 @@ scope WebSpin
         private Bonus bonus
         private TrueSight ts
         private Table tb
-        
+
         private static thistype global
         private static group enumG
-        
+
         private method remove takes nothing returns nothing
             local unit u
             loop
@@ -135,7 +135,7 @@ scope WebSpin
             set this.sfx = null
             call this.destroy()
         endmethod
-        
+
         private static method picked takes nothing returns nothing
             local unit u = GetEnumUnit()
             local SpellBuff b
@@ -149,20 +149,20 @@ scope WebSpin
             endif
             set u = null
         endmethod
-        
+
         implement CTL
             local unit u
             local SpellBuff b
         implement CTLExpire
             set this.duration = this.duration - CTL_TIMEOUT
             if this.duration > 0 then
-                call GroupUnitsInArea(thistype.enumG, this.x, this.y, this.radius)
+                call GroupEnumUnitsInRange(thistype.enumG, this.x, this.y, this.radius + MAX_COLLISION_SIZE, null)
                 set thistype.global = this
                 loop
                     set u = FirstOfGroup(thistype.enumG)
                     exitwhen u == null
                     call GroupRemoveUnit(thistype.enumG, u)
-                    if TargetFilter(u, this.owner) and not IsUnitInGroup(u, this.g) then
+                    if IsUnitInRangeXY(u, this.x, this.y, this.radius) and TargetFilter(u, this.owner) and not IsUnitInGroup(u, this.g) then
                         set b = SpellBuff.add(this.caster, u)
                         call b.ms.change(this.slow, 0)
                         set this.tb[GetHandleId(u)] = b
@@ -174,7 +174,7 @@ scope WebSpin
                     if FirstOfGroup(this.g) != null then
                         set this.bonus = Bonus.add(this.caster, this.caster)
                     endif
-                else    
+                else
                     if FirstOfGroup(this.g) == null then
                         call this.bonus.remove()
                         set this.bonus = 0
@@ -184,7 +184,7 @@ scope WebSpin
                 call this.remove()
             endif
         implement CTLEnd
-        
+
         private static method onCast takes nothing returns nothing
             local thistype this = thistype.create()
             local integer lvl
@@ -203,11 +203,11 @@ scope WebSpin
             set this.fm = CreateFogModifierRadius(this.owner, FOG_OF_WAR_VISIBLE, this.x, this.y, RMaxBJ(SightRadius(lvl), 385), true, false)
             set this.ts = TrueSight.create(this.dummy, SightRadius(lvl))
             call FogModifierStart(this.fm)
-            call SetUnitScale(this.dummy, this.radius/100.0 + 0.2, 0, 0) 
+            call SetUnitScale(this.dummy, this.radius/100.0 + 0.2, 0, 0)
             call SetUnitVertexColor(this.dummy, 255, 255, 255, 125)
             call SystemMsg.create(GetUnitName(GetTriggerUnit()) + " cast thistype")
         endmethod
-        
+
         static method init takes nothing returns nothing
             call SystemTest.start("Initializing thistype: ")
             call RegisterSpellEffectEvent(SPELL_ID, function thistype.onCast)
@@ -216,7 +216,7 @@ scope WebSpin
             call Bonus.initialize()
             call SystemTest.end()
         endmethod
-        
+
     endstruct
-    
+
 endscope

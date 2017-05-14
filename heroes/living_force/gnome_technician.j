@@ -16,7 +16,7 @@ module GnomeTechnicianSpells
     set bomb.info = "Bomb|n|cfff4a460Target|r: |cff3399ffPoint|n|r|cfff4a460Explosion Radius|r: |cff3399ff300|n|r|cfff4a460Range|r: |cff3399ff(100 x level)|n|r|cfff4a460Damage|r: |cff3399ff(50 x level)|r|cfff4a460|nCooldown|r: |cff3399ff30 seconds|r|n|nGnome Technician tosses a bomb to the target location. On impact with the ground bomb explodes dealing magic damage to all enemies within radius."
 
     set stickyLiquid = Spell.create('AH63')
-    set stickyLiquid.info = "Sticky Liquid"
+    set stickyLiquid.info = "Sticky Liquid|n|cfff4a460Target|r: |cff3399ffPoint|n|r|cfff4a460Cast Range|r: |cff3399ff100|n|r|cfff4a460Radius|r: |cff3399ff350|n|r|cfff4a460Slow|r: |cff3399ff40%|n|r|cfff4a460Duration|r: |cff3399ff(0.3 x level) seconds|r|cfff4a460|nCooldown|r: |cff3399ff20 seconds|r|n|nGnome Technician creates a pool of sticky liquid at the target area. Enemies caught in the area will have their movement speed reduced as long as they remain in the area."
 
     set motionController = Spell.create('AH64')
     set motionController.info = "Motion Controller|n|cfff4a460Target|r: |cff3399ffEnemy Hero|n|r|cfff4a460Range|r: |cff3399ff600|n|r|cfff4a460Attacks to Destroy|r: |cff3399ff5|n|r|cfff4a460Duration|r: |cff3399ff(L1: 5 / L2: 10) seconds|n|r|cfff4a460Cooldown|r: |cff3399ff60 seconds|r|n|nDelvus creates a device that will be directly connected to the Ancient and will not allow it to go further than 300 range away. Device can be destroyed by attacks."

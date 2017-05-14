@@ -105,4 +105,5 @@
 //! import "../lib/utils/preload.j"
 //! import "../lib/utils/set_unit_z.j"
 //! import "../lib/utils/stack.j"
+//! import "../lib/utils/unit_timer.j"
 //! import "../lib/utils/unselectable.j"

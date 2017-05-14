@@ -1,5 +1,5 @@
 scope RainOfFire
- 
+
     globals
         private constant integer SPELL_ID = 'A521'
         private constant string MISSILE_MODEL = "Abilities\\Weapons\\LavaSpawnMissile\\LavaSpawnMissile.mdl"
@@ -17,7 +17,7 @@ scope RainOfFire
 
     private function WaveDamage takes integer level returns real
         if level == 11 then
-            return 400.0    
+            return 400.0
         endif
         return 20.0*level
     endfunction
@@ -39,7 +39,7 @@ scope RainOfFire
         private integer part
 
         private static group g
-        
+
         method destroy takes nothing returns nothing
             set this.w.fires = this.w.fires - 1
             if this.w.fires == 0 then
@@ -53,7 +53,7 @@ scope RainOfFire
             local thistype this = thistype(Missile.getHit())
             local unit u
             local real a
-            call GroupUnitsInArea(thistype.g, this.w.r.x, this.w.r.y, this.w.r.radius)
+            call GroupEnumUnitsInRange(thistype.g, this.w.r.x, this.w.r.y, this.w.r.radius + MAX_COLLISION_SIZE, null)
             if this.part == -1 then
                 loop
                     set u = FirstOfGroup(thistype.g)
@@ -81,46 +81,6 @@ scope RainOfFire
             endif
             call this.destroy()
         endmethod
-
-        /*
-        private static method onPeriod takes nothing returns nothing
-            local thistype this = thistype(0).next
-            local unit u
-            local real a
-            loop
-                exitwhen this == 0
-                if GetUnitFlyHeight(this.m.u) <= HEIGHT_MIN then
-                    call GroupUnitsInArea(thistype.g, this.w.r.x, this.w.r.y, this.w.r.radius)
-                    if this.part == -1 then
-                        loop
-                            set u = FirstOfGroup(thistype.g)
-                            exitwhen u == null
-                            call GroupRemoveUnit(thistype.g, u)
-                            if not IsUnitInGroup(u, this.w.hit) and IsUnitInRangeXY(u, this.w.r.x, this.w.r.y, 0.5*this.w.r.radius) and TargetFilter(u, this.w.r.owner) then
-                                call GroupAddUnit(this.w.hit, u)
-                                call Damage.element.apply(this.w.r.caster, u, this.w.r.dmg, ATTACK_TYPE, DAMAGE_TYPE, DAMAGE_ELEMENT_FIRE)
-                            endif
-                        endloop
-                    else
-                        loop
-                            set u = FirstOfGroup(thistype.g)
-                            exitwhen u == null
-                            call GroupRemoveUnit(thistype.g, u)
-                            set a = Atan2(GetUnitY(u) - this.w.r.y, GetUnitX(u) - this.w.r.x)
-                            if a < 0 then
-                                set a = a + 2*bj_PI
-                            endif
-                            if a >= this.part*bj_PI/3 and a < (this.part + 1)*bj_PI/3 and not IsUnitInGroup(u, this.w.hit) and TargetFilter(u, this.w.r.owner) then
-                                call GroupAddUnit(this.w.hit, u)
-                                call Damage.element.apply(this.w.r.caster, u, this.w.r.dmg, ATTACK_TYPE, DAMAGE_TYPE, DAMAGE_ELEMENT_FIRE)
-                            endif
-                        endloop
-                    endif
-                    call this.destroy()
-                endif
-                set this = this.next
-            endloop
-        endmethod*/
 
         //implement List
 
@@ -182,7 +142,7 @@ scope RainOfFire
         endmethod
 
     endstruct
-    
+
     struct RainOfFire extends array
         implement Alloc
 
@@ -228,7 +188,7 @@ scope RainOfFire
             set this.count = this.count - 1
             call SystemMsg.create(GetUnitName(GetTriggerUnit()) + " cast thistype")
         endmethod
-        
+
         static method init takes nothing returns nothing
             call SystemTest.start("Initializing thistype: ")
             call Fire.init()
@@ -237,5 +197,5 @@ scope RainOfFire
         endmethod
 
     endstruct
-    
+
 endscope

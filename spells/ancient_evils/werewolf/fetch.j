@@ -8,31 +8,31 @@ scope Fetch
         private constant real NODE_RADIUS = 400
         private constant real TIMEOUT = 0.05
     endglobals
-    
+
     private function Radius takes integer level returns real
         return 1000.0*level
     endfunction
-    
+
     private function Duration takes integer level returns real
         if level == 11 then
             return 15.0
         endif
         return 5.00
     endfunction
-    
+
     private function TargetFilter takes unit u, player owner returns boolean
         return UnitAlive(u) and IsUnitEnemy(u, owner) and not IsUnitType(u, UNIT_TYPE_MAGIC_IMMUNE) and not IsUnitType(u, UNIT_TYPE_STRUCTURE)
     endfunction
-    
+
     private struct SightSource
-        
+
         readonly unit u
         readonly unit target
         private effect sfx
-        
+
         readonly thistype next
         readonly thistype prev
-        
+
         method destroy takes nothing returns nothing
             set this.prev.next = this.next
             set this.next.prev = this.prev
@@ -48,7 +48,7 @@ scope Fetch
             set this.target = null
             call this.deallocate()
         endmethod
-        
+
         static method create takes thistype head, unit target, player owner returns thistype
             local thistype this = thistype.allocate()
             local string s = SFX_TARGET
@@ -68,16 +68,16 @@ scope Fetch
             set this.prev.next = this
             return this
         endmethod
-        
+
         static method head takes nothing returns thistype
             local thistype this = thistype.allocate()
             set this.next = this
             set this.prev = this
             return this
         endmethod
-        
+
     endstruct
-    
+
     private struct SpellBuff extends Buff
 
         public SightSource ss
@@ -92,7 +92,7 @@ scope Fetch
         private static constant integer RAWCODE = 'B233'
         private static constant integer DISPEL_TYPE = BUFF_POSITIVE
         private static constant integer STACK_TYPE = BUFF_STACK_NONE
-        
+
         method onRemove takes nothing returns nothing
             local SightSource sight = this.ss.next
             call this.pop()
@@ -125,7 +125,7 @@ scope Fetch
             loop
                 exitwhen this == 0
                 if this.ss > 0 then
-                    call GroupUnitsInArea(thistype.g, GetUnitX(this.target), GetUnitY(this.target), this.radius)
+                    call GroupEnumUnitsInRange(thistype.g, GetUnitX(this.target), GetUnitY(this.target), this.radius, null)
                     set b = this.owner != GetOwningPlayer(this.target)
                     if b then
                         set this.owner = GetOwningPlayer(this.target)
@@ -161,7 +161,7 @@ scope Fetch
         endmethod
 
         implement List
-        
+
         method onApply takes nothing returns nothing
             set this.sfx = AddSpecialEffectTarget(SFX, this.target, "overhead")
             set this.owner = GetOwningPlayer(this.target)
@@ -176,12 +176,12 @@ scope Fetch
             call PreloadSpell(thistype.RAWCODE)
             set thistype.g = CreateGroup()
         endmethod
-        
+
         implement BuffApply
     endstruct
 
     struct Fetch extends array
-        
+
         private static method onCast takes nothing returns nothing
             local unit u = GetTriggerUnit()
             local integer lvl = GetUnitAbilityLevel(u, SPELL_ID)
@@ -206,14 +206,14 @@ scope Fetch
             set u = null
             call SystemMsg.create(GetUnitName(GetTriggerUnit()) + " cast thistype")
         endmethod
-        
+
         static method init takes nothing returns nothing
             call SystemTest.start("Initializing thistype: ")
             call SpellBuff.initialize()
             call RegisterSpellEffectEvent(SPELL_ID, function thistype.onCast)
             call SystemTest.end()
         endmethod
-        
+
     endstruct
-    
+
 endscope

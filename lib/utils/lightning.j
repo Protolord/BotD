@@ -91,7 +91,7 @@ library Lightning requires SetUnitZ
                     if this.source != null and this.target != null then
                         call MoveLightningEx(this.l, true, GetUnitX(this.source), GetUnitY(this.source), GetUnitZ(this.source) + this.sourceZ, GetUnitX(this.target), GetUnitY(this.target), GetUnitZ(this.target) + this.targetZ)
                     endif
-                    if this.color then
+                    if this.color and this.dur > 0 then
                         set factor = (this.fullDur - this.dur)/this.fullDur
                         call SetLightningColor(this.l, this.r + this.dr*factor, this.g + this.dg*factor, this.b + this.db*factor, this.a + this.da*factor)
                     endif
@@ -153,6 +153,7 @@ library Lightning requires SetUnitZ
             set this.targetZ = Z_OFFSET
             set this.l = AddLightningEx(codeName, true, GetUnitX(source), GetUnitY(source), GetUnitZ(source) + this.sourceZ, GetUnitX(target), GetUnitY(target), GetUnitZ(target) + this.targetZ)
             set this.dur = -1
+            set this.color = false
             call this.push()
             return this
         endmethod
@@ -161,6 +162,7 @@ library Lightning requires SetUnitZ
             local thistype this = thistype.allocate()
             set this.l = AddLightningEx(codeName, true, x1, y1, z1, x2, y2, z2)
             set this.dur = -1
+            set this.color = false
             return this
         endmethod
 

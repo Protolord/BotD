@@ -159,7 +159,7 @@ library HeroDisplay/*
             call SystemTest.start("Creating HeroDisplay: ")
             call SetMapFlag(MAP_FOG_HIDE_TERRAIN, true)
             set thistype.r = Rect(CENTER_X - 1100, CENTER_Y - 800, CENTER_X + 1100, CENTER_Y + 800)
-            set thistype.modelRect = Rect(MODEL_X - 60, MODEL_Y - 60, MODEL_X + 60, MODEL_Y + 60)
+            set thistype.modelRect = Rect(MODEL_X - 150, MODEL_Y - 150, MODEL_X + 150, MODEL_Y + 150)
             call ForForce(Players.users, function thistype.perPlayer)
             call RemoveRect(thistype.r)
             call SystemTest.end()

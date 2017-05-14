@@ -15,7 +15,7 @@ module DwarfDefenderSpells
     set stormBolt.info = "Storm Bolt|n|cfff4a460Target|r: |cff3399ffEnemy unit|n|r|cfff4a460Range|r: |cff3399ff700|n|r|cfff4a460Damage|r: |cff3399ff(60 x level)|n|r|cfff4a460Cooldown|r: |cff3399ff20 seconds|r|n|nDwarf Defender throws a magical hammer to deal magic damage to an enemy unit."
 
     set treasury = Spell.create('AH33')
-    set treasury.info = "Treasury"
+    set treasury.info = "Treasury|n|cfff4a460Target|r: |cff3399ffPassive|n|r|cfff4a460Chance|r: |cff3399ff(0.1% x level)|n|r|nDwarves are a masters of mining. Dwarf Defender has a chance to instantly destroy Soul Prison or Wealthy Tomb upon attack."
 
     set ancestralPower = Spell.create('AH34')
     set ancestralPower.info = "Ancestral Power|n|cfff4a460Target|r: |cff3399ffPoint|n|r|cfff4a460Range|r: |cff3399ff750|n|r|cfff4a460Stomp Damage|r: |cff3399ff(5% x level) Max HP|n|r|cfff4a460Cooldown|r: |cff3399ff120 seconds|r|n|nDwarf Defender sends a wave of stomps towards the target point. Each stomp deals damage equal to a certain percentrage of target hitpoints. Stomps will appear in the range of 150 of each other beginning from the position of Dwarf Defender every 0.25 seconds."

@@ -44,6 +44,6 @@
 //                                   Witch
 //==============================================================================
 // import "../spells/living_force/witch/frog_transformation.j"
-// import "../spells/living_force/witch/envenomed_darts.j"
-// import "../spells/living_force/witch/sanctuary.j"
-// import "../spells/living_force/witch/spiritual_wall.j"
+//! import "../spells/living_force/witch/envenomed_dart.j"
+//! import "../spells/living_force/witch/sanctuary.j"
+//! import "../spells/living_force/witch/spiritual_wall.j"

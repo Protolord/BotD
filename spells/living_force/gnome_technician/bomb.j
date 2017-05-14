@@ -5,14 +5,15 @@ scope Bomb
         private constant string MODEL = "Abilities\\Weapons\\MakuraMissile\\MakuraMissile.mdl"
         private constant string SFX_HIT = "Models\\Effects\\BombExplosion.mdx"
         private constant real SPEED = 800.0
-        private constant player NEUTRAL = Player(14)
+        private constant attacktype ATTACK_TYPE = ATTACK_TYPE_NORMAL
+        private constant damagetype DAMAGE_TYPE = DAMAGE_TYPE_MAGIC
     endglobals
 
     private function DamageDealt takes integer level returns real
         if level == 11 then
-            return 1200.0
+            return 1000.0
         endif
-        return 60.0*level
+        return 50.0*level
     endfunction
 
     private function Radius takes integer level returns real
@@ -41,6 +42,7 @@ scope Bomb
         private static method onHit takes nothing returns nothing
             local thistype this = Missile.getHit()
             local real radius = Radius(this.lvl)
+            local real dmg = DamageDealt(this.lvl)
             local unit u
             call GroupUnitsInArea(thistype.g, this.m.x, this.m.y, Radius(this.lvl))
             call DestroyEffect(AddSpecialEffect(SFX_HIT, this.m.x, this.m.y))
@@ -49,7 +51,7 @@ scope Bomb
                 exitwhen u == null
                 call GroupRemoveUnit(thistype.g, u)
                 if TargetFilter(u, this.owner) then
-
+                    call Damage.element.apply(this.caster, u, dmg, ATTACK_TYPE, DAMAGE_TYPE, DAMAGE_ELEMENT_FIRE)
                 endif
             endloop
             call this.destroy()

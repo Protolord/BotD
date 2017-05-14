@@ -62,7 +62,7 @@ scope Storm
             local player p = GetOwningPlayer(this.source)
             local unit u
             local Lightning l
-            call GroupUnitsInArea(thistype.g, GetUnitX(this.source), GetUnitY(this.source), this.radius)
+            call GroupEnumUnitsInRange(thistype.g, GetUnitX(this.source), GetUnitY(this.source), this.radius, null)
             loop
                 set u = FirstOfGroup(thistype.g)
                 exitwhen u == null

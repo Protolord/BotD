@@ -1,13 +1,10 @@
 
 MODEL CONCERNS:
-- Gnome Technician spells' manacost, range and cooldown are incorrect.
-- Change Stasis Trap model.
-- Motion Controller Chain colors make it match Chain Head color
 - Cleave change Visual Effect
 - Add Spike Model
-- Testudo Animation
-- Devour Change animation
 - Storm Shaman needs a levitate animation put into "stand alternate", "attack alternate" and "walk alternate"
+- Request better Cauldron
+- Request better Sticky Liquid
 
 CODING CONCERNS:
 - SystemMsg create admin parameter.
@@ -16,4 +13,20 @@ CODING CONCERNS:
 - Allow units with Rabies exceed 522 movespeed.
 - DamageEvent doesn't properly classify units with magic attack as magic damage.
 - Transform spells remove attached effects. Attach spell buff effects to Object Editor data instead.
+
+Git Commit
+
+Systems:
+* Create Unit Timer
+
+Spells:
+* Create Rebuild
+* Create Envenomed Dart
+* Create Sanctuary
+* Create Spiritual Wall
+* Replace GroupUnitsInArea in heavy loops
+
+Visuals:
+* Add Cave Troll animations
+* Add Storm Shaman levitate animation
 

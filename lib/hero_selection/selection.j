@@ -18,8 +18,8 @@ library SelectionMain /*
     //Hero Selection System Configuration
     globals
         //Display coordinates
-        constant real CENTER_X = 0
-        constant real CENTER_Y = 0
+        constant real CENTER_X = -1750
+        constant real CENTER_Y = -3250
         constant real MODEL_X = CENTER_X - 700
         constant real MODEL_Y = CENTER_Y + 75
         constant real ICON_X = CENTER_X - 870

@@ -20,7 +20,7 @@ scope Cauldron
         if level == 11 then
             return 340.0
         endif
-        return 1.0//240 + 10.0*level
+        return 240 + 10.0*level
     endfunction
 
     private function DebuffDuration takes integer level returns real
@@ -90,6 +90,7 @@ scope Cauldron
         private player owner
         private unit cauldron
         private effect sfx
+        private effect sfx2
         private real x
         private real y
         private real radius
@@ -101,7 +102,10 @@ scope Cauldron
         private method destroy takes nothing returns nothing
             call this.pop()
             call DestroyEffect(this.sfx)
+            call DestroyEffect(this.sfx2)
             call DummyAddRecycleTimer(this.cauldron, 5.0)
+            set this.sfx = null
+            set this.sfx2 = null
             set this.cauldron = null
             set this.caster = null
             set this.owner = null
@@ -115,12 +119,12 @@ scope Cauldron
             loop
                 exitwhen this == 0
                 if this.duration > 0 then
-                    call GroupUnitsInArea(thistype.g, this.x, this.y, this.radius)
+                    call GroupEnumUnitsInRange(thistype.g, this.x, this.y, this.radius + MAX_COLLISION_SIZE, null)
                     loop
                         set u = FirstOfGroup(thistype.g)
                         exitwhen u == null
                         call GroupRemoveUnit(thistype.g, u)
-                        if TargetFilter(u, this.owner) then
+                        if IsUnitInRangeXY(u, this.x, this.y, this.radius) and TargetFilter(u, this.owner) then
                             set b = SpellBuff.add(this.caster, u)
                             set b.duration = this.debuffDuration
                         endif
@@ -144,6 +148,7 @@ scope Cauldron
             set this.cauldron = GetRecycledDummyAnyAngle(this.x, this.y, 0)
             call SetUnitOwner(this.cauldron, this.owner, false)
             set this.sfx = AddSpecialEffectTarget(MODEL, this.cauldron, "origin")
+            set this.sfx2 = AddSpecialEffectTarget(BUFF_SFX, this.cauldron, "origin")
             set this.radius = Radius(lvl)
             set this.duration = Duration(lvl)
             set this.debuffDuration = DebuffDuration(lvl)

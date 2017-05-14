@@ -10,7 +10,7 @@ library DamageModify uses DamageEvent/*
 
     globals
         private constant integer SET_MAX_LIFE = 'ASML'
-        private constant boolean DEBUG_SYSTEM = true
+        private constant boolean DEBUG_SYSTEM = false
     endglobals
 
     struct DamageTrigger2
