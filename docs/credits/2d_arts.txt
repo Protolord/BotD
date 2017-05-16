@@ -11,7 +11,11 @@
         BTN_CaveTroll               by Marshmallo
         BTN_StormShaman             by wij
         BTN_Witch                   by Daenar7
-        BTN_Hunter                  by Daenar7
+        BTN_Hunter                  by Dan van Ohllus & Mr.Goblin, Kuhneghetz
+        BTN_Guardian                by FrIkY
+        BTN_Inquisitor              by Kwaliti
+        BTN_Knight                  by 67chrome
+        BTN_Mistress                by Kuhneghetz
 
 
     Vampire Lord Abilities:
@@ -142,3 +146,6 @@
         Crusader                    by CloudWolf
         Dwarf Defender              by camel's_hump
         Witch                       by Daenar7
+        Guardian                    by FrIkY
+        Inquisitor                  by markone
+        Knight                      by 67chrome

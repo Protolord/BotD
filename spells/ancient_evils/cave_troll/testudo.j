@@ -21,12 +21,11 @@ scope Testudo
         return 50.0
     endfunction
 
-    private struct SpellBuff extends Buff
+    private struct SpellBuffUlt extends Buff
 
         private integer lvl
         private effect sfx
         private Armor a
-        private SpellResistance sr
         private SpellImmunity si
 
         private static constant integer RAWCODE = 'B821'
@@ -39,11 +38,7 @@ scope Testudo
             call SetPlayerAbilityAvailable(ps.player, ps.spell3.id, true)
             call SetPlayerAbilityAvailable(ps.player, ps.spell4.id, true)
             call DestroyEffect(this.sfx)
-            if this.lvl == 11 then
-                call this.si.destroy()
-            else
-                call this.sr.destroy()
-            endif
+            call this.si.destroy()
             call this.a.destroy()
             set this.sfx = null
         endmethod
@@ -53,11 +48,47 @@ scope Testudo
             set this.lvl = GetUnitAbilityLevel(this.target, SPELL_ID)
             set this.sfx = AddSpecialEffectTarget(SFX, this.target, "chest")
             set this.a = Armor.create(this.target, ArmorBonus(this.lvl))
-            if lvl == 11 then
-                set this.si = SpellImmunity.create(this.target)
-            else
-                set this.sr = SpellResistance.create(this.target, SpellResistBonus(this.lvl))
-            endif
+            set this.si = SpellImmunity.create(this.target)
+            call SetPlayerAbilityAvailable(ps.player, ps.spell1.id, false)
+            call SetPlayerAbilityAvailable(ps.player, ps.spell3.id, false)
+            call SetPlayerAbilityAvailable(ps.player, ps.spell4.id, false)
+        endmethod
+
+        private static method init takes nothing returns nothing
+            call PreloadSpell(thistype.RAWCODE)
+        endmethod
+
+        implement BuffApply
+    endstruct
+
+    private struct SpellBuff extends Buff
+
+        private integer lvl
+        private effect sfx
+        private Armor a
+        private SpellResistance sr
+
+        private static constant integer RAWCODE = 'D821'
+        private static constant integer DISPEL_TYPE = BUFF_NONE
+        private static constant integer STACK_TYPE = BUFF_STACK_NONE
+
+        method onRemove takes nothing returns nothing
+            local PlayerStat ps = PlayerStat.get(GetOwningPlayer(this.target))
+            call SetPlayerAbilityAvailable(ps.player, ps.spell1.id, true)
+            call SetPlayerAbilityAvailable(ps.player, ps.spell3.id, true)
+            call SetPlayerAbilityAvailable(ps.player, ps.spell4.id, true)
+            call DestroyEffect(this.sfx)
+            call this.sr.destroy()
+            call this.a.destroy()
+            set this.sfx = null
+        endmethod
+
+        method onApply takes nothing returns nothing
+            local PlayerStat ps = PlayerStat.get(GetOwningPlayer(this.target))
+            set this.lvl = GetUnitAbilityLevel(this.target, SPELL_ID)
+            set this.sfx = AddSpecialEffectTarget(SFX, this.target, "chest")
+            set this.a = Armor.create(this.target, ArmorBonus(this.lvl))
+            set this.sr = SpellResistance.create(this.target, SpellResistBonus(this.lvl))
             call SetPlayerAbilityAvailable(ps.player, ps.spell1.id, false)
             call SetPlayerAbilityAvailable(ps.player, ps.spell3.id, false)
             call SetPlayerAbilityAvailable(ps.player, ps.spell4.id, false)
@@ -74,7 +105,8 @@ scope Testudo
         implement Alloc
 
         private unit caster
-        private SpellBuff b
+        private integer lvl
+        private Buff b
 
         private static Table tb
 
@@ -88,7 +120,11 @@ scope Testudo
 
         private static method expire takes nothing returns nothing
             local thistype this = ReleaseTimer(GetExpiredTimer())
-            set this.b = SpellBuff.add(this.caster, this.caster)
+            if this.lvl == 11 then
+                set this.b = SpellBuffUlt.add(this.caster, this.caster)
+            else
+                set this.b = SpellBuff.add(this.caster, this.caster)
+            endif
         endmethod
 
         private static method onCast takes nothing returns nothing
@@ -98,6 +134,7 @@ scope Testudo
             if GetUnitTypeId(u) == 'UCav' then
                 set this = thistype.allocate()
                 set this.caster = u
+                set this.lvl = GetUnitAbilityLevel(u, SPELL_ID)
                 set thistype.tb[id] = this
                 call SetUnitAnimation(this.caster, "death")
                 call TimerStart(NewTimerEx(this), DELAY, false, function thistype.expire)
@@ -115,6 +152,7 @@ scope Testudo
             call PreloadUnit(UNIT_ID)
             call RegisterSpellEffectEvent(SPELL_ID, function thistype.onCast)
             call SpellBuff.initialize()
+            call SpellBuffUlt.initialize()
             call SystemTest.end()
         endmethod
 

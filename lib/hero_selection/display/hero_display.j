@@ -107,7 +107,7 @@ library HeroDisplay/*
             endif
             call SetTextTagText(this.innateSpellText, h.innateSpell.info1, 0.02)
             call SetTextTagPos(this.innateSpellText, ICON_X - 20, ATTR_Y - 130 - h.innateSpell.yOffset1, 0)
-            call this.info.setText(h.info, 5.10, TEXTSPLAT_TEXT_ALIGN_LEFT)
+            call this.info.setText(h.info, h.infoSize, TEXTSPLAT_TEXT_ALIGN_LEFT)
             call this.attribute.setText(h.attribute, 6.1, TEXTSPLAT_TEXT_ALIGN_LEFT)
             call this.name.setText(h.name, 9, TEXTSPLAT_TEXT_ALIGN_LEFT)
             call this.primary.move(ATTR_UI_X + 100*(h.primary - 1) - 2.5, ATTR_UI_Y - 1)

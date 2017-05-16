@@ -71,7 +71,9 @@ scope Devour
             set this.ctr = 0
             set this.factor = HealPercent(GetUnitAbilityLevel(this.source, SPELL_ID))/100.0
             call UnitAddAbility(this.source, BUFF_RAWCODE)
-            call this.eat()
+            if not IsUnitType(this.source, UNIT_TYPE_ETHEREAL) and not IsUnitType(this.target, UNIT_TYPE_ETHEREAL) then
+                call this.eat()
+            endif
             call this.push(thistype.PERIODIC)
         endmethod
 

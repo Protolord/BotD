@@ -20,6 +20,7 @@ library Hero requires DummyRecycler, Table
         readonly string attribute    //The attributes displayed
         readonly integer primary
         readonly string info
+        public real infoSize
         private string priv_modelPath
         private Spell priv_innateSpell
         private string priv_iconPath
@@ -145,6 +146,7 @@ library Hero requires DummyRecycler, Table
             local race r = GetUnitIdRace(id)
             set this.unitId = id
             set this.tb = Table.create()
+            set this.infoSize = 5.1
             return this
         endmethod
 

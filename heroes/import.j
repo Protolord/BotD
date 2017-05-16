@@ -14,3 +14,8 @@
 //! import "../heroes/living_force/firelord.j"
 //! import "../heroes/living_force/gnome_technician.j"
 //! import "../heroes/living_force/witch.j"
+//! import "../heroes/living_force/hunter.j"
+//! import "../heroes/living_force/guardian.j"
+//! import "../heroes/living_force/inquisitor.j"
+//! import "../heroes/living_force/knight.j"
+//! import "../heroes/living_force/mistress.j"

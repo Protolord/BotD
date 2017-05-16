@@ -107,16 +107,18 @@ scope Pyro
 
         private static method onCast takes nothing returns nothing
             local thistype this
-            if not Pyro.has(GetTriggerUnit()) then
+            local unit u = GetTriggerUnit()
+            if not Pyro.has(u) then
                 set this = thistype.allocate()
-                set this.caster = GetTriggerUnit()
+                set this.caster = u
                 set this.lvl = GetUnitAbilityLevel(this.caster, SPELL_ID)
                 set thistype.tb[GetHandleId(this.caster)] = this
-                call DestroyEffect(AddSpecialEffect(SFX, GetUnitX(this.caster), GetUnitY(this.caster)))
                 call TimerStart(NewTimerEx(this), 0.0, false, function thistype.removeAnimation)
                 call TimerStart(NewTimerEx(this), Duration(this.lvl), false, function thistype.expires)
                 call SystemMsg.create(GetUnitName(GetTriggerUnit()) + " cast thistype")
             endif
+            call DestroyEffect(AddSpecialEffect(SFX, GetUnitX(u), GetUnitY(u)))
+            set u = null
         endmethod
 
         static method init takes nothing returns nothing

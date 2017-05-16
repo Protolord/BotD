@@ -86,7 +86,7 @@ scope Rebuild
             call this.m.targetXYZ(x, y, GetPointZ(x, y) + 5.0)
             set this.m.speed = SPEED
             set this.m.model = MISSILE_MODEL
-            set this.m.autohide = true
+            set this.m.autohide = false
             set this.m.projectile = true
             set this.m.arc = 1.0
             call this.m.registerOnHit(function thistype.onHit)

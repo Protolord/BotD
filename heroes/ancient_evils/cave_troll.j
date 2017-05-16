@@ -69,7 +69,7 @@ module CaveTrollSpells
     set totem.info = "Totem|n|cfff4a460Target|r: |cff3399ffPoint|n|r|cfff4a460Range|r: |cff3399ff2500|n|r|cfff4a460Heal/Second|r: |cff3399ff(100 + 10 x level)|n|r|cfff4a460Attacks To Destroy|r: |cff3399ff(10 + 1 x level)|r|n|cfff4a460Duration|r: |cff3399ff60 seconds|r|n|cfff4a460Cooldown|r: |cff3399ff60 seconds|r|n|nCave Troll plants a Totem that will provide additional healing for himself and his allies. For every 250 range away from Totem 10% healing strength is lost. Heals 4x on ethereal units."
 
     set devour = Spell.create('A842')
-    set devour.info = "Devour|n|cfff4a460Target|r: |cff3399ffEnemy Unit|n|r|cfff4a460Range|r: |cff3399ffMelee|n|r|cfff4a460Health/Second|r: |cff3399ff10% Target Max HP|n|r|cfff4a460Duration|r: |cff3399ff(1 x level) seconds|n|r|cfff4a460Cooldown|r: |cff3399ff20 seconds|r|n|nCave Troll eats enemy alive stealing 10% its maximum health per second for a certain duration. During feast Cave Troll is unmoved by Area Damage."
+    set devour.info = "Devour|n|cfff4a460Target|r: |cff3399ffEnemy Unit|n|r|cfff4a460Range|r: |cff3399ffMelee|n|r|cfff4a460Health/Second|r: |cff3399ff10% Target Max HP|n|r|cfff4a460Duration|r: |cff3399ff(1 x ability level) seconds|n|r|cfff4a460Cooldown|r: |cff3399ff20 seconds|r|n|nCave Troll eats enemy alive stealing 10% its maximum health per second for a certain duration. During feast Cave Troll is unmoved by Area Damage. Devour stops when Cave Troll or the target is ethereal."
 
     set rage = Spell.create('A843')
     set rage.passive = true
@@ -86,7 +86,8 @@ module CaveTrollConfig
     set caveTroll.iconPath = "ReplaceableTextures\\CommandButtons\\BTN_CaveTroll.blp"
     set caveTroll.scaleAdd = -0.45
     set caveTroll.modelPath = "Models\\Units\\CaveTroll.mdx"
-    set caveTroll.info = "<NOTHING YET>"
+    set caveTroll.info = "A VERY FORMIDABLE WARRIOR THAT SPECIALIZES IN DEALING ENORMOUS DAMAGE IN A SHORT INVERVALS AS WELL AS KEEPING OPPONENTS CLOSE AND |nPROPERLY DETAINED. UNAFRAID OF LARGE AMOUNTS OF DAMAGE CAN VERY QUICKLY REGAIN HIS HEALTH AS WELL AS ALLIES. MASTERED CLOSE RANGE |nCOMBAT AND ENEMY OBSERVATION TO PERFECTION, AND AT THE SAME TIME IS COMPLETELY UNAFRAID OF TAKING HEAVY ENEMY DAMAGE ON HIS CHEST."
+    set caveTroll.infoSize = 4.7
     set caveTroll.attribute = "19 +4.5    7 +2.5   12 +1.2"
     set caveTroll.primary = STR
 

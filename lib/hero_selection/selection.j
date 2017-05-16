@@ -34,8 +34,8 @@ library SelectionMain /*
         constant real INNATE_SPELL_Y = CENTER_Y - 115
         constant real HERO_BUTTON_ORIGIN_X = CENTER_X - 485
         constant real HERO_BUTTON_ORIGIN_Y = CENTER_Y - 210
-        constant real HERO_BUTTON_LIMIT = CENTER_X + 400
-        constant real HERO_BUTTON_SPACING = 100
+        constant real HERO_BUTTON_LIMIT = CENTER_X + 600
+        constant real HERO_BUTTON_SPACING = 80
         constant real SPELL_BUTTON_ORIGIN_X = CENTER_X - 500
         constant real SPELL_BUTTON_ORIGIN_Y = CENTER_Y + 385
         constant real SPELL_BUTTON_SPACING = 70

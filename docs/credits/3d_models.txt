@@ -16,6 +16,9 @@
         Crusader                    by Forgotten_Warlord and Takakenji
         Firelord                    by Gluma
         Pyro                        by Illidan(Evil)X
+        Gnome Technician            by Norinrad
+        Hunter                      by Kuhneghetz & Mr.Goblin
+        Mistress                    by Cavman, Kuhneghetz
 
     ABILITIES:
         Immortal Force Effect       by sPy
@@ -134,3 +137,6 @@
         Generic CastBar             by HappyTauren
         Dummy Model                 by Vexorian
         Silence SFX                 by icewolf055
+
+
+To use:

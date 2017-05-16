@@ -89,7 +89,8 @@ module SkeletonKingConfig
     set skeletonKing.scaleAdd = -0.10
     set skeletonKing.iconPath = "ReplaceableTextures\\CommandButtons\\BTN_SkeletonKing.blp"
     set skeletonKing.modelPath = "Models\\Units\\SkeletonKing.mdx"
-    set skeletonKing.info = "<NOTHING YET>"
+    set skeletonKing.info = "BEING DIRECTLY CONNECTED TO DEATH, SKELETON KING IS THE FIRST BENEFICIARY OF MORTAL SUFFERING. BY EXCELING AT ABILITIES THAT CAN QUICKLY |nTURN LIFEFORCE INTO PAIN AND GRIEF, THE REAPER CAN VERY EASILY BENEFIT FROM LIVING CREATURES AND THEIR WILL TO LIVE. UNSTOPPABLE |nAGAINST LIVING ENEMIES, SKELETON KING IS A KILLING TOOL THAT EVEN THE GREATEST OF WARRIORS ARE RELUCTANT TO FACE IN COMBAT."
+    set skeletonKing.infoSize = 4.65
     set skeletonKing.attribute = "19 +3.6    7 +3.2   12 +1.4"
     set skeletonKing.primary = STR
 

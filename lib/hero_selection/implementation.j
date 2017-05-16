@@ -14,6 +14,11 @@
     implement FirelordSpells
     implement GnomeTechnicianSpells
     implement WitchSpells
+    implement HunterSpells
+    implement GuardianSpells
+    implement InquisitorSpells
+    implement KnightSpells
+    implement MistressSpells
 //! endtextmacro
 
 //! textmacro SELECTION_SYSTEM_HERO_IMPLEMENTATION
@@ -32,6 +37,11 @@
     implement FirelordConfig
     implement GnomeTechnicianConfig
     implement WitchConfig
+    implement HunterConfig
+    implement GuardianConfig
+    implement InquisitorConfig
+    implement KnightConfig
+    implement MistressConfig
 //! endtextmacro
 
 //! textmacro SELECTION_SYSTEM_HERO_BUTTON_IMPLEMENTATION
@@ -44,6 +54,11 @@
     implement FirelordButton
     implement GnomeTechnicianButton
     implement WitchButton
+    implement HunterButton
+    implement GuardianButton
+    implement InquisitorButton
+    implement KnightButton
+    implement MistressButton
     set HeroButton.buttonX = HERO_BUTTON_ORIGIN_X
     set HeroButton.buttonY = HERO_BUTTON_ORIGIN_Y - 180
     implement VampireLordButton

@@ -108,6 +108,7 @@ module MissileTrajectory
                 endif
             elseif this.projectile then
                 if height <= 0 then
+                    //Bounce
                     set this.stop = true
                     call this.callbackOnHit()
                 endif
