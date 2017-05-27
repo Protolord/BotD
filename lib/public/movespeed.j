@@ -2,60 +2,59 @@ library Movespeed /*
 
                     Movespeed v1.21
                        by Flux
-       
+
         Applies a stacking movespeed modification to a unit
         through code.
-       
+
         Formula:
         New Movespeed = (Default Movespeed + Total FlatBonus)*(1 + Total PercentBonus)
-   
-    */ requires /*
-       (nothing)
-   
+
+    */ requires SpellEffectEvent/*
+
     */ optional Table /*
        If not found, the system will create 1 hashtable. Hashtables are
        limited to 255 per map.
-       
+
     */ optional TimerUtils /*
        If found, timers for duration will be recycled.
-       
-   
+
+
     ******************************
                    API
     ******************************
-   
+
     struct Movespeed
-   
+
         static method create(unit, percentBonus, flatBonus)
             - Create a Movespeed modification.
             EXAMPLE: local Movespeed ms = Movespeed.create(GetTriggerUnit(), 0.15, 0)
-           
-        method operator duration= 
+
+        method operator duration=
             - Sets the current duration of the Movespeed instace.
             EXAMPLE: set ms.duration = 5
-       
+
         method operator duration
             - Reads the current duration of the Movespeed instance.
             - Returns zero if the instance has no duration
             EXAMPLE: call BJDebugMsg("Time left: " + R2S(ms.duration))
-           
+
         method change(newPercentBonus, newFlatBonus)
             - Change the movespeed modification of a certain instance
             EXAMPLE: call ms.change(0.20, 0)
-       
+
         method destroy()
             - Remove an instance of movespeed modification.
             - Not needed if thhe Movespeed instance has a duration.
-   
+
     -------------------
-           NOTE: 
+           NOTE:
     -------------------
         All in-game movespeed modifiers such as Boots of Speed, Endurance Aura, Slow Aura, etc.
-        will still work with this system, but all of them are always applied last.  
-       
+        will still work with this system, but all of them are always applied last.
+
         Formula:
         New Movespeed = ((Default Movespeed + Total FlatBonus)*(1 + Total PercentBonus) + Total in-game FlatBonus)*(1 + Total in-game PercentBonus)
-       
+
     -----------
       CREDITS
     -----------
@@ -63,26 +62,26 @@ library Movespeed /*
         Vexorian - TimerUtils
         Aniki    - For the movespeed formula used by Warcraft 3
 
-*/    
+*/
     struct Movespeed
-       
+
         readonly real pb
         readonly real fb
         readonly unit u
         private real default
         private timer t
-       
+
         private thistype head
         private integer count
-       
+
 
         static if LIBRARY_Table then
             private static Table tb
         else
             private static hashtable hash = InitHashtable()
         endif
-       
-       
+
+
         method destroy takes nothing returns nothing
             local thistype head = this.head
             set head.pb = head.pb - this.pb
@@ -113,7 +112,7 @@ library Movespeed /*
             set this.u = null
             call this.deallocate()
         endmethod
-       
+
         method change takes real newPercentBonus, integer newFlatBonus returns nothing
             local thistype head = this.head
             set head.pb = head.pb + newPercentBonus - this.pb
@@ -122,7 +121,7 @@ library Movespeed /*
             set this.fb = newFlatBonus
             call SetUnitMoveSpeed(u, (head.default + head.fb)*(1 + head.pb))
         endmethod
-       
+
         static method create takes unit u, real percentBonus, integer flatBonus returns thistype
             local thistype this = thistype.allocate()
             local integer id = GetHandleId(u)
@@ -161,7 +160,7 @@ library Movespeed /*
             call SetUnitMoveSpeed(u, (head.default + head.fb)*(1 + head.pb))
             return this
         endmethod
-       
+
         private static method expired takes nothing returns nothing
             static if LIBRARY_TimerUtils then
                 call thistype(GetTimerData(GetExpiredTimer())).destroy()
@@ -171,14 +170,14 @@ library Movespeed /*
                 call thistype(LoadInteger(thistype.hash, GetHandleId(GetExpiredTimer()), 0)).destroy()
             endif
         endmethod
-       
+
         method operator duration takes nothing returns real
             if this.t == null then
                 return 0.0
             endif
             return TimerGetRemaining(this.t)
         endmethod
-       
+
         method operator duration= takes real time returns nothing
             if this.t == null then
                 static if LIBRARY_TimerUtils then
@@ -194,13 +193,44 @@ library Movespeed /*
             endif
             call TimerStart(this.t, time, false, function thistype.expired)
         endmethod
-       
-       
+
+        private static method reapply takes nothing returns nothing
+            local thistype this = ReleaseTimer(GetExpiredTimer())
+            local integer id = GetHandleId(this.u)
+            local thistype head
+            if thistype.tb.has(id) then
+                set head = thistype.tb[id]
+                call SetUnitMoveSpeed(this.u, (head.default + head.fb)*(1 + head.pb))
+            endif
+            set this.u = null
+            call this.deallocate()
+        endmethod
+
+        private static method onTransform takes nothing returns nothing
+            local thistype this = thistype.allocate()
+            set this.u = GetTriggerUnit()
+            call TimerStart(NewTimerEx(this), thistype.tb.real[GetSpellAbilityId()] + 0.01, false, function thistype.reapply)
+        endmethod
+
+        static method registerTransform takes integer spellId, real delay returns nothing
+            call RegisterSpellEffectEvent(spellId, function thistype.onTransform)
+            set thistype.tb.real[spellId] = delay
+        endmethod
+
+        static method check takes unit u returns nothing
+            local integer id = GetHandleId(u)
+            local thistype head
+            if thistype.tb.has(id) then
+                set head = thistype.tb[id]
+                call SetUnitMoveSpeed(u, (head.default + head.fb)*(1 + head.pb))
+            endif
+        endmethod
+
         static if LIBRARY_Table then
             private static method onInit takes nothing returns nothing
                 set thistype.tb = Table.create()
             endmethod
         endif
-       
+
     endstruct
 endlibrary

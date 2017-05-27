@@ -3,7 +3,6 @@ scope FrostNova
     globals
         private constant integer SPELL_ID = 'AH42'
         private constant string SFX = "Models\\Effects\\FrostNova.mdx"
-        private constant string SFX_BUFF = "Abilities\\Spells\\Undead\\FrostArmor\\FrostArmorDamage.mdl"
         private constant string SFX_TARGET = "Abilities\\Spells\\Undead\\FrostNova\\FrostNovaTarget.mdl"
         private constant attacktype ATTACK_TYPE = ATTACK_TYPE_NORMAL
         private constant damagetype DAMAGE_TYPE = DAMAGE_TYPE_MAGIC
@@ -42,7 +41,6 @@ scope FrostNova
 
     private struct SpellBuff extends Buff
 
-        private effect sfx
         private VertexColor vc
         private Movespeed ms
         private Atkspeed as
@@ -52,15 +50,12 @@ scope FrostNova
         private static constant integer STACK_TYPE = BUFF_STACK_PARTIAL
 
         method onRemove takes nothing returns nothing
-            call DestroyEffect(this.sfx)
             call this.ms.destroy()
             call this.as.destroy()
             call this.vc.destroy()
-            set this.sfx = null
         endmethod
 
         method onApply takes nothing returns nothing
-            set this.sfx = AddSpecialEffectTarget(SFX_BUFF, this.target, "chest")
             set this.vc = VertexColor.create(this.target, -200, -50, 255, 0)
             set this.ms = Movespeed.create(this.target, 0, 0)
             set this.as = Atkspeed.create(this.target, 0)

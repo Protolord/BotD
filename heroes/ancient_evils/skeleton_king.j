@@ -36,8 +36,7 @@ module SkeletonKingSpells
     set soulRip.info = "Soul Rip|n|cfff4a460Target|r: |cff3399ffSelf|n|r|cfff4a460Radius|r: |cff3399ff(100 x level)|n|r|cfff4a460HP Stolen|r: |cff3399ff(100 + 50 x level)|n|r|cfff4a460Cooldown|r: |cff3399ff25 seconds|r|n|nSkeleton King rips souls of all nearby enemies slowly gathering their life force."
 
     set unholyAura = Spell.create('A714')
-    set unholyAura.passive = true
-    set unholyAura.info = "Unholy Aura|n|cfff4a460Target|r: |cff3399ffPassive, Enemy|n|r|cfff4a460Radius|r: |cff3399ff750|n|r|cfff4a460Min Damage|r: |cff3399ff(0.1% x level)|n|r|cfff4a460Max Damage|r: |cff3399ff(0.5% x level)|n|r|nEnemies close to Skeleton King feel their life force being ripped losing a percentage of their max health per second based on how close they are to Skeleton King. Deals maximum damage to all enemies within 150 radius."
+    set unholyAura.info = "Unholy Aura|n|cfff4a460Target|r: |cff3399ffSelf|n|r|cfff4a460Radius|r: |cff3399ff750|n|r|cfff4a460Min Damage|r: |cff3399ff(0.1% x level)|n|r|cfff4a460Max Damage|r: |cff3399ff(0.5% x level)|n|r|nEnemies close to Skeleton King feel their life force being ripped losing a percentage of their current health per second based on how close they are to Skeleton King. Deals maximum damage to all enemies within 150 radius."
 
     set ghostForm = Spell.create('A721')
     set ghostForm.info = "Ghost Form|n|cfff4a460Target|r: |cff3399ffSelf|n|r|cfff4a460HP Stolen|r: |cff3399ff(30 x level)|n|r|cfff4a460Duration|r: |cff3399ff15 seconds|n|r|cfff4a460Cooldown|r: |cff3399ff30 seconds|r|n|nSkeleton King becomes invisible and on attack breaking invisibility will steal a portion of enemy hitpoints."
@@ -51,8 +50,7 @@ module SkeletonKingSpells
     set deathPact.info = "Death Pact|n|cfff4a460Target|r: |cff3399ffPassive, Enemy|n|r|cfff4a460Threshold|r: |cff3399ff(2% x level)|n|r|nSkeleton King can instantly kill any living creature whose hitpoints percentage is below a certain threshold."
 
     set fear = Spell.create('A724')
-    set fear.passive = true
-    set fear.info = "Fear|n|cfff4a460Target|r: |cff3399ffPassive, Self|n|r|cfff4a460Damage Penalty|r: |cff3399ff(3% x level)|n|r|cfff4a460Range|r: |cff3399ff500|r|n|nEnemies looking directly at Skeleton King get cursed losing certain portion of their attack damage."
+    set fear.info = "Fear|n|cfff4a460Target|r: |cff3399ffSelf|n|r|cfff4a460Damage Penalty|r: |cff3399ff(3% x level)|n|r|cfff4a460Range|r: |cff3399ff500|r|n|nEnemies looking directly at Skeleton King get cursed losing certain portion of their attack damage."
 
     set heartBeat = Spell.create('A731')
     set heartBeat.passive = true
@@ -74,7 +72,7 @@ module SkeletonKingSpells
 
     set grimDeal = Spell.create('A743')
     set grimDeal.passive = true
-    set grimDeal.info = "Grim Deal|n|cfff4a460Target|r: |cff3399ffPassive, Self|n|r|cfff4a460Chance|r: |cff3399ff(11 + 2 x level) %|r|n|nKilling blow has a set chance to instead fully heal Skeleton King."
+    set grimDeal.info = "Grim Deal|n|cfff4a460Target|r: |cff3399ffPassive, Self|n|r|cfff4a460Manacost|r: |cff3399ff25% Mana Pool|n|r|cfff4a460Chance|r: |cff3399ff(11 + 2 x level) %|r|n|nSkeleton King has a chance to cheat death fully restoring himself after taking a deathblow. Only activates when Skeleton King has enough mana and activation consumes the mana in the process."
 
     set soulFeast = Spell.create('A744')
     set soulFeast.passive = true

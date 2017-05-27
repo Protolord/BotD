@@ -2,8 +2,6 @@ scope FrostArmor
 
     globals
         private constant integer SPELL_ID = 'AH43'
-        private constant string SFX_BUFF = "Abilities\\Spells\\Undead\\FrostArmor\\FrostArmorTarget.mdl"
-        private constant string SFX_SLOWED = "Abilities\\Spells\\Undead\\FrostArmor\\FrostArmorDamage.mdl"
     endglobals
 
     //In Percent
@@ -29,7 +27,6 @@ scope FrostArmor
 
     private struct SpellBuff extends Buff
 
-        private effect sfx
         private VertexColor vc
         private Movespeed ms
         private Atkspeed as
@@ -39,15 +36,12 @@ scope FrostArmor
         private static constant integer STACK_TYPE = BUFF_STACK_NONE
 
         method onRemove takes nothing returns nothing
-            call DestroyEffect(this.sfx)
             call this.ms.destroy()
             call this.as.destroy()
             call this.vc.destroy()
-            set this.sfx = null
         endmethod
 
         method onApply takes nothing returns nothing
-            set this.sfx = AddSpecialEffectTarget(SFX_SLOWED, this.target, "chest")
             set this.vc = VertexColor.create(this.target, -200, -50, 255, 0)
             set this.ms = Movespeed.create(this.target, 0, 0)
             set this.as = Atkspeed.create(this.target, 0)
@@ -68,17 +62,11 @@ scope FrostArmor
 
     private struct FrostArmorBuff extends Buff
 
-        private effect sfx
         private integer lvl
 
         private static constant integer RAWCODE = 'BH43'
         private static constant integer DISPEL_TYPE = BUFF_POSITIVE
         private static constant integer STACK_TYPE = BUFF_STACK_NONE
-
-        method onRemove takes nothing returns nothing
-            call DestroyEffect(this.sfx)
-            set this.sfx = null
-        endmethod
 
         private static method onDamage takes nothing returns nothing
             local thistype this = Buff.get(null, Damage.target, thistype.typeid)
@@ -88,10 +76,6 @@ scope FrostArmor
                 set b.duration = DebuffDuration(this.lvl)
                 call b.reapply(this.lvl)
             endif
-        endmethod
-
-        method onApply takes nothing returns nothing
-            set this.sfx = AddSpecialEffectTarget(SFX_BUFF, this.target, "chest")
         endmethod
 
         method reapply takes integer level returns nothing

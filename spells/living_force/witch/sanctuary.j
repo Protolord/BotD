@@ -4,8 +4,8 @@ scope Sanctuary
         private constant integer SPELL_ID = 'AH73'
         private constant string MODEL = "Models\\Effects\\SanctuaryMissile.mdx"
         private constant string MODEL2 = "Abilities\\Weapons\\AvengerMissile\\AvengerMissile.mdl"
-        private constant string SFX1 = "Models\\Effects\\SanctuaryMissile.mdx"
-        private constant string SFX2 = "Models\\Effects\\SanctuaryMissile.mdx"
+        private constant string SFX_SOURCE = "Models\\Effects\\SanctuaryMissile.mdx"
+        private constant string SFX_TARGET = "Models\\Effects\\Sanctuary.mdx"
         private constant real OFFSET = 100.0
         private constant real IMAGE_TRANSITION = 0.75
     endglobals
@@ -55,8 +55,8 @@ scope Sanctuary
                 set y = this.m.y + OFFSET*Sin(facing)
                 set tx = GetUnitX(this.target)
                 set ty = GetUnitY(this.target)
-                call DestroyEffect(AddSpecialEffect(SFX1, tx, ty))
-                call DestroyEffect(AddSpecialEffect(SFX2, x, y))
+                call DestroyEffect(AddSpecialEffect(SFX_SOURCE, tx, ty))
+                call DestroyEffect(AddSpecialEffect(SFX_TARGET, x, y))
                 call SetUnitPosition(this.target, x, y)
                 set imagery = CreateUnit(Player(PLAYER_NEUTRAL_PASSIVE), GetUnitTypeId(this.target), tx, ty, GetUnitFacing(this.target))
                 call UnitAddAbility(imagery, 'Aloc')

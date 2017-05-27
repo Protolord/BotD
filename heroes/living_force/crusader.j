@@ -28,6 +28,7 @@ module CrusaderConfig
     set crusader = Hero.create('H002')
     set crusader.faction = LIVING_FORCE
     set crusader.name = "Crusader"
+    set crusader.scaleAdd = -0.1
     set crusader.iconPath = "ReplaceableTextures\\CommandButtons\\BTN_Crusader.blp"
     set crusader.modelPath = "Models\\Units\\Crusader.mdl"
     set crusader.info = "<NOTHING YET>"

@@ -3,7 +3,6 @@ scope Enlight
     globals
         private constant integer SPELL_ID = 'AH22'
         private constant string SFX = "Abilities\\Spells\\Human\\HolyBolt\\HolyBoltSpecialArt.mdl"
-        private constant string SFX_BUFF = "Abilities\\Spells\\Items\\StaffOfSanctuary\\Staff_Sanctuary_Target.mdl"
         private constant attacktype ATTACK_TYPE = ATTACK_TYPE_NORMAL
         private constant damagetype DAMAGE_TYPE = DAMAGE_TYPE_MAGIC
     endglobals
@@ -36,20 +35,9 @@ scope Enlight
 
     private struct SpellBuff extends Buff
 
-        private effect sfx
-
         private static constant integer RAWCODE = 'DH22'
         private static constant integer DISPEL_TYPE = BUFF_NEGATIVE
         private static constant integer STACK_TYPE = BUFF_STACK_NONE
-
-        method onRemove takes nothing returns nothing
-            call DestroyEffect(this.sfx)
-            set this.sfx = null
-        endmethod
-
-        method onApply takes nothing returns nothing
-            set this.sfx = AddSpecialEffectTarget(SFX_BUFF, this.target, "chest")
-        endmethod
 
         private static method init takes nothing returns nothing
             call PreloadSpell(thistype.RAWCODE)

@@ -29,7 +29,7 @@ module CaveTrollSpells
     set heavySwing.info = "Heavy Swing|n|cfff4a460Target|r: |cff3399ffEnemy Unit|n|r|cfff4a460Range|r: |cff3399ffMelee|n|r|cfff4a460Damage Dealt|r: |cff3399ff150%|n|r|cfff4a460Stun Duration|r: |cff3399ff(0.2 x level) seconds|r|n|nCave Troll attacks with all his strength to deliver excruciating blow dealing extra damage and temporarily stunning the target."
 
     set threeSixty = Spell.create('A812')
-    set threeSixty.info = "Three Sixty|n|cfff4a460Target|r: |cff3399ffSelf|n|r|cfff4a460Radius|r: |cff3399ff350|n|r|cfff4a460Damage|r: |cff3399ff(100 x level)|n|r|cfff4a460Cooldown|r: |cff3399ff10 seconds|r|n|nCave Troll swings around damaging all nearby opponents."
+    set threeSixty.info = "Three Sixty|n|cfff4a460Target|r: |cff3399ffSelf|n|r|cfff4a460Radius|r: |cff3399ff275|n|r|cfff4a460Damage|r: |cff3399ff(100 x level)|n|r|cfff4a460Cooldown|r: |cff3399ff10 seconds|r|n|nCave Troll swings around damaging all nearby opponents."
 
     set secondHit = Spell.create('A813')
     set secondHit.passive = true

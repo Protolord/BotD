@@ -3,6 +3,7 @@ library SpellResistance requires DamageEvent, DamageModify
 /*
     SpellResistance.create(unit, amount)
         - Make a unit gain spell resistance by a certain amount.
+        - Only use values (-inf, 1)
 
     this.duration = <time duration>
         - Add an expiration timer to a SpellResistance instance.
@@ -24,7 +25,7 @@ library SpellResistance requires DamageEvent, DamageModify
 
         method destroy takes nothing returns nothing
             local thistype head = this.head
-            set head.b = RMinBJ(head.b - this.b, 1.0)
+            set head.b = head.b/(1 - this.b)
             set head.count = head.count - 1
             if head.count == 0 then
                 call thistype.tb.remove(GetHandleId(this.u))
@@ -35,14 +36,14 @@ library SpellResistance requires DamageEvent, DamageModify
 
         method change takes real newBonus returns nothing
             local thistype head = this.head
-            set head.b = RMinBJ(head.b + newBonus - this.b, 1.0)
+            set head.b = head.b*(1 - newBonus)/(1 - this.b)
             set this.b = newBonus
         endmethod
 
         private static method onDamage takes nothing returns nothing
             local integer id = GetHandleId(Damage.target)
-            if Damage.type == DAMAGE_TYPE_MAGICAL and Damage.coded and thistype.tb.has(id) then
-                set Damage.amount = (1.0 - thistype(thistype.tb[id]).head.b)*Damage.amount
+            if thistype.tb.has(id) and (Damage.type == DAMAGE_TYPE_MAGICAL or (Damage.type == DAMAGE_TYPE_PHYSICAL and CombatStat.getAttackType(Damage.source) == ATTACK_TYPE_MAGIC)) then
+                set Damage.amount = thistype(thistype.tb[id]).b*Damage.amount
             endif
         endmethod
 
@@ -55,14 +56,14 @@ library SpellResistance requires DamageEvent, DamageModify
                 set head.count = head.count + 1
             else
                 set head = thistype.allocate()
-                set head.b = 0
+                set head.b = 1
                 set head.count = 1
                 set thistype.tb[id] = head
             endif
             set this.u = u
             set this.b = bonus
             set this.head = head
-            set head.b = RMinBJ(head.b + this.b, 1.0)
+            set head.b = head.b*(1 - this.b)
             return this
         endmethod
 

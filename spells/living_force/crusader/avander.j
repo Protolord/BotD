@@ -3,7 +3,6 @@ scope Avander
     globals
         private constant integer SPELL_ID = 'AH24'
         private constant string SFX = "Models\\Effects\\AvanderEffect.mdx"
-        private constant string SFX_BUFF = "Models\\Effects\\Avander.mdx"
     endglobals
 
     private function Duration takes integer level returns real
@@ -21,7 +20,6 @@ scope Avander
 
     private struct SpellBuff extends Buff
 
-        private effect sfx
         private Root r
         private TurningOff to
         private Disarm d
@@ -34,12 +32,9 @@ scope Avander
             call this.d.destroy()
             call this.r.destroy()
             call this.to.destroy()
-            call DestroyEffect(this.sfx)
-            set this.sfx = null
         endmethod
 
         method onApply takes nothing returns nothing
-            set this.sfx = AddSpecialEffectTarget(SFX_BUFF, this.target, "origin")
             set this.d = Disarm.create(this.target)
             set this.r = Root.create(this.target)
             set this.to = TurningOff.create(this.target)

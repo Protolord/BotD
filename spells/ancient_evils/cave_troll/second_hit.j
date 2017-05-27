@@ -2,7 +2,6 @@ scope SecondHit
 
     globals
         private constant integer SPELL_ID = 'A813'
-        private constant string BUFF_SFX = "Models\\Effects\\SecondHit.mdx"
     endglobals
 
     private function DamagePercentage takes integer level returns real
@@ -25,7 +24,6 @@ scope SecondHit
 
     private struct SpellBuff extends Buff
 
-        private effect sfx
         private Atkspeed as
 
         private static constant integer RAWCODE = 'B813'
@@ -39,14 +37,11 @@ scope SecondHit
 
         method onRemove takes nothing returns nothing
             call AddUnitAnimationProperties(this.target, "alternate", false)
-            call DestroyEffect(this.sfx)
             call this.as.destroy()
-            set this.sfx = null
         endmethod
 
         method onApply takes nothing returns nothing
             set this.as = Atkspeed.create(this.target, 0xFFFF)
-            set this.sfx = AddSpecialEffectTarget(BUFF_SFX, this.target, "hand left")
             call TimerStart(NewTimerEx(this), 0.25, false, function thistype.delay)
         endmethod
 
@@ -78,6 +73,7 @@ scope SecondHit
             call thistype.tb.remove(GetHandleId(this.trg))
             call thistype.tb.remove(GetHandleId(this.orderTrg))
             call thistype.tb.boolean.remove(GetHandleId(this.buff.source))
+            call Damage.unregisterTrigger(this.trg)
             call DestroyTrigger(this.trg)
             call DestroyTrigger(this.orderTrg)
             set this.target = null
@@ -93,7 +89,7 @@ scope SecondHit
         private static method onSecondDamage takes nothing returns boolean
             local thistype this = thistype.tb[GetHandleId(GetTriggeringTrigger())]
             local textsplat t
-            if Damage.type == DAMAGE_TYPE_PHYSICAL and not Damage.coded and Damage.source == this.buff.source then
+            if this > 0 and Damage.type == DAMAGE_TYPE_PHYSICAL and not Damage.coded and Damage.source == this.buff.source then
                 if Damage.target == this.target then
                     set Damage.amount = this.dmg
                     if Damage.amount >= 1.0 then

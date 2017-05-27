@@ -33,7 +33,7 @@ library PlayerStat uses RegisterPlayerUnitEvent, SystemConsole, HeroPool
             return GetPlayerId(p)
         endmethod
 
-        readonly static thistype initializer
+        readonly static thistype initializer = 0
 
         method createHero takes nothing returns nothing
             local fogmodifier fm
@@ -58,7 +58,7 @@ library PlayerStat uses RegisterPlayerUnitEvent, SystemConsole, HeroPool
             call FogModifierStart(fm)
             call DestroyFogModifier(fm)
             //Remove before Final Release
-            call SetHeroLevel(this.unit, 40, true)
+            call TriggerExecute(gg_trg_Hero_Selected)
         endmethod
 
         private static method addUltimates takes nothing returns boolean

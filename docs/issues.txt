@@ -1,14 +1,8 @@
-
-ISSUES:
-- Bounce mechanics in missile system
-
-
 MODEL CONCERNS:
 - Cleave change Visual Effect
-- Add Spike Model
-- Storm Shaman needs a levitate animation put into "stand alternate", "attack alternate" and "walk alternate"
+- Fix stun system and silence system this.destroy() removes all instances.
+- Sleep System
 - Request better Cauldron
-- Request better Sticky Liquid
 
 CODING CONCERNS:
 - SystemMsg create admin parameter.
@@ -16,4 +10,37 @@ CODING CONCERNS:
 - Test if Inception takes the correct damage taken factor
 - Allow units with Rabies exceed 522 movespeed.
 - DamageEvent doesn't properly classify units with magic attack as magic damage.
-- Transform spells remove attached effects. Attach spell buff effects to Object Editor data instead.
+
+
+Email notes:
+- Unstoppable Hunger's chance temporarily changed to 100%.
+- Companion not yet done but try it out to see if animal model fits.
+
+
+Living Force Heroes and Spells development
+
+Systems:
+* Create Ethereal System
+* Create Transform System
+* Add attack type parameter to CombatStat
+* Fix Root system to persist after a transforming spell
+* Fix Buff visuals to persist after a transforming spell
+* Fix Movespeed system to persist after a transforming spell
+
+Heroes:
+* Add Living Forces Heroes up to Viking
+* Update Skeleton King and Cave Troll description
+
+Spells:
+* Create Companion
+* Create Silencing Pain
+* Create Bash
+* Create Banish
+* Create Zeal
+* Create Critical Strike
+* Create Blocking
+* Create Wrath of the Desert
+* Create Frog Transformation
+* Decrease unit vision spells to 200 sight radius
+* Change Unholy Aura to an active ability
+* Change Fear to an active ability

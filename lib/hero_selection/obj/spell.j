@@ -15,7 +15,7 @@ library Spell requires StringSize
         readonly real yOffset1
         readonly real yOffset2
 
-        private boolean initialized
+        readonly boolean initialized
         private string pInfo1
         private string pInfo2
 

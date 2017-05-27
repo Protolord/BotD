@@ -11,11 +11,19 @@
         BTN_CaveTroll               by Marshmallo
         BTN_StormShaman             by wij
         BTN_Witch                   by Daenar7
-        BTN_Hunter                  by Dan van Ohllus & Mr.Goblin, Kuhneghetz
         BTN_Guardian                by FrIkY
         BTN_Inquisitor              by Kwaliti
         BTN_Knight                  by 67chrome
         BTN_Mistress                by Kuhneghetz
+        BTN_Nomad                   by Dan van Ohllus & Mr.Goblin, Kuhneghetz
+        BTN_Arcanist                by GhostThruster
+        BTN_Raven                   by 67chrome
+        BTN_Medium                  by 67chrome
+        BTN_Siren                   by Tarrasque
+        BTN_Sorceress               by Apheraz Lucent
+        BTN_Templar                 by Eagle XI
+        BTN_Viking                  by Marcos DAB
+
 
 
     Vampire Lord Abilities:
@@ -125,11 +133,26 @@
         BTN_StatisTrap              by Valve Corporation
         BTN_Bomb                    by bigapple90
         BTN_StickyLiquid            by NFWar
-        BTN_MotionController        by 67chrome
+        BTN_MotionController        by The Panda
 
     Witch:
         BTN_SpiritualWall           by Infinitynexus
         BTN_Sanctuary               by Valve Corporation
+
+    Hunter:
+        BTN_Companion               by Valve Corporation
+        BTN_Falcon                  by olofmoleman
+
+    Inquisitor:
+        BTN_SilencingPain           by Valve Corporation
+
+    Mistress
+        BTN_Evasion                 by CRAZYRUSSIAN
+        BTN_Banish                  by Valve Corporation
+        BTN_CriticalStrike          by PeeKay
+
+    Nomad:
+        BTN_WrathOfTheDesert        by olofmoleman
 
     Others:
         BTN_Check                   by Lockheart
@@ -144,8 +167,11 @@
         Blue Laser Lightning        by Erkki2
 
         Crusader                    by CloudWolf
-        Dwarf Defender              by camel's_hump
         Witch                       by Daenar7
+        Hunter                      by Daenar7
         Guardian                    by FrIkY
         Inquisitor                  by markone
         Knight                      by 67chrome
+        Raven                       by 67chrome
+        Medium                      by Daenar7
+        Sorceress                   by Apheraz Lucent

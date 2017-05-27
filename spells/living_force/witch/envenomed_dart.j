@@ -3,7 +3,6 @@ scope EnvenomedDart
     globals
         private constant integer SPELL_ID = 'AH72'
         private constant string MODEL = "Abilities\\Weapons\\HarpyMissile\\HarpyMissile.mdl"
-        private constant string SFX_SLOW = "Abilities\\Weapons\\PoisonSting\\PoisonStingTarget.mdl"
     endglobals
 
     private function MoveSlow takes integer level returns real
@@ -27,22 +26,17 @@ scope EnvenomedDart
 
     private struct SpellBuff extends Buff
 
-        private Atkspeed as
         private Movespeed ms
-        private effect sfx
 
         private static constant integer RAWCODE = 'DH72'
         private static constant integer DISPEL_TYPE = BUFF_NEGATIVE
         private static constant integer STACK_TYPE = BUFF_STACK_PARTIAL
 
         method onRemove takes nothing returns nothing
-            call DestroyEffect(this.sfx)
             call this.ms.destroy()
-            set this.sfx = null
         endmethod
 
         method onApply takes nothing returns nothing
-            set this.sfx = AddSpecialEffectTarget(SFX_SLOW, this.target, "chest")
             set this.ms = Movespeed.create(this.target, 0, 0)
         endmethod
 
@@ -95,6 +89,9 @@ scope EnvenomedDart
             set this.m.model = MODEL
             set this.m.speed = Speed(this.lvl)
             call this.m.registerOnHit(function thistype.onHit)
+            if GetUnitTypeId(this.caster) == 'HT07' then
+                call this.m.move(this.m.x, this.m.y, this.m.z - 50)
+            endif
             call this.m.launch()
             call SystemMsg.create(GetUnitName(GetTriggerUnit()) + " cast thistype")
         endmethod

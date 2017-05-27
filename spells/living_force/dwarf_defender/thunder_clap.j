@@ -3,7 +3,6 @@ scope ThunderClap
     globals
         private constant integer SPELL_ID = 'AH31'
         private constant string SFX = "Abilities\\Spells\\Human\\Thunderclap\\ThunderClapCaster.mdl"
-        private constant string BUFF_SFX = "Abilities\\Spells\\Orc\\Purge\\PurgeBuffTarget.mdl"
         private constant string SFX_RIBBON = "Abilities\\Spells\\Orc\\LightningShield\\LightningShieldBuff.mdl"
         private constant attacktype ATTACK_TYPE = ATTACK_TYPE_NORMAL
         private constant damagetype DAMAGE_TYPE = DAMAGE_TYPE_MAGIC
@@ -31,7 +30,6 @@ scope ThunderClap
 
     private struct SpellBuff extends Buff
 
-        private effect sfx
         private Movespeed ms
 
         private static constant integer RAWCODE = 'DH31'
@@ -40,12 +38,9 @@ scope ThunderClap
 
         method onRemove takes nothing returns nothing
             call this.ms.destroy()
-            call DestroyEffect(this.sfx)
-            set this.sfx = null
         endmethod
 
         method onApply takes nothing returns nothing
-            set this.sfx = AddSpecialEffectTarget(BUFF_SFX, this.target, "chest")
             set this.ms = Movespeed.create(this.target, 0, 0)
         endmethod
 
@@ -72,7 +67,7 @@ scope ThunderClap
             local real x = GetUnitX(caster)
             local real y = GetUnitY(caster)
             local group g = NewGroup()
-            local Effect e = Effect.createAnyAngle(SFX, x, y, 50)
+            local Effect e = Effect.createAnyAngle(SFX, x, y, GetUnitFlyHeight(caster) + 50)
             local real duration = Duration(100*(1 - GetWidgetLife(caster))/GetUnitState(caster, UNIT_STATE_MAX_LIFE))
             local unit u
             set e.scale = Radius(lvl)/300.0

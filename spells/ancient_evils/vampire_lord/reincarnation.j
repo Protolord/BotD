@@ -1,20 +1,20 @@
 scope Reincarnation
- 
+
     globals
         private constant integer SPELL_ID = 'A1XX'
         private constant real REVIVE_DELAY = 7.00
         private constant integer DETECT_REMOVE = 'ARem'
     endglobals
-    
+
     struct Reincarnation extends array
         implement Alloc
-        
+
         private unit u
         private real mana
         private static trigger t
         private static trigger dead
         private static Table tb
-        
+
         private static method restore takes nothing returns nothing
             local thistype this = ReleaseTimer(GetExpiredTimer())
             if GetOwningPlayer(this.u) == GetLocalPlayer() then
@@ -26,7 +26,7 @@ scope Reincarnation
             set this.mana = 0
             call this.deallocate()
         endmethod
-        
+
         private static method expires takes nothing returns nothing
             local thistype this = ReleaseTimer(GetExpiredTimer())
             if thistype.tb.boolean[GetHandleId(this.u)] then
@@ -38,12 +38,12 @@ scope Reincarnation
                 call this.deallocate()
             endif
         endmethod
-        
+
         private static method onDeath takes nothing returns boolean
             set thistype.tb.boolean[GetHandleId(GetTriggerUnit())] = false
             return false
         endmethod
-        
+
         private static method onOrder takes nothing returns boolean
             local thistype this
             local unit caster
@@ -55,19 +55,20 @@ scope Reincarnation
                     set this.mana = GetUnitState(caster, UNIT_STATE_MANA)
                     set thistype.tb.boolean[GetHandleId(this.u)] = true
                     call TimerStart(NewTimerEx(this), 0.0, false, function thistype.expires)
+                    call Buff.dispelAll(this.u)
                 endif
                 set caster = null
             endif
             return false
         endmethod
-        
+
         static method add takes unit u returns nothing
             call SetPlayerAbilityAvailable(GetOwningPlayer(u), DETECT_REMOVE, false)
             call TriggerRegisterUnitEvent(thistype.t, u, EVENT_UNIT_ISSUED_ORDER)
             call TriggerRegisterUnitEvent(thistype.dead, u, EVENT_UNIT_DEATH)
             call UnitAddAbility(u, DETECT_REMOVE)
         endmethod
-        
+
         static method init takes nothing returns nothing
             call SystemTest.start("Initializing thistype: ")
             set thistype.t = CreateTrigger()
@@ -78,8 +79,8 @@ scope Reincarnation
             call thistype.add(PlayerStat.initializer.unit)
             call SystemTest.end()
         endmethod
-        
-        
+
+
     endstruct
-    
+
 endscope

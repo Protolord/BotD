@@ -2,7 +2,6 @@ scope Destinction
 
     globals
         private constant integer SPELL_ID = 'AH21'
-        private constant string SFX = "Abilities\\Spells\\Human\\DivineShield\\DivineShieldTarget.mdl"
     endglobals
 
     private function Duration takes integer level returns real
@@ -11,7 +10,6 @@ scope Destinction
 
     private struct SpellBuff extends Buff
 
-        private effect sfx
         private Disarm d
         private Invulnerable i
 
@@ -22,14 +20,11 @@ scope Destinction
         method onRemove takes nothing returns nothing
             call this.i.destroy()
             call this.d.destroy()
-            call DestroyEffect(this.sfx)
-            set this.sfx = null
         endmethod
 
         method onApply takes nothing returns nothing
             set this.i = Invulnerable.create(this.target)
             set this.d = Disarm.create(this.target)
-            set this.sfx = AddSpecialEffectTarget(SFX, this.target, "origin")
         endmethod
 
         private static method init takes nothing returns nothing

@@ -2,7 +2,6 @@ scope Mirage
 
     globals
         private constant integer SPELL_ID = 'AH41'
-        private constant string SFX_BUFF = "Models\\Effects\\Mirage.mdx"
     endglobals
 
     //In Percent
@@ -12,25 +11,14 @@ scope Mirage
 
     private struct SpellBuff extends Buff
 
-        private effect sfx
-
         private static constant integer RAWCODE = 'BH41'
         private static constant integer DISPEL_TYPE = BUFF_POSITIVE
         private static constant integer STACK_TYPE = BUFF_STACK_NONE
 
-        method onRemove takes nothing returns nothing
-            call DestroyEffect(this.sfx)
-            set this.sfx = null
-        endmethod
-
         private static method onDamage takes nothing returns nothing
-            if Damage.type == DAMAGE_TYPE_PHYSICAL and not Damage.coded and Buff.has(null, Damage.target, SpellBuff.typeid) then
+            if Damage.type == DAMAGE_TYPE_PHYSICAL and not Damage.coded and Buff.has(null, Damage.target, thistype.typeid) then
                 set Damage.amount = 0
             endif
-        endmethod
-
-        method onApply takes nothing returns nothing
-            set this.sfx = AddSpecialEffectTarget(SFX_BUFF, this.target, "origin")
         endmethod
 
         private static method init takes nothing returns nothing

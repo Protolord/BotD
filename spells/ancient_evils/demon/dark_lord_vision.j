@@ -3,10 +3,9 @@ scope DarkLordVision
     globals
         private constant integer SPELL_ID = 'A532'
         private constant integer BUFF_ID = 'B532'
-        private constant string SFX = "Models\\Effects\\DarkLordVisionBuff.mdx"
         private constant string SFX_TARGET = "Models\\Effects\\DarkLordVisionTarget.mdx"
-        private constant real NODE_RADIUS = 400
-        private constant real TIMEOUT = 0.05
+        private constant real NODE_RADIUS = 200
+        private constant real TIMEOUT = 0.03125
     endglobals
 
     private function RevealThreshold takes integer level returns real
@@ -19,22 +18,22 @@ scope DarkLordVision
         endif
         return 30.00
     endfunction
-    
+
     private function TargetFilter takes unit u, player owner returns boolean
         return UnitAlive(u) and IsUnitEnemy(u, owner) and not IsUnitType(u, UNIT_TYPE_MAGIC_IMMUNE) and not IsUnitType(u, UNIT_TYPE_STRUCTURE)
     endfunction
-    
-    private struct SightSource extends array 
+
+    private struct SightSource extends array
         implement Alloc
-        
+
         private FlySight fs
         private effect sfx
         readonly unit u
         readonly unit target
-        
+
         readonly thistype next
         readonly thistype prev
-        
+
         method destroy takes nothing returns nothing
             set this.prev.next = this.next
             set this.next.prev = this.prev
@@ -50,7 +49,7 @@ scope DarkLordVision
             set this.target = null
             call this.deallocate()
         endmethod
-        
+
         static method create takes thistype head, unit target, player owner returns thistype
             local thistype this = thistype.allocate()
             local string s = SFX_TARGET
@@ -70,16 +69,16 @@ scope DarkLordVision
             set this.prev.next = this
             return this
         endmethod
-        
+
         static method head takes nothing returns thistype
             local thistype this = thistype.allocate()
             set this.next = this
             set this.prev = this
             return this
         endmethod
-        
+
     endstruct
-    
+
     private struct SpellBuff extends Buff
 
         public SightSource ss
@@ -88,14 +87,13 @@ scope DarkLordVision
         public real threshold
         private player owner
         private group visible
-        private effect sfx
 
         private static group g
 
         private static constant integer RAWCODE = 'B532'
         private static constant integer DISPEL_TYPE = BUFF_POSITIVE
         private static constant integer STACK_TYPE = BUFF_STACK_NONE
-        
+
         method onRemove takes nothing returns nothing
             local SightSource sight = this.ss.next
             call this.pop()
@@ -118,8 +116,6 @@ scope DarkLordVision
                 set this.ts = 0
             endif
             call ReleaseGroup(this.visible)
-            call DestroyEffect(this.sfx)
-            set this.sfx = null
             set this.visible = null
             set this.owner = null
         endmethod
@@ -168,9 +164,8 @@ scope DarkLordVision
         endmethod
 
         implement List
-        
+
         method onApply takes nothing returns nothing
-            set this.sfx = AddSpecialEffectTarget(SFX, this.target, "overhead")
             set this.owner = GetOwningPlayer(this.target)
             set this.visible = NewGroup()
             if GetUnitAbilityLevel(this.source, SPELL_ID) < 11 then
@@ -183,12 +178,12 @@ scope DarkLordVision
             call PreloadSpell(thistype.RAWCODE)
             set thistype.g = CreateGroup()
         endmethod
-        
+
         implement BuffApply
     endstruct
 
     struct DarkLordVision extends array
-        
+
         private static method onCast takes nothing returns nothing
             local unit u = GetTriggerUnit()
             local integer lvl = GetUnitAbilityLevel(u, SPELL_ID)
@@ -214,14 +209,14 @@ scope DarkLordVision
             set u = null
             call SystemMsg.create(GetUnitName(GetTriggerUnit()) + " cast thistype")
         endmethod
-        
+
         static method init takes nothing returns nothing
             call SystemTest.start("Initializing thistype: ")
             call SpellBuff.initialize()
             call RegisterSpellEffectEvent(SPELL_ID, function thistype.onCast)
             call SystemTest.end()
         endmethod
-        
+
     endstruct
-    
+
 endscope

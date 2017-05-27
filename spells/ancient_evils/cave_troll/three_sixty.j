@@ -16,7 +16,7 @@ scope ThreeSixty
     endfunction
 
     private function Radius takes integer level returns real
-        return 350.0 + 0.0*level
+        return 275.0 + 0.0*level
     endfunction
 
     private function TargetFilter takes unit u, player p returns boolean

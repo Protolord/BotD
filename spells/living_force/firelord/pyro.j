@@ -11,7 +11,6 @@ scope Pyro
     globals
         //Burn Debuff
         private constant real ATK_PERCENT_REDUCE = 0.3
-        private constant string SFX_BUFF = "Environment\\LargeBuildingFire\\LargeBuildingFire2.mdl"
     endglobals
 
     private function BaseDamage takes integer level returns real
@@ -36,7 +35,6 @@ scope Pyro
 
     struct Burn extends Buff
 
-        private effect sfx
         private AtkDamagePercent adp
 
         private static constant integer RAWCODE = 'DH50'
@@ -44,13 +42,10 @@ scope Pyro
         private static constant integer STACK_TYPE = BUFF_STACK_NONE
 
         method onRemove takes nothing returns nothing
-            call DestroyEffect(this.sfx)
             call this.adp.destroy()
-            set this.sfx = null
         endmethod
 
         method onApply takes nothing returns nothing
-            set this.sfx = AddSpecialEffectTarget(SFX_BUFF, this.target, "chest")
             set this.adp = AtkDamagePercent.create(this.target, -ATK_PERCENT_REDUCE)
         endmethod
 

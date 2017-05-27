@@ -1,42 +1,38 @@
 scope EngulfedFires
- 
+
     globals
         private constant integer SPELL_ID = 'A544'
-        private constant string SFX = "Models\\Effects\\EngulfedFires.mdx"
         private constant integer SET_MAX_LIFE = 'ASML'
     endglobals
-    
+
     private function Duration takes integer level returns real
         if level == 11 then
             return 20.0
         endif
         return 0.5*level + 5.0
     endfunction
-    
+
     private struct SpellBuff extends Buff
-        
-        private effect sfx
+
         private real hp
         private trigger trg
         private trigger dmgTrg
-        
+
         private static Table tb
 
         private static constant integer RAWCODE = 'B544'
         private static constant integer DISPEL_TYPE = BUFF_POSITIVE
         private static constant integer STACK_TYPE = BUFF_STACK_NONE
-        
+
         method onRemove takes nothing returns nothing
             call thistype.tb.remove(GetHandleId(this.dmgTrg))
             call thistype.tb.remove(GetHandleId(this.trg))
             call DestroyTrigger(this.dmgTrg)
             call DestroyTrigger(this.trg)
-            call DestroyEffect(this.sfx)
             set this.dmgTrg = null
             set this.trg = null
-            set this.sfx = null
         endmethod
-        
+
         private static method onChange takes nothing returns boolean
             local thistype this = thistype.tb[GetHandleId(GetTriggeringTrigger())]
             call SetWidgetLife(this.target, this.hp)
@@ -55,9 +51,8 @@ scope EngulfedFires
             call TimerStart(NewTimerEx(this), 0.0, false, function thistype.enable)
             return false
         endmethod
-        
+
         method onApply takes nothing returns nothing
-            set this.sfx = AddSpecialEffectTarget(SFX, this.target, "origin")
             set this.hp = RMinBJ(I2R(R2I(GetWidgetLife(this.target))) + 0.5, GetUnitState(this.target, UNIT_STATE_MAX_LIFE))
             set this.dmgTrg = CreateTrigger()
             set this.trg = CreateTrigger()
@@ -75,22 +70,22 @@ scope EngulfedFires
             call PreloadSpell(thistype.RAWCODE)
             set thistype.tb = Table.create()
         endmethod
-        
+
         implement BuffApply
     endstruct
-    
+
     struct EngulfedFires extends array
         implement Alloc
-        
+
         private unit u
-        
+
         private static method expires takes nothing returns nothing
             local thistype this = ReleaseTimer(GetExpiredTimer())
             call UnitRemoveAbility(this.u, 'Bbsk')
             set this.u = null
             call this.deallocate()
         endmethod
-        
+
         private static method onCast takes nothing returns nothing
             local thistype this = thistype.allocate()
             local unit caster = GetTriggerUnit()
@@ -102,14 +97,14 @@ scope EngulfedFires
             set caster = null
             call SystemMsg.create(GetUnitName(GetTriggerUnit()) + " cast thistype")
         endmethod
-        
+
         static method init takes nothing returns nothing
             call SystemTest.start("Initializing thistype: ")
             call RegisterSpellEffectEvent(SPELL_ID, function thistype.onCast)
             call SpellBuff.initialize()
             call SystemTest.end()
         endmethod
-        
+
     endstruct
-    
+
 endscope

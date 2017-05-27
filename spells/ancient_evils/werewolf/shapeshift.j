@@ -9,7 +9,7 @@ scope ShapeShift
     endglobals
 
     struct Shapeshift extends array
-        
+
         private effect sfx
         private effect sfx2
         private unit u
@@ -18,10 +18,10 @@ scope ShapeShift
         private boolean human
         private boolean transformed
         private real ctr
-        
+
         private Root root
         private TurningOff turnOff
-        
+
         implement CTLExpire
             set this.duration = this.duration - CTL_TIMEOUT
             if this.duration > 0 then
@@ -63,7 +63,7 @@ scope ShapeShift
                 endif
             endif
         implement CTLEnd
-        
+
         private static method onCast takes nothing returns nothing
             local unit u = GetTriggerUnit()
             local thistype this = thistype.create()
@@ -87,13 +87,15 @@ scope ShapeShift
             set u = null
             call SystemMsg.create(GetUnitName(GetTriggerUnit()) + " cast thistype")
         endmethod
-        
+
         static method init takes nothing returns nothing
             call SystemTest.start("Initializing thistype: ")
             call RegisterSpellEffectEvent(SPELL_ID, function thistype.onCast)
+            call Root.registerTransform(SPELL_ID, 1.0)
+            call Movespeed.registerTransform(SPELL_ID, 1.0)
             call SystemTest.end()
         endmethod
-        
+
     endstruct
-    
+
 endscope

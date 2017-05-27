@@ -2,7 +2,6 @@ scope Reaper
 
     globals
         private constant integer SPELL_ID = 'A712'
-        private constant string BUFF_SFX = "Models\\Effects\\Reaper.mdx"
         private constant real LIMIT = 2000.0
     endglobals
 
@@ -23,7 +22,6 @@ scope Reaper
 
     private struct SpellBuff extends Buff
 
-        private effect sfx
         private real bonus
         private AtkDamage ad
 
@@ -32,15 +30,12 @@ scope Reaper
         private static constant integer STACK_TYPE = BUFF_STACK_NONE
 
         method onRemove takes nothing returns nothing
-            call DestroyEffect(this.sfx)
             call this.ad.destroy()
-            set this.sfx = null
         endmethod
 
         method onApply takes nothing returns nothing
             set this.bonus = 0
             set this.ad = AtkDamage.create(this.target, 0)
-            set this.sfx = AddSpecialEffectTarget(BUFF_SFX, this.target, "weapon right")
         endmethod
 
         method reapply takes integer level returns nothing

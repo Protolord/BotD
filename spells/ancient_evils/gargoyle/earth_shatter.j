@@ -3,7 +3,6 @@ scope EarthShatter
     globals
         private constant integer SPELL_ID = 'A612'
         private constant string SFX = "Models\\Effects\\EarthShatter.mdx"
-        private constant string SFX_TARGET = "Abilities\\Spells\\Orc\\StasisTrap\\StasisTotemTarget.mdl"
         private constant attacktype ATTACK_TYPE = ATTACK_TYPE_NORMAL
         private constant damagetype DAMAGE_TYPE = DAMAGE_TYPE_MAGIC
     endglobals
@@ -42,23 +41,19 @@ scope EarthShatter
 
         readonly Movespeed ms
         readonly Atkspeed as
-        private effect sfx
 
         private static constant integer RAWCODE = 'D612'
         private static constant integer DISPEL_TYPE = BUFF_NEGATIVE
         private static constant integer STACK_TYPE = BUFF_STACK_PARTIAL
 
         method onRemove takes nothing returns nothing
-            call DestroyEffect(this.sfx)
             call this.as.destroy()
             call this.ms.destroy()
-            set this.sfx = null
         endmethod
 
         method onApply takes nothing returns nothing
             set this.as = Atkspeed.create(this.target, 0)
             set this.ms = Movespeed.create(this.target, 0, 0)
-            set this.sfx = AddSpecialEffectTarget(SFX_TARGET, this.target, "origin")
         endmethod
 
         private static method init takes nothing returns nothing

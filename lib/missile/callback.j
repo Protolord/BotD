@@ -8,7 +8,7 @@ module MissileCallback
         - Register a code that will execute when a Missile instance hits its unit target or reached its position.
 */
     //On Hit
-    private static trigger array trgOnHit
+    public static trigger array trgOnHit
     private static thistype hittingObj
 
     static method getHit takes nothing returns thistype
@@ -25,8 +25,10 @@ module MissileCallback
     endmethod
 
     method registerOnHit takes code c returns nothing
-        set thistype.trgOnHit[this] = CreateTrigger()
-        call TriggerAddCondition(thistype.trgOnHit[this], Filter(c))
+        if thistype.trgOnHit[this] == null then
+            set thistype.trgOnHit[this] = CreateTrigger()
+            call TriggerAddCondition(thistype.trgOnHit[this], Filter(c))
+        endif
     endmethod
 
 endmodule

@@ -24,7 +24,6 @@ scope Testudo
     private struct SpellBuffUlt extends Buff
 
         private integer lvl
-        private effect sfx
         private Armor a
         private SpellImmunity si
 
@@ -37,16 +36,13 @@ scope Testudo
             call SetPlayerAbilityAvailable(ps.player, ps.spell1.id, true)
             call SetPlayerAbilityAvailable(ps.player, ps.spell3.id, true)
             call SetPlayerAbilityAvailable(ps.player, ps.spell4.id, true)
-            call DestroyEffect(this.sfx)
             call this.si.destroy()
             call this.a.destroy()
-            set this.sfx = null
         endmethod
 
         method onApply takes nothing returns nothing
             local PlayerStat ps = PlayerStat.get(GetOwningPlayer(this.target))
             set this.lvl = GetUnitAbilityLevel(this.target, SPELL_ID)
-            set this.sfx = AddSpecialEffectTarget(SFX, this.target, "chest")
             set this.a = Armor.create(this.target, ArmorBonus(this.lvl))
             set this.si = SpellImmunity.create(this.target)
             call SetPlayerAbilityAvailable(ps.player, ps.spell1.id, false)
@@ -64,7 +60,6 @@ scope Testudo
     private struct SpellBuff extends Buff
 
         private integer lvl
-        private effect sfx
         private Armor a
         private SpellResistance sr
 
@@ -77,16 +72,13 @@ scope Testudo
             call SetPlayerAbilityAvailable(ps.player, ps.spell1.id, true)
             call SetPlayerAbilityAvailable(ps.player, ps.spell3.id, true)
             call SetPlayerAbilityAvailable(ps.player, ps.spell4.id, true)
-            call DestroyEffect(this.sfx)
             call this.sr.destroy()
             call this.a.destroy()
-            set this.sfx = null
         endmethod
 
         method onApply takes nothing returns nothing
             local PlayerStat ps = PlayerStat.get(GetOwningPlayer(this.target))
             set this.lvl = GetUnitAbilityLevel(this.target, SPELL_ID)
-            set this.sfx = AddSpecialEffectTarget(SFX, this.target, "chest")
             set this.a = Armor.create(this.target, ArmorBonus(this.lvl))
             set this.sr = SpellResistance.create(this.target, SpellResistBonus(this.lvl))
             call SetPlayerAbilityAvailable(ps.player, ps.spell1.id, false)
@@ -151,6 +143,8 @@ scope Testudo
             set thistype.tb = Table.create()
             call PreloadUnit(UNIT_ID)
             call RegisterSpellEffectEvent(SPELL_ID, function thistype.onCast)
+            call Root.registerTransform(SPELL_ID, 1.0)
+            call Movespeed.registerTransform(SPELL_ID, 1.0)
             call SpellBuff.initialize()
             call SpellBuffUlt.initialize()
             call SystemTest.end()

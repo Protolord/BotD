@@ -3,7 +3,6 @@ scope SoulMark
     globals
         private constant integer SPELL_ID = 'A732'
         private constant string MODEL = "Models\\Effects\\SoulBreak.mdx"
-        private constant string BUFF_SFX = "Abilities\\Spells\\Other\\SoulBurn\\SoulBurnbuff.mdl"
         private constant real TIMEOUT = 0.05
         private constant integer TRUE_SIGHT_ABILITY = 'ATSS'
         private constant real RADIUS = 300.0
@@ -15,7 +14,6 @@ scope SoulMark
 
     private struct SpellBuff extends Buff
 
-        private effect sfx
         private unit dummy
 
         private static constant integer RAWCODE = 'D732'
@@ -24,11 +22,9 @@ scope SoulMark
 
         method onRemove takes nothing returns nothing
             call this.pop()
-            call DestroyEffect(this.sfx)
             call UnitClearBonus(this.dummy, BONUS_SIGHT_RANGE)
             call UnitRemoveAbility(this.dummy, TRUE_SIGHT_ABILITY)
             call RecycleDummy(this.dummy)
-            set this.sfx = null
             set this.dummy = null
         endmethod
 
@@ -45,7 +41,6 @@ scope SoulMark
         implement List
 
         method onApply takes nothing returns nothing
-            set this.sfx = AddSpecialEffectTarget(BUFF_SFX, this.target, "overhead")
             set this.dummy = GetRecycledDummyAnyAngle(GetUnitX(this.target), GetUnitY(this.target), 0)
             call SetUnitOwner(this.dummy, GetOwningPlayer(this.source), false)
             call PauseUnit(this.dummy, false)

@@ -1,11 +1,10 @@
 
 scope InfernalChains
-    
+
     globals
         private constant integer SPELL_ID = 'A523'
         private constant attacktype ATTACK_TYPE = ATTACK_TYPE_CHAOS //Changing it may not properly affect buildings
         private constant damagetype DAMAGE_TYPE = DAMAGE_TYPE_UNIVERSAL
-        private constant string BUFF_SFX = "Models\\Effects\\InfernalChains.mdx"
     endglobals
 
     //Damage is a percentage of target's max hp
@@ -30,39 +29,32 @@ scope InfernalChains
         endif
         return 100.0//1.0
     endfunction
-    
+
     private function TargetFilter takes unit u, player p returns boolean
         return UnitAlive(u) and IsUnitType(u, UNIT_TYPE_STRUCTURE)
     endfunction
-    
+
     private struct SpellBuff extends Buff
-        
-        private effect sfx
+
         public real dmg
 
         private static constant integer RAWCODE = 'D523'
         private static constant integer DISPEL_TYPE = BUFF_NONE
         private static constant integer STACK_TYPE = BUFF_STACK_PARTIAL
-        
-        method onRemove takes nothing returns nothing
-            call DestroyEffect(this.sfx)
-            set this.sfx = null
-        endmethod
-        
+
         method onApply takes nothing returns nothing
             set this.dmg = DamageGrowth(GetUnitAbilityLevel(this.source, SPELL_ID))
-            set this.sfx = AddSpecialEffectTarget(BUFF_SFX, this.target, "origin")
         endmethod
 
         private static method init takes nothing returns nothing
             call PreloadSpell(thistype.RAWCODE)
         endmethod
-        
+
         implement BuffApply
     endstruct
-    
+
     struct InfernalChains extends array
-    
+
         private static trigger trg
 
         private static method onDamage takes nothing returns boolean
@@ -85,7 +77,7 @@ scope InfernalChains
             endif
             return false
         endmethod
-        
+
         static method init takes nothing returns nothing
             call SystemTest.start("Initializing thistype: ")
             set thistype.trg = CreateTrigger()
@@ -94,7 +86,7 @@ scope InfernalChains
             call SpellBuff.initialize()
             call SystemTest.end()
         endmethod
-        
+
     endstruct
-    
+
 endscope

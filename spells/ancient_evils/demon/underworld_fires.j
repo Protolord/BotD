@@ -1,5 +1,5 @@
 scope UnderworldFires
- 
+
     globals
         private constant integer SPELL_ID = 'A524'
         private constant real TIMEOUT = 0.25
@@ -7,7 +7,7 @@ scope UnderworldFires
         private constant attacktype ATTACK_TYPE = ATTACK_TYPE_NORMAL
         private constant damagetype DAMAGE_TYPE = DAMAGE_TYPE_MAGIC
     endglobals
-    
+
     private function DamagePerSecond takes integer level returns real
         if level == 11 then
             return 600.0
@@ -15,7 +15,7 @@ scope UnderworldFires
         return 30.0*level
     endfunction
 
-    private function Radius takes integer level returns real 
+    private function Radius takes integer level returns real
         return 160.0 + 0.0*level
     endfunction
 
@@ -42,6 +42,7 @@ scope UnderworldFires
             call ReleaseTimer(this.t)
             call thistype.tb.remove(GetHandleId(this.caster))
             call thistype.tb.remove(GetHandleId(this.manaTrg))
+            set this.t = null
             set this.caster = null
             set this.manaTrg = null
             call this.deallocate()
@@ -50,15 +51,14 @@ scope UnderworldFires
         private static method onPeriod takes nothing returns nothing
             local thistype this = GetTimerData(GetExpiredTimer())
             local unit u
-            call GroupUnitsInArea(thistype.g, GetUnitX(this.caster), GetUnitY(this.caster), this.radius)
+            call GroupEnumUnitsInRange(thistype.g, GetUnitX(this.caster), GetUnitY(this.caster), this.radius, null)
             loop
                 set u = FirstOfGroup(thistype.g)
-                exitwhen u == null 
+                exitwhen u == null
                 call GroupRemoveUnit(thistype.g, u)
                 if TargetFilter(u, this.owner) then
                     call AddSpecialEffectTimer(AddSpecialEffectTarget(SFX_TARGET, u, "head"), TIMEOUT)
                     call Damage.element.apply(this.caster, u, this.dmg, ATTACK_TYPE, DAMAGE_TYPE, DAMAGE_ELEMENT_FIRE)
-                    call BJDebugMsg("hp = " + R2S(GetWidgetLife(u)))
                 endif
             endloop
         endmethod
@@ -103,7 +103,7 @@ scope UnderworldFires
         private static method add takes unit u returns nothing
             call TriggerRegisterUnitEvent(thistype.trg, u, EVENT_UNIT_ISSUED_ORDER)
         endmethod
-        
+
         static method init takes nothing returns nothing
             call SystemTest.start("Initializing thistype: ")
             set thistype.trg = CreateTrigger()
@@ -114,7 +114,7 @@ scope UnderworldFires
             call thistype.add(PlayerStat.initializer.unit)
             call SystemTest.end()
         endmethod
-        
+
     endstruct
-    
+
 endscope

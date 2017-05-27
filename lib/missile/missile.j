@@ -102,6 +102,10 @@ MissileCallback:
                 call DestroyEffect(this.mdl)
                 set this.mdl = null
             endif
+            if thistype.trgOnHit[this] != null then
+                call DestroyTrigger(thistype.trgOnHit[this])
+                set thistype.trgOnHit[this] = null
+            endif
             call DummyAddRecycleTimer(this.u, 3.0)
             set this.speed = 0
             set this.u = null

@@ -1,90 +1,90 @@
 library SystemConsole /*
                             SystemConsole v1.02
                                   by Flux
-            
+
             SystemConsole is a text-console simulation for Warcraft 3.
             It main purpose is to display information to players in a
-            console format thus it logs all messages displayed so 
-            players can view it again anytime. It can hold up to 8192 
+            console format thus it logs all messages displayed so
+            players can view it again anytime. It can hold up to 8192
             line messages in its buffer.
-            It can also be used as a debugging tool through its 
+            It can also be used as a debugging tool through its
             SystemTest feature.
-            
-    
+
+
     */ requires TimerUtilsEx/*
       (nothing)
-     
+
     */ optional Table /*
      If not found, it will create a hashtable. Hashtables are limited to
      255 per map.
-    
-    
+
+
     Includes:
-        * SystemMsg 
+        * SystemMsg
             - The interface for displaying game messages.
-                
+
             API:
                 - SystemMsg.create(string msg)
                     Display message.
-                
+
                 - SystemMsg.createFor(force f, string msg)
                     Display message only to force f.
-                
+
                 - SystemMsg.createIf(boolean condition, string msg)
                     Display message if condition is true.
-                
+
                 - SystemMsg.refresh()
                     Refreshes the console. Works inside a local block.
-                    
+
                 - set SystemMsg.show = true/false
                     Controls the visibility of System Messages.
                     Works inside a local block.
-                
-                    
-                        
+
+
+
         * SystemTest
-            - Test a function or a group of functions if it 
+            - Test a function or a group of functions if it
               will execute without fail. Enclosed the function(s)
-              to be tested between SystemTest.start(msg) and 
+              to be tested between SystemTest.start(msg) and
               SystemTest.end().
-                
+
             API:
                 - SystemTest.start(string msg)
                     Starting block of SystemTest
-                
+
                 - SystemTest.startFor(force f, string msg)
                     Starting block of SystemTest that is only visible to force f.
-                    
+
                 - SystemTest.end()
                     End block of SystemTest
-        
+
     */
-    
+
     globals
         //Duration of system messages
         private constant real DURATION = 10000
-        
+
         //The time allotted for a SystemTest to finish before it is considered a failure
         private constant real DELAY = 0.25
-        
+
         //Maximum number of lines saved in memory
         public constant integer BUFFER = 256
     endglobals
-    
+
     struct SystemMsg extends array
         implement Alloc
-        
+
         string value
-        
+
         readonly thistype next
         readonly thistype prev
-        
+
         private static boolean privShow = false
         readonly static integer count = 0
-        
+
         static integer lineCount = 0
         static integer cursor = 16
-        
+
         static method refresh takes nothing returns nothing
             local thistype this = thistype(0).next
             local integer i = 0
@@ -101,14 +101,14 @@ library SystemConsole /*
                 endloop
             endif
         endmethod
-        
+
         method destroy takes nothing returns nothing
             set this.next.prev = this.prev
             set this.prev.next = this.next
             set thistype.count = thistype.count - 1
             call this.deallocate()
         endmethod
-        
+
         static method create takes string s returns thistype
             local thistype this = thistype.allocate()
             set thistype.lineCount = thistype.lineCount + 1
@@ -130,11 +130,11 @@ library SystemConsole /*
             endif
             return this
         endmethod
-        
+
         static method operator show takes nothing returns boolean
             return thistype.privShow
         endmethod
-        
+
         static method operator show= takes boolean b returns nothing
             set thistype.privShow = b
             if b then
@@ -143,16 +143,16 @@ library SystemConsole /*
                 call ClearTextMessages()
             endif
         endmethod
-        
+
     endstruct
-    
+
     struct SystemTest extends array
         implement Alloc
-    
+
         private boolean checker
         private timer t
         private SystemMsg msg
-        
+
         private thistype next
 
         static if LIBRARY_Table then
@@ -160,7 +160,7 @@ library SystemConsole /*
         else
             private static hashtable hash = InitHashtable()
         endif
-        
+
         method destroy takes nothing returns nothing
             if this.msg > 0 then
                 if this.checker then
@@ -174,11 +174,11 @@ library SystemConsole /*
             set this.t = null
             call this.deallocate()
         endmethod
-        
+
         private static method expires takes nothing returns nothing
             call thistype(ReleaseTimer(GetExpiredTimer())).destroy()
         endmethod
-        
+
         static method create takes nothing returns thistype
             local thistype this = thistype.allocate()
             set this.checker = false
@@ -194,7 +194,7 @@ library SystemConsole /*
             local thistype this = thistype.create()
             set this.msg = SystemMsg.create(s)
         endmethod
-        
+
         static method end takes nothing returns nothing
             local thistype this = thistype(0).next
             debug if this == 0 then
@@ -206,13 +206,13 @@ library SystemConsole /*
             set this.checker = true
             call this.destroy()
         endmethod
-        
+
         static if LIBRARY_Table then
             private static method onInit takes nothing returns nothing
                 set thistype.tb = Table.create()
             endmethod
         endif
-        
+
     endstruct
-    
+
 endlibrary

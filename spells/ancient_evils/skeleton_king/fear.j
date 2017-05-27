@@ -2,10 +2,8 @@ scope Fear
 
     globals
         private constant integer SPELL_ID = 'A724'
-        private constant integer BUFF_ID = 'B724'
         private constant real TIMEOUT = 0.125
         private constant real ANGLE_TOLERANCE = 30.0 //In degrees
-        private constant string BUFF_SFX = "Models\\Effects\\FearTarget.mdx"
     endglobals
 
     private function Range takes integer level returns real
@@ -15,9 +13,13 @@ scope Fear
     //In Percent
     private function DamageReduction takes integer level returns real
         if level == 11 then
-            return 60.0
+            return 50.0
         endif
         return 3.0*level
+    endfunction
+
+    private function ManacostPerSecond takes integer level returns real
+        return 10.0 + 0.0*level
     endfunction
 
     private function TargetFilter takes unit u, player p returns boolean
@@ -26,22 +28,18 @@ scope Fear
 
     private struct SpellBuff extends Buff
 
-        private effect sfx
         private AtkDamagePercent adp
 
         private static constant integer RAWCODE = 'D724'
         private static constant integer DISPEL_TYPE = BUFF_NEGATIVE
-        private static constant integer STACK_TYPE = BUFF_STACK_FULL
+        private static constant integer STACK_TYPE = BUFF_STACK_NONE
 
         method onRemove takes nothing returns nothing
-            call DestroyEffect(this.sfx)
             call this.adp.destroy()
-            set this.sfx = null
         endmethod
 
         method onApply takes nothing returns nothing
             set this.adp = AtkDamagePercent.create(this.target, -DamageReduction(GetUnitAbilityLevel(this.source, SPELL_ID))/100)
-            set this.sfx = AddSpecialEffectTarget(BUFF_SFX, this.target, "origin")
         endmethod
 
         private static method init takes nothing returns nothing
@@ -53,28 +51,51 @@ scope Fear
 
     struct Fear extends array
         implement Alloc
+        implement List
 
-        private unit u
+        private unit caster
+        private trigger manaTrg
         private real range
+        private real mc
         private group affected
 
+        private static trigger trg
         private static Table tb
-        private static group g
         private static thistype global
+        private static group g
         private static real tempX
         private static real tempY
+
+        private method destroy takes nothing returns nothing
+            local unit u
+            call this.pop()
+            loop
+                set u = FirstOfGroup(this.affected)
+                exitwhen u == null
+                call GroupRemoveUnit(this.affected, u)
+                call Buff.get(this.caster, u, SpellBuff.typeid).remove()
+            endloop
+            call DestroyTrigger(this.manaTrg)
+            call ReleaseGroup(this.affected)
+            call thistype.tb.remove(GetHandleId(this.caster))
+            call thistype.tb.remove(GetHandleId(this.manaTrg))
+            set this.caster = null
+            set this.manaTrg = null
+            set this.affected = null
+            call this.deallocate()
+        endmethod
 
         private static method picked takes nothing returns nothing
             local thistype this = thistype.global
             local unit u = GetEnumUnit()
-            local SpellBuff b = Buff.get(this.u, u, SpellBuff.typeid)
+            local SpellBuff b = Buff.get(this.caster, u, SpellBuff.typeid)
             local real angle
             if b > 0  then
-                set angle = Atan2(GetUnitY(u) - tempY, GetUnitX(u) - tempX)*bj_RADTODEG
+                set angle = Atan2(GetUnitY(u) - thistype.tempY, GetUnitX(u) - thistype.tempX)*bj_RADTODEG
                 if angle < 0 then
                     set angle = angle + 360
                 endif
-                if RAbsBJ(GetUnitFacing(u) - angle) > ANGLE_TOLERANCE or not UnitAlive(this.u) then
+                if RAbsBJ(GetUnitFacing(u) - angle) > ANGLE_TOLERANCE then
                     call b.remove()
                     call GroupRemoveUnit(this.affected, u)
                 endif
@@ -83,84 +104,89 @@ scope Fear
         endmethod
 
         private static method onPeriod takes nothing returns nothing
-            local thistype this = thistype.top
+            local thistype this = thistype(0).next
             local player p
             local real angle
             local unit u
             loop
                 exitwhen this == 0
-                set tempX = GetUnitX(this.u)
-                set tempY = GetUnitY(this.u)
+                set thistype.tempX = GetUnitX(this.caster)
+                set thistype.tempY = GetUnitY(this.caster)
                 set thistype.global = this
                 call ForGroup(this.affected, function thistype.picked)
-                if UnitAlive(this.u) then
-                    call GroupEnumUnitsInRange(thistype.g, tempX, tempY, this.range, null)
-                    set p = GetOwningPlayer(this.u)
+                if UnitAlive(this.caster) then
+                    call GroupEnumUnitsInRange(thistype.g, thistype.tempX, thistype.tempY, this.range, null)
+                    set p = GetOwningPlayer(this.caster)
                     loop
                         set u = FirstOfGroup(thistype.g)
                         exitwhen u == null
                         call GroupRemoveUnit(thistype.g, u)
-                        if TargetFilter(u, p) and not Buff.has(this.u, u, SpellBuff.typeid) and IsUnitVisible(this.u, GetOwningPlayer(u)) then
-                            set angle = Atan2(tempY - GetUnitY(u), tempX - GetUnitX(u))*bj_RADTODEG
+                        if TargetFilter(u, p) and not Buff.has(this.caster, u, SpellBuff.typeid) and IsUnitVisible(this.caster, GetOwningPlayer(u)) then
+                            set angle = Atan2(thistype.tempY - GetUnitY(u), thistype.tempX - GetUnitX(u))*bj_RADTODEG
                             if angle < 0 then
                                 set angle = angle + 360
                             endif
                             if RAbsBJ(GetUnitFacing(u) - angle) <= ANGLE_TOLERANCE then
-                                call SpellBuff.add(this.u, u)
+                                call SpellBuff.add(this.caster, u)
                                 call GroupAddUnit(this.affected, u)
                             endif
                         endif
                     endloop
                 endif
+                call SetUnitState(this.caster, UNIT_STATE_MANA, GetUnitState(this.caster, UNIT_STATE_MANA) - this.mc)
                 set this = this.next
             endloop
+            set p = null
         endmethod
 
-        implement Stack
-
-        private static method ultimates takes nothing returns boolean
-            local unit u = GetTriggerUnit()
-            local integer id = GetHandleId(u)
-            local thistype this
+        private static method onManaDeplete takes nothing returns boolean
+            local integer id = GetHandleId(GetTriggeringTrigger())
             if thistype.tb.has(id) then
-                set this = thistype.tb[id]
-                set this.range = Range(11)
+                call thistype(thistype.tb[id]).destroy()
+                call SetUnitState(GetTriggerUnit(), UNIT_STATE_MANA, 0.0)
+                call SystemMsg.create(GetUnitName(GetTriggerUnit()) + " deactivates thistype")
             endif
-            set u = null
             return false
         endmethod
 
-        private static method learn takes nothing returns nothing
-            local thistype this
-            local unit u
-            local integer id
+        private static method onCast takes nothing returns nothing
+            local thistype this = thistype.allocate()
             local integer lvl
-            if GetLearnedSkill() == SPELL_ID then
-                set u = GetTriggerUnit()
-                set id = GetHandleId(u)
-                if not thistype.tb.has(id) then
-                    set this = thistype.allocate()
-                    set this.u = u
-                    set this.affected = CreateGroup()
-                    set thistype.tb[id] = this
-                    call this.push(TIMEOUT)
-                    call UnitAddAbility(u, BUFF_ID)
-                    call UnitMakeAbilityPermanent(u, true, BUFF_ID)
-                else
-                    set this = thistype.tb[id]
-                endif
-                set lvl = GetUnitAbilityLevel(u, SPELL_ID)
-                set this.range = Range(lvl)
-                set u = null
+            set this.caster = GetTriggerUnit()
+            set lvl = GetUnitAbilityLevel(this.caster, SPELL_ID)
+            set this.range = Range(lvl)
+            set this.affected = NewGroup()
+            set this.mc = ManacostPerSecond(lvl)*TIMEOUT
+            set this.manaTrg = CreateTrigger()
+            call TriggerAddCondition(this.manaTrg, function thistype.onManaDeplete)
+            call TriggerRegisterUnitStateEvent(this.manaTrg, this.caster, UNIT_STATE_MANA, LESS_THAN, 1.0)
+            set thistype.tb[GetHandleId(this.caster)] = this
+            set thistype.tb[GetHandleId(this.manaTrg)] = this
+            call this.push(TIMEOUT)
+            call SystemMsg.create(GetUnitName(GetTriggerUnit()) + " activates thistype")
+        endmethod
+
+        private static method unCast takes nothing returns boolean
+            local integer id = GetHandleId(GetTriggerUnit())
+            if GetIssuedOrderId() == ORDER_manashieldoff and thistype.tb.has(id) then
+                call thistype(thistype.tb[id]).destroy()
+                call SystemMsg.create(GetUnitName(GetTriggerUnit()) + " deactivates thistype")
             endif
+            return false
+        endmethod
+
+        private static method add takes unit u returns nothing
+            call TriggerRegisterUnitEvent(thistype.trg, u, EVENT_UNIT_ISSUED_ORDER)
         endmethod
 
         static method init takes nothing returns nothing
             call SystemTest.start("Initializing thistype: ")
-            call RegisterPlayerUnitEvent(EVENT_PLAYER_HERO_SKILL, function thistype.learn)
-            call PlayerStat.ultimateEvent(function thistype.ultimates)
-            set thistype.tb = Table.create
+            set thistype.trg = CreateTrigger()
+            set thistype.tb = Table.create()
             set thistype.g = CreateGroup()
+            call TriggerAddCondition(thistype.trg, function thistype.unCast)
+            call RegisterSpellEffectEvent(SPELL_ID, function thistype.onCast)
+            call thistype.add(PlayerStat.initializer.unit)
             call SpellBuff.initialize()
             call SystemTest.end()
         endmethod

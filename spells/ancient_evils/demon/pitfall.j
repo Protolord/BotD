@@ -51,6 +51,15 @@ scope Pitfall
             call this.deallocate()
         endmethod
 
+        method clear takes nothing returns nothing
+            local thistype node = this.next
+            loop
+                exitwhen node == this
+                call node.destroy()
+                set node = node.next
+            endloop
+        endmethod
+
         static method add takes thistype head, real x, real y returns nothing
             local thistype this = thistype.allocate()
             set this.next = head
@@ -73,7 +82,6 @@ scope Pitfall
 
         readonly Movespeed ms
         readonly Atkspeed as
-        private effect sfx
         private timer t
         public real dmg
 
@@ -84,9 +92,7 @@ scope Pitfall
         method onRemove takes nothing returns nothing
             call this.ms.destroy()
             call this.as.destroy()
-            call DestroyEffect(this.sfx)
             call ReleaseTimer(this.t)
-            set this.sfx = null
             set this.t = null
         endmethod
 
@@ -102,7 +108,6 @@ scope Pitfall
         method onApply takes nothing returns nothing
             set this.ms = Movespeed.create(this.target, 0, 0)
             set this.as = Atkspeed.create(this.target, 0)
-            set this.sfx = AddSpecialEffectTarget(SFX_BUFF, this.target, "chest")
             set this.t = NewTimerEx(this)
             call TimerStart(this.t, TIMEOUT, true, function thistype.onPeriod)
         endmethod
@@ -132,18 +137,13 @@ scope Pitfall
 
         private method remove takes nothing returns nothing
             local unit u
-            local Flame f = this.sfxHead.next
             loop
                 set u = FirstOfGroup(this.g)
                 exitwhen u == null
                 call GroupRemoveUnit(this.g, u)
                 call Buff(this.tb[GetHandleId(u)]).remove()
             endloop
-            loop
-                exitwhen f == this.sfxHead
-                call f.destroy()
-                set f = f.next
-            endloop
+            call this.sfxHead.clear()
             call this.sfxHead.destroy()
             call this.pit.destroy()
             call this.tb.destroy()
@@ -221,7 +221,7 @@ scope Pitfall
             set this.pit = Effect.createAnyAngle(SFX, this.x, this.y, 0)
             set this.pit.scale = this.radius/115.0
             set this.sfxHead = Flame.head()
-            set da = 2*bj_PI/R2I(2*bj_PI*radius/SPACING)
+            set da = 2*bj_PI/R2I(2*bj_PI*this.radius/SPACING)
             if da > bj_PI/3 then
                 set da = bj_PI/3
             endif

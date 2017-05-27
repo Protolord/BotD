@@ -28,6 +28,7 @@ library CombatStat uses Table
         private integer dice
         private integer sides
         private integer range
+        private attacktype at
         private integer attribute
 
         private static Table tb
@@ -45,6 +46,14 @@ library CombatStat uses Table
             return range <= MELEE_THRESHOLD and range > 0
         endmethod
 
+        static method getAttackType takes unit u returns attacktype
+            local thistype this = thistype.tb[GetUnitTypeId(u)]
+            if this > 0 then
+                return this.at
+            endif
+            return null
+        endmethod
+
         static method getDamage takes unit u returns real
             local thistype this = thistype.tb[GetUnitTypeId(u)]
             if this > 0 then
@@ -56,10 +65,11 @@ library CombatStat uses Table
             return 0.0
         endmethod
 
-        static method unit takes integer unitId, integer baseDmg, integer dice, integer sides, integer range returns nothing
+        static method unit takes integer unitId, attacktype attackType, integer baseDmg, integer dice, integer sides, integer range returns nothing
             local thistype this
             if not thistype.tb.has(unitId) then
                 set this = thistype.allocate()
+                set this.at = attackType
                 set this.baseDmg = baseDmg
                 set this.dice = dice
                 set this.sides = sides
@@ -68,10 +78,11 @@ library CombatStat uses Table
             endif
         endmethod
 
-        static method hero takes integer unitId, integer baseDmg, integer dice, integer sides, integer range, integer attribute returns nothing
+        static method hero takes integer unitId, attacktype attackType, integer baseDmg, integer dice, integer sides, integer range, integer attribute returns nothing
             local thistype this
             if not thistype.tb.has(unitId) then
                 set this = thistype.allocate()
+                set this.at = attackType
                 set this.baseDmg = baseDmg
                 set this.dice = dice
                 set this.sides = sides

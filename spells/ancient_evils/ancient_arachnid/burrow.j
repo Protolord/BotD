@@ -1,4 +1,4 @@
-scope Burrow 
+scope Burrow
     globals
         private constant integer SPELL_ID = 'A4XX'
         private constant integer BURROWED_UNIT_ID = 'UBAr'
@@ -8,13 +8,13 @@ scope Burrow
         private constant string SFX = "Objects\\Spawnmodels\\Undead\\ImpaleTargetDust\\ImpaleTargetDust.mdl"
         private constant string SFX_SPIKE = "Abilities\\Spells\\Undead\\Impale\\ImpaleMissTarget.mdl"
     endglobals
-    
+
     private function TargetFilter takes unit u, player p returns boolean
         return UnitAlive(u) and IsUnitEnemy(u, p) and not IsUnitType(u, UNIT_TYPE_STRUCTURE) and not IsUnitType(u, UNIT_TYPE_MAGIC_IMMUNE)
     endfunction
-    
+
     struct Burrow extends array
-        
+
         private static method onCast takes nothing returns nothing
             local unit caster = GetTriggerUnit()
             local real x = GetUnitX(caster)
@@ -57,13 +57,15 @@ scope Burrow
             set caster = null
             call SystemMsg.create(GetUnitName(GetTriggerUnit()) + " cast thistype")
         endmethod
-        
+
         static method init takes nothing returns nothing
             call SystemTest.start("Initializing thistype: ")
             call RegisterSpellEffectEvent(SPELL_ID, function thistype.onCast)
+            call Root.registerTransform(SPELL_ID, 1.0)
+            call Movespeed.registerTransform(SPELL_ID, 1.0)
             call SystemTest.end()
         endmethod
-        
+
     endstruct
-    
+
 endscope

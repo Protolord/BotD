@@ -3,9 +3,8 @@ scope Fetch
     globals
         private constant integer SPELL_ID = 'A233'
         private constant integer BUFF_ID = 'B233'
-        private constant string SFX = ""
         private constant string SFX_TARGET = "Models\\Effects\\FetchTarget.mdx"
-        private constant real NODE_RADIUS = 400
+        private constant real NODE_RADIUS = 200
         private constant real TIMEOUT = 0.05
     endglobals
 
@@ -85,7 +84,6 @@ scope Fetch
         public real radius
         private player owner
         private group visible
-        private effect sfx
 
         private static group g
 
@@ -111,8 +109,6 @@ scope Fetch
                 set this.fs = 0
             endif
             call ReleaseGroup(this.visible)
-            call DestroyEffect(this.sfx)
-            set this.sfx = null
             set this.visible = null
             set this.owner = null
         endmethod
@@ -163,7 +159,6 @@ scope Fetch
         implement List
 
         method onApply takes nothing returns nothing
-            set this.sfx = AddSpecialEffectTarget(SFX, this.target, "overhead")
             set this.owner = GetOwningPlayer(this.target)
             set this.visible = NewGroup()
             if GetUnitAbilityLevel(this.source, SPELL_ID) < 11 then

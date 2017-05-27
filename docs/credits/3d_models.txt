@@ -14,11 +14,18 @@
         Cave Troll Club             by Hayate
         Storm Shaman                by Ujimasa Hojo
         Crusader                    by Forgotten_Warlord and Takakenji
+        Dwarf Defender              by Tranquil
         Firelord                    by Gluma
         Pyro                        by Illidan(Evil)X
         Gnome Technician            by Norinrad
-        Hunter                      by Kuhneghetz & Mr.Goblin
         Mistress                    by Cavman, Kuhneghetz
+        Nomad                       by Kuhneghetz & Mr.Goblin
+        Nomad Morph                 by olofmoleman
+        Arcanist                    by Juice_F
+        Siren                       by Tarrasque
+        Templar                     by ratamahatta
+        Treant                      by IceK
+        Viking                      by Sellenisko
 
     ABILITIES:
         Immortal Force Effect       by sPy
@@ -30,6 +37,7 @@
         Spectral Track Effect       by Sandro
         Veins of Blood Effect       by Kino
         Bloodlines Effect           by WILL THE ALMIGHTY
+        Blood Heal Effect           by Empyreal
 
         ShapeShift Blast Effects    by WILL THE ALMIGHTY
         ShapeShifting Effect        by Hermit
@@ -60,7 +68,7 @@
         Severe Wound Heal           by WILL THE ALMIGHTY
 
         Vigilant and Virtuous       by ChaoticHunter
-        Doom                        by xyzier_24
+        Doom                        by xyzier_24 and Rvn
         Taunt                       by JetFangInferno
         Hellish Cloud Buff          by JetFangInferno
         Hellish Cloud Effect        by Vortigon
@@ -123,14 +131,33 @@
 
         Stasis Trap                 by icewolf055
         Bomb Explosion              by WILL THE ALMIGHTY
+        Sticky Liquid               by kellym0
         Motion Controller (MC)      by Pvt.Toma
         MC Laser Entrance           by WILL THE ALMIGHTY
         MC Chain Head               by Infrisios
         MC Chain Elements           by Illustrike
 
         Sanctuary Missile           by Boogles
+        Sanctuary Effect            by nhocklanhox6
         Spiritual Wall              by icewolf055
         Spiritual Wall Spirit       by JetFangInferno
+        Spiritual Wall Buff         by stan0033
+
+        Silencing Pain Buff         by icewolf055
+        Silencing Pain Appear       by 00110000
+        Silencing Pain Damage       by JetFangInferno
+
+        Owl Model                   by Kuhneghetz
+        Eagle Model                 by Hayate
+        Falcon Model                by olofmoleman
+
+        Robust Force                by Mythic
+        Bash Attachment             by Empyreal and Hate
+
+        Banish Missile              by Ham Ham
+        Critical Strike Blood       by Empyreal
+
+        Wrath of the Desert Effect  by JetFangInferno
 
 
     OTHERS:

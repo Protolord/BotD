@@ -1,6 +1,6 @@
 library DamageModify uses DamageEvent/*
             ---------------------------------
-                    DamageModify v1.40
+                    DamageModify v1.42
                         by Flux
             ---------------------------------
 
@@ -172,7 +172,7 @@ library DamageModify uses DamageEvent/*
                 call DamageTrigger.executeAll()
             endif
 
-            if amount < 0.0 or changed then
+            if amount < 0.0 or (changed and amount > 0.2) then
                 set thistype.hp = GetWidgetLife(this.stackTarget)
                 set trg = CreateTrigger()
                 if amount > 0.0 then
@@ -183,9 +183,9 @@ library DamageModify uses DamageEvent/*
 
                     call SetWidgetLife(this.stackTarget, newHp)
                     if amount > 1.0 then
-                        call TriggerRegisterUnitStateEvent(trg, this.stackTarget, UNIT_STATE_LIFE, LESS_THAN, newHp - 0.01*amount)
-                    else
-                        call TriggerRegisterUnitStateEvent(trg, this.stackTarget, UNIT_STATE_LIFE, LESS_THAN, newHp - 0.01)
+                        call TriggerRegisterUnitStateEvent(trg, this.stackTarget, UNIT_STATE_LIFE, LESS_THAN, newHp - 0.2*amount)
+                    elseif amount > 0.2 then
+                        call TriggerRegisterUnitStateEvent(trg, this.stackTarget, UNIT_STATE_LIFE, LESS_THAN, newHp - 0.2)
                     endif
                 else
                     set newHp = thistype.hp + amount
@@ -194,7 +194,9 @@ library DamageModify uses DamageEvent/*
                     endif
                     call SetWidgetLife(this.stackTarget, newHp)
                     if amount < -1.0 then
-                        call TriggerRegisterUnitStateEvent(trg, this.stackTarget, UNIT_STATE_LIFE, GREATER_THAN, newHp - 0.01*amount)
+                        call TriggerRegisterUnitStateEvent(trg, this.stackTarget, UNIT_STATE_LIFE, GREATER_THAN, newHp - 0.2*amount)
+                    elseif amount < -0.2 then
+                        call TriggerRegisterUnitStateEvent(trg, this.stackTarget, UNIT_STATE_LIFE, GREATER_THAN, newHp + 0.2)
                     else
                         call TriggerRegisterUnitStateEvent(trg, this.stackTarget, UNIT_STATE_LIFE, GREATER_THAN, newHp + 0.01)
                     endif
@@ -237,7 +239,7 @@ library DamageModify uses DamageEvent/*
             call DamageTrigger2.register(thistype.registered2)
             set u = null
             static if DEBUG_SYSTEM then
-                call TimerStart(CreateTimer(), 3.0, true, function thistype.instancePrint)
+                call TimerStart(CreateTimer(), 1.5, true, function thistype.instancePrint)
             endif
         endmethod
     endmodule

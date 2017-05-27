@@ -79,6 +79,7 @@
 //! import "../lib/unit_status/combat_stat_register.j"
 //! import "../lib/unit_status/combat_stat.j"
 //! import "../lib/unit_status/disarm.j"
+//! import "../lib/unit_status/ethereal.j"
 //! import "../lib/unit_status/fly_sight.j"
 //! import "../lib/unit_status/heal.j"
 //! import "../lib/unit_status/invisible.j"
@@ -93,6 +94,7 @@
 //! import "../lib/unit_status/spell_resistance.j"
 //! import "../lib/unit_status/stun.j"
 //! import "../lib/unit_status/time_scale.j"
+//! import "../lib/unit_status/transform.j"
 //! import "../lib/unit_status/turning_off.j"
 //! import "../lib/unit_status/vertex_color.j"
 

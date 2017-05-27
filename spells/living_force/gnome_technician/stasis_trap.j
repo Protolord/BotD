@@ -3,7 +3,6 @@ scope StasisTrap
     globals
         private constant integer SPELL_ID = 'AH61'
         private constant integer UNIT_ID = 'hSta'
-        private constant string SFX_SLOW = "Abilities\\Spells\\Orc\\StasisTrap\\StasisTotemTarget.mdl"
         private constant real TIMEOUT = 0.05
     endglobals
 
@@ -43,21 +42,17 @@ scope StasisTrap
 
         private Atkspeed as
         private Movespeed ms
-        private effect sfx
 
         private static constant integer RAWCODE = 'DH61'
         private static constant integer DISPEL_TYPE = BUFF_NEGATIVE
         private static constant integer STACK_TYPE = BUFF_STACK_PARTIAL
 
         method onRemove takes nothing returns nothing
-            call DestroyEffect(this.sfx)
             call this.as.destroy()
             call this.ms.destroy()
-            set this.sfx = null
         endmethod
 
         method onApply takes nothing returns nothing
-            set this.sfx = AddSpecialEffectTarget(SFX_SLOW, this.target, "overhead")
             set this.ms = Movespeed.create(this.target, 0, 0)
             set this.as = Atkspeed.create(this.target, 0)
         endmethod

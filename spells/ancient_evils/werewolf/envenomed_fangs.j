@@ -4,7 +4,6 @@ scope EnvenomedFangs
         private constant integer SPELL_ID = 'A211'
         private constant attacktype ATTACK_TYPE = ATTACK_TYPE_NORMAL
         private constant damagetype DAMAGE_TYPE = DAMAGE_TYPE_MAGIC
-        private constant string BUFF_SFX = "Abilities\\Weapons\\PoisonSting\\PoisonStingTarget.mdl"
     endglobals
 
     private function Duration takes integer level returns real
@@ -27,7 +26,6 @@ scope EnvenomedFangs
 
     private struct SpellBuff extends Buff
 
-        private effect sfx
         private timer t
         public real dmg
 
@@ -36,10 +34,8 @@ scope EnvenomedFangs
         private static constant integer STACK_TYPE = BUFF_STACK_PARTIAL
 
         method onRemove takes nothing returns nothing
-            call DestroyEffect(this.sfx)
             call ReleaseTimer(this.t)
             set this.t = null
-            set this.sfx = null
         endmethod
 
         static method onPeriod takes nothing returns nothing
@@ -51,7 +47,6 @@ scope EnvenomedFangs
 
         method onApply takes nothing returns nothing
             set this.t = NewTimerEx(this)
-            set this.sfx = AddSpecialEffectTarget(BUFF_SFX, this.target, "chest")
             call TimerStart(this.t, 1.00, true, function thistype.onPeriod)
         endmethod
 

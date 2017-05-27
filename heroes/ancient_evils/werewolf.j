@@ -68,7 +68,7 @@ module WerewolfSpells
     set rabid.info = "Rabid|n|cfff4a460Target|r: |cff3399ffPassive, Self|n|r|cfff4a460Max HP Regen|r: |cff3399ff(1% + 0.2% x level)|n|r|nProvides Werewolf with passive healing based on max hitpoints."
 
     set bloodthirst = Spell.create('A242')
-    set bloodthirst.info = "Bloodthirst|n|cfff4a460Target|r: |cff3399ffSelf (800)|n|r|cfff4a460Cooldown|r: |cff3399ff30 seconds|n|r|cfff4a460Initial Heal|r: |cff3399ff(250 x level)|n|r|cfff4a460Bonus Heal/Unit|r:|cff3399ff (50  x level)|r|n|nCalls a wave of dark energy which heals Werewolf depending on number of living enemies in range of 800. Heals 4x more hitpoints on ethereal units."
+    set bloodthirst.info = "Bloodthirst|n|cfff4a460Target|r: |cff3399ffSelf (800)|n|r|cfff4a460Cooldown|r: |cff3399ff30 seconds|n|r|cfff4a460Initial Heal|r: |cff3399ff(250 x level)|n|r|cfff4a460Bonus Heal/Unit|r:|cff3399ff (50 x level)|r|n|nCalls a wave of dark energy which heals Werewolf depending on number of living enemies in range of 800. Heals 4x more hitpoints on ethereal units."
 
     set furyOfTheLycan = Spell.create('A243')
     set furyOfTheLycan.info = "Fury Of The Lycan|n|cfff4a460Target|r: |cff3399ffSelf|n|r|cfff4a460Duration|r: |cff3399ff9 seconds|n|r|cfff4a460Cooldown|r: |cff3399ff40 - (1 x level) seconds|r|n|nConverts damage taken into heal with twice the amount."

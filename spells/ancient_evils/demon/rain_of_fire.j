@@ -7,6 +7,7 @@ scope RainOfFire
         private constant real HEIGHT = 1200
         private constant real HEIGHT_MIN = 10
         private constant real SPEED = 800
+        private constant real STRUCTURE_DAMAGE = 0.10
         private constant attacktype ATTACK_TYPE = ATTACK_TYPE_CHAOS
         private constant damagetype DAMAGE_TYPE = DAMAGE_TYPE_UNIVERSAL
     endglobals
@@ -27,7 +28,7 @@ scope RainOfFire
     endfunction
 
     private function TargetFilter takes unit u, player p returns boolean
-        return UnitAlive(u) and IsUnitEnemy(u, p) and not IsUnitType(u, UNIT_TYPE_STRUCTURE) and not IsUnitType(u, UNIT_TYPE_MAGIC_IMMUNE)
+        return UnitAlive(u) and IsUnitEnemy(u, p) and not IsUnitType(u, UNIT_TYPE_MAGIC_IMMUNE)
     endfunction
 
     private keyword Wave
@@ -45,7 +46,6 @@ scope RainOfFire
             if this.w.fires == 0 then
                 call this.w.destroy()
             endif
-            //call this.pop()
             call this.m.destroy()
         endmethod
 
@@ -61,7 +61,11 @@ scope RainOfFire
                     call GroupRemoveUnit(thistype.g, u)
                     if not IsUnitInGroup(u, this.w.hit) and IsUnitInRangeXY(u, this.w.r.x, this.w.r.y, 0.5*this.w.r.radius) and TargetFilter(u, this.w.r.owner) then
                         call GroupAddUnit(this.w.hit, u)
-                        call Damage.element.apply(this.w.r.caster, u, this.w.r.dmg, ATTACK_TYPE, DAMAGE_TYPE, DAMAGE_ELEMENT_FIRE)
+                        if IsUnitType(u, UNIT_TYPE_STRUCTURE) then
+                            call Damage.element.apply(this.w.r.caster, u, this.w.r.dmg*STRUCTURE_DAMAGE, ATTACK_TYPE, DAMAGE_TYPE, DAMAGE_ELEMENT_FIRE)
+                        else
+                            call Damage.element.apply(this.w.r.caster, u, this.w.r.dmg, ATTACK_TYPE, DAMAGE_TYPE, DAMAGE_ELEMENT_FIRE)
+                        endif
                     endif
                 endloop
             else
@@ -82,8 +86,6 @@ scope RainOfFire
             call this.destroy()
         endmethod
 
-        //implement List
-
         static method add takes Wave w, real x, real y, integer part returns nothing
             local thistype this = thistype(Missile.create())
             set this.w = w
@@ -97,7 +99,6 @@ scope RainOfFire
             set this.m.model = MISSILE_MODEL
             call this.m.registerOnHit(function thistype.onHit)
             call this.m.launch()
-            //call this.push(0.05)
         endmethod
 
         static method init takes nothing returns nothing

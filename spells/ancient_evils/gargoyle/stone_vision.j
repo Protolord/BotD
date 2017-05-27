@@ -1,10 +1,9 @@
 scope StoneVision
- 
+
     globals
         private constant integer SPELL_ID = 'A631'
-        private constant string SFX = "Models\\Effects\\StoneVisionTarget.mdx"
         private constant string SFX_TARGET = "Models\\Effects\\StoneVisionTarget.mdx"
-        private constant real NODE_RADIUS = 400
+        private constant real NODE_RADIUS = 300
         private constant real TIMEOUT = 0.05
     endglobals
 
@@ -14,24 +13,24 @@ scope StoneVision
         endif
         return 1500.0*level
     endfunction
-    
+
     private function Duration takes integer level returns real
         return 15.00 + 0.0*level
     endfunction
-    
+
     private function TargetFilter takes unit u, player owner returns boolean
         return UnitAlive(u) and IsUnitEnemy(u, owner) and IsUnitType(u, UNIT_TYPE_STRUCTURE)
     endfunction
 
     private struct SightSource
-        
+
         readonly unit u
         readonly unit target
         private effect sfx
-        
+
         readonly thistype next
         readonly thistype prev
-        
+
         method destroy takes nothing returns nothing
             set this.prev.next = this.next
             set this.next.prev = this.prev
@@ -46,7 +45,7 @@ scope StoneVision
             set this.target = null
             call this.deallocate()
         endmethod
-        
+
         static method create takes thistype head, unit target, player owner returns thistype
             local thistype this = thistype.allocate()
             local string s = SFX_TARGET
@@ -65,14 +64,14 @@ scope StoneVision
             set this.prev.next = this
             return this
         endmethod
-        
+
         static method head takes nothing returns thistype
             local thistype this = thistype.allocate()
             set this.next = this
             set this.prev = this
             return this
         endmethod
-        
+
     endstruct
 
     private struct SpellBuff extends Buff
@@ -81,14 +80,13 @@ scope StoneVision
         public real radius
         private player owner
         private group visible
-        private effect sfx
 
         private static group g
 
         private static constant integer RAWCODE = 'D631'
         private static constant integer DISPEL_TYPE = BUFF_POSITIVE
         private static constant integer STACK_TYPE = BUFF_STACK_NONE
-        
+
         method onRemove takes nothing returns nothing
             local SightSource sight = this.ss.next
             call this.pop()
@@ -103,8 +101,6 @@ scope StoneVision
                 set this.ss = 0
             endif
             call ReleaseGroup(this.visible)
-            call DestroyEffect(this.sfx)
-            set this.sfx = null
             set this.visible = null
             set this.owner = null
         endmethod
@@ -153,9 +149,8 @@ scope StoneVision
         endmethod
 
         implement List
-        
+
         method onApply takes nothing returns nothing
-            set this.sfx = AddSpecialEffectTarget(SFX, this.target, "overhead")
             set this.owner = GetOwningPlayer(this.target)
             set this.visible = NewGroup()
             call this.push(TIMEOUT)
@@ -165,12 +160,12 @@ scope StoneVision
             call PreloadSpell(thistype.RAWCODE)
             set thistype.g = CreateGroup()
         endmethod
-        
+
         implement BuffApply
     endstruct
-    
+
     struct StoneVision extends array
-        
+
         private static method onCast takes nothing returns nothing
             local unit u = GetTriggerUnit()
             local integer lvl = GetUnitAbilityLevel(u, SPELL_ID)
@@ -181,14 +176,14 @@ scope StoneVision
             set u = null
             call SystemMsg.create(GetUnitName(GetTriggerUnit()) + " cast thistype")
         endmethod
-        
+
         static method init takes nothing returns nothing
             call SystemTest.start("Initializing thistype: ")
             call RegisterSpellEffectEvent(SPELL_ID, function thistype.onCast)
             call SpellBuff.initialize()
             call SystemTest.end()
         endmethod
-        
+
     endstruct
-    
+
 endscope

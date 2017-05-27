@@ -4,7 +4,6 @@ scope ShadowsOfCorruption
     globals
         private constant integer SPELL_ID = 'A123'
         private constant integer SPELL_BUFF = 'a123'
-        private constant string SFX = "Models\\Effects\\ShadowsOfCorruption.mdx"
     endglobals
 
     private function SlowEffect takes integer level returns real
@@ -32,7 +31,6 @@ scope ShadowsOfCorruption
     private struct SpellBuff extends Buff
 
         public Movespeed ms
-        private effect sfx
 
         private static constant integer RAWCODE = 'D123'
         private static constant integer DISPEL_TYPE = BUFF_NEGATIVE
@@ -40,13 +38,10 @@ scope ShadowsOfCorruption
 
         method onRemove takes nothing returns nothing
             call this.ms.destroy()
-            call DestroyEffect(this.sfx)
-            set this.sfx = null
         endmethod
 
         method onApply takes nothing returns nothing
             set this.ms = Movespeed.create(this.target, 0, 0)
-            set this.sfx = AddSpecialEffectTarget(SFX, this.target, "chest")
         endmethod
 
         private static method init takes nothing returns nothing

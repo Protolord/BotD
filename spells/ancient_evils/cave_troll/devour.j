@@ -18,7 +18,6 @@ scope Devour
 
     private struct SpellBuff extends Buff
 
-        private effect sfx
         private real ctr
         private real factor
         private Pause p
@@ -33,9 +32,7 @@ scope Devour
             call this.pop()
             call IssueImmediateOrderById(this.source, ORDER_stop)
             call UnitRemoveAbility(this.source, BUFF_RAWCODE)
-            call DestroyEffect(this.sfx)
             call this.p.destroy()
-            set this.sfx = null
         endmethod
 
         private method eat takes nothing returns nothing
@@ -66,7 +63,6 @@ scope Devour
         implement List
 
         method onApply takes nothing returns nothing
-            set this.sfx = AddSpecialEffectTarget(BUFF_SFX, this.target, "overhead")
             set this.p = Pause.create(this.target)
             set this.ctr = 0
             set this.factor = HealPercent(GetUnitAbilityLevel(this.source, SPELL_ID))/100.0

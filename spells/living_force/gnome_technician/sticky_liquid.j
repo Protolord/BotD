@@ -3,7 +3,7 @@ scope StickyLiquid
     globals
         private constant integer SPELL_ID = 'AH63'
         private constant string SFX = "Models\\Effects\\StickyLiquid.mdx"
-        private constant string SFX_BUFF = ""
+        private constant real SPACING = 87.5
     endglobals
 
     private function Radius takes integer level returns real
@@ -24,7 +24,6 @@ scope StickyLiquid
 
     private struct SpellBuff extends Buff
 
-        private effect sfx
         readonly Movespeed ms
 
         private static constant integer RAWCODE = 'DH63'
@@ -32,13 +31,10 @@ scope StickyLiquid
         private static constant integer STACK_TYPE = BUFF_STACK_FULL
 
         method onRemove takes nothing returns nothing
-            call DestroyEffect(this.sfx)
             call this.ms.destroy()
-            set this.sfx = null
         endmethod
 
         method onApply takes nothing returns nothing
-            set this.sfx = AddSpecialEffectTarget(SFX_BUFF, this.target, "chest")
             set this.ms = Movespeed.create(this.target, 0, 0)
         endmethod
 
@@ -49,11 +45,54 @@ scope StickyLiquid
         implement BuffApply
     endstruct
 
+    private struct Liquid extends array
+        implement Alloc
+
+        private effect sfx
+        readonly thistype next
+        readonly thistype prev
+
+        method destroy takes nothing returns nothing
+            set this.prev.next = this.next
+            set this.next.prev = this.prev
+            if this.sfx != null then
+                call DestroyEffect(this.sfx)
+                set this.sfx = null
+            endif
+            call this.deallocate()
+        endmethod
+
+        method clear takes nothing returns nothing
+            local thistype node = this.next
+            loop
+                exitwhen node == this
+                call node.destroy()
+                set node = node.next
+            endloop
+        endmethod
+
+        static method add takes thistype head, real x, real y returns nothing
+            local thistype this = thistype.allocate()
+            set this.next = head
+            set this.prev = head.prev
+            set this.next.prev = this
+            set this.prev.next = this
+            set this.sfx = AddSpecialEffect(SFX, x, y)
+        endmethod
+
+        static method head takes nothing returns thistype
+            local thistype this = thistype.allocate()
+            set this.next = this
+            set this.prev = this
+            return this
+        endmethod
+
+    endstruct
+
     struct StickyLiquid extends array
 
         private unit caster
         private player owner
-        private Effect e
         private group g
         private real radius
         private real duration
@@ -62,6 +101,7 @@ scope StickyLiquid
         private real slow
         private SpellBuff b
         private Table tb
+        private Liquid liquidHead
 
         private static thistype global
         private static group enumG
@@ -74,9 +114,10 @@ scope StickyLiquid
                 call GroupRemoveUnit(this.g, u)
                 call Buff(this.tb[GetHandleId(u)]).remove()
             endloop
+            call this.liquidHead.clear()
+            call this.liquidHead.destroy()
             call this.tb.destroy()
             call ReleaseGroup(this.g)
-            call this.e.destroy()
             set this.g = null
             set this.caster = null
             call this.destroy()
@@ -124,6 +165,10 @@ scope StickyLiquid
         private static method onCast takes nothing returns nothing
             local thistype this = thistype.create()
             local integer lvl
+            local real angle
+            local real endAngle
+            local real da
+            local real radius
             set this.caster = GetTriggerUnit()
             set this.g = NewGroup()
             set this.owner = GetTriggerPlayer()
@@ -133,9 +178,26 @@ scope StickyLiquid
             set this.radius = Radius(lvl)
             set this.duration = Duration(lvl)
             set this.slow = -Slow(lvl)
-            set this.e = Effect.createAnyAngle(SFX, this.x, this.y, 0)
-            set this.e.scale = this.radius/160.0
+            set this.liquidHead = Liquid.head()
             set this.tb = Table.create()
+            set radius = this.radius - SPACING
+            call Liquid.add(this.liquidHead, this.x, this.y)
+            loop
+                exitwhen radius < SPACING
+                set da = 2*bj_PI/R2I(2*bj_PI*radius/SPACING)
+                if da > bj_PI/3 then
+                    set da = bj_PI/3
+                endif
+                set angle = da
+                set endAngle = da + 2*bj_PI - 0.0001
+                loop
+                    exitwhen angle >= endAngle
+                    call Liquid.add(this.liquidHead, this.x + radius*Cos(angle), this.y + radius*Sin(angle))
+                    set angle = angle + da
+                endloop
+                set radius = radius - SPACING
+            endloop
+
             call SystemMsg.create(GetUnitName(GetTriggerUnit()) + " cast thistype")
         endmethod
 

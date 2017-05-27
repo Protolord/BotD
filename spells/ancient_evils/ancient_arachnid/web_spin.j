@@ -5,8 +5,6 @@ scope WebSpin
         private constant integer SPELL_BUFF = 'B432'
         private constant integer SPELL_DEBUFF = 'D432'
         private constant string WEB_MODEL = "Models\\Effects\\WebSpin.mdx"
-        private constant string BUFF_SFX = "Models\\Effects\\StickyShellBuff.mdx"
-        private constant string BONUS_SFX = "Models\\Effects\\Haste.mdx"
     endglobals
 
     private function Radius takes integer level returns real
@@ -37,7 +35,6 @@ scope WebSpin
 
     private struct Bonus extends Buff
 
-        private effect sfx
         readonly Movespeed ms
 
         private static constant integer RAWCODE = 'B432'
@@ -46,13 +43,10 @@ scope WebSpin
 
         method onRemove takes nothing returns nothing
             call this.ms.destroy()
-            call DestroyEffect(this.sfx)
-            set this.sfx = null
         endmethod
 
         method onApply takes nothing returns nothing
             set this.ms = Movespeed.create(this.target, 999.9, 999)
-            set this.sfx = AddSpecialEffectTarget(BONUS_SFX, this.target, "chest")
         endmethod
 
         private static method init takes nothing returns nothing
@@ -64,7 +58,6 @@ scope WebSpin
 
     private struct SpellBuff extends Buff
 
-        private effect sfx
         readonly Movespeed ms
 
         private static constant integer RAWCODE = 'D432'
@@ -72,13 +65,10 @@ scope WebSpin
         private static constant integer STACK_TYPE = BUFF_STACK_FULL
 
         method onRemove takes nothing returns nothing
-            call DestroyEffect(this.sfx)
             call this.ms.destroy()
-            set this.sfx = null
         endmethod
 
         method onApply takes nothing returns nothing
-            set this.sfx = AddSpecialEffectTarget(BUFF_SFX, this.target, "chest")
             set this.ms = Movespeed.create(this.target, 0, 0)
         endmethod
 

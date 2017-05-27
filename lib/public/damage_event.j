@@ -1,28 +1,28 @@
 library DamageEvent /*
             ----------------------------------
-                    DamageEvent v1.40
+                    DamageEvent v1.42
                         by Flux
             ----------------------------------
-            
-        A lightweight damage detection system that 
+
+        A lightweight damage detection system that
         detects when a unit takes damage.
         Can distinguish physical and magical damage.
-                                
+
     */ requires /*
       (nothing)
-    
+
     */ optional Table /*
         If not found, DamageEvent will create 2 hashtables. Hashtables are limited to 255 per map.
-        
+
     */
-    
+
     //Basic Configuration
     //See documentation for details
     globals
         private constant integer DAMAGE_TYPE_DETECTOR = 'ADMG'
         private constant real ETHEREAL_FACTOR = 1.6666
     endglobals
-    
+
     //Advanced Configuration
     //Default values are recommended, edit only if you understand how the system works (See documentation).
     globals
@@ -31,18 +31,18 @@ library DamageEvent /*
         private constant integer COUNT_LIMIT = 50
         private constant real REFRESH_TIMEOUT = 30.0
     endglobals
-    
+
     static if not AUTO_REGISTER and not PREPLACE_INIT then
     //Equivalent to AUTO_REGISTER or PREPLACE_INIT
-    else    
+    else
         //Autoregister Filter
         //If it returns true, it will be registered automatically
         private function AutoRegisterFilter takes unit u returns boolean
             local integer id = GetUnitTypeId(u)
-            return id != 'dumi' and id != 'cbar' and id != 'uSpL'  
+            return id != 'dumi'
         endfunction
     endif
-    
+
     //Globals not meant to be edited.
     globals
         constant integer DAMAGE_TYPE_PHYSICAL = 1
@@ -51,17 +51,17 @@ library DamageEvent /*
         private DamageBucket pickedBucket = 0
         private DamageBucket currentBucket = 0
     endglobals
-    
+
     struct DamageBucket
-        
+
         readonly integer count
         readonly trigger trg
         readonly group grp
         readonly thistype next
         readonly thistype prev
-        
+
         private static timer t = CreateTimer()
-        
+
         method destroy takes nothing returns nothing
             set this.next.prev = this.prev
             set this.prev.next = this.next
@@ -77,7 +77,7 @@ library DamageEvent /*
             set this.grp = null
             call this.deallocate()
         endmethod
-        
+
         //Returns the DamageBucket where unit u belongs.
         static method get takes unit u returns thistype
             static if LIBRARY_Table then
@@ -86,7 +86,7 @@ library DamageEvent /*
                 return LoadInteger(Damage.hash, GetHandleId(u), 0)
             endif
         endmethod
-        
+
         method remove takes unit u returns nothing
             call GroupRemoveUnit(this.grp, u)
             static if LIBRARY_Table then
@@ -95,7 +95,7 @@ library DamageEvent /*
                 call RemoveSavedInteger(Damage.hash, GetHandleId(u), 0)
             endif
         endmethod
-        
+
         //Add unit u to this DamageBucket.
         method add takes unit u returns nothing
             call TriggerRegisterUnitEvent(this.trg, u, EVENT_UNIT_DAMAGED)
@@ -107,9 +107,9 @@ library DamageEvent /*
                 call SaveInteger(Damage.hash, GetHandleId(u), 0, this)
             endif
         endmethod
-        
+
         private static thistype temp
-        
+
         //Enumerate DamageBucket units, removing it if it is removed from the game
         private static method cleanGroup takes nothing returns nothing
             local unit u = GetEnumUnit()
@@ -127,7 +127,7 @@ library DamageEvent /*
             endif
             set u = null
         endmethod
-        
+
         //Refreshes this DamageBucket
         method refresh takes nothing returns nothing
             local unit u
@@ -141,7 +141,7 @@ library DamageEvent /*
                 call this.destroy()
             endif
         endmethod
-        
+
         static method create takes nothing returns thistype
             local thistype this = thistype.allocate()
             set this.count = 0
@@ -159,13 +159,13 @@ library DamageEvent /*
         endmethod
 
     endstruct
-    
+
     struct DamageTrigger
-        
+
         private trigger trg
         private thistype next
         private thistype prev
-        
+
         method destroy takes nothing returns nothing
             set this.next.prev = this.prev
             set this.prev.next = this.next
@@ -177,7 +177,7 @@ library DamageEvent /*
             set this.trg = null
             call this.deallocate()
         endmethod
-        
+
         static method unregister takes trigger t returns nothing
             local integer id = GetHandleId(t)
             static if LIBRARY_Table then
@@ -190,7 +190,7 @@ library DamageEvent /*
                 endif
             endif
         endmethod
-        
+
         static method register takes trigger t returns nothing
             local thistype this = thistype.allocate()
             set this.trg = t
@@ -204,7 +204,7 @@ library DamageEvent /*
                 call SaveInteger(Damage.hash, GetHandleId(t), 0, this)
             endif
         endmethod
-        
+
         static method executeAll takes nothing returns nothing
             local thistype this = thistype(0).next
             loop
@@ -217,10 +217,10 @@ library DamageEvent /*
                 set this = this.next
             endloop
         endmethod
-        
+
     endstruct
-    
-    
+
+
     struct Damage extends array
 
         private static thistype stackTop = 0
@@ -231,25 +231,25 @@ library DamageEvent /*
         private real stackAmount
         private integer stackType
         private thistype stackNext
-        
+
         private static real hp
-        
+
         static if LIBRARY_Table then
             readonly static Table tb
         else
             readonly static hashtable hash = InitHashtable()
         endif
-        
+
         //Allows the DamageModify module to access the configuration
         static if LIBRARY_DamageModify then
             private static constant real S_ETHEREAL_FACTOR = ETHEREAL_FACTOR
             private static constant real S_MIN_LIFE = MIN_LIFE
         endif
-        
+
         static method remove takes unit u returns nothing
             call DamageBucket.get(u).remove(u)
         endmethod
-        
+
         //Add unit u to the current DamageBucket
         static method add takes unit u returns nothing
             local DamageBucket temp
@@ -283,7 +283,7 @@ library DamageEvent /*
                 call currentBucket.add(u)
             endif
         endmethod
-        
+
         //Periodic Refresh only refreshing one DamageBucket per REFRESH_TIMEOUT
         //to avoid lag spike.
         static method refresh takes nothing returns nothing
@@ -293,7 +293,7 @@ library DamageEvent /*
                 exitwhen pickedBucket != 0
             endloop
         endmethod
-        
+
         static method operator amount takes nothing returns real
             return thistype.stackTop.stackAmount
         endmethod
@@ -311,11 +311,11 @@ library DamageEvent /*
         endmethod
 
         private static boolean prevEnable = true
-        
+
         static method operator enabled takes nothing returns boolean
             return thistype.prevEnable
         endmethod
-        
+
         static method operator enabled= takes boolean b returns nothing
             local DamageBucket bucket = DamageBucket(0).next
             if b != thistype.prevEnable then
@@ -331,29 +331,28 @@ library DamageEvent /*
             endif
             set thistype.prevEnable = b
         endmethod
-        
+
         //All registered codes will go to this trigger
         private static trigger registered
-       
+
         static method register takes code c returns boolean
             call TriggerAddCondition(thistype.registered, Condition(c))
             return false    //Prevents inlining
         endmethod
-        
+
         static method registerTrigger takes trigger trig returns nothing
             call DamageTrigger.register(trig)
         endmethod
-        
+
         static method unregisterTrigger takes trigger trig returns nothing
             call DamageTrigger.unregister(trig)
         endmethod
 
-        
-        
         implement optional DamageModify
-        
+        implement DamageElement
+
         static if not LIBRARY_DamageModify then
-            
+
             private static method afterDamage takes nothing returns boolean
                 call SetWidgetLife(thistype.stackTop.stackTarget, thistype.hp - thistype.stackTop.stackAmount)
                 call DestroyTrigger(GetTriggeringTrigger())
@@ -364,17 +363,17 @@ library DamageEvent /*
                 endif
                 return false
             endmethod
-            
+
             static method core takes nothing returns boolean
                 local real amount = GetEventDamage()
                 local thistype this
                 local real newHp
                 local trigger trg
-                
+
                 if amount == 0.0 then
                     return false
                 endif
-                
+
                 set this = thistype.allocator[0]
                 if (thistype.allocator[this] == 0) then
                     set thistype.allocator[0] = this + 1
@@ -385,7 +384,7 @@ library DamageEvent /*
                 set this.stackTarget = GetTriggerUnit()
                 set this.stackNext = thistype.stackTop
                 set thistype.stackTop = this
-                
+
                 if amount > 0.0 then
                     set this.stackType = DAMAGE_TYPE_PHYSICAL
                     set this.stackAmount = amount
@@ -393,7 +392,7 @@ library DamageEvent /*
                     set thistype.allocator[this] = thistype.allocator[0]
                     set thistype.allocator[0] = this
                     set thistype.stackTop = thistype.stackTop.stackNext
-                    
+
                 elseif amount < 0.0 then
                     set this.stackType = DAMAGE_TYPE_MAGICAL
                     if IsUnitType(this.stackTarget, UNIT_TYPE_ETHEREAL) then
@@ -401,25 +400,29 @@ library DamageEvent /*
                     endif
                     set this.stackAmount = -amount
                     call DamageTrigger.executeAll()
-                    
+
                     set thistype.hp = GetWidgetLife(this.stackTarget)
                     set newHp = thistype.hp + amount
                     if newHp < MIN_LIFE then
                         set newHp = MIN_LIFE
                     endif
                     call SetWidgetLife(this.stackTarget, newHp)
-                    
+
                     set trg = CreateTrigger()
-                    call TriggerRegisterUnitStateEvent(trg, this.stackTarget, UNIT_STATE_LIFE, GREATER_THAN, newHp + 0.01)
+                    if amount < -1.0 then
+                        call TriggerRegisterUnitStateEvent(trg, this.stackTarget, UNIT_STATE_LIFE, GREATER_THAN, newHp - 0.2*amount)
+                    else
+                        call TriggerRegisterUnitStateEvent(trg, this.stackTarget, UNIT_STATE_LIFE, GREATER_THAN, newHp + 0.2)
+                    endif
                     call TriggerAddCondition(trg, Condition(function thistype.afterDamage))
                     set trg = null
                     set thistype.global = this
                 endif
-                
+
                 return false
             endmethod
         endif
-        
+
         static if PREPLACE_INIT then
             private static method preplace takes nothing returns nothing
                 local group g = CreateGroup()
@@ -438,7 +441,7 @@ library DamageEvent /*
                 set g = null
             endmethod
         endif
-            
+
         static if AUTO_REGISTER then
             private static method entered takes nothing returns boolean
                 local unit u = GetTriggerUnit()
@@ -449,12 +452,11 @@ library DamageEvent /*
                 return false
             endmethod
         endif
-        
+
         implement DamageInit
-        implement DamageElement
-        
+
     endstruct
-    
+
     module DamageInit
         private static method onInit takes nothing returns nothing
             static if AUTO_REGISTER then
@@ -478,7 +480,7 @@ library DamageEvent /*
             set thistype(0).stackAmount = 0.0
             set thistype(0).stackType = 0
         endmethod
-        
+
     endmodule
-    
+
 endlibrary

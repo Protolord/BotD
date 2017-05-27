@@ -2,7 +2,6 @@ scope StuddedClub
 
     globals
         private constant integer SPELL_ID = 'A814'
-        private constant string SFX = "Models\\Effects\\StuddedClub.mdx"
         private constant string SFX_ATTACH = "Models\\Effects\\StuddedClubAttach.mdx"
         private constant attacktype ATTACK_TYPE = ATTACK_TYPE_NORMAL
         private constant damagetype DAMAGE_TYPE = DAMAGE_TYPE_MAGIC
@@ -28,7 +27,6 @@ scope StuddedClub
 
     private struct SpellBuff extends Buff
 
-        private effect sfx
         private timer t
         public real dmg
 
@@ -37,9 +35,7 @@ scope StuddedClub
         private static constant integer STACK_TYPE = BUFF_STACK_PARTIAL
 
         method onRemove takes nothing returns nothing
-            call DestroyEffect(this.sfx)
             call ReleaseTimer(this.t)
-            set this.sfx = null
             set this.t = null
         endmethod
 
@@ -52,7 +48,6 @@ scope StuddedClub
 
         method onApply takes nothing returns nothing
             set this.t = NewTimerEx(this)
-            set this.sfx = AddSpecialEffectTarget(SFX, this.target, "chest")
             call TimerStart(this.t, 1.00, true, function thistype.onPeriod)
         endmethod
 

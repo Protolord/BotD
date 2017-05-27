@@ -2,8 +2,6 @@ scope ForceOfLycan
 
     globals
         private constant integer SPELL_ID = 'A212'
-        private constant string BUFF_SFX = "Models\\Effects\\ForceOfTheLycan.mdx"
-        private constant string BUFF_SFX2 = "Abilities\\Spells\\Other\\HowlOfTerror\\HowlTarget.mdl"
         private constant player HOSTILE_PLAYER = Player(PLAYER_NEUTRAL_AGGRESSIVE)
     endglobals
 
@@ -24,8 +22,6 @@ scope ForceOfLycan
     private struct SpellBuff extends Buff
 
         private player origOwner
-        private effect sfx
-        private effect sfx2
         private AtkDamagePercent adp
 
         private static constant integer RAWCODE = 'D212'
@@ -35,10 +31,6 @@ scope ForceOfLycan
         method onRemove takes nothing returns nothing
             call SetUnitOwner(this.target, this.origOwner, true)
             call this.adp.destroy()
-            call DestroyEffect(this.sfx)
-            call DestroyEffect(this.sfx2)
-            set this.sfx = null
-            set this.sfx2 = null
             set this.origOwner = null
         endmethod
 
@@ -46,8 +38,6 @@ scope ForceOfLycan
             local group g = CreateGroup()
             local unit u
             set this.origOwner = GetOwningPlayer(this.target)
-            set this.sfx = AddSpecialEffectTarget(BUFF_SFX, this.target, "origin")
-            set this.sfx2 = AddSpecialEffectTarget(BUFF_SFX2, this.target, "chest")
             set this.adp = AtkDamagePercent.create(this.target, BonusPercentDamage(GetUnitAbilityLevel(this.source, SPELL_ID))/100)
             call GroupEnumUnitsInRange(g, GetUnitX(this.target), GetUnitY(this.target), 800, null)
             loop

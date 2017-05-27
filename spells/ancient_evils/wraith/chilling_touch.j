@@ -2,7 +2,6 @@ scope ChillingTouch
 
     globals
         private constant integer SPELL_ID = 'A3XX'
-        private constant string SFX = "Abilities\\Spells\\Other\\FrostDamage\\FrostDamage.mdl"
     endglobals
 
     private function Duration takes integer level returns real
@@ -18,7 +17,6 @@ scope ChillingTouch
 
         readonly Movespeed ms
         readonly Atkspeed as
-        private effect sfx
         private VertexColor vc
 
         private static constant integer RAWCODE = 'D3XX'
@@ -28,23 +26,19 @@ scope ChillingTouch
         method onRemove takes nothing returns nothing
             call this.ms.destroy()
             call this.as.destroy()
-            call DestroyEffect(this.sfx)
             call this.vc.destroy()
-            set this.sfx = null
         endmethod
 
         method onApply takes nothing returns nothing
             set this.ms = Movespeed.create(this.target, 0, 0)
             set this.as = Atkspeed.create(this.target, 0)
-            set this.sfx = AddSpecialEffectTarget(SFX, this.target, "chest")
-            set this.vc = VertexColor.create(this.target, -200, -50, 255, 0)
             set this.vc.speed = 500
         endmethod
 
         method reapply takes nothing returns nothing
-            local real slow = -0.01*GetHeroLevel(this.source)
-            call this.ms.change(slow, 0)
-            call this.as.change(slow)
+            local real s = -0.01*GetHeroLevel(this.source)
+            call this.ms.change(s, 0)
+            call this.as.change(s)
         endmethod
 
         private static method init takes nothing returns nothing

@@ -2,7 +2,7 @@ scope Bloodlust
 
     globals
         private constant integer SPELL_ID = 'A824'
-        private constant string BUFF_SFX = "Abilities\\Spells\\Orc\\Bloodlust\\BloodlustTarget.mdl"
+        private constant string BUFF_SFX = ""
         private constant real LIMIT = 500.0
     endglobals
 
@@ -35,10 +35,6 @@ scope Bloodlust
 
     private struct SpellBuff extends Buff
 
-        private effect sfx1
-        private effect sfx2
-        private effect sfx3
-        private effect sfx4
         public real bonus
         readonly Atkspeed as
         readonly Movespeed ms
@@ -48,26 +44,14 @@ scope Bloodlust
         private static constant integer STACK_TYPE = BUFF_STACK_NONE
 
         method onRemove takes nothing returns nothing
-            call DestroyEffect(this.sfx1)
-            call DestroyEffect(this.sfx2)
-            call DestroyEffect(this.sfx3)
-            call DestroyEffect(this.sfx4)
             call this.as.destroy()
             call this.ms.destroy()
-            set this.sfx1 = null
-            set this.sfx2 = null
-            set this.sfx3 = null
-            set this.sfx4 = null
         endmethod
 
         method onApply takes nothing returns nothing
             set this.bonus = 0
             set this.as = Atkspeed.create(this.target, 0)
             set this.ms = Movespeed.create(this.target, 0, 0)
-            set this.sfx1 = AddSpecialEffectTarget(BUFF_SFX, this.target, "hand right")
-            set this.sfx2 = AddSpecialEffectTarget(BUFF_SFX, this.target, "hand left")
-            set this.sfx3 = AddSpecialEffectTarget(BUFF_SFX, this.target, "foot right")
-            set this.sfx4 = AddSpecialEffectTarget(BUFF_SFX, this.target, "foot left")
         endmethod
 
         private static method init takes nothing returns nothing

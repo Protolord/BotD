@@ -2,12 +2,12 @@ scope Storm
 
     globals
         private constant integer SPELL_ID = 'AH14'
-        private constant string SFX = "Models\\Effects\\Storm.mdx"
         private constant string SFX_HIT = "Abilities\\Weapons\\Bolt\\BoltImpact.mdl"
         private constant string LIGHTNING_CODE = "CLSB"
         private constant real LIGHTNING_DURATION = 0.8
         private constant attacktype ATTACK_TYPE = ATTACK_TYPE_NORMAL
         private constant damagetype DAMAGE_TYPE = DAMAGE_TYPE_MAGIC
+        private constant real MORPH_DELAY = 0.8
     endglobals
 
     private function Duration takes integer level returns real
@@ -36,10 +36,10 @@ scope Storm
 
     private struct SpellBuff extends Buff
 
-        private effect sfx
         private timer t
         private real dmg
         private real radius
+        private boolean b
         private Movespeed ms
 
         private static group g
@@ -52,9 +52,7 @@ scope Storm
             call AddUnitAnimationProperties(this.target, "alternate", false)
             call this.ms.destroy()
             call ReleaseTimer(this.t)
-            call DestroyEffect(this.sfx)
             set this.t = null
-            set this.sfx = null
         endmethod
 
         private static method onPeriod takes nothing returns nothing
@@ -80,11 +78,20 @@ scope Storm
             set p = null
         endmethod
 
+        private static method morph takes nothing returns nothing
+            call AddUnitAnimationProperties(thistype(ReleaseTimer(GetExpiredTimer())).target, "alternate", true)
+        endmethod
+
+        private static method unmorph takes nothing returns nothing
+            call SetUnitAnimation(thistype(ReleaseTimer(GetExpiredTimer())).target, "morph alternate")
+        endmethod
+
         method onApply takes nothing returns nothing
-            set this.sfx = AddSpecialEffectTarget(SFX, this.target, "overhead")
             set this.ms = Movespeed.create(this.target, 0, 0)
-            call AddUnitAnimationProperties(this.target, "alternate", true)
+            call SetUnitAnimation(this.target, "morph")
             set this.t = NewTimerEx(this)
+            set this.b = true
+            call TimerStart(NewTimerEx(this), MORPH_DELAY, false, function thistype.morph)
         endmethod
 
         method reapply takes integer level returns nothing
@@ -92,6 +99,7 @@ scope Storm
             set this.dmg = DamagePerAttack(level)
             set this.radius = Radius(level)
             call this.ms.change(-MovementSlow(level), 0)
+            call TimerStart(NewTimerEx(this), this.duration - MORPH_DELAY, false, function thistype.unmorph)
             call TimerStart(this.t, AttackCooldown(level), true, function thistype.onPeriod)
         endmethod
 

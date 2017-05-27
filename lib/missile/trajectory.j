@@ -146,6 +146,11 @@ module MissileTrajectory
         return this.spd/thistype.TIMEOUT
     endmethod
 
+    private static method modelRender takes nothing returns nothing
+        local thistype this = ReleaseTimer(GetExpiredTimer())
+        set this.mdl = AddSpecialEffectTarget(this.mdlPath, this.u, "origin")
+    endmethod
+
     method launch takes nothing returns nothing
         local real dx = this.x2 - this.x
         local real dy = this.y2 - this.y
@@ -175,7 +180,7 @@ module MissileTrajectory
         endif
         if this.u == null then
             set this.u = GetRecycledDummy(this.x, this.y, this.z, facing*bj_RADTODEG)
-            set this.mdl = AddSpecialEffectTarget(this.mdlPath, this.u, "origin")
+            call TimerStart(NewTimerEx(this), 0.01, false, function thistype.modelRender)
         endif
     endmethod
 

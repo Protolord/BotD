@@ -21,24 +21,25 @@ library DamageElement uses DamageEvent, FloatingText
     endglobals
 
     struct Element extends array
-        
+
         private static unit source
         private static integer element
         private static string array path
         private static trigger trg
-        
-        
+
+
         static method string takes integer element returns string
             return thistype.path[element]
         endmethod
-            
+
         private static method onDamage takes nothing returns boolean
-            if Damage.source == thistype.source then
-                call FloatingTextSplat(thistype.path[thistype.element] + I2S(R2I(Damage.amount + 0.5)) + "|r", Damage.target, 1.0).setVisible(GetLocalPlayer() == GetOwningPlayer(Damage.source) and IsUnitVisible(Damage.target, GetLocalPlayer()))
+            local integer dmg = R2I(Damage.amount + 0.5)
+            if Damage.source == thistype.source and dmg > 0 then
+                call FloatingTextSplat(thistype.path[thistype.element] + I2S(dmg) + "|r", Damage.target, 1.0).setVisible(GetLocalPlayer() == GetOwningPlayer(Damage.source) and IsUnitVisible(Damage.target, GetLocalPlayer()))
             endif
             return false
         endmethod
-            
+
         static method apply takes unit source, unit target, real damage, attacktype at, damagetype dt, integer element returns nothing
             set thistype.source = source
             set thistype.element = element
@@ -50,7 +51,7 @@ library DamageElement uses DamageEvent, FloatingText
             set thistype.source = null
             set thistype.element = 0
         endmethod
-            
+
         private static method onInit takes nothing returns nothing
             set thistype.path[DAMAGE_ELEMENT_ARCANE] = "|iELEMENT_ARCANE|i|cfff85888"
             set thistype.path[DAMAGE_ELEMENT_DARK] = "|iELEMENT_DARK|i|cff9c2889"
@@ -74,7 +75,7 @@ library DamageElement uses DamageEvent, FloatingText
     module DamageElement
         public static Element element
         readonly static boolean coded
-        
+
         static method apply takes unit source, unit target, real amount, attacktype at, damagetype dt returns nothing
             set thistype.coded = true
             call UnitDamageTarget(source, target, amount, true, false, at, dt, null)
@@ -92,5 +93,5 @@ library DamageElement uses DamageEvent, FloatingText
         endmethod
 
     endmodule
-    
+
 endlibrary

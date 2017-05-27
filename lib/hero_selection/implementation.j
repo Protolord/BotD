@@ -19,6 +19,15 @@
     implement InquisitorSpells
     implement KnightSpells
     implement MistressSpells
+    implement NomadSpells
+    implement ArcanistSpells
+    implement RavenSpells
+    implement MediumSpells
+    implement SirenSpells
+    implement SorceressSpells
+    implement TemplarSpells
+    implement TreantSpells
+    implement VikingSpells
 //! endtextmacro
 
 //! textmacro SELECTION_SYSTEM_HERO_IMPLEMENTATION
@@ -42,6 +51,15 @@
     implement InquisitorConfig
     implement KnightConfig
     implement MistressConfig
+    implement NomadConfig
+    implement ArcanistConfig
+    implement RavenConfig
+    implement MediumConfig
+    implement SirenConfig
+    implement SorceressConfig
+    implement TemplarConfig
+    implement TreantConfig
+    implement VikingConfig
 //! endtextmacro
 
 //! textmacro SELECTION_SYSTEM_HERO_BUTTON_IMPLEMENTATION
@@ -59,6 +77,15 @@
     implement InquisitorButton
     implement KnightButton
     implement MistressButton
+    implement NomadButton
+    implement ArcanistButton
+    implement RavenButton
+    implement MediumButton
+    implement SirenButton
+    implement SorceressButton
+    implement TemplarButton
+    implement TreantButton
+    implement VikingButton
     set HeroButton.buttonX = HERO_BUTTON_ORIGIN_X
     set HeroButton.buttonY = HERO_BUTTON_ORIGIN_Y - 180
     implement VampireLordButton

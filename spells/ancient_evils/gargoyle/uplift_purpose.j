@@ -2,11 +2,10 @@ scope UpliftPurpose
 
     globals
         private constant integer SPELL_ID = 'A621'
-        private constant string SFX = "Models\\Effects\\UpliftPurpose.mdx"
         private constant attacktype ATTACK_TYPE = ATTACK_TYPE_SIEGE
         private constant damagetype DAMAGE_TYPE = DAMAGE_TYPE_NORMAL
     endglobals
-    
+
     private function HPSacrifice takes integer level returns real
         if level == 11 then
             return 0.20
@@ -23,35 +22,25 @@ scope UpliftPurpose
     endfunction
 
     private struct SpellBuff extends Buff
-     
-        private effect sfx
+
         public real dmg
 
         private static constant integer RAWCODE = 'B621'
         private static constant integer DISPEL_TYPE = BUFF_NEGATIVE
         private static constant integer STACK_TYPE = BUFF_STACK_FULL
-        
-        method onRemove takes nothing returns nothing
-            call DestroyEffect(this.sfx)
-            set this.sfx = null
-        endmethod
-        
-        method onApply takes nothing returns nothing
-            set this.sfx = AddSpecialEffectTarget(SFX, this.target, "overhead")
-        endmethod
 
         private static method init takes nothing returns nothing
             call PreloadSpell(thistype.RAWCODE)
         endmethod
-        
+
         implement BuffApply
     endstruct
-    
+
     struct UpliftPurpose extends array
         implement Alloc
-        
+
         private unit u
-        
+
         private static trigger trg
 
         private static method onDamage takes nothing returns boolean
@@ -75,14 +64,14 @@ scope UpliftPurpose
             set this.u = null
             call this.deallocate()
         endmethod
-        
+
         private static method onCast takes nothing returns nothing
             local thistype this = thistype.allocate()
             local unit caster = GetTriggerUnit()
             local integer lvl = GetUnitAbilityLevel(caster, SPELL_ID)
             local real bonus = HPSacrifice(lvl)*GetUnitState(caster, UNIT_STATE_MAX_LIFE)
             local real hp = GetWidgetLife(caster)
-            local SpellBuff b 
+            local SpellBuff b
             if hp > bonus then
                 call SetWidgetLife(caster, hp - bonus)
                 set b = SpellBuff.add(caster, caster)
@@ -96,7 +85,7 @@ scope UpliftPurpose
             call TimerStart(NewTimerEx(this), 0.00, false, function thistype.expires)
             call SystemMsg.create(GetUnitName(GetTriggerUnit()) + " cast thistype")
         endmethod
-        
+
         static method init takes nothing returns nothing
             call SystemTest.start("Initializing thistype: ")
             set thistype.trg = CreateTrigger()
@@ -106,6 +95,6 @@ scope UpliftPurpose
             call SpellBuff.initialize()
             call SystemTest.end()
         endmethod
-        
+
     endstruct
 endscope

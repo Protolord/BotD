@@ -154,5 +154,12 @@
 //! runtextmacro CREATE_SPELL_SELECT_OBJECT("H72", "2")
 //! runtextmacro CREATE_SPELL_SELECT_OBJECT("H82", "2")
 //! runtextmacro CREATE_SPELL_SELECT_OBJECT("H92", "2")
-*/
+//! runtextmacro CREATE_SPELL_SELECT_OBJECT("HA2", "2")
+//! runtextmacro CREATE_SPELL_SELECT_OBJECT("HB2", "2")
+//! runtextmacro CREATE_SPELL_SELECT_OBJECT("HC2", "2")
+//! runtextmacro CREATE_SPELL_SELECT_OBJECT("HD2", "2")
+//! runtextmacro CREATE_SPELL_SELECT_OBJECT("HE2", "2")
+//! runtextmacro CREATE_SPELL_SELECT_OBJECT("HF2", "2")
+//! runtextmacro CREATE_SPELL_SELECT_OBJECT("HG2", "2")*/
+
 

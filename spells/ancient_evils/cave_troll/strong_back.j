@@ -23,7 +23,7 @@ scope StrongBack
         private static method onDamage takes nothing returns nothing
             local integer level = GetUnitAbilityLevel(Damage.target, SPELL_ID)
             local real angle
-            if level > 0 and Damage.type == DAMAGE_TYPE_PHYSICAL and not Damage.coded and TargetFilter(Damage.source, GetOwningPlayer(Damage.target))  then
+            if level > 0 and Damage.type == DAMAGE_TYPE_PHYSICAL and not Damage.coded and CombatStat.getAttackType(Damage.source) != ATTACK_TYPE_MAGIC and TargetFilter(Damage.source, GetOwningPlayer(Damage.target))  then
                 set angle = Atan2(GetUnitY(Damage.target) - GetUnitY(Damage.source), GetUnitX(Damage.target) - GetUnitX(Damage.source))*bj_RADTODEG
                 if angle < 0 then
                     set angle = angle + 360
