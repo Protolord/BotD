@@ -95,6 +95,11 @@ library PlayerStat uses RegisterPlayerUnitEvent, SystemConsole, HeroPool
             call TriggerAddCondition(thistype.trg, Condition(c))
         endmethod
 
+        private static method makeHeroPool takes nothing returns nothing
+            local thistype this = ReleaseTimer(GetExpiredTimer())
+            set this.heroPool = HeroPool.create(this.player)
+        endmethod
+
         static method init takes player p returns nothing
             local thistype this = thistype.get(p)
             call SystemTest.start("Initializing thistype for " + GetPlayerName(p) + ":")
@@ -105,7 +110,7 @@ library PlayerStat uses RegisterPlayerUnitEvent, SystemConsole, HeroPool
             call SetPlayerAbilityAvailable(p, 'Abl3', false)
             call SetPlayerAbilityAvailable(p, 'Abl4', false)
             call TriggerRegisterPlayerUnitEvent(thistype.trg, p, EVENT_PLAYER_HERO_LEVEL, null)
-            set this.heroPool = HeroPool.create(p)
+            call TimerStart(NewTimerEx(this), 0.1, false, function thistype.makeHeroPool)
             call SystemTest.end()
         endmethod
 

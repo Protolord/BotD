@@ -24,10 +24,7 @@ scope InfernalChains
 
     //In percent
     private function Chance takes integer level returns real
-        if level == 11 then
-            return 100.0//1.0
-        endif
-        return 100.0//1.0
+        return 1.0 + 0.0*level
     endfunction
 
     private function TargetFilter takes unit u, player p returns boolean

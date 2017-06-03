@@ -89,9 +89,6 @@ scope EnvenomedDart
             set this.m.model = MODEL
             set this.m.speed = Speed(this.lvl)
             call this.m.registerOnHit(function thistype.onHit)
-            if GetUnitTypeId(this.caster) == 'HT07' then
-                call this.m.move(this.m.x, this.m.y, this.m.z - 50)
-            endif
             call this.m.launch()
             call SystemMsg.create(GetUnitName(GetTriggerUnit()) + " cast thistype")
         endmethod

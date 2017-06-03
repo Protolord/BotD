@@ -9,38 +9,19 @@ CODING CONCERNS:
 - CombatStat.get has a +-1 tolerance value.
 - Test if Inception takes the correct damage taken factor
 - Allow units with Rabies exceed 522 movespeed.
-- DamageEvent doesn't properly classify units with magic attack as magic damage.
 
-
-Email notes:
-- Unstoppable Hunger's chance temporarily changed to 100%.
-- Companion not yet done but try it out to see if animal model fits.
-
-
-Living Force Heroes and Spells development
+Git:
+Fix Spells damage bug and various issues
 
 Systems:
-* Create Ethereal System
-* Create Transform System
-* Add attack type parameter to CombatStat
-* Fix Root system to persist after a transforming spell
-* Fix Buff visuals to persist after a transforming spell
-* Fix Movespeed system to persist after a transforming spell
-
-Heroes:
-* Add Living Forces Heroes up to Viking
-* Update Skeleton King and Cave Troll description
+* Update DamageEvent
+* Update DamageModify
+* Add PathingLib
+* Update Selection system to consider faction
+* Update Missile system
+* Fix SpellImmunity, Disarm and Ethereal to add permanent ability
+* Fix TrueSight bug not revealing preplaced invisible units
 
 Spells:
-* Create Companion
-* Create Silencing Pain
-* Create Bash
-* Create Banish
-* Create Zeal
-* Create Critical Strike
-* Create Blocking
-* Create Wrath of the Desert
-* Create Frog Transformation
-* Decrease unit vision spells to 200 sight radius
-* Change Unholy Aura to an active ability
-* Change Fear to an active ability
+* Create Rock Hard
+

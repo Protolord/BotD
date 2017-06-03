@@ -69,7 +69,7 @@ module GargoyleSpells
 
     set rebuild = Spell.create('A644')
     set rebuild.passive = true
-    set rebuild.info = "Rebuild|n|cfff4a460Target|r: |cff3399ffSelf, Passive|n|r|cfff4a460Recovery|r: |cff3399ff(25% + (5% x level))|n|r|cfff4a460Damage Threshold|r: |cff3399ff200|r|n|nEvery time damage taken by Gargoyle is reaches or exceeds the damage threshold, a piece of him falls to the ground. Gargoyle can collect these pieces and recover certain percentage from the rock piece. These segments degrade rapidly losing 5% life every second."
+    set rebuild.info = "Rebuild|n|cfff4a460Target|r: |cff3399ffSelf, Passive|n|r|cfff4a460Recovery|r: |cff3399ff(25% + (5% x level))|n|r|cfff4a460Damage Threshold|r: |cff3399ff200|r|n|nEvery time damage taken by Gargoyle reaches or exceeds the damage threshold, a piece of him falls to the ground. Gargoyle can collect these pieces and recover certain percentage from the rock piece. These segments degrade rapidly losing 5% life every second."
 endmodule
 
 module GargoyleConfig

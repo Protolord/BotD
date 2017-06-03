@@ -134,8 +134,6 @@
         Sticky Liquid               by kellym0
         Motion Controller (MC)      by Pvt.Toma
         MC Laser Entrance           by WILL THE ALMIGHTY
-        MC Chain Head               by Infrisios
-        MC Chain Elements           by Illustrike
 
         Sanctuary Missile           by Boogles
         Sanctuary Effect            by nhocklanhox6

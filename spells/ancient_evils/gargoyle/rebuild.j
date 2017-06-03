@@ -71,7 +71,7 @@ scope Rebuild
         private static method onHit takes nothing returns nothing
             local thistype this = Missile.getHit()
             call ShowDummy(this.m.u, false)
-            set this.e = Effect.createAnyAngle(ROCK_MODEL, this.m.x, this.m.y, 0)
+            set this.e = Effect.createAnyAngle(ROCK_MODEL, this.m.x, this.m.y, 5)
             set this.e.scale = 0.4 + this.hp/2000.0
             call this.push(TIMEOUT)
         endmethod
@@ -109,6 +109,7 @@ scope Rebuild
         private real dmgThreshold
 
         private static Table tb
+        private static constant real DIST_OFFSET = 20
 
         private static method onDamage takes nothing returns nothing
             local thistype this = thistype.tb[GetHandleId(Damage.target)]
@@ -118,6 +119,10 @@ scope Rebuild
             local real x2
             local real y2
             local real dist
+            local real d
+            local integer cliff
+            local integer i
+            local integer j
             if this > 0 then
                 set this.dmg = this.dmg + Damage.amount
                 if this.dmg >= this.dmgThreshold then
@@ -125,9 +130,22 @@ scope Rebuild
                     set y1 = GetUnitY(Damage.source)
                     set x2 = GetUnitX(Damage.target)
                     set y2 = GetUnitY(Damage.target)
+                    set cliff = GetTerrainCliffLevel(x2, y2)
                     set angle = Atan2(y2 - y1, x2 - x1)
                     set dist = RMaxBJ(MIN_DISTANCE, DISTANCE_PER_DAMAGE*this.dmg) + GetRandomReal(0, 50)
-                    call RockPiece.create(Damage.target, this.dmg*this.factor, x2 + dist*Cos(angle), y2 + dist*Sin(angle))
+                    set x1 = x2 + dist*Cos(angle)
+                    set y1 = y2 + dist*Sin(angle)
+                    set i = 1
+                    set j = -1
+                    loop
+                        exitwhen IsTerrainBuildable(x1, y1) and cliff == GetTerrainCliffLevel(x1, y1)
+                        set d = dist + i*j*thistype.DIST_OFFSET
+                        set i = i + 1
+                        set j = -j
+                        set x1 = x2 + d*Cos(angle)
+                        set y1 = y2 + d*Sin(angle)
+                    endloop
+                    call RockPiece.create(Damage.target, this.dmg*this.factor, x1, y1)
                     set this.dmg = 0
                 endif
             endif

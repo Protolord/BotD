@@ -2,7 +2,7 @@ scope Smell
 
     globals
         private constant integer SPELL_ID = 'A831'
-        private constant real RADIUS = 200.0
+        private constant real RADIUS = 75.0
         private constant integer TRUE_SIGHT_ABILITY = 'ATSS'
         private constant real TIMEOUT = 0.05
     endglobals

@@ -41,6 +41,7 @@ library Disarm uses Table, TimerUtilsEx
             else
                 set thistype.tb[id] = 1
                 call UnitAddAbility(u, DISARM_ID)
+                call UnitMakeAbilityPermanent(u, true, DISARM_ID)
             endif
             return this
         endmethod

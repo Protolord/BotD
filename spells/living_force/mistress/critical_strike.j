@@ -11,7 +11,7 @@ scope CriticalStrike
 
     //In percent
     private function Chance takes integer level returns real
-        return 100.0//35 + 0.0*level
+        return 35 + 0.0*level
     endfunction
 
     private function TargetFilter takes unit u, player p returns boolean

@@ -1,6 +1,6 @@
 library DamageModify uses DamageEvent/*
             ---------------------------------
-                    DamageModify v1.42
+                    DamageModify v1.44
                         by Flux
             ---------------------------------
 
@@ -10,10 +10,11 @@ library DamageModify uses DamageEvent/*
 
     globals
         private constant integer SET_MAX_LIFE = 'ASML'
-        private constant boolean DEBUG_SYSTEM = false
+        private constant boolean DEBUG_SYSTEM = true
     endglobals
 
-    struct DamageTrigger2
+    struct DamageTrigger2 extends array
+        implement Alloc
 
         private trigger trg
         private thistype next
@@ -149,11 +150,10 @@ library DamageModify uses DamageEvent/*
                 set changed = thistype.changed
                 if changed then
                     set thistype.changed = false
-                    if thistype.locked then
-                        set thistype.locked = false
-                    endif
                 endif
+                set thistype.locked = true
                 call DamageTrigger.executeAll()
+                set thistype.locked = false
 
             elseif amount < 0.0 then
                 set this.stackType = DAMAGE_TYPE_MAGICAL
@@ -165,14 +165,13 @@ library DamageModify uses DamageEvent/*
                 set changed = thistype.changed
                 if changed then
                     set thistype.changed = false
-                    if thistype.locked then
-                        set thistype.locked = false
-                    endif
                 endif
+                set thistype.locked = true
                 call DamageTrigger.executeAll()
+                set thistype.locked = false
             endif
 
-            if amount < 0.0 or (changed and amount > 0.2) then
+            if amount < 0.0 or (changed and amount > 0.125) then
                 set thistype.hp = GetWidgetLife(this.stackTarget)
                 set trg = CreateTrigger()
                 if amount > 0.0 then
@@ -183,9 +182,9 @@ library DamageModify uses DamageEvent/*
 
                     call SetWidgetLife(this.stackTarget, newHp)
                     if amount > 1.0 then
-                        call TriggerRegisterUnitStateEvent(trg, this.stackTarget, UNIT_STATE_LIFE, LESS_THAN, newHp - 0.2*amount)
-                    elseif amount > 0.2 then
-                        call TriggerRegisterUnitStateEvent(trg, this.stackTarget, UNIT_STATE_LIFE, LESS_THAN, newHp - 0.2)
+                        call TriggerRegisterUnitStateEvent(trg, this.stackTarget, UNIT_STATE_LIFE, LESS_THAN, newHp - 1.0)
+                    elseif amount > 0.125 then
+                        call TriggerRegisterUnitStateEvent(trg, this.stackTarget, UNIT_STATE_LIFE, LESS_THAN, newHp - 0.125)
                     endif
                 else
                     set newHp = thistype.hp + amount
@@ -194,9 +193,9 @@ library DamageModify uses DamageEvent/*
                     endif
                     call SetWidgetLife(this.stackTarget, newHp)
                     if amount < -1.0 then
-                        call TriggerRegisterUnitStateEvent(trg, this.stackTarget, UNIT_STATE_LIFE, GREATER_THAN, newHp - 0.2*amount)
-                    elseif amount < -0.2 then
-                        call TriggerRegisterUnitStateEvent(trg, this.stackTarget, UNIT_STATE_LIFE, GREATER_THAN, newHp + 0.2)
+                        call TriggerRegisterUnitStateEvent(trg, this.stackTarget, UNIT_STATE_LIFE, GREATER_THAN, newHp + 1.0)
+                    elseif amount < -0.125 then
+                        call TriggerRegisterUnitStateEvent(trg, this.stackTarget, UNIT_STATE_LIFE, GREATER_THAN, newHp + 0.125)
                     else
                         call TriggerRegisterUnitStateEvent(trg, this.stackTarget, UNIT_STATE_LIFE, GREATER_THAN, newHp + 0.01)
                     endif

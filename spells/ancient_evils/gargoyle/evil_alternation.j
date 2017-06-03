@@ -1,9 +1,9 @@
 scope EvilAlternation
- 
+
     globals
         private constant integer SPELL_ID = 'A643'
     endglobals
-    
+
     private function DamageFactor takes integer level returns real
         if level == 11 then
             return 2.0
@@ -77,7 +77,7 @@ scope EvilAlternation
         private static method add takes unit u returns nothing
             call TriggerRegisterUnitEvent(thistype.trg, u, EVENT_UNIT_ISSUED_ORDER)
         endmethod
-        
+
         static method init takes nothing returns nothing
             call SystemTest.start("Initializing thistype: ")
             set thistype.trg = CreateTrigger()
@@ -88,7 +88,7 @@ scope EvilAlternation
             call Damage.register(function thistype.onDamage)
             call SystemTest.end()
         endmethod
-        
+
     endstruct
-    
+
 endscope

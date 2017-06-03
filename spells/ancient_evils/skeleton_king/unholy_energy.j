@@ -1,5 +1,5 @@
 scope UnholyEnergy
-    
+
     globals
         private constant integer SPELL_ID = 'A742'
         private constant integer BUFF_ID = 'B742'
@@ -11,9 +11,9 @@ scope UnholyEnergy
 
     private function Range takes integer level returns real
         if level == 11 then
-            return 1000.0
+            return 500.0
         endif
-        return 250 + 50.0*level
+        return 250 + 20.0*level
     endfunction
 
     private function BonusRegenPerUnit takes integer level returns real
@@ -26,10 +26,10 @@ scope UnholyEnergy
     private function TargetFilter takes unit u, player p returns boolean
         return UnitAlive(u) and IsUnitEnemy(u, p) and not IsUnitType(u, UNIT_TYPE_STRUCTURE) and not IsUnitType(u, UNIT_TYPE_MAGIC_IMMUNE)
     endfunction
-    
+
     struct UnholyEnergy extends array
         implement Alloc
-        
+
         private unit u
         private real factor
         private real range
@@ -37,7 +37,7 @@ scope UnholyEnergy
 
         private static Table tb
         private static group g
-        
+
         private static method onPeriod takes nothing returns nothing
             local thistype this = thistype.top
             local player p
@@ -70,7 +70,7 @@ scope UnholyEnergy
         endmethod
 
         implement Stack
-        
+
         private static method ultimates takes nothing returns boolean
             local unit u = GetTriggerUnit()
             local integer id = GetHandleId(u)
@@ -83,8 +83,8 @@ scope UnholyEnergy
             set u = null
             return false
         endmethod
-        
-        private static method learn takes nothing returns nothing   
+
+        private static method learn takes nothing returns nothing
             local thistype this
             local unit u
             local integer id
@@ -108,7 +108,7 @@ scope UnholyEnergy
                 set u = null
             endif
         endmethod
-        
+
         static method init takes nothing returns nothing
             call SystemTest.start("Initializing thistype: ")
             call RegisterPlayerUnitEvent(EVENT_PLAYER_HERO_SKILL, function thistype.learn)
@@ -117,7 +117,7 @@ scope UnholyEnergy
             set thistype.g = CreateGroup()
             call SystemTest.end()
         endmethod
-        
+
     endstruct
-    
+
 endscope

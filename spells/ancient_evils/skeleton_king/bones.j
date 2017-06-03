@@ -1,25 +1,25 @@
 scope Bones
-    
+
     globals
         private constant integer SPELL_ID = 'A7XX'
         private constant integer BUFF_ID = 'B7XX'
         private constant real CHANCE = 10.0
-        private constant real DURATION = 180.0
+        private constant real DURATION = 60.0
         private constant real DAMAGE_PER_ARROW = 10.0
         private constant integer MAX_ARROW = 25
         private constant attacktype ATTACK_TYPE = ATTACK_TYPE_NORMAL
         private constant damagetype DAMAGE_TYPE = DAMAGE_TYPE_MAGIC
         private constant real TIMEOUT = 0.0312500
     endglobals
-    
+
     private function TargetFilter takes unit u, player owner returns boolean
         return UnitAlive(u) and IsUnitEnemy(u, owner) and CombatStat.isMelee(u)
     endfunction
-    
+
     private function SourceFilter takes unit u returns boolean
         return GetUnitTypeId(u) == 'hgtw' or GetUnitTypeId(u) == 'hTes'
     endfunction
-    
+
     struct BonesBuff extends Buff
 
         private effect sfx
@@ -37,7 +37,7 @@ scope Bones
         private static constant integer DISPEL_TYPE = BUFF_POSITIVE
         private static constant integer STACK_TYPE = BUFF_STACK_FULL
 
-        static method count takes unit u returns integer 
+        static method count takes unit u returns integer
             return thistype.tb[GetHandleId(u)]
         endmethod
 
@@ -89,7 +89,7 @@ scope Bones
                 set thistype.tim = NewTimer()
                 call TimerStart(thistype.tim, TIMEOUT, true, function thistype.onPeriod)
             endif
-            
+
             set this.sfx = AddSpecialEffectTarget(thistype.arrow[ModuloInteger(thistype.tb[id], 6)], this.target, thistype.attach[(thistype.tb[id] - 1)/6])
         endmethod
 
@@ -110,14 +110,14 @@ scope Bones
             set thistype.attach[3] = "medium"
             set thistype.attach[4] = "rear"
         endmethod
-        
+
         implement BuffApply
     endstruct
-    
+
     struct Bones extends array
-        
+
         private static trigger trg
-        
+
         private static method onDamage takes nothing returns boolean
             local integer level = GetUnitAbilityLevel(Damage.target, SPELL_ID)
             local BonesBuff b
@@ -137,7 +137,7 @@ scope Bones
             endif
             return false
         endmethod
-        
+
         static method init takes nothing returns nothing
             call SystemTest.start("Initializing thistype: ")
             set thistype.trg = CreateTrigger()
@@ -146,7 +146,7 @@ scope Bones
             call BonesBuff.initialize()
             call SystemTest.end()
         endmethod
-        
+
     endstruct
-    
+
 endscope

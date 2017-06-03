@@ -1,5 +1,5 @@
-scope GhostlyBeam   
- 
+scope GhostlyBeam
+
     globals
         private constant integer SPELL_ID = 'A331'
         private constant string SFX = "Abilities\\Weapons\\NecromancerMissile\\NecromancerMissile.mdl"
@@ -8,31 +8,31 @@ scope GhostlyBeam
         private constant real TIMEOUT = 0.0625
         private constant real ULT_DURATION = 10.0
     endglobals
-    
+
     private function NodeSightRadius takes integer level returns real
         if level == 11 then
             return GLOBAL_SIGHT
         endif
         return 100.0*level
     endfunction
-    
+
     private struct Vision extends array
-        
+
         private Missile m
         private FlySight fs
         private TrueSight ts
         private boolean isHead
         private boolean isUlt
-        
+
         private thistype next
         private thistype prev
-        
+
         private method destroy takes nothing returns nothing
             call this.fs.destroy()
             call this.ts.destroy()
             call this.m.destroy()
         endmethod
-        
+
         private static method onHit takes nothing returns nothing
             local thistype this = thistype(Missile.getHit())
             if this.isHead and this.ts.radius == GLOBAL_SIGHT then
@@ -47,11 +47,11 @@ scope GhostlyBeam
                 call this.destroy()
             endif
         endmethod
-        
+
         private static method expires takes nothing returns nothing
             call thistype(ReleaseTimer(GetExpiredTimer())).destroy()
         endmethod
-        
+
         static method add takes GhostlyBeam b returns thistype
             local thistype this = thistype(Missile.create())
             set this.m = Missile(this)
@@ -60,10 +60,10 @@ scope GhostlyBeam
             set this.m.model = SFX
             set this.m.speed = SPEED
             call this.m.launch()
+            call SetUnitVertexColor(this.m.u, 255, 0, 0, 255)
             call SetUnitOwner(this.m.u, b.owner, false)
             if b.radius == GLOBAL_SIGHT then
                 call SetUnitScale(this.m.u, 2.75, 0, 0)
-                
             else
                 call SetUnitScale(this.m.u, 2.0 + b.radius/1500, 0, 0)
             endif
@@ -91,16 +91,15 @@ scope GhostlyBeam
             else
                 call this.m.registerOnHit(function thistype.onHit)
             endif
-            call SetUnitVertexColor(this.m.u, 255, 0, 0, 255)
             set this.ts = TrueSight.create(this.m.u, b.radius)
             set this.fs = FlySight.create(this.m.u, b.radius)
             return this
         endmethod
     endstruct
-    
+
     struct GhostlyBeam extends array
         implement Alloc
-        
+
         private integer id
         private unit dummy
         private effect sfx
@@ -115,9 +114,9 @@ scope GhostlyBeam
         readonly real duration
         readonly boolean first
         readonly Vision head
-        
+
         private static Table tb
-        
+
         private method destroy takes nothing returns nothing
             call thistype.tb.remove(this.id)
             call this.pop()
@@ -128,7 +127,7 @@ scope GhostlyBeam
             set this.owner = null
             call this.deallocate()
         endmethod
-        
+
         private static method onPeriod takes nothing returns nothing
             local thistype this = thistype(0).next
             loop
@@ -142,13 +141,13 @@ scope GhostlyBeam
         endmethod
 
         implement List
-        
+
         private static method onStop takes nothing returns nothing
             call thistype(thistype.tb[GetHandleId(GetTriggerUnit())]).destroy()
         endmethod
-        
+
         private static real Z_OFFSET = 50.0
-        
+
         private static method onCast takes nothing returns nothing
             local thistype this = thistype.allocate()
             local unit caster = GetTriggerUnit()
@@ -179,7 +178,7 @@ scope GhostlyBeam
             set caster = null
             call SystemMsg.create(GetUnitName(GetTriggerUnit()) + " cast thistype")
         endmethod
-        
+
         static method init takes nothing returns nothing
             call SystemTest.start("Initializing thistype: ")
             set thistype.tb = Table.create()
@@ -187,7 +186,7 @@ scope GhostlyBeam
             call RegisterSpellEndcastEvent(SPELL_ID, function thistype.onStop)
             call SystemTest.end()
         endmethod
-        
+
     endstruct
-    
+
 endscope

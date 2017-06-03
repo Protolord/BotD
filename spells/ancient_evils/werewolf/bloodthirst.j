@@ -25,7 +25,7 @@ scope Bloodthirst
     endfunction
 
     private function TargetFilter takes unit u, player p returns boolean
-        return UnitAlive(u) and not IsUnitType(u, UNIT_TYPE_UNDEAD) and not IsUnitType(u, UNIT_TYPE_STRUCTURE) and IsUnitEnemy(u, p)
+        return UnitAlive(u) and not IsUnitType(u, UNIT_TYPE_STRUCTURE) and IsUnitEnemy(u, p)
     endfunction
 
     struct Bloodthirst extends array

@@ -6,14 +6,14 @@ scope Reaper
     endglobals
 
     private function Duration takes integer level returns real
-        return 1.0 + 0.0*level
+        return 5.0 + 0.0*level
     endfunction
 
     private function DamageGrowth takes integer level returns real
         if level == 11 then
             return 20.0
         endif
-        return 10.0 + 0.0*level
+        return 10.0 + 2.0*level
     endfunction
 
     private function TargetFilter takes unit u, player p returns boolean

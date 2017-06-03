@@ -63,9 +63,7 @@ scope Bloodlust
 
     struct Bloodlust extends array
 
-        private static trigger trg
-
-        private static method onDamage takes nothing returns boolean
+        private static method onDamage takes nothing returns nothing
             local integer level = GetUnitAbilityLevel(Damage.source, SPELL_ID)
             local SpellBuff b
             if Damage.type == DAMAGE_TYPE_PHYSICAL and not Damage.coded and level > 0 and TargetFilter(Damage.target, GetOwningPlayer(Damage.source)) then
@@ -82,14 +80,11 @@ scope Bloodlust
                 call b.as.change(b.bonus)
                 call b.ms.change(b.bonus, 0)
             endif
-            return false
         endmethod
 
         static method init takes nothing returns nothing
             call SystemTest.start("Initializing thistype: ")
-            set thistype.trg = CreateTrigger()
-            call Damage.registerTrigger(thistype.trg)
-            call TriggerAddCondition(thistype.trg, function thistype.onDamage)
+            call Damage.register(function thistype.onDamage)
             call SpellBuff.initialize()
             call SystemTest.end()
         endmethod

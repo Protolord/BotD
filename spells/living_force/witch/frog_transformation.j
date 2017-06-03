@@ -32,10 +32,23 @@ scope FrogTransformation
             call this.sb.destroy()
         endmethod
 
+        private static method onBlock takes nothing returns nothing
+            local SpellBlock sb = SpellBlock.get()
+            local texttag text = CreateTextTag()
+            call SetTextTagPos(text, GetUnitX(sb.u), GetUnitY(sb.u), GetUnitFlyHeight(sb.u) + 50)
+            call SetTextTagText(text, "|cffff0000Miss!|r", 0.0225)
+            call SetTextTagVelocity(text, 0, 0.03)
+            call SetTextTagPermanent(text, false)
+            call SetTextTagFadepoint(text, 1)
+            call SetTextTagLifespan(text, 3)
+            set text = null
+        endmethod
+
         method onApply takes nothing returns nothing
             local integer lvl = GetUnitAbilityLevel(this.target, SPELL_ID)
             set this.ms = Movespeed.create(this.target, MoveBonus(lvl), 0)
             set this.sb = SpellBlock.create(this.target, Chance(lvl), 0)
+            call this.sb.registerProc(function thistype.onBlock)
         endmethod
 
         private static method init takes nothing returns nothing

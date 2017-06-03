@@ -2,92 +2,88 @@ library TrueSight /*
 
                      True Sight v1.10
                          by Flux
-       
+
     Allows dynamically assigning a True Sight to a unit at any range
     using only 1 ability.
-       
+
     */ requires Invisible/*
        nothing
-       
+
     */ optional DummyRecycler /*
         if not found, the system will create a new dummy every time a unit passing the filter is within range.
         Highly recommended.
-       
+
     */ optional RegisterPlayerUnitEvent /*
         if not found, it will create a new trigger with the Item Picked and Item Dropped event.
-   
-   
+
+
     Known Issues:
         - Actual sight radius sometimes become "radius + 64" if a unit outside radius is close enough to a revealed unit.
         - Minimum acceptable radius is 64
-               
-                       
+
+
     *********************************
                    API
     *********************************
-       
+
     struct TrueSight
-       
+
         public real radius
             You can edit the radius of a TrueSight instance anytime.
-       
+
         static method create takes unit u, real radius returns TrueSight
             Add a True Sight to <unit u> revealing invisible units within <real radius> for
             <real duration> second(s).
-       
+
         method operator duration= takes real time returns nothing
             Add a duration counter to a TrueSight instance.
-           
+
         static method addToItem takes integer itemId, real radius returns nothing
             Make all items of rawcode <integer itemId> have TrueSight having <real radius>.
-       
+
         method destroy takes nothing returns nothing
             Destroy a TrueSight instance. You mostly won't need this if duration is not zero.
- 
-         
+
+
     CREDITS:
         Flux                - DummyRecycler
         Magtheridon96       - RegisterPlayerUnitEvent
-           
+
     */
-   
+
     globals
         //A True Sight Ability with 64 Cast Range
         private constant integer TRUE_SIGHT_ABILITY = 'ATSS'
-       
+
         //If DummyRecycler is not found, it will create units using this rawcode
         private constant integer DUMMY_ID = 'dumi'
-       
-        //Recommended Value: 0.05 to 0.25 
+
+        //Recommended Value: 0.05 to 0.25
         //If value is too high, revealed unit may sometimes flicker (switching between visible and invisible)
         //Lower value = Better detection
         //Higher value = Better performance
         private constant real TIMEOUT = 0.05
-       
+
         //If certain items will have a passive TrueSight, set this to true
         //else set it to false to have lesser compiled code
         private constant boolean WILL_USE_ON_ITEMS = false
     endglobals
-   
+
     native UnitAlive takes unit u returns boolean
 
     private function TargetFilter takes unit u, player owner returns boolean
-        static if DEBUG_MODE then
-            return UnitAlive(u) and IsUnitEnemy(u, owner)
-        else
-            return UnitAlive(u) and IsUnitEnemy(u, owner) and Invisible.has(u)
-        endif
+        return UnitAlive(u) and IsUnitEnemy(u, owner) and Invisible.has(u)
     endfunction
-   
+
     private struct SightSource extends array
         implement Alloc
-       
+
         readonly unit u
         readonly unit target
-       
+
         readonly thistype next
         readonly thistype prev
-       
+
         method destroy takes nothing returns nothing
             set this.prev.next = this.next
             set this.next.prev = this.prev
@@ -103,7 +99,7 @@ library TrueSight /*
             set this.target = null
             call this.deallocate()
         endmethod
-       
+
         static method create takes thistype head, unit target, player owner returns thistype
             local thistype this = thistype.allocate()
             set this.target = target
@@ -121,35 +117,35 @@ library TrueSight /*
             set this.prev.next = this
             return this
         endmethod
-       
+
         static method head takes nothing returns thistype
             local thistype this = thistype.allocate()
             set this.next = this
             set this.prev = this
             return this
         endmethod
-       
+
     endstruct
-   
+
     struct TrueSight extends array
         implement Alloc
-       
+
         public real radius
-       
+
         readonly unit u
         readonly player owner
-       
+
         private SightSource sightHead
         private real dur
         private group visible
         private boolean inf
-       
+
         private thistype next
         private thistype prev
-       
+
         private static group g = CreateGroup()
         private static timer t = CreateTimer()
-       
+
         method destroy takes nothing returns nothing
             local SightSource sight = this.sightHead.next
             set this.prev.next = this.next
@@ -169,7 +165,7 @@ library TrueSight /*
             set this.u = null
             call this.deallocate()
         endmethod
-       
+
 
         private static method pickAll takes nothing returns nothing
             local thistype this = thistype(0).next
@@ -180,7 +176,7 @@ library TrueSight /*
             local unit u
             loop
                 exitwhen this == 0
-               
+
                 set newOwner = GetOwningPlayer(this.u)
                 set b = newOwner != this.owner
                 if b then
@@ -189,7 +185,7 @@ library TrueSight /*
                 if not this.inf then
                     set this.dur = this.dur - TIMEOUT
                 endif
-               
+
                 if (this.dur > 0 or this.inf) and UnitAlive(this.u) then
                     //Find new invisible units
                     //Find new invisible units
@@ -210,7 +206,7 @@ library TrueSight /*
                         set u = FirstOfGroup(thistype.g)
                         exitwhen u == null
                         call GroupRemoveUnit(thistype.g, u)
-                       
+
                         if not IsUnitInGroup(u, this.visible) and TargetFilter(u, this.owner) and IsUnitInRange(this.u, u, this.radius) then
                             call GroupAddUnit(this.visible, u)
                             call SightSource.create(this.sightHead, u, this.owner)
@@ -235,11 +231,11 @@ library TrueSight /*
                 else
                     call this.destroy()
                 endif
-               
+
                 set this = this.next
             endloop
         endmethod
-       
+
         static method create takes unit u, real radius returns thistype
             local thistype this = thistype.allocate()
             set this.u = u
@@ -257,26 +253,26 @@ library TrueSight /*
             endif
             return this
         endmethod
-       
+
         method operator duration takes nothing returns real
             return this.dur
         endmethod
-       
+
         method operator duration= takes real time returns nothing
             set this.inf = false
             set this.dur = time
         endmethod
-        
+
         static method createEx takes unit u, real radius, real time returns thistype
             local thistype this = thistype.create(u, radius)
             set this.duration = time
             return this
         endmethod
-       
+
         static if WILL_USE_ON_ITEMS then
-           
+
             private static hashtable hash = InitHashtable()
-       
+
             private static method drop takes nothing returns nothing
                 local item it = GetManipulatedItem()
                 local integer id = GetItemTypeId(it)
@@ -285,7 +281,7 @@ library TrueSight /*
                 endif
                 set it = null
             endmethod
-           
+
             private static method pick takes nothing returns nothing
                 local item it = GetManipulatedItem()
                 local integer id = GetItemTypeId(it)
@@ -297,11 +293,11 @@ library TrueSight /*
                 endif
                 set it = null
             endmethod
-           
+
             static method addToItem takes integer itemId, real radius returns nothing
                 call SaveReal(thistype.hash, itemId, 0, radius)
             endmethod
-           
+
             private static method onInit takes nothing returns nothing
                 static if LIBRARY_RegisterPlayerUnitEvent then
                     call RegisterPlayerUnitEvent(EVENT_PLAYER_UNIT_PICKUP_ITEM, function thistype.pick)
@@ -317,9 +313,9 @@ library TrueSight /*
                     call TriggerAddCondition(dropTrg, Filter(c2))
                 endif
             endmethod
-       
+
         endif
-   
+
     endstruct
-   
+
 endlibrary

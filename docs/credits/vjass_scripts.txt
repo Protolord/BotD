@@ -19,6 +19,7 @@
     IsDestructableTree          by BPower
     Movespeed                   by Flux
     OrderId                     by Nestharus
+    PathingLib                  by Quilnez
     Queue                       by Nestharus
     RegisterPlayerUnitEvent     by Magtheridon96
     SetUnitMaxState             by Earth-Fury
@@ -26,7 +27,6 @@
     SystemConsole               by Flux
     StringSize                  by PurgeandFire
     Table                       by Bribe
-    TerrainPathability          by Rising_Dusk
     TextSplat2                  by BPower
     TimerUtilsEx                by Magtheridon96 & Vexorian
     Track                       by PurgeandFire

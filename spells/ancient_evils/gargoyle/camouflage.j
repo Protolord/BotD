@@ -13,9 +13,9 @@ scope Camouflage
 
     private function StunDuration takes integer level returns real
         if level == 11 then
-            return 20.0
+            return 6.0
         endif
-        return 1.0*level
+        return 0.3*level
     endfunction
 
     private function TargetFilter takes unit u, player p returns boolean

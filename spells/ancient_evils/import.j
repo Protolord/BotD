@@ -126,6 +126,7 @@
 //------------------------------------------------------------------------------
 //! import "../spells/ancient_evils/gargoyle/uplift_purpose.j"
 //! import "../spells/ancient_evils/gargoyle/fissure.j"
+//! import "../spells/ancient_evils/gargoyle/rock_hard.j"
 //! import "../spells/ancient_evils/gargoyle/camouflage.j"
 //------------------------------------------------------------------------------
 //! import "../spells/ancient_evils/gargoyle/stone_vision.j"

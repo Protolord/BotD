@@ -3,7 +3,7 @@ library Invisible uses Table, TimerUtilsEx
 /*
     Invisible.create(unit, duration)
         - Add invisibility to a unit for a period of time.
-    
+
     this.destroy()
         - Destroy the Invisibility instance.
 */
@@ -13,20 +13,20 @@ library Invisible uses Table, TimerUtilsEx
 
         private constant integer REFRESH_COUNT = 20
     endglobals
-    
+
     struct Invisible extends array
         implement Alloc
-        
+
         public boolean autoDestroy
         readonly unit u
         readonly thistype next
         readonly thistype prev
-        
+
         private static trigger deathTrg = CreateTrigger()
         private static Table counter
         private static integer count = 0
         private static group g = CreateGroup()
-        
+
         static method has takes unit u returns boolean
             return GetUnitAbilityLevel(u, PERMA_INVI) > 0
         endmethod
@@ -34,7 +34,7 @@ library Invisible uses Table, TimerUtilsEx
         private static method reAdd takes nothing returns nothing
             call TriggerRegisterUnitEvent(thistype.deathTrg, GetEnumUnit(), EVENT_UNIT_DEATH)
         endmethod
-        
+
         method destroy takes nothing returns nothing
             local integer id = GetHandleId(this.u)
             set thistype.counter[id] = thistype.counter[id] - 1
@@ -73,15 +73,15 @@ library Invisible uses Table, TimerUtilsEx
         private static method expire takes nothing returns nothing
             call thistype(ReleaseTimer(GetExpiredTimer())).destroy()
         endmethod
-        
+
         static method create takes unit u, real duration returns thistype
             local thistype this = thistype.allocate()
             local integer id = GetHandleId(u)
             set this.u = u
             set this.autoDestroy = false
             if thistype.counter[id] == 0 then
-                call UnitMakeAbilityPermanent(u, true, PERMA_INVI)
                 call UnitAddAbility(u, PERMA_INVI)
+                call UnitMakeAbilityPermanent(u, true, PERMA_INVI)
                 set this.next = thistype(0)
                 set this.prev = thistype(0).prev
                 set this.next.prev = this
@@ -95,32 +95,12 @@ library Invisible uses Table, TimerUtilsEx
             endif
             return this
         endmethod
-        
-        static if DEBUG_MODE then
-            private static method register takes nothing returns nothing
-                local group g = CreateGroup()
-                local unit u
-                call GroupEnumUnitsInRect(g, bj_mapInitialPlayableArea, null)
-                loop
-                    set u = FirstOfGroup(g)
-                    exitwhen u == null
-                    call GroupRemoveUnit(g, u)
-                    if GetUnitAbilityLevel(u, 'Agho') > 0 or GetUnitAbilityLevel(u, 'Apiv') > 0 then
-                        set Invisible.create(u, 0).autoDestroy = true
-                    endif
-                endloop
-                call DestroyGroup(g)
-                set g = null
-                call DestroyTimer(GetExpiredTimer())
-            endmethod
-        endif
-        
+
         private static method onInit takes nothing returns nothing
             set thistype.counter = Table.create()
             call TriggerAddCondition(thistype.deathTrg, Condition(function thistype.onDeath))
-            debug call TimerStart(CreateTimer(), 0.0, false, function thistype.register)
         endmethod
-        
+
     endstruct
-    
+
 endlibrary

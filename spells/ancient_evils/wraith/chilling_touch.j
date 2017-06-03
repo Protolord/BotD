@@ -32,6 +32,7 @@ scope ChillingTouch
         method onApply takes nothing returns nothing
             set this.ms = Movespeed.create(this.target, 0, 0)
             set this.as = Atkspeed.create(this.target, 0)
+            set this.vc = VertexColor.create(this.target, -200, -50, 255, 0)
             set this.vc.speed = 500
         endmethod
 
@@ -54,7 +55,7 @@ scope ChillingTouch
             local integer level = GetUnitAbilityLevel(Damage.source, SPELL_ID)
             local SpellBuff b
 
-            if Damage.type == DAMAGE_TYPE_PHYSICAL and not Damage.coded and level > 0 and TargetFilter(Damage.target, GetOwningPlayer(Damage.source))  then
+            if Damage.type == DAMAGE_TYPE_PHYSICAL and not Damage.coded and level > 0 and not IsUnitIllusion(Damage.source) and TargetFilter(Damage.target, GetOwningPlayer(Damage.source))  then
                 set b = SpellBuff.add(Damage.source, Damage.target)
                 set b.duration = Duration(level)
                 call b.reapply()

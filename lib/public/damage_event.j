@@ -1,6 +1,6 @@
 library DamageEvent /*
             ----------------------------------
-                    DamageEvent v1.42
+                    DamageEvent v1.44
                         by Flux
             ----------------------------------
 
@@ -349,7 +349,6 @@ library DamageEvent /*
         endmethod
 
         implement optional DamageModify
-        implement DamageElement
 
         static if not LIBRARY_DamageModify then
 
@@ -410,9 +409,11 @@ library DamageEvent /*
 
                     set trg = CreateTrigger()
                     if amount < -1.0 then
-                        call TriggerRegisterUnitStateEvent(trg, this.stackTarget, UNIT_STATE_LIFE, GREATER_THAN, newHp - 0.2*amount)
+                        call TriggerRegisterUnitStateEvent(trg, this.stackTarget, UNIT_STATE_LIFE, GREATER_THAN, newHp + 1.0)
+                    elseif amount < -0.125 then
+                        call TriggerRegisterUnitStateEvent(trg, this.stackTarget, UNIT_STATE_LIFE, GREATER_THAN, newHp + 0.125)
                     else
-                        call TriggerRegisterUnitStateEvent(trg, this.stackTarget, UNIT_STATE_LIFE, GREATER_THAN, newHp + 0.2)
+                        call TriggerRegisterUnitStateEvent(trg, this.stackTarget, UNIT_STATE_LIFE, GREATER_THAN, newHp + 0.01)
                     endif
                     call TriggerAddCondition(trg, Condition(function thistype.afterDamage))
                     set trg = null
@@ -454,6 +455,7 @@ library DamageEvent /*
         endif
 
         implement DamageInit
+        implement DamageElement
 
     endstruct
 

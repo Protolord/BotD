@@ -46,9 +46,11 @@ scope EngulfedFires
 
         private static method onDamage takes nothing returns boolean
             local thistype this = thistype.tb[GetHandleId(GetTriggeringTrigger())]
-            set Damage.amount = 0
-            call DisableTrigger(this.trg)
-            call TimerStart(NewTimerEx(this), 0.0, false, function thistype.enable)
+            if this.target == Damage.target then
+                set Damage.amount = 0
+                call DisableTrigger(this.trg)
+                call TimerStart(NewTimerEx(this), 0.0, false, function thistype.enable)
+            endif
             return false
         endmethod
 

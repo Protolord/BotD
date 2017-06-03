@@ -158,13 +158,14 @@ library Hero requires DummyRecycler, Table
         endmethod
 
         static method initialize takes nothing returns nothing
-            call SystemTest.start("Initializing thistype" + "es:")
+            call SystemTest.start("Initializing Heroes:")
             set LIVING_FORCE = thistype.factionHead()
             set ANCIENT_EVILS = thistype.factionHead()
             //! runtextmacro SELECTION_SYSTEM_HERO_IMPLEMENTATION()
-            set defaultHero = vampireLord
-            if IsPlayerInForce(GetLocalPlayer(), Players.ancientEvils) then
+            if IsPlayerInForce(GetLocalPlayer(), Players.livingForce) then
                 set defaultHero = stormShaman
+            elseif IsPlayerInForce(GetLocalPlayer(), Players.ancientEvils) then
+                set defaultHero = vampireLord
             endif
             call SystemTest.end()
         endmethod

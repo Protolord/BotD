@@ -202,6 +202,7 @@ library SystemConsole /*
             debug return
             debug endif
             //Pop
+            //call BJDebugMsg("System.end for this = " + I2S(this))
             set thistype(0).next = this.next
             set this.checker = true
             call this.destroy()

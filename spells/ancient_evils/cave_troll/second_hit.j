@@ -11,11 +11,12 @@ scope SecondHit
         return 5.0*level
     endfunction
 
+    //In percent
     private function Chance takes integer level returns real
         if level == 11 then
             return 30.0
         endif
-        return 15.0
+        return 100.0//15.0
     endfunction
 
     private function TargetFilter takes unit u, player p returns boolean
@@ -73,7 +74,7 @@ scope SecondHit
             call thistype.tb.remove(GetHandleId(this.trg))
             call thistype.tb.remove(GetHandleId(this.orderTrg))
             call thistype.tb.boolean.remove(GetHandleId(this.buff.source))
-            call Damage.unregisterTrigger(this.trg)
+            call Damage.unregisterModifierTrigger(this.trg)
             call DestroyTrigger(this.trg)
             call DestroyTrigger(this.orderTrg)
             set this.target = null
@@ -92,6 +93,7 @@ scope SecondHit
             if this > 0 and Damage.type == DAMAGE_TYPE_PHYSICAL and not Damage.coded and Damage.source == this.buff.source then
                 if Damage.target == this.target then
                     set Damage.amount = this.dmg
+                    call Damage.lockAmount()
                     if Damage.amount >= 1.0 then
                         set t = FloatingTextSplat(Element.string(DAMAGE_ELEMENT_NORMAL) + I2S(R2I(Damage.amount)) + "|r", Damage.target, 2.0)
                         call t.setVisible(GetLocalPlayer() == GetOwningPlayer(Damage.source))

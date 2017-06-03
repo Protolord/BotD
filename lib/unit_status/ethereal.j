@@ -42,6 +42,7 @@ library Ethereal uses Table, TimerUtilsEx
             else
                 set thistype.tb[id] = 1
                 call UnitAddAbility(u, SPELL_ID)
+                call UnitMakeAbilityPermanent(u, true, SPELL_ID)
             endif
             return this
         endmethod

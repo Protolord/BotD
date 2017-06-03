@@ -23,7 +23,7 @@ module SkeletonKingSpells
 
     set bones = Spell.create('A7XX')
     set bones.passive = true
-    set bones.info = "Bones|n|cfff4a460Target|r: |cff3399ffPassive, Self|n|r|cfff4a460Max Arrows|r: |cff3399ff25|n|r|cfff4a460Arrow Duration|r: |cff3399ff3 minutes|r|n|nArrow projectiles have 10% chance getting stuck on skeletal body to create temporary spiked carapace. Each arrow deals 10 damage to melee attackers."
+    set bones.info = "Bones|n|cfff4a460Target|r: |cff3399ffPassive, Self|n|r|cfff4a460Max Arrows|r: |cff3399ff25|n|r|cfff4a460Arrow Duration|r: |cff3399ff1 minute|r|n|nArrow projectiles have 10% chance getting stuck on skeletal body to create temporary spiked carapace. Each arrow deals 10 damage to melee attackers."
 
     set soulBreak = Spell.create('A711')
     set soulBreak.info = "Soul Break|n|cfff4a460Target|r: |cff3399ffEnemy Unit|n|r|cfff4a460Range|r: |cff3399ff700|n|r|cfff4a460Damage/second|r: |cff3399ff20|n|r|cfff4a460Stun|r: |cff3399ff0.3 second |n|r|cfff4a460Duration|r: |cff3399ff(1 second x level)|n|r|cfff4a460Cooldown|r: |cff3399ff15 seconds|r|n|nSkeleton King sends a wave of unholy energy that breaks enemy soul dealing periodic damage and stun every second."
@@ -68,7 +68,7 @@ module SkeletonKingSpells
 
     set unholyEnergy = Spell.create('A742')
     set unholyEnergy.passive = true
-    set unholyEnergy.info = "Unholy Energy|n|cfff4a460Target|r: |cff3399ffPassive, Self|n|r|cfff4a460Range|r: |cff3399ff(250 + 50 x level)|n|r|cfff4a460Bonus Regeneration|r: |cff3399ff50 per unit|r|n|nSkeleton King receives additional +50 hitpoints regeneration for each living creature nearby. Heals 4x on ethereal units."
+    set unholyEnergy.info = "Unholy Energy|n|cfff4a460Target|r: |cff3399ffPassive, Self|n|r|cfff4a460Range|r: |cff3399ff(250 + 20 x level)|n|r|cfff4a460Bonus Regeneration|r: |cff3399ff50 per unit|r|n|nSkeleton King receives additional +50 hitpoints regeneration for each living creature nearby. Heals 4x on ethereal units."
 
     set grimDeal = Spell.create('A743')
     set grimDeal.passive = true

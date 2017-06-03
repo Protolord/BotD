@@ -148,6 +148,13 @@ library HeroButton/*
             set this.prev = thistype(0).prev
             set this.next.prev = this
             set this.prev.next = this
+            //Control visuals based on team
+            if this.h.faction == ANCIENT_EVILS and not IsPlayerInForce(GetLocalPlayer(), Players.ancientEvils) then
+                call this.selected()
+            endif
+            if this.h.faction == LIVING_FORCE and not IsPlayerInForce(GetLocalPlayer(), Players.livingForce) then
+                call this.selected()
+            endif
             return this
         endmethod
 

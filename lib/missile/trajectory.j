@@ -106,9 +106,8 @@ module MissileTrajectory
                     set this.hidden = true
                     call ShowDummy(this.u, false)
                 endif
-            elseif this.projectile then
+            else
                 if height <= 0 then
-                    //Bounce
                     set this.stop = true
                     call this.callbackOnHit()
                 endif
@@ -180,7 +179,8 @@ module MissileTrajectory
         endif
         if this.u == null then
             set this.u = GetRecycledDummy(this.x, this.y, this.z, facing*bj_RADTODEG)
-            call TimerStart(NewTimerEx(this), 0.01, false, function thistype.modelRender)
+            set this.mdl = AddSpecialEffectTarget(this.mdlPath, this.u, "origin")
+            //call TimerStart(NewTimerEx(this), 0.01, false, function thistype.modelRender)
         endif
     endmethod
 

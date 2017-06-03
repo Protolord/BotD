@@ -6,7 +6,9 @@ library SpellBlock uses Table, TimerUtilsEx
             - unit: The unit that will have the SpellBlock.
             - percentToProc: Chance to Block a Spell [Acceptable Values: 0.0 (0%) to 1.0 (100%)]
             - duration: How long will this instance of SpellBlock last.
-            - destroyOnProc: Will the Spell Block be removed upon blocking a Spell or will it remain until it expires?
+
+    this.registerProc(code)
+        - Register a callback to be called when the SpellBlock procs.
 
     SpellBlock.has(unit)
         - returns true if unit will successfully block a blockable spell due to chance.
@@ -26,6 +28,7 @@ library SpellBlock uses Table, TimerUtilsEx
         private thistype prev
 
         private static Table tb
+        private static thistype proc = 0
 
         method destroy takes nothing returns nothing
             if this.trg != null then
@@ -46,6 +49,10 @@ library SpellBlock uses Table, TimerUtilsEx
             call thistype(ReleaseTimer(GetExpiredTimer())).destroy()
         endmethod
 
+        static method get takes nothing returns thistype
+            return thistype.proc
+        endmethod
+
         static method has takes unit u returns boolean
             local integer id = GetHandleId(u)
             local thistype this
@@ -57,7 +64,9 @@ library SpellBlock uses Table, TimerUtilsEx
                     exitwhen this == head
                     if GetRandomReal(0, 1) <= this.percent then
                         if this.trg != null then
+                            set thistype.proc = this
                             call TriggerEvaluate(this.trg)
+                            set thistype.proc = 0
                         endif
                         return true
                     endif

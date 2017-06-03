@@ -36,32 +36,37 @@ library ConfirmButton/*
             local thistype this = GetPlayerId(Track.tracker)
             local PlayerStat p = PlayerStat(this)
             local HeroButton hb = HeroButton.get(p.hero)
-            if hb != 0 then
-                if p.spell1 != Spell.BLANK and p.spell2 != Spell.BLANK and p.spell3 != Spell.BLANK and p.spell4 != Spell.BLANK then
-                    //Make this HeroButton unavailable for other players
-                    call hb.selected()
-                    //Remove this hero from other player's HeroPool
-                    call HeroPool.removeHero(p.hero)
-                    //Hide StaticDisplay for this player
-                    call StaticDisplay.hide(Track.tracker)
-                    //Hide all other HeroButtons from this player
-                    call HeroButton.hideAll(Track.tracker)
-                    //Hide all other SpellButtons from this player
-                    call SpellButton.hideAll(Track.tracker)
-                    //Remove ConfirmButton and RandomButton from this player
-                    call ConfirmButton.remove(Track.tracker)
-                    call RandomButton.remove(Track.tracker)
-                    //Hide this player's Spell Display
-                    call SpellDisplay(this).destroy()
-                    //Hide this player's Hero Display
-                    call HeroDisplay(this).destroy()
-                    //Create selected Hero for this player
-                    call PlayerStat(this).createHero()
+            //Check if faction is aligned to player
+            if (p.hero.faction == LIVING_FORCE and IsPlayerInForce(p.player, Players.livingForce)) or (p.hero.faction == ANCIENT_EVILS and IsPlayerInForce(p.player, Players.ancientEvils)) then
+                if hb != 0 then
+                    if p.spell1 != Spell.BLANK and p.spell2 != Spell.BLANK and p.spell3 != Spell.BLANK and p.spell4 != Spell.BLANK then
+                        //Make this HeroButton unavailable for other players
+                        call hb.selected()
+                        //Remove this hero from other player's HeroPool
+                        call HeroPool.removeHero(p.hero)
+                        //Hide StaticDisplay for this player
+                        call StaticDisplay.hide(Track.tracker)
+                        //Hide all other HeroButtons from this player
+                        call HeroButton.hideAll(Track.tracker)
+                        //Hide all other SpellButtons from this player
+                        call SpellButton.hideAll(Track.tracker)
+                        //Remove ConfirmButton and RandomButton from this player
+                        call ConfirmButton.remove(Track.tracker)
+                        call RandomButton.remove(Track.tracker)
+                        //Hide this player's Spell Display
+                        call SpellDisplay(this).destroy()
+                        //Hide this player's Hero Display
+                        call HeroDisplay(this).destroy()
+                        //Create selected Hero for this player
+                        call PlayerStat(this).createHero()
+                    else
+                        call PlayerStat.errorMsg(Track.tracker, "Not enough spells selected")
+                    endif
                 else
-                    call PlayerStat.errorMsg(Track.tracker, "Not enough spells selected")
+                    call PlayerStat.errorMsg(Track.tracker, "Hero already taken")
                 endif
             else
-                call PlayerStat.errorMsg(Track.tracker, "Hero already taken")
+                call PlayerStat.errorMsg(Track.tracker, "Heroes from another faction cannot be selected")
             endif
         endmethod
 

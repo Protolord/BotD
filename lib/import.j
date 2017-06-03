@@ -46,6 +46,7 @@
 //! import "../lib/public/is_destructable_tree.j"
 //! import "../lib/public/movespeed.j"
 //! import "../lib/public/orderid.j"
+//! import "../lib/public/pathinglib.j"
 //! import "../lib/public/queue.j"
 //! import "../lib/public/string_size.j"
 //! import "../lib/public/register_player_unit_event.j"
