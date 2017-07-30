@@ -81,6 +81,7 @@ library SystemConsole /*
 
         private static boolean privShow = false
         readonly static integer count = 0
+        static timer t = CreateTimer()
 
         static integer lineCount = 0
         static integer cursor = 16
@@ -109,10 +110,23 @@ library SystemConsole /*
             call this.deallocate()
         endmethod
 
+        private static method conv takes integer i returns string
+            local string s = I2S(i)
+            if i < 10 then
+                set s = "0" + s
+            endif
+            return s
+        endmethod
+
         static method create takes string s returns thistype
             local thistype this = thistype.allocate()
+            local real time = TimerGetElapsed(thistype.t)
+            local integer min = R2I(time/60)
+            local integer sec = R2I(time)
+            set min = min - (min/60)*60
+            set sec = sec - (sec/60)*60
             set thistype.lineCount = thistype.lineCount + 1
-            set this.value = "|cff777777#" + I2S(thistype.lineCount) + "|r: " + s
+            set this.value = "|cff777777[" + thistype.conv(min) + ":" + thistype.conv(sec) + "]#" + I2S(thistype.lineCount) + "|r: " + s
             set this.next = 0
             set this.prev = thistype(0).prev
             set this.next.prev = this
@@ -201,18 +215,16 @@ library SystemConsole /*
             debug call SystemMsg.create("Missing SystemTest.start(<message>)")
             debug return
             debug endif
-            //Pop
-            //call BJDebugMsg("System.end for this = " + I2S(this))
             set thistype(0).next = this.next
             set this.checker = true
             call this.destroy()
         endmethod
 
-        static if LIBRARY_Table then
-            private static method onInit takes nothing returns nothing
-                set thistype.tb = Table.create()
-            endmethod
-        endif
+        private static method onInit takes nothing returns nothing
+            call TimerStart(SystemMsg.t, 9999, false, null)
+            set thistype.tb = Table.create()
+        endmethod
+
 
     endstruct
 

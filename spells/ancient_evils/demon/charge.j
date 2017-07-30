@@ -1,5 +1,5 @@
 scope Charge
- 
+
     globals
         private constant integer SPELL_ID = 'A513'
         private constant real SPEED = 1800.0
@@ -8,39 +8,39 @@ scope Charge
         private constant attacktype ATTACK_TYPE = ATTACK_TYPE_NORMAL
         private constant damagetype DAMAGE_TYPE = DAMAGE_TYPE_MAGIC
     endglobals
-    
+
     private function Duration takes integer level returns real
         if level == 11 then
             return 6.0
         endif
         return 0.3*level
     endfunction
-    
+
     private function DamageDealt takes integer level returns real
         if level == 11 then
             return 1000.0
         endif
         return 50.0*level
     endfunction
-    
+
     private function TargetFilter takes unit u, player p returns boolean
         return UnitAlive(u) and IsUnitEnemy(u, p) and not IsUnitType(u, UNIT_TYPE_STRUCTURE)
     endfunction
-    
+
     //If false, dashing will immedietly stop
     private function ChaseFilter takes unit u returns boolean
         return true
     endfunction
-    
+
     struct Charge extends array
-        
+
         private unit caster
         private unit target
         private unit dummy
         private integer lvl
         private effect sfx
         private Phase phase
-        
+
         private method remove takes nothing returns nothing
             call this.phase.destroy()
             call DestroyEffect(this.sfx)
@@ -50,7 +50,7 @@ scope Charge
             set this.dummy = null
             call this.destroy()
         endmethod
-        
+
         implement CTL
             local real x1
             local real y1
@@ -62,7 +62,7 @@ scope Charge
             if ChaseFilter(this.target) then
                 if IsUnitInRange(this.caster, this.target, HIT_DISTANCE) then
                     if not SpellBlock.has(this.target) and TargetFilter(this.target, GetOwningPlayer(this.caster)) then
-                        call Stun.create(this.target, Duration(this.lvl), false)
+                        call Stun.create(this.target, Duration(this.lvl))
                         call Damage.element.apply(this.caster, this.target, DamageDealt(this.lvl), ATTACK_TYPE, DAMAGE_TYPE, DAMAGE_ELEMENT_FIRE)
                     endif
                     call this.remove()
@@ -86,7 +86,7 @@ scope Charge
                 call this.remove()
             endif
         implement CTLEnd
-        
+
         private static method onCast takes nothing returns nothing
             local thistype this = thistype.create()
             set this.caster = GetTriggerUnit()
@@ -97,13 +97,13 @@ scope Charge
             set this.phase = Phase.create(this.caster)
             call SystemMsg.create(GetUnitName(GetTriggerUnit()) + " cast thistype on " + GetUnitName(GetSpellTargetUnit()))
         endmethod
-        
+
         static method init takes nothing returns nothing
             call SystemTest.start("Initializing thistype: ")
             call RegisterSpellEffectEvent(SPELL_ID, function thistype.onCast)
             call SystemTest.end()
         endmethod
-        
+
     endstruct
-    
+
 endscope

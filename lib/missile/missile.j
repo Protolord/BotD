@@ -32,6 +32,9 @@ Missile:
         - If true, missile will be hidden when going through cliffs/hills.
         - If false and has a point target, it will auto-destroy upon hitting the ground.
 
+    this.wave = <boolean>
+        - If true, missile will behave like a shockwave always on the ground.
+
     this.getDistance()
         - Get the distance between current position and target location
 
@@ -70,6 +73,7 @@ MissileCallback:
         implement MissileCallback
 
         private boolean hidden
+        public boolean wave
         public boolean autohide
 
         readonly real x
@@ -169,13 +173,22 @@ MissileCallback:
             call SetUnitScale(this.u, r, 0, 0)
         endmethod
 
+        method show takes boolean flag returns nothing
+            set this.hidden = not flag
+            call ShowDummy(this.u, flag)
+        endmethod
+
         static method create takes nothing returns thistype
             local thistype this = thistype.allocate()
             set this.mdlPath = ""
             set this.stop = true
             set this.projectile = false
             set this.autohide = true
-            set this.hidden = false
+            set this.wave = false
+            if this.hidden then
+                call this.show(true)
+                set this.hidden = false
+            endif
             set this.arc = 1.0
             set this.next = 0
             set this.prev = thistype(0).prev

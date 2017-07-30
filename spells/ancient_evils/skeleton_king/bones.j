@@ -9,7 +9,6 @@ scope Bones
         private constant integer MAX_ARROW = 25
         private constant attacktype ATTACK_TYPE = ATTACK_TYPE_NORMAL
         private constant damagetype DAMAGE_TYPE = DAMAGE_TYPE_MAGIC
-        private constant real TIMEOUT = 0.0312500
     endglobals
 
     private function TargetFilter takes unit u, player owner returns boolean
@@ -28,10 +27,7 @@ scope Bones
         private static string array attach
 
         private static Table tb
-        private static Table ts
-        private static group g
-        private static timer tim
-        private static group trigger
+        private static Table bd
 
         private static constant integer RAWCODE = 'B7XX'
         private static constant integer DISPEL_TYPE = BUFF_POSITIVE
@@ -44,33 +40,13 @@ scope Bones
         method onRemove takes nothing returns nothing
             local integer id = GetHandleId(this.target)
             set thistype.tb[id] = thistype.tb[id] - 1
+            set BuffDisplay(thistype.bd[id]).value = "|iBONES|i" + I2S(thistype.tb[id])
             if thistype.tb[id] == 0 then
                 call thistype.tb.remove(id)
-                call textsplat(thistype.ts[id]).destroy()
-                call thistype.ts.remove(id)
-                call GroupRemoveUnit(thistype.g, this.target)
-                if FirstOfGroup(thistype.g) == null then
-                    call ReleaseTimer(thistype.tim)
-                    set thistype.tim = null
-                endif
+                call BuffDisplay(thistype.bd[id]).destroy()
+                call thistype.bd.remove(id)
             endif
             call DestroyEffect(this.sfx)
-        endmethod
-
-        private static method pick takes nothing returns nothing
-            local unit u = GetEnumUnit()
-            local integer id = GetHandleId(u)
-            local textsplat text = textsplat(thistype.ts[id])
-            if Buff.has(null, u, RegencyBuff.typeid) then
-                call text.setPosition(GetUnitX(u) - 30, GetUnitY(u), GetUnitFlyHeight(u) + 180)
-            else
-                call text.setPosition(GetUnitX(u), GetUnitY(u), GetUnitFlyHeight(u) + 180)
-            endif
-            call text.setText("|iBONES|i" + I2S(thistype.tb[id]), 7.0, TEXTSPLAT_TEXT_ALIGN_CENTER)
-        endmethod
-
-        private static method onPeriod takes nothing returns nothing
-            call ForGroup(thistype.g, function thistype.pick)
         endmethod
 
         method onApply takes nothing returns nothing
@@ -83,21 +59,16 @@ scope Bones
                 set thistype.tb[id] = thistype.tb[id] + 1
             else
                 set thistype.tb[id] = 1
-                set thistype.ts[id] = textsplat.create(TREBUCHET_MS)
-                call textsplat(thistype.ts[id]).setVisible(GetLocalPlayer() == GetOwningPlayer(this.target))
-                call GroupAddUnit(thistype.g, this.target)
-                set thistype.tim = NewTimer()
-                call TimerStart(thistype.tim, TIMEOUT, true, function thistype.onPeriod)
+                set thistype.bd[id] = BuffDisplay.create(this.target)
             endif
-
+            set BuffDisplay(thistype.bd[id]).value = "|iBONES|i" + I2S(thistype.tb[id])
             set this.sfx = AddSpecialEffectTarget(thistype.arrow[ModuloInteger(thistype.tb[id], 6)], this.target, thistype.attach[(thistype.tb[id] - 1)/6])
         endmethod
 
         private static method init takes nothing returns nothing
             call PreloadSpell(thistype.RAWCODE)
             set thistype.tb = Table.create()
-            set thistype.ts = Table.create()
-            set thistype.g = CreateGroup()
+            set thistype.bd = Table.create()
             set thistype.arrow[0] = "Models\\Effects\\BoneArrow1.mdx"
             set thistype.arrow[1] = "Models\\Effects\\BoneArrow2.mdx"
             set thistype.arrow[2] = "Models\\Effects\\BoneArrow3.mdx"

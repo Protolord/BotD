@@ -20,7 +20,7 @@ scope UnstoppableHunger
     endfunction
 
     private function Chance takes integer level returns real
-        return 100.0//3.0 + 0.0*level
+        return 3.0 + 0.0*level
     endfunction
 
     struct UnstoppableHunger extends array

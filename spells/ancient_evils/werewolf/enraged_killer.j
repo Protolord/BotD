@@ -56,7 +56,7 @@ scope EnragedKiller
                     call DisableTrigger(thistype.trg)
                     call Damage.apply(Damage.source, Damage.target, b.dmg, ATTACK_TYPE, DAMAGE_TYPE)
                     call EnableTrigger(thistype.trg)
-                    set t = FloatingTextSplat(Element.string(DAMAGE_ELEMENT_NORMAL) + "+" + I2S(R2I(b.dmg + 0.5)) + "|r", Damage.target, 1.0)
+                    set t = FloatingTextSplat(Element.string(DAMAGE_ELEMENT_NORMAL) + "+" + I2S(R2I(b.dmg + 0.5)) + "|r", Damage.target)
                     call t.setVisible(GetLocalPlayer() == GetOwningPlayer(Damage.source) and IsUnitVisible(Damage.source, GetLocalPlayer()))
                 endif
                 set b.dmg = b.dmg + DamageGrowth(level)

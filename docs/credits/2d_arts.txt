@@ -1,6 +1,8 @@
 -------------------------
           Icons
 -------------------------
+    All icons are credited to Blizzard unless otherwise stated
+
     Heroes:
         BTN_Werewolf                by CRAZYRUSSIAN
         BTN_Wraith                  by Yak
@@ -16,15 +18,15 @@
         BTN_Knight                  by 67chrome
         BTN_Mistress                by Kuhneghetz
         BTN_Nomad                   by Dan van Ohllus & Mr.Goblin, Kuhneghetz
-        BTN_Arcanist                by GhostThruster
         BTN_Raven                   by 67chrome
         BTN_Medium                  by 67chrome
         BTN_Siren                   by Tarrasque
         BTN_Sorceress               by Apheraz Lucent
         BTN_Templar                 by Eagle XI
         BTN_Viking                  by Marcos DAB
-
-
+        BTN_Zealot                  by Pyraeus
+        BTN_Pathfinder              by Daenar7
+        BTN_Cleric                  by Norinrad
 
     Vampire Lord Abilities:
         BTN_ImmortalForce           by PeeKay
@@ -52,7 +54,6 @@
         BTN_Revitalize              by PeeKay
 
     Wraith Abilities:
-        BTN_ChillingTouch           by The Panda
         BTN_DeathAndDecay           by NFWar
         BTN_BrainSap                by BLazeKraze
         BTN_EssenceOfEvil           by morbent
@@ -126,7 +127,6 @@
 
     Elementalist
         BTN_Mirage                  by Valve Corporation
-        BTN_FrostArmor              by Darkfang
         BTN_FireDevastation         by Valve Corporation
 
     Gnome Technician
@@ -140,19 +140,64 @@
         BTN_Sanctuary               by Valve Corporation
 
     Hunter:
+        BTN_ClawBlock               by -Berz-
         BTN_Companion               by Valve Corporation
         BTN_Falcon                  by olofmoleman
+        BTN_ViciousStrike           by CRAZYRUSSIAN
+
+    Guardian:
+        BTN_FistOfHeavens           by zbc
 
     Inquisitor:
         BTN_SilencingPain           by Valve Corporation
 
+    Knight:
+        BTN_ShieldReaction          by APProject
+
     Mistress
         BTN_Evasion                 by CRAZYRUSSIAN
         BTN_Banish                  by Valve Corporation
-        BTN_CriticalStrike          by PeeKay
 
     Nomad:
+        BTN_CursedContact           by Scythy Dervish
+        BTN_Sandstorm               by D.ee
         BTN_WrathOfTheDesert        by olofmoleman
+
+    Raven:
+        BTN_Ultravision             by PeeKay
+        BTN_DeadlyStrike            by PeeKay
+
+    Medium:
+        BTN_DeadlyLink              by Valve Corporation
+        BTN_SpiritualSwap           by Valve Corporation
+
+    Siren:
+        BTN_SongOfTheSiren          by Valve Corporation
+        BTN_AquaStrike              by PeeKay
+        BTN_WaterBlow               by Darkfang
+
+    Sorceress:
+        BTN_StrongMind              by PeeKay
+        BTN_WisdomReflection        by Raging Ent
+
+    Treant:
+        BTN_LivingArmor             by Valve Corporation
+        BTN_ForestSentinel          by PeeKay
+        BTN_Overgrowth              by Valve Corporation
+        BTN_NatureWrath             by -Berz-
+
+    Viking:
+        BTN_SeamansWill             by Valve Corporation
+        BTN_OceansForce             by Valve Corporation
+        BTN_IvoryWave               by Valve Corporation
+
+    Zealot:
+        BTN_ArcaneNet               by Valve Corporation
+        BTN_FieryDust               by Darkfang
+
+    Pathfinder:
+        BTN_Lasso                   by Valve Corporation
+
 
     Others:
         BTN_Check                   by Lockheart
@@ -164,14 +209,23 @@
 -------------------------
           Skins
 -------------------------
-        Blue Laser Lightning        by Erkki2
+    All skins are credited to Blizzard unless otherwise stated
 
+    Heroes:
         Crusader                    by CloudWolf
         Witch                       by Daenar7
         Hunter                      by Daenar7
         Guardian                    by FrIkY
         Inquisitor                  by markone
         Knight                      by 67chrome
-        Raven                       by 67chrome
+        Raven                       by The_Silent
         Medium                      by Daenar7
         Sorceress                   by Apheraz Lucent
+        Pathfinder                  by Daenar7
+
+    Lightnings:
+        Blue Laser                  by Erkki2
+        Beaming Glare               by Erkki2
+        Deadly Link                 by Spellbound
+
+

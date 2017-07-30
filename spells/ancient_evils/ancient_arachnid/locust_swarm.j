@@ -1,5 +1,5 @@
 /*
-    
+
     No triggers needed
     Use Locust Swarm
 
@@ -18,7 +18,7 @@ scope LocustSwarm
 
         private static method onDamage takes nothing returns nothing
             if GetUnitTypeId(Damage.source) == UNIT_ID then
-                call FloatingTextSplat(Element.string(DAMAGE_ELEMENT_NORMAL) + I2S(R2I(Damage.amount + 0.5)) + "|r", Damage.target, 1.0).setVisible(GetLocalPlayer() == GetOwningPlayer(Damage.source))
+                call FloatingTextSplat(Element.string(DAMAGE_ELEMENT_NORMAL) + I2S(R2I(Damage.amount + 0.5)) + "|r", Damage.target).setVisible(GetLocalPlayer() == GetOwningPlayer(Damage.source))
             endif
         endmethod
 
@@ -41,7 +41,7 @@ scope LocustSwarm
             call RegisterSpellEffectEvent(SPELL_ID, function thistype.onCast)
             call PreloadUnit(UNIT_ID)
             call SystemTest.end()
-        endmethod        
+        endmethod
 
     endstruct
 

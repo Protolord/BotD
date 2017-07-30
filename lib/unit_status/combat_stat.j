@@ -61,6 +61,8 @@ library CombatStat uses Table
                     return I2R(this.baseDmg) + 0.5*(this.dice*this.sides + 1) + I2R(GetHeroStr(u, false))
                 endif
                 return I2R(this.baseDmg) + 0.5*(this.dice*this.sides + 1)
+            else
+                call BJDebugMsg("Unable to get damage of " + GetUnitName(u))
             endif
             return 0.0
         endmethod

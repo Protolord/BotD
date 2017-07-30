@@ -4,25 +4,25 @@ scope Crack
         private constant integer SPELL_ID = 'A611'
         private constant string SFX = "Abilities\\Spells\\Orc\\EarthQuake\\EarthquakeTarget.mdl"
     endglobals
-    
+
     private function Duration takes integer level returns real
         if level == 11 then
             return 4.0
         endif
         return 0.2*level
     endfunction
-    
+
     private function Radius takes integer level returns real
         return 300.0 + 0.0*level
     endfunction
-    
+
     private function TargetFilter takes unit u, player p returns boolean
         return UnitAlive(u) and IsUnitEnemy(u, p) and not IsUnitType(u, UNIT_TYPE_STRUCTURE) and not IsUnitType(u, UNIT_TYPE_MAGIC_IMMUNE)
     endfunction
-    
-    
+
+
     struct Crack extends array
-        
+
         private static method onCast takes nothing returns nothing
             local unit caster = GetTriggerUnit()
             local player owner = GetTriggerPlayer()
@@ -47,7 +47,7 @@ scope Crack
                 exitwhen u == null
                 call GroupRemoveUnit(g, u)
                 if TargetFilter(u, owner) then
-                    call Stun.create(u, duration, false)
+                    call Stun.create(u, duration)
                 endif
             endloop
             call ReleaseGroup(g)
@@ -56,12 +56,12 @@ scope Crack
             set dummy = null
             call SystemMsg.create(GetUnitName(GetTriggerUnit()) + " cast thistype")
         endmethod
-        
+
         static method init takes nothing returns nothing
             call SystemTest.start("Initializing thistype: ")
             call RegisterSpellEffectEvent(SPELL_ID, function thistype.onCast)
             call SystemTest.end()
         endmethod
-        
+
     endstruct
 endscope

@@ -25,7 +25,7 @@ scope CriticalStrike
         private static method onDamage takes nothing returns nothing
             local textsplat t
             if Damage.target == thistype.target then
-                set t = FloatingTextSplat(Element.string(DAMAGE_ELEMENT_NORMAL) + I2S(R2I(Damage.amount + 0.5)) + "|r", Damage.target, 1.0)
+                set t = FloatingTextSplat(Element.string(DAMAGE_ELEMENT_NORMAL) + I2S(R2I(Damage.amount + 0.5)) + "|r", Damage.target)
                 call t.setVisible(GetLocalPlayer() == GetOwningPlayer(Damage.source) and IsUnitVisible(Damage.source, GetLocalPlayer()))
                 set thistype.target = null
             endif

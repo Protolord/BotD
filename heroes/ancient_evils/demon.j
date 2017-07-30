@@ -45,7 +45,7 @@ module DemonSpells
 
     set infernalChains = Spell.create('A523')
     set infernalChains.passive = true
-    set infernalChains.info = "Infernal Chains|n|cfff4a460Target|r: |cff3399ffPassive, Structure|n|r|cfff4a460Chain Length|r:|cff3399ff (1 x level)|n|r|cfff4a460Chance to proc|r:|cff3399ff 1%|n|n|rProvides Demon with a chance to devastate enemy structures dealing 10% of target's Max HP as damage. Further successful procs on the same target deals additional 10% damage up to 100%."
+    set infernalChains.info = "Infernal Chains|n|cfff4a460Target|r: |cff3399ffPassive, Structure|n|r|cfff4a460Chain Length|r:|cff3399ff (1 x level)|n|r|cfff4a460Chance to proc|r:|cff3399ff 2.5%|n|n|rProvides Demon with a chance to devastate enemy structures dealing 10% of target's Max HP as damage. Further successful procs on the same target deals additional 10% damage up to 100%."
 
     set underworldFires = Spell.create('A524')
     set underworldFires.info = "Underworld Fires|n|cfff4a460Target|r: |cff3399ffSelf (160)|n|r|cfff4a460Damage|r: |cff3399ff(30 x level)|n|r|cfff4a460Mana cost|r: |cff3399ff20 + (4 x level)|r|n|nDemon engulfs with Underworld Fires to deal damage to nearby enemies. Also damages structures."

@@ -21,8 +21,6 @@ scope GhostlyBeam
         private Missile m
         private FlySight fs
         private TrueSight ts
-        private boolean isHead
-        private boolean isUlt
 
         private thistype next
         private thistype prev
@@ -35,14 +33,9 @@ scope GhostlyBeam
 
         private static method onHit takes nothing returns nothing
             local thistype this = thistype(Missile.getHit())
-            if this.isHead and this.ts.radius == GLOBAL_SIGHT then
+            if this.ts.radius == GLOBAL_SIGHT then
                 set this.m.stop = true
-                set this = this.next
-                loop
-                    exitwhen this == Missile.getHit()
-                    set this.m.stop = true
-                    set this = this.next
-                endloop
+                call this.m.show(false)
             else
                 call this.destroy()
             endif
@@ -67,32 +60,12 @@ scope GhostlyBeam
             else
                 call SetUnitScale(this.m.u, 2.0 + b.radius/1500, 0, 0)
             endif
-            if b.duration > 0 then
-                set this.isUlt = true
-            else
-                set this.isUlt = false
-            endif
-            if this.isUlt then
-                if b.first then
-                    set this.next = this
-                    set this.prev = this
-                    set this.isHead = true
-                    call this.m.registerOnHit(function thistype.onHit)
-                else
-                    set this.next = b.head
-                    set this.prev = b.head.prev
-                    set this.next.prev = this
-                    set this.prev.next = this
-                    set this.isHead = false
-                endif
-            endif
-            if this.isUlt then
-                call TimerStart(NewTimerEx(this), b.duration, false, function thistype.expires)
-            else
-                call this.m.registerOnHit(function thistype.onHit)
-            endif
+            call this.m.registerOnHit(function thistype.onHit)
             set this.ts = TrueSight.create(this.m.u, b.radius)
             set this.fs = FlySight.create(this.m.u, b.radius)
+            if b.duration > 0 then
+                call TimerStart(NewTimerEx(this), b.duration, false, function thistype.expires)
+            endif
             return this
         endmethod
     endstruct

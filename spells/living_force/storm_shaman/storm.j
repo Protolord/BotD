@@ -2,7 +2,7 @@ scope Storm
 
     globals
         private constant integer SPELL_ID = 'AH14'
-        private constant string SFX_HIT = "Abilities\\Weapons\\Bolt\\BoltImpact.mdl"
+        private constant string SFX_HIT = "Abilities\\Spells\\Orc\\LightningBolt\\LightningBoltMissile.mdl"
         private constant string LIGHTNING_CODE = "CLSB"
         private constant real LIGHTNING_DURATION = 0.8
         private constant attacktype ATTACK_TYPE = ATTACK_TYPE_NORMAL
@@ -71,7 +71,7 @@ scope Storm
                     set l.duration = LIGHTNING_DURATION
                     call l.startColor(1.0, 1.0, 1.0, 1.0)
                     call l.endColor(1.0, 1.0, 1.0, 0.1)
-                    call DestroyEffect(AddSpecialEffectTarget(SFX_HIT, u, "overhead"))
+                    call DestroyEffect(AddSpecialEffectTarget(SFX_HIT, u, "chest"))
                     call Damage.element.apply(this.source, u, this.dmg, ATTACK_TYPE, DAMAGE_TYPE, DAMAGE_ELEMENT_ELECTRIC)
                 endif
             endloop

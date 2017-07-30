@@ -1,6 +1,7 @@
 -------------------------
         Models
 -------------------------
+    All models are credited to Blizzard unless otherwise stated
 
     HEROES:
         Vampire Lord                by -Grendel
@@ -21,16 +22,19 @@
         Mistress                    by Cavman, Kuhneghetz
         Nomad                       by Kuhneghetz & Mr.Goblin
         Nomad Morph                 by olofmoleman
-        Arcanist                    by Juice_F
+        Arcanist                    by Tenebis
         Siren                       by Tarrasque
         Templar                     by ratamahatta
         Treant                      by IceK
         Viking                      by Sellenisko
+        Zealot                      by Tenebis
+        Cleric                      by Norinrad
 
     ABILITIES:
         Immortal Force Effect       by sPy
         Corrupting Stomp Effect     by JetFangInferno
         Soul Corruption Effect      by Glen Elendra
+        Spiritual Walk Mana Burn    by Empyreal
         Shadows Of Corruption       by The_Swamp_Warrior
         Vicious Explorers Effect    by JetFangInferno
         Eye of Darkness Effect      by kellym0
@@ -50,7 +54,7 @@
         Death and Decay Effect      by dhguardianes
         Mist of Darkness Effect     by Vortigon
         Brain Sap Effects           by nGy
-        Horror Effect               by JetFangInferno
+        Horror Effect               by Empyreal
         Horror Target Effect        by JetFangInferno
         InnerDive Effect            by Razer!X
         Spiritual Tunnel Effect     by Azsure, familla
@@ -65,6 +69,7 @@
         Sticky Shell Slow           by icewolf055
         Spray Heal                  by icewolf055
         Poison Blast                by icewolf055
+        Severe Wound Bug            by tee.dubs
         Severe Wound Heal           by WILL THE ALMIGHTY
 
         Vigilant and Virtuous       by ChaoticHunter
@@ -149,19 +154,61 @@
         Eagle Model                 by Hayate
         Falcon Model                by olofmoleman
 
+        Fist of Heaven Attachment   by Pyritie
+        Fist of Heaven Effect       by DCrimson
+
+        Brilliance Aura             by UgoUgo
+
         Robust Force                by Mythic
         Bash Attachment             by Empyreal and Hate
 
         Banish Missile              by Ham Ham
         Critical Strike Blood       by Empyreal
 
+        Sandstorm                   by JetFangInferno
         Wrath of the Desert Effect  by JetFangInferno
+
+        Vortex Shield               by Feria
+        Ethereal Force Missile      by Empyreal
+        Ethereal Force Slow         by JetFangInferno
+        Energy Field                by Empyreal
+        Arcane Pierce Missile       by nGy
+        Arcane Pierce Effects       by xyzier_24
+        Arcane Pierce Beams         by nGy
+
+        Shadow Strike Missile       by -Grendel
+        Shadow Strike Slow          by UgoUgo
+        Deadly Strike Blood         by Empyreal
+        Deadly Strike Attachment    by Empyreal
+
+        Song of the Siren Effect    by JetFangInferno
+        Aqua Strike Missile         by UgoUgo
+        Amphibian Sign Buff         by ChaoticHunter
+        Amphibian Sign Effect       by 00110000
+
+        Sonic Blast                 by WILL THE ALMIGHTY
+        Strong Mind Missile         by Suselishe
+
+        Holy Aura                   by Empyreal
+        Holy Spiral                 by Feria
+        Holy Spiral Center Missile  by Tranquilx
+        Beaming Glare Buff          by JetFangInferno
+
+        Living Armor                by icewolf055
+        Forest Sentinel             by Destro666
+        Nature Wrath Effect         by Empyreal
+        Nature Wrath Attachment     by Pyritie
+
+        Seaman's Will Explode       by JesusHipster
+        Seaman's Will Buff          by Empyreal
+
+        Arcane Bomb Missile         by Empyreal
+        Arcane Bomb Explosion       by JesusHipster
+        Arcane Bomb Buff            by Titania
+        Fiery Dust                  by Empyreal
 
 
     OTHERS:
         Generic CastBar             by HappyTauren
         Dummy Model                 by Vexorian
         Silence SFX                 by icewolf055
-
-
-To use:

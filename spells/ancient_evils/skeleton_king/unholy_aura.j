@@ -2,7 +2,7 @@ scope UnholyAura
 
     globals
         private constant integer SPELL_ID = 'A714'
-        private constant real TIMEOUT = 1.0
+        private constant real TIMEOUT = 0.25
         private constant real MIN_RANGE = 150 //Range that will deal max damage
         private constant attacktype ATTACK_TYPE = ATTACK_TYPE_NORMAL
         private constant damagetype DAMAGE_TYPE = DAMAGE_TYPE_MAGIC
@@ -76,6 +76,7 @@ scope UnholyAura
                 set u = FirstOfGroup(thistype.g)
                 exitwhen u == null
                 call GroupRemoveUnit(thistype.g, u)
+                call FloatingText.setSplatProperties(TIMEOUT)
                 if TargetFilter(u, p) then
                     set dx = x - GetUnitX(u)
                     set dy = y - GetUnitY(u)
@@ -88,6 +89,7 @@ scope UnholyAura
                     call Damage.element.apply(this.caster, u, 0.01*dmg*GetWidgetLife(u), ATTACK_TYPE, DAMAGE_TYPE, DAMAGE_ELEMENT_SPIRIT)
                     call DestroyEffect(AddSpecialEffectTarget(SFX, u, "chest"))
                 endif
+                call FloatingText.resetSplatProperties()
             endloop
             set p = null
         endmethod
@@ -108,8 +110,8 @@ scope UnholyAura
             set this.caster = GetTriggerUnit()
             set lvl = GetUnitAbilityLevel(this.caster, SPELL_ID)
             set this.range = Range(lvl)
-            set this.maxDmg = HealthPercentDamage_Max(lvl)
-            set this.minDmg = HealthPercentDamage_Min(lvl)
+            set this.maxDmg = HealthPercentDamage_Max(lvl)*TIMEOUT
+            set this.minDmg = HealthPercentDamage_Min(lvl)*TIMEOUT
             set this.m = (this.maxDmg - this.minDmg)/(this.range - MIN_RANGE)
             set this.manaTrg = CreateTrigger()
             call TriggerAddCondition(this.manaTrg, function thistype.onManaDeplete)

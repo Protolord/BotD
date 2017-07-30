@@ -30,7 +30,7 @@ module FirelordConfig
     set firelord.iconPath = "ReplaceableTextures\\CommandButtons\\BTN_Firelord.blp"
     set firelord.modelPath = "Models\\Units\\Firelord.mdl"
     set firelord.info = "<NOTHING YET>"
-    set firelord.attribute = "20 +1.0   20 +1.5   20 +3.5"
+    set firelord.attribute = "20 +2.2   20 +1.5   20 +3.0"
     set firelord.primary = INT
 
     //Configure Spells

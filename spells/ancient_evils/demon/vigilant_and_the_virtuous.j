@@ -28,17 +28,8 @@ scope VigilantAndTheVirtuous
 
         static method onPeriod takes nothing returns nothing
             local thistype this = GetTimerData(GetExpiredTimer())
-            local real dmg
             if TargetFilter(this.target, GetOwningPlayer(this.source)) then
-                set dmg = GetHeroLevel(this.source)*DAMAGE_FACTOR
-                if dmg > GetWidgetLife(this.target) then
-                    set VigilantAndTheVirtuous.dying = this.target
-                    call EnableTrigger(VigilantAndTheVirtuous.preventDying)
-                    call Damage.apply(this.source, this.target, dmg, ATTACK_TYPE, DAMAGE_TYPE)
-                    call DisableTrigger(VigilantAndTheVirtuous.preventDying)
-                else
-                    call Damage.element.apply(this.source, this.target, dmg, ATTACK_TYPE, DAMAGE_TYPE, DAMAGE_ELEMENT_FIRE)
-                endif
+                call Damage.element.apply(this.source, this.target, GetHeroLevel(this.source)*DAMAGE_FACTOR, ATTACK_TYPE, DAMAGE_TYPE, DAMAGE_ELEMENT_FIRE)
             endif
         endmethod
 
@@ -56,20 +47,6 @@ scope VigilantAndTheVirtuous
 
     struct VigilantAndTheVirtuous extends array
 
-        public static unit dying
-        readonly static trigger preventDying
-
-        private static method onPrevent takes nothing returns boolean
-            if thistype.dying == Damage.target and Damage.amount > GetWidgetLife(Damage.target) then
-                set Damage.amount = GetWidgetLife(Damage.target) - 0.6
-                if Damage.amount + 0.5 >= 1 then
-                    call FloatingTextSplat(Element.string(DAMAGE_ELEMENT_FIRE) + I2S(R2I(Damage.amount + 0.5)) + "|r", Damage.target, 1.0).setVisible(GetLocalPlayer() == GetOwningPlayer(Damage.source) and IsUnitVisible(Damage.target, GetLocalPlayer()))
-                endif
-            endif
-            set thistype.dying = null
-            return false
-        endmethod
-
         private static method onDamage takes nothing returns nothing
             local integer level
             local SpellBuff b
@@ -81,10 +58,6 @@ scope VigilantAndTheVirtuous
 
         static method init takes nothing returns nothing
             call SystemTest.start("Initializing thistype: ")
-            set thistype.preventDying = CreateTrigger()
-            call TriggerAddCondition(thistype.preventDying, function thistype.onPrevent)
-            call Damage.register(function thistype.onDamage)
-            call Damage.registerTrigger(thistype.preventDying)
             call SpellBuff.initialize()
             call SystemTest.end()
         endmethod

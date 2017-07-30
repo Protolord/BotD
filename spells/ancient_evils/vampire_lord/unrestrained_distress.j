@@ -77,7 +77,7 @@ scope UnrestrainedDistress
                 if this.time <= 0 then
                     set this.time = this.time + 1.0
                     set hp = GetWidgetLife(this.target) - this.dmg
-                    call FloatingTextSplat(Element.string(DAMAGE_ELEMENT_DARK) + I2S(R2I(this.dmg)) + "|r", this.target, 1.0).setVisible(GetLocalPlayer() == GetOwningPlayer(this.caster) and IsUnitVisible(this.target, GetLocalPlayer()))
+                    call FloatingTextSplat(Element.string(DAMAGE_ELEMENT_DARK) + I2S(R2I(this.dmg)) + "|r", this.target).setVisible(GetLocalPlayer() == GetOwningPlayer(this.caster) and IsUnitVisible(this.target, GetLocalPlayer()))
                     if hp > 0.406 then
                         call SetWidgetLife(this.target, hp)
                     else

@@ -7,7 +7,7 @@ scope RockToss
         private constant real SPEED = 1000.0
         private constant player NEUTRAL = Player(14)
     endglobals
-    
+
     private function Duration takes integer level returns real
         return 0.0*level + 15.0
     endfunction
@@ -22,7 +22,7 @@ scope RockToss
     private function StunRadius takes integer level returns real
         return 500.0 + 0.0*level
     endfunction
-    
+
     private function StunDuration takes integer level returns real
         return 1.0 + 0.0*level
     endfunction
@@ -30,9 +30,9 @@ scope RockToss
     private function TargetFilter takes unit u, player p returns boolean
         return UnitAlive(u) and IsUnitEnemy(u, p) and not IsUnitType(u, UNIT_TYPE_STRUCTURE) and not IsUnitType(u, UNIT_TYPE_MAGIC_IMMUNE)
     endfunction
-    
+
     struct RockToss extends array
-        
+
         private unit caster
         private unit dummy
         private integer lvl
@@ -42,7 +42,7 @@ scope RockToss
         private TrueSight ts
 
         private static group g
-        
+
         private method destroy takes nothing returns nothing
             call this.fs.destroy()
             call this.ts.destroy()
@@ -54,7 +54,7 @@ scope RockToss
         private static method expires takes nothing returns nothing
             call thistype(ReleaseTimer(GetExpiredTimer())).destroy()
         endmethod
-        
+
         private static method onHit takes nothing returns nothing
             local thistype this = Missile.getHit()
             local real radius = Radius(this.lvl)
@@ -73,12 +73,12 @@ scope RockToss
                 exitwhen u == null
                 call GroupRemoveUnit(thistype.g, u)
                 if TargetFilter(u, this.owner) then
-                    call Stun.create(u, StunDuration(this.lvl), false)
+                    call Stun.create(u, StunDuration(this.lvl))
                 endif
             endloop
             call TimerStart(NewTimerEx(this), Duration(this.lvl), false, function thistype.expires)
         endmethod
-        
+
         private static method onCast takes nothing returns nothing
             local thistype this = thistype(Missile.create())
             local real x = GetSpellTargetX()
@@ -98,13 +98,13 @@ scope RockToss
             call this.m.launch()
             call SystemMsg.create(GetUnitName(GetTriggerUnit()) + " cast thistype")
         endmethod
-        
+
         static method init takes nothing returns nothing
             call SystemTest.start("Initializing thistype: ")
             set thistype.g = CreateGroup()
             call RegisterSpellEffectEvent(SPELL_ID, function thistype.onCast)
             call SystemTest.end()
         endmethod
-        
+
     endstruct
 endscope

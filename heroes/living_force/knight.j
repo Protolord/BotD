@@ -16,7 +16,8 @@ module KnightSpells
     set robustForce.info = "Robust Force|n|cfff4a460Target|r: |cff3399ffPassive / Self and Allies|r|cfff4a460|nRange|r: |cff3399ff300|n|r|cfff4a460Return Damage|r: |cff3399ff(4% x level)|n|r|nKnight and nearby allies will return percent of damage back to attacker."
 
     set shieldReaction = Spell.create('AHB3')
-    set shieldReaction.info = "Shield Reaction"
+    set shieldReaction.passive = true
+    set shieldReaction.info = "Shield Reaction|n|cffF4A460Target|r: |cff3399FFPassive|n|cffF4A460Chance|r: |cff3399FF(5% x level)|n|n|rAny time Knight is attacked by a melee unit from rear side, there is a chance to knockback and silence the attacking unit for 2 seconds."
 
     set bash = Spell.create('AHB4')
     set bash.passive = true
@@ -31,8 +32,8 @@ module KnightConfig
     set knight.iconPath = "ReplaceableTextures\\CommandButtons\\BTN_Knight.blp"
     set knight.modelPath = "Models\\Units\\Knight.mdl"
     set knight.info = "<NOTHING YET>"
-    set knight.attribute = "20 +1.0   20 +1.5   20 +3.5"
-    set knight.primary = INT
+    set knight.attribute = "20 +3.2   20 +2.6   20 +1.1"
+    set knight.primary = STR
 
     //Configure Spells
     set knight.spell11 = angelicBlessing

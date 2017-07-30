@@ -6,7 +6,7 @@ scope Pitfall
         private constant damagetype DAMAGE_TYPE = DAMAGE_TYPE_MAGIC
         private constant string SFX = "Models\\Effects\\Pitfall.mdx"
         private constant string SFX_BUFF = "Abilities\\Spells\\Human\\FlameStrike\\FlameStrikeDamageTarget.mdl"
-        private constant real TIMEOUT = 1.0
+        private constant real TIMEOUT = 0.25
         private constant real SPACING = 100.0
     endglobals
 
@@ -98,11 +98,13 @@ scope Pitfall
 
         private static method onPeriod takes nothing returns nothing
             local thistype this = GetTimerData(GetExpiredTimer())
+            call FloatingText.setSplatProperties(TIMEOUT)
             if TargetFilter(this.target, GetOwningPlayer(this.source)) then
                 call Damage.element.apply(this.source, this.target, this.dmg, ATTACK_TYPE, DAMAGE_TYPE, DAMAGE_ELEMENT_FIRE)
             else
                 call this.remove()
             endif
+            call FloatingText.resetSplatProperties()
         endmethod
 
         method onApply takes nothing returns nothing
@@ -121,6 +123,7 @@ scope Pitfall
     struct Pitfall extends array
 
         private unit caster
+        private player owner
         private Flame sfxHead
         private Effect pit
         private real x
@@ -150,18 +153,16 @@ scope Pitfall
             call ReleaseGroup(this.g)
             set this.g = null
             set this.caster = null
+            set this.owner = null
             call this.destroy()
         endmethod
 
         private static method picked takes nothing returns nothing
             local unit u = GetEnumUnit()
-            local SpellBuff b
-            local integer id
-            if not TargetFilter(u, GetOwningPlayer(global.caster)) or not IsUnitInRangeXY(u, global.x, global.y, global.radius) then
-                call GroupRemoveUnit(global.g, u)
-                set id = GetHandleId(u)
-                if Buff.has(global.caster, u, SpellBuff.typeid) then
-                    call Buff(global.tb[id]).remove()
+            if not TargetFilter(u, thistype.global.owner) or not IsUnitInRangeXY(u, thistype.global.x, thistype.global.y, thistype.global.radius) then
+                call GroupRemoveUnit(thistype.global.g, u)
+                if Buff.has(thistype.global.caster, u, SpellBuff.typeid) then
+                    call Buff(thistype.global.tb[GetHandleId(u)]).remove()
                 endif
             endif
             set u = null
@@ -172,18 +173,16 @@ scope Pitfall
         implement CTL
             local unit u
             local SpellBuff b
-            local player owner
         implement CTLExpire
             set this.duration = this.duration - CTL_TIMEOUT
             if this.duration > 0 then
                 call GroupEnumUnitsInRange(thistype.enumG, this.x, this.y, this.radius + MAX_COLLISION_SIZE, null)
                 set thistype.global = this
-                set owner = GetOwningPlayer(this.caster)
                 loop
                     set u = FirstOfGroup(thistype.enumG)
                     exitwhen u == null
                     call GroupRemoveUnit(thistype.enumG, u)
-                    if IsUnitInRangeXY(u, this.x, this.y, this.radius) and TargetFilter(u, owner) and not IsUnitInGroup(u, this.g) then
+                    if IsUnitInRangeXY(u, this.x, this.y, this.radius) and TargetFilter(u, this.owner) and not IsUnitInGroup(u, this.g) then
                         set b = SpellBuff.add(this.caster, u)
                         set b.dmg = this.dmg
                         call b.ms.change(this.moveSlow, 0)
@@ -196,8 +195,6 @@ scope Pitfall
             else
                 call this.remove()
             endif
-        implement CTLNull
-            set owner = null
         implement CTLEnd
 
 
@@ -208,6 +205,7 @@ scope Pitfall
             local real angle
             local real endAngle
             set this.caster = GetTriggerUnit()
+            set this.owner = GetTriggerPlayer()
             set this.g = NewGroup()
             set lvl = GetUnitAbilityLevel(this.caster, SPELL_ID)
             set this.x = GetUnitX(this.caster)

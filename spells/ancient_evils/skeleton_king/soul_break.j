@@ -5,7 +5,7 @@ scope SoulBreak
         private constant string MODEL = "Models\\Effects\\SoulBreak.mdx"
         private constant attacktype ATTACK_TYPE = ATTACK_TYPE_NORMAL
         private constant damagetype DAMAGE_TYPE = DAMAGE_TYPE_MAGIC
-        private constant real TIMEOUT = 1.0
+        private constant real TIMEOUT = 0.5
     endglobals
 
     private function Duration takes integer level returns real
@@ -55,7 +55,7 @@ scope SoulBreak
         static method onPeriod takes nothing returns nothing
             local thistype this = GetTimerData(GetExpiredTimer())
             call Damage.element.apply(this.source, this.target, this.dmg, ATTACK_TYPE, DAMAGE_TYPE, DAMAGE_ELEMENT_DARK)
-            call Stun.create(this.target, this.ministun, false)
+            call Stun.create(this.target, this.ministun)
         endmethod
 
         method onApply takes nothing returns nothing
@@ -88,7 +88,9 @@ scope SoulBreak
         private static method onHit takes nothing returns nothing
             local thistype this = Missile.getHit()
             local SpellBuff b
-            if not SpellBlock.has(this.target) and TargetFilter(this.target, this.owner) then
+            if SpellBlock.has(this.target) then
+                call this.m.show(false)
+            elseif TargetFilter(this.target, this.owner) then
                 set b = SpellBuff.add(this.caster, this.target)
                 set b.dmg = DamagePerSecond(this.lvl)*TIMEOUT
                 set b.ministun = Ministun(this.lvl)

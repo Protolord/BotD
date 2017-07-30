@@ -28,6 +28,9 @@
     implement TemplarSpells
     implement TreantSpells
     implement VikingSpells
+    implement ZealotSpells
+    implement PathfinderSpells
+    implement ClericSpells
 //! endtextmacro
 
 //! textmacro SELECTION_SYSTEM_HERO_IMPLEMENTATION
@@ -60,6 +63,9 @@
     implement TemplarConfig
     implement TreantConfig
     implement VikingConfig
+    implement ZealotConfig
+    implement PathfinderConfig
+    implement ClericConfig
 //! endtextmacro
 
 //! textmacro SELECTION_SYSTEM_HERO_BUTTON_IMPLEMENTATION
@@ -86,6 +92,9 @@
     implement TemplarButton
     implement TreantButton
     implement VikingButton
+    implement ZealotButton
+    implement PathfinderButton
+    implement ClericButton
     set HeroButton.buttonX = HERO_BUTTON_ORIGIN_X
     set HeroButton.buttonY = HERO_BUTTON_ORIGIN_Y - 180
     implement VampireLordButton

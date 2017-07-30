@@ -1,5 +1,5 @@
 scope Spiders
- 
+
     globals
         private constant integer SPELL_ID = 'A431'
         private constant integer UNIT_ID = 'uSpi'
@@ -7,47 +7,47 @@ scope Spiders
         private constant real TIMEOUT = 0.20
         private constant real DEFAULT_SIGHT = 1000 //Sight Radius of Hatchling in Object Editor
     endglobals
-    
+
     private function NumberOfUnits takes integer level returns integer
         if level == 11 then
             return 1
         endif
         return level
     endfunction
-    
+
     private function SightRadius takes integer level returns real
         if level == 11 then
             return GLOBAL_SIGHT
         endif
         return 0.0*level + 1000.0
     endfunction
-    
+
     private function UnitHP takes integer level returns real
-        return 0.0*level + 200.0 
+        return 0.0*level + 200.0
     endfunction
-    
+
     private function Duration takes integer level returns real
         return 0.0*level + 10.0
     endfunction
-    
+
     private function Speed takes integer level returns real
         return 0.0*level + 522
     endfunction
-    
+
     struct Spiders extends array
         implement Alloc
-        
+
         private group g
-        
+
         private static thistype global
-        
+
         private method destroy takes nothing returns nothing
             call this.pop()
             call ReleaseGroup(this.g)
             set this.g = null
             call this.deallocate()
         endmethod
-        
+
         private static method picked takes nothing returns nothing
             local unit u = GetEnumUnit()
             if UnitAlive(u) then
@@ -59,7 +59,7 @@ scope Spiders
             endif
             set u = null
         endmethod
-        
+
         private static method onPeriod takes nothing returns nothing
             local thistype this = thistype(0).next
             loop
@@ -74,7 +74,7 @@ scope Spiders
         endmethod
 
         implement List
-        
+
         private static method onCast takes nothing returns nothing
             local thistype this = thistype.allocate()
             local unit caster = GetTriggerUnit()
@@ -89,6 +89,7 @@ scope Spiders
             local real hp = UnitHP(lvl)
             local real spd = Speed(lvl)
             local unit u
+            local VertexColor vc
             set this.g = NewGroup()
             loop
                 exitwhen i == 0
@@ -101,6 +102,9 @@ scope Spiders
                 call TrueSight.createEx(u, radius, duration)
                 if lvl == 11 then
                     call FlySight.create(u, radius)
+                    set vc = VertexColor.create(u, 0, -250, -250, 0)
+                    set vc.speed = 600
+                    set vc.duration = duration + 5
                 else
                     call UnitSetBonus(u, BONUS_SIGHT_RANGE, R2I(radius - DEFAULT_SIGHT))
                 endif
@@ -111,14 +115,14 @@ scope Spiders
             set caster = null
             call SystemMsg.create(GetUnitName(GetTriggerUnit()) + " cast thistype")
         endmethod
-        
+
         static method init takes nothing returns nothing
             call SystemTest.start("Initializing thistype: ")
             call RegisterSpellEffectEvent(SPELL_ID, function thistype.onCast)
             call PreloadUnit(UNIT_ID)
             call SystemTest.end()
         endmethod
-        
+
     endstruct
-    
+
 endscope

@@ -28,7 +28,7 @@ module StormShamanConfig
     set stormShaman.iconPath = "ReplaceableTextures\\CommandButtons\\BTN_StormShaman.blp"
     set stormShaman.modelPath = "Models\\Units\\StormShaman.mdl"
     set stormShaman.info = "<NOTHING YET>"
-    set stormShaman.attribute = "20 +1.0   20 +1.5   20 +3.5"
+    set stormShaman.attribute = "20 +1.7   20 +1.6   20 +3.5"
     set stormShaman.primary = INT
 
     //Configure Spells

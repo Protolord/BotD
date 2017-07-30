@@ -4,6 +4,7 @@ scope Bloodthirst
         private constant integer SPELL_ID = 'A242'
         private constant string LIGHTNING_CODE = "HWPB"
         private constant real LIGHTNING_DURATION = 0.75
+        private constant string HEAL_EFFECT = "Models\\Effects\\BloodHeal.mdx"
     endglobals
 
     private function HealFixed takes integer level returns real
@@ -67,6 +68,7 @@ scope Bloodthirst
                 endif
             endloop
             call Heal.unit(caster, caster, amount, 4.0, true)
+            call DestroyEffect(AddSpecialEffectTarget(HEAL_EFFECT, caster, "chest"))
             set this.u = caster
             call TimerStart(NewTimerEx(this), 0.00, false, function thistype.debuff)
             call ReleaseGroup(g)

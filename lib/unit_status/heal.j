@@ -2,11 +2,11 @@ library Heal uses FloatingText
 
 /*
     Heal.unit(unit, amount, etherealFactor)
-        - Heals the units with texttag displayed and ethereal status considered.     
+        - Heals the units with texttag displayed and ethereal status considered.
 */
 
     struct Heal extends array
-        
+
         private static Table self
         private static Table other
 
@@ -24,7 +24,9 @@ library Heal uses FloatingText
             endif
             call SetWidgetLife(target, hp + amount)
             if R2I(amount) > 0 and show then
-                set text = FloatingTextTag("|cff00ff00+" + I2S(R2I(amount)), target, 1.5)
+                set FloatingText.tagTime = 1.5
+                set text = FloatingTextTag("|cff00ff00+" + I2S(R2I(amount)), target)
+                set FloatingText.tagTime = 1.0
                 if IsUnitEnemy(target, GetLocalPlayer()) or not IsUnitVisible(target, GetLocalPlayer()) then
                     call SetTextTagVisibility(text, false)
                 endif
@@ -40,7 +42,7 @@ library Heal uses FloatingText
             set thistype.self = Table.create()
             set thistype.other = Table.create()
         endmethod
-        
+
     endstruct
-    
+
 endlibrary

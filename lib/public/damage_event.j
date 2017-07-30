@@ -1,6 +1,6 @@
 library DamageEvent /*
             ----------------------------------
-                    DamageEvent v1.44
+                    DamageEvent v1.45
                         by Flux
             ----------------------------------
 
@@ -209,6 +209,7 @@ library DamageEvent /*
             local thistype this = thistype(0).next
             loop
                 exitwhen this == 0
+                set s__Damage_triggeringTrigger  = this.trg
                 if IsTriggerEnabled(this.trg) then
                     if TriggerEvaluate(this.trg) then
                         call TriggerExecute(this.trg)
@@ -216,6 +217,7 @@ library DamageEvent /*
                 endif
                 set this = this.next
             endloop
+            set s__Damage_triggeringTrigger  = null
         endmethod
 
     endstruct
@@ -233,6 +235,7 @@ library DamageEvent /*
         private thistype stackNext
 
         private static real hp
+        readonly static trigger triggeringTrigger
 
         static if LIBRARY_Table then
             readonly static Table tb

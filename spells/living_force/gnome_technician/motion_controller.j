@@ -55,6 +55,9 @@ scope MotionController
             call this.b.remove()
             call this.l.destroy()
             call thistype.tb.remove(GetHandleId(this.device))
+            if UnitAlive(this.device) then
+                call KillUnit(this.device)
+            endif
             set this.device = null
             set this.target = null
             call this.deallocate()

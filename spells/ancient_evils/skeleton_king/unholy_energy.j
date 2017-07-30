@@ -4,7 +4,6 @@ scope UnholyEnergy
         private constant integer SPELL_ID = 'A742'
         private constant integer BUFF_ID = 'B742'
         private constant real TIMEOUT = 0.1
-        private constant real MIN_RANGE = 250 //Range that will deal max damage
         private constant string SFX_EXTRA = "Abilities\\Spells\\Other\\Drain\\DrainTarget.mdl"
         private constant integer EXTRA_THRESHOLD = 10
     endglobals

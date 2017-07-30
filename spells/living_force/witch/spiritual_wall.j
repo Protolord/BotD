@@ -169,6 +169,7 @@ scope SpiritualWall
         private group g
         private real mslow
         private unit caster
+        private integer unitId
         private player owner
         private Wall wallHead
         private Spirit spiritHead
@@ -202,13 +203,10 @@ scope SpiritualWall
 
         private static method picked takes nothing returns nothing
             local unit u = GetEnumUnit()
-            local SpellBuff b
-            local integer id
-            if not TargetFilter(u, global.owner) or not IsUnitInRangeXY(u, global.x, global.y, global.radius) then
-                call GroupRemoveUnit(global.g, u)
-                set id = GetHandleId(u)
-                if Buff.has(global.caster, u, SpellBuff.typeid) then
-                    call Buff(global.t[id]).remove()
+            if not TargetFilter(u, thistype.global.owner) or not IsUnitInRangeXY(u, thistype.global.x, thistype.global.y, thistype.global.radius) then
+                call GroupRemoveUnit(thistype.global.g, u)
+                if Buff.has(thistype.global.caster, u, SpellBuff.typeid) then
+                    call Buff(thistype.global.t[GetHandleId(u)]).remove()
                 endif
             endif
             set u = null
@@ -220,20 +218,22 @@ scope SpiritualWall
             local unit u
             loop
                 exitwhen this == 0
-                call GroupEnumUnitsInRange(thistype.enumG, this.x, this.y, this.radius, null)
-                set thistype.global = this
-                loop
-                    set u = FirstOfGroup(thistype.enumG)
-                    exitwhen u == null
-                    call GroupRemoveUnit(thistype.enumG, u)
-                    if IsUnitInRangeXY(u, this.x, this.y, this.radius) and TargetFilter(u, this.owner) and not IsUnitInGroup(u, this.g) then
-                        set b = SpellBuff.add(this.caster, u)
-                        call b.ms.change(this.mslow, 0)
-                        set this.t[GetHandleId(u)] = b
-                        call GroupAddUnit(this.g, u)
-                    endif
-                endloop
-                call ForGroup(this.g, function thistype.picked)
+                if GetUnitTypeId(this.caster) == this.unitId then
+                    call GroupEnumUnitsInRange(thistype.enumG, this.x, this.y, this.radius + MAX_COLLISION_SIZE, null)
+                    set thistype.global = this
+                    loop
+                        set u = FirstOfGroup(thistype.enumG)
+                        exitwhen u == null
+                        call GroupRemoveUnit(thistype.enumG, u)
+                        if IsUnitInRangeXY(u, this.x, this.y, this.radius) and TargetFilter(u, this.owner) and not IsUnitInGroup(u, this.g) then
+                            set b = SpellBuff.add(this.caster, u)
+                            call b.ms.change(this.mslow, 0)
+                            set this.t[GetHandleId(u)] = b
+                            call GroupAddUnit(this.g, u)
+                        endif
+                    endloop
+                    call ForGroup(this.g, function thistype.picked)
+                endif
                 set this = this.next
             endloop
         endmethod
@@ -255,6 +255,7 @@ scope SpiritualWall
             local real a
             set this.owner = GetTriggerPlayer()
             set this.caster = GetTriggerUnit()
+            set this.unitId = GetUnitTypeId(this.caster)
             set this.x = GetUnitX(this.caster)
             set this.y = GetUnitY(this.caster)
             set this.g = NewGroup()

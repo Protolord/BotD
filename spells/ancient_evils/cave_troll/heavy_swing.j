@@ -58,9 +58,9 @@ scope HeavySwing
             if this > 0 and level > 0 and Damage.type == DAMAGE_TYPE_PHYSICAL and not Damage.coded and this.run > 0 and this.hasMana then
                 set p = GetOwningPlayer(Damage.source)
                 if TargetFilter(Damage.target, p) then
-                    call Stun.create(Damage.target, StunDuration(level), false)
+                    call Stun.create(Damage.target, StunDuration(level))
                     set Damage.amount = (1.0 + ExtraDamage(level)/100.0)*Damage.amount
-                    call FloatingTextSplat(Element.string(DAMAGE_ELEMENT_NORMAL) + "+" + I2S(R2I((CombatStat.getDamage(Damage.source) + AtkDamage.get(Damage.source))*ExtraDamage(level)/100.0 + 0.5)) + "|r", Damage.target, 1.0).setVisible(GetLocalPlayer() == p)
+                    call FloatingTextSplat(Element.string(DAMAGE_ELEMENT_NORMAL) + "+" + I2S(R2I((CombatStat.getDamage(Damage.source) + AtkDamage.get(Damage.source))*ExtraDamage(level)/100.0 + 0.5)) + "|r", Damage.target).setVisible(GetLocalPlayer() == p)
                 endif
                 set p = null
             endif

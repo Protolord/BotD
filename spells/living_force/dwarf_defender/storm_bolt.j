@@ -39,7 +39,9 @@ scope StormBolt
 
         private static method onHit takes nothing returns nothing
             local thistype this = Missile.getHit()
-            if not SpellBlock.has(this.target) and TargetFilter(this.target, this.owner) then
+            if SpellBlock.has(this.target) then
+                call this.m.show(false)
+            elseif TargetFilter(this.target, this.owner) then
                 call Damage.element.apply(this.caster, this.target, DamageDealt(this.lvl), ATTACK_TYPE, DAMAGE_TYPE, DAMAGE_ELEMENT_ELECTRIC)
             endif
             call this.destroy()

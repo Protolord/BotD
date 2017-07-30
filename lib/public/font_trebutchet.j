@@ -1,11 +1,11 @@
 library TrebuchetMS uses Font
 
     globals
-        font TREBUCHET_MS 
-    endglobals 
-    
+        font TREBUCHET_MS
+    endglobals
+
     private struct I extends array
-    
+
         private static method onInit takes nothing returns nothing
             set TREBUCHET_MS = font.create(0)//* no parent font.
             call TREBUCHET_MS.addChar(" ", 12, "war3mapImported\\TrebuchetMS32.blp")
@@ -109,15 +109,22 @@ library TrebuchetMS uses Font
             call TREBUCHET_MS.addImage("ELEMENT_ELECTRIC", 32, "Fonts\\Elements\\Electric.blp")
             call TREBUCHET_MS.addImage("ELEMENT_FIRE", 32, "Fonts\\Elements\\Fire.blp")
             call TREBUCHET_MS.addImage("ELEMENT_ICE", 32, "Fonts\\Elements\\Ice.blp")
+            call TREBUCHET_MS.addImage("ELEMENT_LIGHT", 32, "Fonts\\Elements\\Light.blp")
             call TREBUCHET_MS.addImage("ELEMENT_NORMAL", 32, "Fonts\\Elements\\Normal.blp")
             call TREBUCHET_MS.addImage("ELEMENT_PLANT", 32, "Fonts\\Elements\\Plant.blp")
             call TREBUCHET_MS.addImage("ELEMENT_POISON", 32, "Fonts\\Elements\\Poison.blp")
             call TREBUCHET_MS.addImage("ELEMENT_SPIRIT", 32, "Fonts\\Elements\\Spirit.blp")
             call TREBUCHET_MS.addImage("ELEMENT_WATER", 32, "Fonts\\Elements\\Water.blp")
+            call TREBUCHET_MS.addImage("ATTRIBUTE_STR", 50, "UI\\HeroSelection\\Strength.blp")
+            call TREBUCHET_MS.addImage("ATTRIBUTE_AGI", 50, "UI\\HeroSelection\\Agility.blp")
+            call TREBUCHET_MS.addImage("ATTRIBUTE_INT", 50, "UI\\HeroSelection\\Intelligence.blp")
             call TREBUCHET_MS.addImage("REGENCY", 32, "ReplaceableTextures\\CommandButtons\\BTN_Regency.blp")
             call TREBUCHET_MS.addImage("BONES", 32, "ReplaceableTextures\\CommandButtons\\BTN_Bones.blp")
+            call TREBUCHET_MS.addImage("VORTEX_SHIELD", 32, "ReplaceableTextures\\CommandButtons\\BTN_VortexShield.blp")
+            call TREBUCHET_MS.addImage("STRONG_MIND", 32, "ReplaceableTextures\\CommandButtons\\BTN_StrongMind.blp")
+            call TREBUCHET_MS.addImage("LIVING_ARMOR", 32, "ReplaceableTextures\\CommandButtons\\BTN_LivingArmor.blp")
         endmethod
-        
+
     endstruct
-    
+
 endlibrary

@@ -1,29 +1,30 @@
 scope ChildOfTheNight
-    
+
     globals
         private constant integer SPELL_ID = 'A232'
         private constant integer SPELL_BUFF = 'B232'
         private constant integer BUFF_ID = 'b232'
     endglobals
-    
+
     private function Radius takes integer level returns real
         if level == 11 then
-            return 2000.0
+            return GLOBAL_SIGHT
         endif
         return 100.0*level
     endfunction
-    
-    struct ChildOfTheNight
-        
+
+    struct ChildOfTheNight extends array
+        implement Alloc
+
         private FlySight reveal
         private TrueSight sight
         private thistype next
         private unit u
         private player owner
         private integer lvl
-        
+
         private static Table tb
-        
+
         private static method day takes nothing returns boolean
             local thistype this = thistype(0).next
             loop
@@ -42,7 +43,7 @@ scope ChildOfTheNight
             endloop
             return false
         endmethod
-        
+
         private static method night takes nothing returns boolean
             local thistype this = thistype(0).next
             loop
@@ -62,7 +63,7 @@ scope ChildOfTheNight
             endloop
             return false
         endmethod
-        
+
         private static method start takes unit u, integer level returns nothing
             local integer id = GetHandleId(u)
             local thistype this
@@ -98,7 +99,7 @@ scope ChildOfTheNight
                 call UnitMakeAbilityPermanent(u, true, SPELL_BUFF)
             endif
         endmethod
-        
+
         private static method ultimates takes nothing returns boolean
             local unit u = GetTriggerUnit()
             local integer id = GetHandleId(u)
@@ -110,13 +111,13 @@ scope ChildOfTheNight
             set u = null
             return false
         endmethod
-        
+
         private static method learn takes nothing returns nothing
             if GetLearnedSkill() == SPELL_ID then
                 call thistype.start(GetTriggerUnit(), GetUnitAbilityLevel(GetTriggerUnit(), SPELL_ID))
             endif
         endmethod
-        
+
         static method init takes nothing returns nothing
             call SystemTest.start("Initializing thistype: ")
             call DayNight.registerDay(function thistype.day)
@@ -126,7 +127,7 @@ scope ChildOfTheNight
             set thistype.tb = Table.create()
             call SystemTest.end()
         endmethod
-        
+
     endstruct
-    
+
 endscope

@@ -2,7 +2,7 @@ scope UnderworldFires
 
     globals
         private constant integer SPELL_ID = 'A524'
-        private constant real TIMEOUT = 0.25
+        private constant real TIMEOUT = 0.125
         private constant string SFX_TARGET = "Abilities\\Spells\\Other\\ImmolationRed\\ImmolationRedDamage.mdl"
         private constant attacktype ATTACK_TYPE = ATTACK_TYPE_NORMAL
         private constant damagetype DAMAGE_TYPE = DAMAGE_TYPE_MAGIC
@@ -51,6 +51,7 @@ scope UnderworldFires
         private static method onPeriod takes nothing returns nothing
             local thistype this = GetTimerData(GetExpiredTimer())
             local unit u
+            call FloatingText.setSplatProperties(TIMEOUT)
             call GroupEnumUnitsInRange(thistype.g, GetUnitX(this.caster), GetUnitY(this.caster), this.radius, null)
             loop
                 set u = FirstOfGroup(thistype.g)
@@ -61,6 +62,7 @@ scope UnderworldFires
                     call Damage.element.apply(this.caster, u, this.dmg, ATTACK_TYPE, DAMAGE_TYPE, DAMAGE_ELEMENT_FIRE)
                 endif
             endloop
+            call FloatingText.resetSplatProperties()
         endmethod
 
         private static method onManaDeplete takes nothing returns boolean

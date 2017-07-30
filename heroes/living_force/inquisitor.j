@@ -15,7 +15,8 @@ module InquisitorSpells
     set manaBlast.info = "Mana Blast"
 
     set brillianceAura = Spell.create('AHA3')
-    set brillianceAura.info = "Brilliance Aura"
+    set brillianceAura.passive = true
+    set brillianceAura.info = "Brilliance Aura|n|cffF4A460Target|r: |cff3399FFPassive / Self and Allies|n|cffF4A460Range|r: |cff3399FF900|n|cffF4A460MP/Second|r: |cff3399FF(3 x level)|n|n|rAll allies near Inquisitor gain extra mana regeneration. Bonus regeneration weakens with distance."
 
     set silencingPain = Spell.create('AHA4')
     set silencingPain.info = "Silencing Pain|n|cfff4a460Target|r: |cff3399ffEnemy Unit|n|r|cfff4a460Range|r: |cff3399ff400|n|r|cfff4a460Duration|r: |cff3399ff(10 x level) seconds|n|r|cfff4a460Cooldown|r: |cff3399ff90 seconds|r|n|nInquisitor puts a seal on target unit making it suffer each time it casts a spell. Each cast attempt refreshes the debuff duration and deals damage based on mana costs of the spell. First spell deals 100% mana costs and adds additional 100% to each further spell."
@@ -29,7 +30,7 @@ module InquisitorConfig
     set inquisitor.iconPath = "ReplaceableTextures\\CommandButtons\\BTN_Inquisitor.blp"
     set inquisitor.modelPath = "Models\\Units\\Inquisitor.mdl"
     set inquisitor.info = "<NOTHING YET>"
-    set inquisitor.attribute = "20 +1.0   20 +1.5   20 +3.5"
+    set inquisitor.attribute = "20 +1.0   20 +1.0   20 +6.0"
     set inquisitor.primary = INT
 
     //Configure Spells

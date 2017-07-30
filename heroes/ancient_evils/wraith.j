@@ -51,7 +51,7 @@ module WraithSpells
     set spiritualTunnel.info = "Spiritual Tunnel|n|cfff4a460Target|r: |cff3399ffSelf|n|r|cfff4a460Effect Delay|r: |cff3399ff8 - (0.5 x level)|n|r|cfff4a460Cooldown|r: |cff3399ff30 seconds|r|n|nInstantly teleports to the middle of the map."
 
     set ghostlyBeam = Spell.create('A331')
-    set ghostlyBeam.info = "Ghostly Beam|n|cfff4a460Target|r: |cff3399ffPoint|n|r|cfff4a460Width|r: |cff3399ff(100 x level)|n|r|cfff4a460Cooldown|r: |cff3399ff30 seconds|r|n|nWraith creates a magical beam which is exploring a long area until it reaches the target point."
+    set ghostlyBeam.info = "Ghostly Beam|n|cfff4a460Target|r: |cff3399ffPoint|n|r|cfff4a460Width|r: |cff3399ff(100 x level)|n|r|cfff4a460Cooldown|r: |cff3399ff30 seconds|r|n|nWraith creates a magical beam which is exploring a long area until it reaches the target point. Reveal invisible units."
 
     set repression = Spell.create('A332')
     set repression.info = "Repression|n|cfff4a460Target|r: |cff3399ffSelf|n|r|cfff4a460Hitpoints|r: |cff3399ff(100 x level)|n|r|cfff4a460Sight|r: |cff3399ff200 + (100 x level)|n|r|cfff4a460Cooldown|r: |cff3399ff120 seconds|r|n|nSummons a permanent controllable flying scout to explore the map. Scouts reveal invisible units."

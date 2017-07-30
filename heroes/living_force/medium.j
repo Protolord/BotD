@@ -28,7 +28,7 @@ module MediumConfig
     set medium.iconPath = "ReplaceableTextures\\CommandButtons\\BTN_Medium.blp"
     set medium.modelPath = "Models\\Units\\Medium.mdl"
     set medium.info = "<NOTHING YET>"
-    set medium.attribute = "20 +1.0   20 +1.5   20 +3.5"
+    set medium.attribute = "20 +1.3   20 +2.5   20 +4.0s"
     set medium.primary = INT
 
     //Configure Spells

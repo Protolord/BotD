@@ -31,7 +31,7 @@ module GnomeTechnicianConfig
     set gnomeTechnician.iconPath = "ReplaceableTextures\\CommandButtons\\BTN_GnomeTechnician.blp"
     set gnomeTechnician.modelPath = "Models\\Units\\GnomeTechnician.mdx"
     set gnomeTechnician.info = "<NOTHING YET>"
-    set gnomeTechnician.attribute = "20 +1.0   20 +1.5   20 +3.5"
+    set gnomeTechnician.attribute = "20 +2.0   20 +2.1   20 +2.8"
     set gnomeTechnician.primary = INT
 
     //Configure Spells

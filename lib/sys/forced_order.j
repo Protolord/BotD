@@ -3,26 +3,29 @@ library ForcedOrder uses TimerUtilsEx
 /*
     ForcedOrder.create(unit, orderId, x, y)
         - Forced a unit to issue orderId into (x, y).
-    
+
+    ForcedOrder.change(unit, orderId, x, y)
+        - Changed a unit's forced order
+
     this.destroy()
         - Destroy the ForcedOrder instance.
 */
     globals
         private constant real TIMEOUT = 0.5
     endglobals
-    
+
     struct ForcedOrder extends array
         implement Alloc
-        
+
         private unit u
         private integer orderId
         private real x
         private real y
-        
+
         readonly trigger trg
-        
+
         private static Table tb
-        
+
         method destroy takes nothing returns nothing
             call this.pop()
             call thistype.tb.remove(GetHandleId(this.u))
@@ -31,7 +34,7 @@ library ForcedOrder uses TimerUtilsEx
             set this.trg = null
             call this.deallocate()
         endmethod
-        
+
         private static method onOrder takes nothing returns boolean
             local thistype this = thistype.tb[GetHandleId(GetTriggerUnit())]
             if GetIssuedOrderId() == ORDER_smart then
@@ -41,7 +44,7 @@ library ForcedOrder uses TimerUtilsEx
             endif
             return false
         endmethod
-        
+
         private static method onPeriod takes nothing returns nothing
             local thistype this = thistype(0).next
             loop
@@ -54,7 +57,7 @@ library ForcedOrder uses TimerUtilsEx
         endmethod
 
         implement List
-        
+
         static method change takes unit u, integer order, real x, real y returns nothing
             local thistype this = thistype.tb[GetHandleId(u)]
             if this > 0 then
@@ -66,7 +69,7 @@ library ForcedOrder uses TimerUtilsEx
                 call EnableTrigger(this.trg)
             endif
         endmethod
-        
+
         static method create takes unit u, integer order, real x, real y returns thistype
             local thistype this = thistype.allocate()
             set this.u = u
@@ -83,7 +86,7 @@ library ForcedOrder uses TimerUtilsEx
             call this.push(TIMEOUT)
             return this
         endmethod
-        
+
         private static method onInit takes nothing returns nothing
             set thistype.tb = Table.create()
         endmethod

@@ -31,7 +31,7 @@ module MistressConfig
     set mistress.iconPath = "ReplaceableTextures\\CommandButtons\\BTN_Mistress.blp"
     set mistress.modelPath = "Models\\Units\\Mistress.mdl"
     set mistress.info = "<NOTHING YET>"
-    set mistress.attribute = "20 +2.0   20 +3.0   20 +1.3"
+    set mistress.attribute = "20 +2.5   20 +3.0   20 +1.5"
     set mistress.primary = AGI
 
     //Configure Spells

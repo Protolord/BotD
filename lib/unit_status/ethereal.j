@@ -26,7 +26,7 @@ library Ethereal uses Table, TimerUtilsEx
             local integer id = GetHandleId(this.u)
             set thistype.tb[id] = thistype.tb[id] - 1
             if thistype.tb[id] == 0 then
-                call UnitRemoveAbility(u, SPELL_ID)
+                call UnitRemoveAbility(this.u, SPELL_ID)
                 call thistype.tb.remove(id)
             endif
             set this.u = null

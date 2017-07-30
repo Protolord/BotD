@@ -2,7 +2,6 @@ scope Reaper
 
     globals
         private constant integer SPELL_ID = 'A712'
-        private constant real LIMIT = 2000.0
     endglobals
 
     private function Duration takes integer level returns real
@@ -10,10 +9,14 @@ scope Reaper
     endfunction
 
     private function DamageGrowth takes integer level returns real
+        return 30.0 + 0.0*level
+    endfunction
+
+    private function DamageMax takes integer level returns real
         if level == 11 then
-            return 20.0
+            return 2000.0
         endif
-        return 10.0 + 2.0*level
+        return 50.0*level
     endfunction
 
     private function TargetFilter takes unit u, player p returns boolean
@@ -41,8 +44,8 @@ scope Reaper
         method reapply takes integer level returns nothing
             set this.duration = Duration(level)
             set this.bonus = this.bonus + DamageGrowth(level)
-            if this.bonus > LIMIT then
-                set this.bonus = LIMIT
+            if this.bonus > DamageMax(level) then
+                set this.bonus = DamageMax(level)
             endif
             call this.ad.change(this.bonus)
         endmethod

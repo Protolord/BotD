@@ -32,7 +32,7 @@ module CrusaderConfig
     set crusader.iconPath = "ReplaceableTextures\\CommandButtons\\BTN_Crusader.blp"
     set crusader.modelPath = "Models\\Units\\Crusader.mdl"
     set crusader.info = "<NOTHING YET>"
-    set crusader.attribute = "20 +2.0   20 +3.0   20 +1.3"
+    set crusader.attribute = "20 +2.1   20 +2.8   20 +1.8"
     set crusader.primary = AGI
 
     //Configure Spells

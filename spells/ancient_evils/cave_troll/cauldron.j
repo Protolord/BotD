@@ -6,7 +6,7 @@ scope Cauldron
         private constant string BUFF_SFX = "Models\\Effects\\CauldronTarget.mdx"
         private constant real TIMEOUT = 0.05
         private constant integer TRUE_SIGHT_ABILITY = 'ATSS'
-        private constant real RADIUS = 200.0
+        private constant real RADIUS = 75.0
     endglobals
 
     private function Radius takes integer level returns real

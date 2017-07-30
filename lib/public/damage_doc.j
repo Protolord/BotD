@@ -1,7 +1,7 @@
 //! novjass
 
     /*
-                             DamagePackage v1.44
+                             DamagePackage v1.45
                                 Documentation
                                   by Flux
 
@@ -77,6 +77,8 @@
             //Turns on/off the entire DamageEvent.
         Damage.lockAmount()
             //Prevents further modification of damage on this damage instance.
+        Damage.triggeringTrigger
+            // The trigger that causes the event to run
 
     DamageModify
         set Damage.amount = <new amount>
@@ -364,6 +366,9 @@
 
         v1.44 - [3 June 2017]
          - Fixed bug when magic damage exceeds max hitpoints.
+
+        v1.45 - [22 July 2017]
+         - Added Damage.triggeringTrigger.
 
     */
 

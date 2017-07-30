@@ -128,13 +128,10 @@ scope WebSpin
 
         private static method picked takes nothing returns nothing
             local unit u = GetEnumUnit()
-            local SpellBuff b
-            local integer id
-            if not TargetFilter(u, global.owner) or not IsUnitInRangeXY(u, global.x, global.y, global.radius) then
-                call GroupRemoveUnit(global.g, u)
-                set id = GetHandleId(u)
-                if Buff.has(global.caster, u, SpellBuff.typeid) then
-                    call Buff(global.tb[id]).remove()
+            if not TargetFilter(u, thistype.global.owner) or not IsUnitInRangeXY(u, thistype.global.x, thistype.global.y, thistype.global.radius) then
+                call GroupRemoveUnit(thistype.global.g, u)
+                if Buff.has(thistype.global.caster, u, SpellBuff.typeid) then
+                    call Buff(thistype.global.tb[GetHandleId(u)]).remove()
                 endif
             endif
             set u = null

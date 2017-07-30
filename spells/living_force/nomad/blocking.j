@@ -11,11 +11,11 @@ scope Blocking
     endfunction
 
     private function AttackSlow takes integer level returns real
-        return 1.0 - 0.1*level
+        return 0.75 - 0.0*level
     endfunction
 
     private function MoveSlow takes integer level returns real
-        return 1.0 - 0.1*level
+        return 0.5 - 0.0*level
     endfunction
 
     struct Blocking extends array

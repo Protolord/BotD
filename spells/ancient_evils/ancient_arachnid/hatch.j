@@ -1,5 +1,5 @@
 scope Hatch
- 
+
     globals
         private constant integer SPELL_ID = 'A422'
         private constant integer UNIT_ID = 'uHat'
@@ -9,18 +9,18 @@ scope Hatch
         private constant string SFX = "Doodads\\Dungeon\\Terrain\\EggSack\\EggSack0.mdl"
         private constant real DEFAULT_SIGHT = 800 //Sight Radius of Hatchling in Object Editor
     endglobals
-    
+
     private function Speed takes integer level returns real
         if level == 11 then
             return 522.0
         endif
         return 0.0*level + 250
     endfunction
-    
+
     private function Damage takes integer level returns integer
         return 0*level + 25
     endfunction
-    
+
     private function AttackSpeedBonus takes integer level returns real
         if level == 11 then
             return 0.33   //Causes it to have an attack cooldown of 0.75 second
@@ -28,21 +28,21 @@ scope Hatch
         return 0.0
     endfunction
 
-    
+
     private function Duration takes integer level returns real
         return 2.0*level + 10
     endfunction
-    
+
     private function SightRadius takes integer level returns real
         return 0.0*level + 800.0
     endfunction
-    
+
     private function NumberOfUnits takes integer level returns integer
         return 0*level + 5
     endfunction
-    
+
     struct Hatch extends array
-        
+
         private static method onCast takes nothing returns nothing
             local unit caster = GetTriggerUnit()
             local player owner = GetTriggerPlayer()
@@ -67,7 +67,7 @@ scope Hatch
                 call UnitSetBonus(u, BONUS_ATK_SPEED, R2I(100*AttackSpeedBonus(lvl)))
                 call IssuePointOrderById(u, ORDER_attack, x + GetRandomReal(-PERIMETER, PERIMETER), y + GetRandomReal(-PERIMETER, PERIMETER))
                 if lvl == 11 then
-                    call SetUnitVertexColor(u, 255, 20, 20, 255)
+                    call SetUnitVertexColor(u, 20, 255, 20, 255)
                 endif
                 set i = i - 1
             endloop
@@ -77,14 +77,14 @@ scope Hatch
             set owner = null
             call SystemMsg.create(GetUnitName(GetTriggerUnit()) + " cast thistype")
         endmethod
-        
+
         static method init takes nothing returns nothing
             call SystemTest.start("Initializing thistype: ")
             call RegisterSpellEffectEvent(SPELL_ID, function thistype.onCast)
             call PreloadUnit(UNIT_ID)
             call SystemTest.end()
         endmethod
-        
+
     endstruct
-    
+
 endscope

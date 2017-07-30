@@ -13,11 +13,12 @@ library DamageElement uses DamageEvent, FloatingText
         constant integer DAMAGE_ELEMENT_EARTH = 4
         constant integer DAMAGE_ELEMENT_FIRE = 5
         constant integer DAMAGE_ELEMENT_ICE = 6
-        constant integer DAMAGE_ELEMENT_NORMAL = 7
-        constant integer DAMAGE_ELEMENT_PLANT = 8
-        constant integer DAMAGE_ELEMENT_POISON = 9
-        constant integer DAMAGE_ELEMENT_SPIRIT = 10
-        constant integer DAMAGE_ELEMENT_WATER = 11
+        constant integer DAMAGE_ELEMENT_LIGHT = 7
+        constant integer DAMAGE_ELEMENT_NORMAL = 8
+        constant integer DAMAGE_ELEMENT_PLANT = 9
+        constant integer DAMAGE_ELEMENT_POISON = 10
+        constant integer DAMAGE_ELEMENT_SPIRIT = 11
+        constant integer DAMAGE_ELEMENT_WATER = 12
     endglobals
 
     struct Element extends array
@@ -27,7 +28,6 @@ library DamageElement uses DamageEvent, FloatingText
         private static string array path
         private static trigger trg
 
-
         static method string takes integer element returns string
             return thistype.path[element]
         endmethod
@@ -35,7 +35,7 @@ library DamageElement uses DamageEvent, FloatingText
         private static method onDamage takes nothing returns boolean
             local integer dmg = R2I(Damage.amount + 0.5)
             if Damage.source == thistype.source and dmg > 0 then
-                call FloatingTextSplat(thistype.path[thistype.element] + I2S(dmg) + "|r", Damage.target, 1.0).setVisible(GetLocalPlayer() == GetOwningPlayer(Damage.source) and IsUnitVisible(Damage.target, GetLocalPlayer()))
+                call FloatingTextSplat(thistype.path[thistype.element] + I2S(dmg) + "|r", Damage.target).setVisible(GetLocalPlayer() == GetOwningPlayer(Damage.source) and IsUnitVisible(Damage.target, GetLocalPlayer()))
             endif
             return false
         endmethod
@@ -59,6 +59,7 @@ library DamageElement uses DamageEvent, FloatingText
             set thistype.path[DAMAGE_ELEMENT_ELECTRIC] = "|iELEMENT_ELECTRIC|i|cff30ccf8"
             set thistype.path[DAMAGE_ELEMENT_FIRE] = "|iELEMENT_FIRE|i|cfff08030"
             set thistype.path[DAMAGE_ELEMENT_ICE] = "|iELEMENT_ICE|i|cff96c8ff"
+            set thistype.path[DAMAGE_ELEMENT_LIGHT] = "|iELEMENT_LIGHT|i|cffffcf00"
             set thistype.path[DAMAGE_ELEMENT_NORMAL] = "|iELEMENT_NORMAL|i|cffff0000"
             set thistype.path[DAMAGE_ELEMENT_PLANT] = "|iELEMENT_PLANT|i|cff50a43b"
             set thistype.path[DAMAGE_ELEMENT_POISON] = "|iELEMENT_POISON|i|cff7ca700"

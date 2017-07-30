@@ -2,7 +2,7 @@ scope Bash
 
     globals
         private constant integer SPELL_ID = 'AHB4'
-        private constant string SFX = "Abilities\\Spells\\Human\\DispelMagic\\DispelMagicTarget.mdl"
+        private constant string SFX = "Abilities\\Spells\\Other\\FrostBolt\\FrostBoltMissile.mdl"
         private constant string SFX_ATTACH = "Models\\Effects\\BashAttach.mdx"
     endglobals
 
@@ -24,7 +24,7 @@ scope Bash
         private static method onDamage takes nothing returns nothing
             local integer level = GetUnitAbilityLevel(Damage.source, SPELL_ID)
             if Damage.type == DAMAGE_TYPE_PHYSICAL and not Damage.coded and level > 0 and TargetFilter(Damage.target, GetOwningPlayer(Damage.source)) and GetRandomReal(0, 100) <= Chance(level) then
-                call Stun.create(Damage.target, Duration(level), false)
+                call Stun.create(Damage.target, Duration(level))
                 call DestroyEffect(AddSpecialEffectTarget(SFX, Damage.target, "origin"))
                 call AddSpecialEffectTimer(AddSpecialEffectTarget(SFX_ATTACH, Damage.source, "hand left"), 0.25)
             endif

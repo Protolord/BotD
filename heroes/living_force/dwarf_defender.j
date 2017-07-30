@@ -29,7 +29,7 @@ module DwarfDefenderConfig
     set dwarfDefender.iconPath = "ReplaceableTextures\\CommandButtons\\BTN_DwarfDefender.blp"
     set dwarfDefender.modelPath = "Models\\Units\\DwarfDefender.mdx"
     set dwarfDefender.info = "<NOTHING YET>"
-    set dwarfDefender.attribute = "20 +3.0    20 +2.0   20 +0.75"
+    set dwarfDefender.attribute = "20 +3.2    20 +2.2   20 +1.3"
     set dwarfDefender.primary = STR
 
     //Configure Spells

@@ -30,7 +30,7 @@ module SkeletonKingSpells
 
     set reaper = Spell.create('A712')
     set reaper.passive = true
-    set reaper.info = "Reaper|n|cfff4a460Target|r: |cff3399ffPassive, Self|n|r|cfff4a460Bonus Damage|r: |cff3399ff10|r|n|cfff4a460Duration|r: |cff3399ff10 + (2 x level) seconds|r|n|nEach attack on living creature provides Skeleton King bonus damage for a certain period of time. Can provide up to 500 bonus damage."
+    set reaper.info = "Reaper|n|cfff4a460Target|r: |cff3399ffPassive, Self|n|r|cfff4a460Bonus Damage|r: |cff3399ff30|n|r|cfff4a460Max Bonus Damage|r: |cff3399ff(50 x level)|r|n|cfff4a460Duration|r: |cff3399ff5 seconds|r|n|nEach attack on living creature provides Skeleton King bonus damage for a certain period of time."
 
     set soulRip = Spell.create('A713')
     set soulRip.info = "Soul Rip|n|cfff4a460Target|r: |cff3399ffSelf|n|r|cfff4a460Radius|r: |cff3399ff(100 x level)|n|r|cfff4a460HP Stolen|r: |cff3399ff(100 + 50 x level)|n|r|cfff4a460Cooldown|r: |cff3399ff25 seconds|r|n|nSkeleton King rips souls of all nearby enemies slowly gathering their life force."

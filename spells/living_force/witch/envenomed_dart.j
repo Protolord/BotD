@@ -69,7 +69,9 @@ scope EnvenomedDart
         private static method onHit takes nothing returns nothing
             local thistype this = Missile.getHit()
             local SpellBuff b
-            if not SpellBlock.has(this.target) and TargetFilter(this.target, this.owner) then
+            if SpellBlock.has(this.target) then
+                call this.m.show(false)
+            elseif TargetFilter(this.target, this.owner) then
                 set b = SpellBuff.add(this.caster, this.target)
                 call b.reapply(-MoveSlow(this.lvl))
                 set b.duration = Duration(this.lvl)

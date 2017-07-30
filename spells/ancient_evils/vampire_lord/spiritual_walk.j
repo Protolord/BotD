@@ -4,6 +4,7 @@ scope SpiritualWalk
     globals
         private constant integer SPELL_ID = 'A122'
         private constant integer SPELL_BUFF = 'a122'
+        private constant string SFX = "Models\\Effects\\SpiritualWalkEffect.mdx"
     endglobals
 
     private function StealMana takes integer level returns real
@@ -55,7 +56,10 @@ scope SpiritualWalk
                     if amount > 0 then
                         call SetUnitState(Damage.target, UNIT_STATE_MANA, mana - amount)
                         call SetUnitState(Damage.source, UNIT_STATE_MANA, GetUnitState(Damage.source, UNIT_STATE_MANA) + amount)
-                        call FloatingTextTag("|cff0099ff-" + I2S(R2I(amount)) + "|r", Damage.target, 2.5)
+                        set FloatingText.tagTime = 2.5
+                        call FloatingTextTag("|cff0099ff-" + I2S(R2I(amount)) + "|r", Damage.target)
+                        set FloatingText.tagTime = 1.0
+                        call DestroyEffect(AddSpecialEffectTarget(SFX, Damage.target, "origin"))
                     endif
                 endif
                 call UnitRemoveAbility(Damage.source, SPELL_BUFF)

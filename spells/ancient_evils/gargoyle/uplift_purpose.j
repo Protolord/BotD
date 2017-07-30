@@ -50,7 +50,7 @@ scope UpliftPurpose
                 if b > 0 then
                     call DisableTrigger(thistype.trg)
                     call UnitDamageTarget(Damage.source, Damage.target, b.dmg, true, false, ATTACK_TYPE, DAMAGE_TYPE, null)
-                    call FloatingTextSplat(Element.string(DAMAGE_ELEMENT_EARTH) + "+" + I2S(R2I(b.dmg + 0.5)) + "|r", Damage.target, 1.0).setVisible(GetLocalPlayer() == GetOwningPlayer(Damage.source))
+                    call FloatingTextSplat(Element.string(DAMAGE_ELEMENT_EARTH) + "+" + I2S(R2I(b.dmg + 0.5)) + "|r", Damage.target).setVisible(GetLocalPlayer() == GetOwningPlayer(Damage.source))
                     call EnableTrigger(thistype.trg)
                     call b.remove()
                 endif

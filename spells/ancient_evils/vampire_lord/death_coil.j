@@ -35,18 +35,14 @@ scope DeathCoil
             call this.m.destroy()
             set this.caster = null
             set this.target = null
-            set owner = null
+            set this.owner = null
         endmethod
 
         private static method onHit takes nothing returns nothing
             local thistype this = Missile.getHit()
-            if TargetFilter(this.target, this.owner) then
-                if SpellBlock.has(this.target) then
-                    call DestroyEffect(AddSpecialEffect(SFX_HIT, this.m.x, this.m.y))
-                else
-                    call DestroyEffect(AddSpecialEffectTarget(SFX_HIT, this.target, "origin"))
-                    call Damage.element.apply(this.caster, this.target, DamageDealt(this.lvl), ATTACK_TYPE, DAMAGE_TYPE, DAMAGE_ELEMENT_DARK)
-                endif
+            if TargetFilter(this.target, this.owner) and not SpellBlock.has(this.target) then
+                call DestroyEffect(AddSpecialEffectTarget(SFX_HIT, this.target, "chest"))
+                call Damage.element.apply(this.caster, this.target, DamageDealt(this.lvl), ATTACK_TYPE, DAMAGE_TYPE, DAMAGE_ELEMENT_DARK)
             endif
             call this.destroy()
         endmethod

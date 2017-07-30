@@ -113,7 +113,7 @@ library Spell requires StringSize
                                 set lines = lines + 1
                                 set count = length
                             endif
-                            if getName then
+                            if getName and char != "'" then
                                 set this.name = this.name + char
                             endif
                         endif

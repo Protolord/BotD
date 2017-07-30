@@ -4,7 +4,6 @@ scope Camouflage
     globals
         private constant integer SPELL_ID = 'A624'
         private constant integer SPELL_BUFF = 'a624'
-        private constant boolean STUN_STACK = false //If true, targeting a stunned unit will result to additive duration
     endglobals
 
     private function Slow takes integer level returns real
@@ -36,7 +35,7 @@ scope Camouflage
             local integer id = GetHandleId(Damage.source)
             if Damage.type == DAMAGE_TYPE_PHYSICAL and not Damage.coded and thistype.tb.has(id) then
                 if TargetFilter(Damage.target, GetOwningPlayer(Damage.source)) then
-                    call Stun.create(Damage.target, StunDuration(thistype(thistype.tb[id]).lvl), STUN_STACK)
+                    call Stun.create(Damage.target, StunDuration(thistype(thistype.tb[id]).lvl))
                 endif
                 call UnitRemoveAbility(Damage.source, SPELL_BUFF)
             endif

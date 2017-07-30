@@ -61,7 +61,7 @@ scope HellishCloud
                     call GroupRemoveUnit(thistype.g, u)
                     if TargetFilter(u, p) then
                         call Damage.apply(Damage.source, u, dmg, ATTACK_TYPE, DAMAGE_TYPE)
-                        call FloatingTextSplat(Element.string(DAMAGE_ELEMENT_FIRE) + I2S(R2I(dmg)) + "|r", u, 1.0).setVisible(GetLocalPlayer() == GetOwningPlayer(Damage.source) and IsUnitVisible(u, GetLocalPlayer()))
+                        call FloatingTextSplat(Element.string(DAMAGE_ELEMENT_FIRE) + I2S(R2I(dmg)) + "|r", u).setVisible(GetLocalPlayer() == GetOwningPlayer(Damage.source) and IsUnitVisible(u, GetLocalPlayer()))
                     endif
                 endloop
                 call EnableTrigger(thistype.trg)

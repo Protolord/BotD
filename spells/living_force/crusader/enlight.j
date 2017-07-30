@@ -65,10 +65,10 @@ scope Enlight
                 if TargetFilter(Damage.target, p) then
                     set b = Buff.get(null, Damage.target, SpellBuff.typeid)
                     if b > 0 then
-                        call Damage.element.apply(Damage.source, Damage.target, BaseDamage(level) + b.duration*ExtraDamage(level), ATTACK_TYPE, DAMAGE_TYPE, DAMAGE_ELEMENT_FIRE)
+                        call Damage.element.apply(Damage.source, Damage.target, BaseDamage(level) + b.duration*ExtraDamage(level), ATTACK_TYPE, DAMAGE_TYPE, DAMAGE_ELEMENT_LIGHT)
                         set b.duration = b.duration + Duration(level)
                     else
-                        call Damage.element.apply(Damage.source, Damage.target, BaseDamage(level), ATTACK_TYPE, DAMAGE_TYPE, DAMAGE_ELEMENT_FIRE)
+                        call Damage.element.apply(Damage.source, Damage.target, BaseDamage(level), ATTACK_TYPE, DAMAGE_TYPE, DAMAGE_ELEMENT_LIGHT)
                         set SpellBuff.add(Damage.source, Damage.target).duration = Duration(level)
                     endif
                 endif

@@ -1,6 +1,6 @@
 library DamageModify uses DamageEvent/*
             ---------------------------------
-                    DamageModify v1.44
+                    DamageModify v1.45
                         by Flux
             ---------------------------------
 
@@ -10,7 +10,7 @@ library DamageModify uses DamageEvent/*
 
     globals
         private constant integer SET_MAX_LIFE = 'ASML'
-        private constant boolean DEBUG_SYSTEM = true
+        private constant boolean DEBUG_SYSTEM = false
     endglobals
 
     struct DamageTrigger2 extends array
@@ -63,6 +63,7 @@ library DamageModify uses DamageEvent/*
             local thistype this = thistype(0).next
             loop
                 exitwhen this == 0
+                set s__Damage_triggeringTrigger  = this.trg
                 if IsTriggerEnabled(this.trg) then
                     if TriggerEvaluate(this.trg) then
                         call TriggerExecute(this.trg)
@@ -70,6 +71,7 @@ library DamageModify uses DamageEvent/*
                 endif
                 set this = this.next
             endloop
+            set s__Damage_triggeringTrigger  = null
         endmethod
 
     endstruct

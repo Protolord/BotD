@@ -42,12 +42,12 @@ scope Banish
         method onRemove takes nothing returns nothing
             call this.sr.destroy()
             call this.ms.destroy()
-            //call this.et.destroy()
+            call this.et.destroy()
         endmethod
 
         method onApply takes nothing returns nothing
             set this.ms = Movespeed.create(this.target, 0, 0)
-            //set this.et = Ethereal.create(this.target)
+            set this.et = Ethereal.create(this.target)
             set this.sr = SpellResistance.create(this.target, 0)
         endmethod
 
@@ -82,7 +82,9 @@ scope Banish
         private static method onHit takes nothing returns nothing
             local thistype this = Missile.getHit()
             local SpellBuff b
-            if not SpellBlock.has(this.target) and TargetFilter(this.target, this.owner) then
+            if SpellBlock.has(this.target) then
+                call this.m.show(false)
+            elseif TargetFilter(this.target, this.owner) then
                 set b = SpellBuff.add(this.caster, this.target)
                 call b.reapply(this.lvl)
             endif

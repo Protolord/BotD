@@ -1,5 +1,5 @@
 scope AuraOfPrayer
-    
+
     globals
         private constant integer SPELL_ID = 'AH23'
         private constant integer BUFF_ID = 'BH23'
@@ -25,10 +25,10 @@ scope AuraOfPrayer
     private function TargetFilter takes unit u, player p returns boolean
         return UnitAlive(u) and IsUnitAlly(u, p)
     endfunction
-    
+
     struct AuraOfPrayer extends array
         implement Alloc
-        
+
         private unit u
         private real range
         private real maxHeal
@@ -36,7 +36,7 @@ scope AuraOfPrayer
         private real m
         private effect sfx
         private group affected
-        
+
         private static Table tb
         private static group g
         private static thistype global
@@ -50,7 +50,7 @@ scope AuraOfPrayer
             endif
             set u = null
         endmethod
-        
+
         private static method onPeriod takes nothing returns nothing
             local thistype this = GetTimerData(GetExpiredTimer())
             local player p
@@ -90,23 +90,8 @@ scope AuraOfPrayer
                 call ForGroup(this.affected, function thistype.picked)
             endif
         endmethod
-        
-        private static method ultimates takes nothing returns boolean
-            local unit u = GetTriggerUnit()
-            local integer id = GetHandleId(u)
-            local thistype this
-            if thistype.tb.has(id) then
-                set this = thistype.tb[id]
-                set this.range = Range(11)
-                set this.maxHeal = Regen_Max(11)
-                set this.minHeal = Regen_Min(11)
-                set this.m = (this.maxHeal - this.minHeal)/(this.range - MIN_RANGE)
-            endif
-            set u = null
-            return false
-        endmethod
-        
-        private static method learn takes nothing returns nothing   
+
+        private static method learn takes nothing returns nothing
             local thistype this
             local unit u
             local integer id
@@ -134,16 +119,15 @@ scope AuraOfPrayer
                 set u = null
             endif
         endmethod
-        
+
         static method init takes nothing returns nothing
             call SystemTest.start("Initializing thistype: ")
             call RegisterPlayerUnitEvent(EVENT_PLAYER_HERO_SKILL, function thistype.learn)
-            call PlayerStat.ultimateEvent(function thistype.ultimates)
             set thistype.tb = Table.create()
             set thistype.g = CreateGroup()
             call SystemTest.end()
         endmethod
-        
+
     endstruct
-    
+
 endscope

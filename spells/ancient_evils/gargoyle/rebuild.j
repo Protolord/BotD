@@ -109,7 +109,7 @@ scope Rebuild
         private real dmgThreshold
 
         private static Table tb
-        private static constant real DIST_OFFSET = 20
+        private static constant real ANGLE_OFFSET = 6
 
         private static method onDamage takes nothing returns nothing
             local thistype this = thistype.tb[GetHandleId(Damage.target)]
@@ -119,10 +119,10 @@ scope Rebuild
             local real x2
             local real y2
             local real dist
-            local real d
+            local real a
             local integer cliff
-            local integer i
-            local integer j
+            local integer i = 1
+            local integer j = 1
             if this > 0 then
                 set this.dmg = this.dmg + Damage.amount
                 if this.dmg >= this.dmgThreshold then
@@ -135,15 +135,13 @@ scope Rebuild
                     set dist = RMaxBJ(MIN_DISTANCE, DISTANCE_PER_DAMAGE*this.dmg) + GetRandomReal(0, 50)
                     set x1 = x2 + dist*Cos(angle)
                     set y1 = y2 + dist*Sin(angle)
-                    set i = 1
-                    set j = -1
                     loop
                         exitwhen IsTerrainBuildable(x1, y1) and cliff == GetTerrainCliffLevel(x1, y1)
-                        set d = dist + i*j*thistype.DIST_OFFSET
                         set i = i + 1
                         set j = -j
-                        set x1 = x2 + d*Cos(angle)
-                        set y1 = y2 + d*Sin(angle)
+                        set a = angle + i*j*thistype.ANGLE_OFFSET
+                        set x1 = x2 + dist*Cos(a)
+                        set y1 = y2 + dist*Sin(a)
                     endloop
                     call RockPiece.create(Damage.target, this.dmg*this.factor, x1, y1)
                     set this.dmg = 0

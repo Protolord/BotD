@@ -16,7 +16,7 @@ scope SecondHit
         if level == 11 then
             return 30.0
         endif
-        return 100.0//15.0
+        return 15.0
     endfunction
 
     private function TargetFilter takes unit u, player p returns boolean
@@ -95,7 +95,7 @@ scope SecondHit
                     set Damage.amount = this.dmg
                     call Damage.lockAmount()
                     if Damage.amount >= 1.0 then
-                        set t = FloatingTextSplat(Element.string(DAMAGE_ELEMENT_NORMAL) + I2S(R2I(Damage.amount)) + "|r", Damage.target, 2.0)
+                        set t = FloatingTextSplat(Element.string(DAMAGE_ELEMENT_NORMAL) + I2S(R2I(Damage.amount)) + "|r", Damage.target)
                         call t.setVisible(GetLocalPlayer() == GetOwningPlayer(Damage.source))
                     endif
                     call TimerStart(NewTimerEx(this), 0.0, false, function thistype.expires)

@@ -4,7 +4,6 @@ scope Dissimulation
     globals
         private constant integer SPELL_ID = 'A421'
         private constant integer SPELL_BUFF = 'a421'
-        private constant boolean SILENCE_STACK = false //If true, targeting a silenced unit will result to additive duration
     endglobals
 
     private function BonusSpeed takes integer level returns real
@@ -36,7 +35,7 @@ scope Dissimulation
             local integer id = GetHandleId(Damage.source)
             if Damage.type == DAMAGE_TYPE_PHYSICAL and not Damage.coded and thistype.tb.has(id) then
                 if TargetFilter(Damage.target, GetOwningPlayer(Damage.source)) then
-                    call Silence.create(Damage.target, SilenceDuration(thistype(thistype.tb[id]).lvl), SILENCE_STACK)
+                    call Silence.create(Damage.target, SilenceDuration(thistype(thistype.tb[id]).lvl))
                 endif
                 call UnitRemoveAbility(Damage.source, SPELL_BUFF)
             endif

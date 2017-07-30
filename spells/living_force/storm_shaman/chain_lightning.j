@@ -2,7 +2,7 @@ scope ChainLightning
 
     globals
         private constant integer SPELL_ID = 'AH12'
-        private constant string SFX = "Abilities\\Spells\\Items\\AIlb\\AIlbSpecialArt.mdl"
+        private constant string SFX = "Abilities\\Weapons\\Bolt\\BoltImpact.mdl"
         private constant string LIGHTNING_CODE = "CLPB"
         private constant string LIGHTNING_CODE2 = "CLSB"
         private constant real LIGHTNING_DURATION = 0.8

@@ -32,3 +32,13 @@
     Track                       by PurgeandFire
     TrueSight                   by Flux
     WorldBounds                 by Nestharus
+
+-------------------------
+ Outsourced Coding tasks:
+-------------------------
+    Claw Block                  by DD_LegionTN
+    Vicious Strike              by DD_LegionTN
+    Slow                        by DD_LegionTN
+    Fist of Heavens             by DD_LegionTN
+    Brilliance Aura             by DD_LegionTN
+    Shield Reaction             by DD_LegionTN

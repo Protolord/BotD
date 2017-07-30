@@ -24,7 +24,7 @@ scope InfernalChains
 
     //In percent
     private function Chance takes integer level returns real
-        return 1.0 + 0.0*level
+        return 2.5 + 0.0*level
     endfunction
 
     private function TargetFilter takes unit u, player p returns boolean
@@ -67,8 +67,10 @@ scope InfernalChains
                     call DisableTrigger(thistype.trg)
                     call Damage.apply(Damage.source, Damage.target, dmg, ATTACK_TYPE, DAMAGE_TYPE)
                     call EnableTrigger(thistype.trg)
-                    set t = FloatingTextSplatEx(Element.string(DAMAGE_ELEMENT_FIRE) + "+" + I2S(R2I(dmg + 0.5)) + "|r", Damage.target, 1.0, 250.0)
+                    set FloatingText.splatExtraHeight = 250.0
+                    set t = FloatingTextSplat(Element.string(DAMAGE_ELEMENT_FIRE) + "+" + I2S(R2I(dmg + 0.5)) + "|r", Damage.target)
                     call t.setVisible(GetLocalPlayer() == GetOwningPlayer(Damage.source) and IsUnitVisible(Damage.source, GetLocalPlayer()))
+                    set FloatingText.splatExtraHeight = 0.0
                     set b.dmg = b.dmg + DamageGrowth(level)
                 endif
             endif

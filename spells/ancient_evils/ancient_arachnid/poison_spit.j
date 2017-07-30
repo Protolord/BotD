@@ -2,7 +2,6 @@ scope PoisonSpit
 
     globals
         private constant integer SPELL_ID = 'A413'
-        private constant boolean SILENCE_STACK = false //If true, targeting a silenced unit will result to additive duration
         private constant attacktype ATTACK_TYPE = ATTACK_TYPE_NORMAL
         private constant damagetype DAMAGE_TYPE = DAMAGE_TYPE_MAGIC
         private constant string MISSILE_MODEL = "Abilities\\Weapons\\snapMissile\\snapMissile.mdl"
@@ -53,7 +52,7 @@ scope PoisonSpit
 
         method onApply takes nothing returns nothing
             set this.t = NewTimerEx(this)
-            set this.s = Silence.create(this.target, 0, SILENCE_STACK)
+            set this.s = Silence.create(this.target, 0)
             call TimerStart(this.t, 1.00, true, function thistype.onPeriod)
         endmethod
 
@@ -82,7 +81,9 @@ scope PoisonSpit
         private static method onHit takes nothing returns nothing
             local thistype this = Missile.getHit()
             local SpellBuff b
-            if not SpellBlock.has(this.target) and TargetFilter(this.target, this.owner) then
+            if SpellBlock.has(this.target) then
+                call this.m.show(false)
+            elseif TargetFilter(this.target, this.owner) then
                 set b = SpellBuff.add(this.caster, this.target)
                 set b.dmg = DamagePerSecond(this.lvl)
                 set b.duration = Duration(this.lvl)

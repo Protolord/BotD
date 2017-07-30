@@ -1,7 +1,9 @@
 MODEL CONCERNS:
 - Cleave change Visual Effect
-- Fix stun system and silence system this.destroy() removes all instances.
+- Knockback system (3D for Water Blow and Shield Reaction)
+- Make other periodic damage like underworld fires that manipulates floating text for more frequent damage
 - Sleep System
+- Fix the proper stat growth of the heroes in Hero Selection System displayed.
 - Request better Cauldron
 
 CODING CONCERNS:
@@ -10,18 +12,63 @@ CODING CONCERNS:
 - Test if Inception takes the correct damage taken factor
 - Allow units with Rabies exceed 522 movespeed.
 
-Git:
-Fix Spells damage bug and various issues
+skely
+ghost form healing is dependant on damage, not raw amount, it steals like half hp with farmed up reaper
+
+Notes:
+- I've made Spirit Link affects non-hero allies at the moment for testing purposes.
 
 Systems:
-* Update DamageEvent
-* Update DamageModify
-* Add PathingLib
-* Update Selection system to consider faction
-* Update Missile system
-* Fix SpellImmunity, Disarm and Ethereal to add permanent ability
-* Fix TrueSight bug not revealing preplaced invisible units
+* Create Ability Timer system
+* Create Buff Display system
+* Update Stun system
+* Update Silence system
+* Update DamageEvent and DamageModify
+
+Heroes:
+* Add Living Forces Heroes up to Cleric
+* Fix Living Forces Heroes attribute growth
 
 Spells:
-* Create Rock Hard
+* Create Claw Block
+* Create Vicious Strike
+* Create Brilliance Aura
+* Create Shield Reaction
+* Create Fist of Heavens
+* Create Slow
+* Create Cursed Contact
+* Create Sandstorm
+* Create Vortex Shield
+* Create Ethereal Force
+* Create Energy Field
+* Create Arcane Pierce
+* Create Spirit Link
+* Create Shadow Strike
+* Create Ultra Vision
+* Create Deadly Strike
+* Create Deadly Link
+* Create Song of the Siren
+* Create Aqua Strike
+* Create Water Blow
+* Create Amphibian Sign
+* Create Feedback
+* Create Sonic Blast
+* Create Strong Mind
+* Create Holy Spiral
+* Create Sacrifice
+* Create Beaming Glare
+* Create Living Armor
+* Create Forest Sentinel
+* Create Overgrowth
+* Create Nature Wrath
+* Create Seaman's Will
+* Create Arcane Net
+* Create Arcane Bomb
+* Create Fiery Dust
+* Create Adrenaline
+* Fix missile animation of blocked and evaded spell
+* Decrease one unit reveal sight radius
 
+Models:
+* Change Arcanist Model
+* Fix Eagle and Zealot HP Bar issue

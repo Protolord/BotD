@@ -33,7 +33,7 @@ scope ThunderClap
         private Movespeed ms
 
         private static constant integer RAWCODE = 'DH31'
-        private static constant integer DISPEL_TYPE = BUFF_POSITIVE
+        private static constant integer DISPEL_TYPE = BUFF_NEGATIVE
         private static constant integer STACK_TYPE = BUFF_STACK_NONE
 
         method onRemove takes nothing returns nothing

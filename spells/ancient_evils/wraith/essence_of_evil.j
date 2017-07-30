@@ -1,5 +1,5 @@
 scope EssenceOfEvil
-    
+
     globals
         private constant integer SPELL_ID = 'A314'
         private constant attacktype ATTACK_TYPE = ATTACK_TYPE_NORMAL
@@ -9,16 +9,16 @@ scope EssenceOfEvil
         private constant real MINISTUN = 0.1
         private constant real BREAK_DISTANCE = 150.0
     endglobals
-    
+
     private function DamageAmount takes integer level returns real
         if level == 11 then
             return 800.0
         endif
         return 40.0*level
     endfunction
-    
+
     struct EssenceOfEvil extends array
-        
+
         private unit target
         private real dist
         private real angle
@@ -29,7 +29,7 @@ scope EssenceOfEvil
         private unit dummy
         private effect sfx
         private PathingOff pathing
-        
+
         implement CTLExpire
             set this.dist = this.dist - SPEED*CTL_TIMEOUT
             if this.dist > 0 and IsUnitInRangeXY(this.target, this.x, this.y, BREAK_DISTANCE) then
@@ -49,7 +49,7 @@ scope EssenceOfEvil
                 call this.destroy()
             endif
         implement CTLEnd
-        
+
         private static method onCast takes nothing returns nothing
             local thistype this = thistype.create()
             local unit caster = GetTriggerUnit()
@@ -59,12 +59,12 @@ scope EssenceOfEvil
             set this.target = GetSpellTargetUnit()
             set this.pathing = PathingOff.create(this.target)
             call Damage.element.apply(caster, this.target, DamageAmount(GetUnitAbilityLevel(caster, SPELL_ID)), ATTACK_TYPE, DAMAGE_TYPE, DAMAGE_ELEMENT_SPIRIT)
-            call Stun.create(this.target, MINISTUN, false)
+            call Stun.create(this.target, MINISTUN)
             set x1 = GetUnitX(caster)
             set y1 = GetUnitY(caster)
             set this.x = GetUnitX(this.target)
             set this.y = GetUnitY(this.target)
-            set this.dist = 0.5*SquareRoot((this.x - x1)*(this.x - x1) + (this.y - y1)*(this.y - y1)) 
+            set this.dist = 0.5*SquareRoot((this.x - x1)*(this.x - x1) + (this.y - y1)*(this.y - y1))
             set angle = Atan2(y1 - this.y, x1 - this.x)
             set this.dx = SPEED*Cos(angle)*CTL_TIMEOUT
             set this.dy = SPEED*Sin(angle)*CTL_TIMEOUT
@@ -73,13 +73,13 @@ scope EssenceOfEvil
             set caster = null
             call SystemMsg.create(GetUnitName(GetTriggerUnit()) + " cast thistype on " + GetUnitName(GetSpellTargetUnit()))
         endmethod
-        
+
         static method init takes nothing returns nothing
             call SystemTest.start("Initializing thistype: ")
             call RegisterSpellEffectEvent(SPELL_ID, function thistype.onCast)
             call SystemTest.end()
         endmethod
-        
+
     endstruct
-    
+
 endscope
